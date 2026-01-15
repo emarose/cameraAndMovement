@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://ce1embig558rd"]
+
+[ext_resource type="Script" uid="uid://cyegqgjkrus4b" path="res://scripts/health_bar_3d.gd" id="1_qhgfr"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_22rjv"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_620v2"]
+bg_color = Color(0.018559394, 0.037310526, 0.004831813, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_22rjv"]
+bg_color = Color(0.36845863, 0.56445324, 0.21098632, 1)
+
+[node name="HealthBar3D" type="Sprite3D"]
+billboard = 1
+texture_filter = 0
+texture = SubResource("ViewportTexture_22rjv")
+script = ExtResource("1_qhgfr")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(128, 27)
+render_target_update_mode = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -3.5
+offset_bottom = -3.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_620v2")
+theme_override_styles/fill = SubResource("StyleBoxFlat_22rjv")

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bqulpcolhat05"]
+
+[ext_resource type="Script" uid="uid://3aqjkph6u0b0" path="res://scripts/level_up_effect.gd" id="1_wm756"]
+
+[node name="LevelUpEffect" type="Node3D"]
+script = ExtResource("1_wm756")
+
+[node name="Label3D" type="Label3D" parent="."]
+pixel_size = 0.01
+billboard = 1
+modulate = Color(0.70197505, 0.5452972, 0.27486363, 1)
+text = "LEVEL UP!"
+outline_size = 2

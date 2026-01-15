@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3 uid="uid://bteikfcwt50w6"]
+
+[ext_resource type="Script" uid="uid://by7cbpuh1k7ld" path="res://scripts/enemy.gd" id="1_55jtl"]
+[ext_resource type="PackedScene" uid="uid://ce1embig558rd" path="res://scenes/HealthBar3D.tscn" id="2_ft8do"]
+[ext_resource type="Script" uid="uid://d32apxuk1vawh" path="res://scripts/healthComponent.gd" id="2_mpr68"]
+[ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="4_ft8do"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_mpr68"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2qkhh"]
+size = Vector3(1, 1.2158203, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3gvst"]
+albedo_color = Color(0.43137255, 0.07058824, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_55jtl"]
+material = SubResource("StandardMaterial3D_3gvst")
+size = Vector3(0.9, 0.9, 0.9)
+
+[node name="Enemy" type="CharacterBody3D" groups=["enemy"]]
+script = ExtResource("1_55jtl")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 1.5
+target_desired_distance = 1.5
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7542914, 0)
+billboard = 1
+text = "mob_name"
+font_size = 64
+outline_size = 24
+
+[node name="HealthBar3D" parent="." instance=ExtResource("2_ft8do")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7302118, 0)
+no_depth_test = true
+texture = SubResource("ViewportTexture_mpr68")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.107910156, 0)
+shape = SubResource("BoxShape3D_2qkhh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("BoxMesh_55jtl")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_mpr68")
+max_health = 1
+
+[node name="StatsComponent" type="Node" parent="."]
+script = ExtResource("4_ft8do")

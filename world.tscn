@@ -1,0 +1,94 @@
+[gd_scene load_steps=19 format=3 uid="uid://bfw5g84ulae23"]
+
+[ext_resource type="Script" uid="uid://bdifrny1pqanx" path="res://scripts/world.gd" id="1_tlwt5"]
+[ext_resource type="Texture2D" uid="uid://c7lpgsw2oj3p6" path="res://textures/texture_13.png" id="2_aqk2v"]
+[ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="3_tlwt5"]
+[ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="4_aqk2v"]
+[ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="5_036b0"]
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="6_gbfbk"]
+[ext_resource type="PackedScene" uid="uid://b3mj4b8fx2imj" path="res://scenes/HUD.tscn" id="7_pkg7o"]
+[ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/Poring.tres" id="8_ioo17"]
+[ext_resource type="Resource" uid="uid://b5sbonaifogvd" path="res://resources/Fabre.tres" id="9_ioo17"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tlwt5"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_aqk2v"]
+sky_material = SubResource("ProceduralSkyMaterial_tlwt5")
+
+[sub_resource type="Environment" id="Environment_036b0"]
+background_mode = 2
+sky = SubResource("Sky_aqk2v")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_aqk2v"]
+vertices = PackedVector3Array(-124.5, 0.5, -124.5, -124.5, 0.5, 124.5, 124.5, 0.5, 124.5, 124.5, 0.5, -124.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tlwt5"]
+albedo_texture = ExtResource("2_aqk2v")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_aqk2v"]
+material = SubResource("StandardMaterial3D_tlwt5")
+size = Vector2(250, 250)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_036b0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqk2v"]
+transparency = 1
+albedo_color = Color(0.74050033, 0.6085594, 0.26434618, 1)
+emission_enabled = true
+
+[sub_resource type="TorusMesh" id="TorusMesh_036b0"]
+material = SubResource("StandardMaterial3D_aqk2v")
+inner_radius = 0.854
+outer_radius = 0.934
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_tlwt5")
+metadata/_edit_horizontal_guides_ = [21.0]
+
+[node name="Player" parent="." instance=ExtResource("3_tlwt5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1590004, 1, 0.51211166)
+speed = 8.0
+attack_range = 1.5
+click_indicator_path = NodePath("../ClickIndicator")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_036b0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 12.960707, 0)
+shadow_enabled = true
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011876106, -0.008881569, 0.00404644)
+navigation_mesh = SubResource("NavigationMesh_aqk2v")
+
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ground"]
+mesh = SubResource("PlaneMesh_aqk2v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground"]
+shape = SubResource("WorldBoundaryShape3D_036b0")
+
+[node name="ClickIndicator" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("TorusMesh_036b0")
+
+[node name="Hud" parent="." instance=ExtResource("7_pkg7o")]
+
+[node name="MobSpawner - Poring" parent="." instance=ExtResource("5_036b0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.501255, -0.00886631, -24.764254)
+enemy_scene = ExtResource("4_aqk2v")
+mob_pool = Array[ExtResource("6_gbfbk")]([ExtResource("8_ioo17")])
+
+[node name="MobSpawner - Fabre" parent="." instance=ExtResource("5_036b0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 30)
+enemy_scene = ExtResource("4_aqk2v")
+mob_pool = Array[ExtResource("6_gbfbk")]([ExtResource("9_ioo17")])
+spawn_radius = 10.0
+max_mobs = 10

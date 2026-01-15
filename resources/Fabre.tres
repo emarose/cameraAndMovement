@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://b5sbonaifogvd"]
+
+[ext_resource type="PackedScene" uid="uid://cjm7w4gbf7dry" path="res://assets/models/fabre-placeholder-model.tscn" id="1_fi3od"]
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_t0rr6"]
+
+[resource]
+script = ExtResource("1_t0rr6")
+monster_name = "Fabre"
+level = 2
+race = "Insect"
+element = "Earth"
+base_exp = 50
+str = 12
+agi = 23
+vit = 3
+int_stat = 4
+dex = 13
+luk = 10
+max_hp = 80
+move_spd = 2.0
+aggro_range = 10
+model_scene = ExtResource("1_fi3od")
+movement_type = "Hover"
+metadata/_custom_type_script = "uid://e53aoxyegbf"

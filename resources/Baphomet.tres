@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://cc5e4cdm8rgrp"]
+
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_rks1e"]
+
+[resource]
+script = ExtResource("1_rks1e")
+monster_name = "Baphomet"
+level = 12
+type = "Boss"
+base_exp = 190
+job_exp = 120
+str = 636
+agi = 326
+vit = 221
+int_stat = 211
+dex = 116
+luk = 106
+max_hp = 595
+atk = 285
+move_spd = 4.255
+aggro_range = 10
+metadata/_custom_type_script = "uid://e53aoxyegbf"

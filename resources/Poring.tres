@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://ttnxvkfcc5ku"]
+
+[ext_resource type="PackedScene" uid="uid://d1nm1abc21fsy" path="res://assets/models/poring-placeholder-model.tscn" id="1_k4j7c"]
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_yrkqf"]
+
+[resource]
+script = ExtResource("1_yrkqf")
+monster_name = "Poring"
+level = 3
+base_exp = 50
+job_exp = 50
+str = 2
+agi = 4
+vit = 10
+dex = 4
+max_hp = 1000
+flee = 1
+def = 1
+move_spd = 2.0
+aggro_range = 10.0
+attack_range = 1.5
+model_scene = ExtResource("1_k4j7c")
+movement_type = "Slime"
+wander_radius = 25.0
+idle_time_max = 2.0
+movement_speed_factor = 0.7
+metadata/_custom_type_script = "uid://e53aoxyegbf"

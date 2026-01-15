@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://d1cthmu16e6oc"]
+
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_eg4gg"]
+
+[resource]
+script = ExtResource("1_eg4gg")
+monster_name = "RangedMonster"
+level = 2
+element = "Ghost"
+base_exp = 123
+str = 2
+int_stat = 2
+aggro_range = 10
+attack_range = 15
+metadata/_custom_type_script = "uid://e53aoxyegbf"

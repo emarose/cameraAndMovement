@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjkj6s57v61vn"]
+
+[ext_resource type="Script" uid="uid://dmietpyk2ody7" path="res://scripts/floating_text.gd" id="1_iwtc3"]
+
+[node name="FloatingTextRoot" type="Node3D"]
+script = ExtResource("1_iwtc3")
+
+[node name="Label3D" type="Label3D" parent="."]
+pixel_size = 0.015
+billboard = 1
+no_depth_test = true
+modulate = Color(0.9227301, 0.6773315, 0.24205005, 1)
+text = "999"

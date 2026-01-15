@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://765vokj83tna"]
+
+[ext_resource type="Script" uid="uid://r8mbj7rrcdad" path="res://scripts/revive_button.gd" id="1_ovv0w"]
+
+[node name="GameOverUI" type="CanvasLayer"]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.36862746, 0.36862746, 0.36862746, 0.4627451)
+
+[node name="ReviveButton" type="Button" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -39.0
+offset_top = -15.5
+offset_right = 39.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Respawn"
+script = ExtResource("1_ovv0w")
