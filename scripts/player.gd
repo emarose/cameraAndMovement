@@ -31,21 +31,20 @@ var is_dead: bool = false
 var is_stunned = false
 var current_target_enemy = null
 var can_attack_player: bool = true
+var is_attacking: bool = false
 
 func _ready():
 	# 1. Calcular y setear vida inicial
 	var max_hp_calculado = 100 + stats.get_max_hp_bonus()
 	health_component.max_health = max_hp_calculado
-	health_component.current_health = max_hp_calculado # Llenar vida
+	health_component.current_health = max_hp_calculado
 	skill_component.setup(self, stats, sp_component)
-	# 2. Si tienes SPComponent, inicializarlo (Asumiendo que el nodo se llama SPComponent)
 	var sp_comp = get_node_or_null("SPComponent")
 	if sp_comp:
-		sp_comp.setup(stats) # Esto debería poner el SP al máximo dentro del componente
-	
+		sp_comp.setup(stats) 
+
 	# 3. Configurar HUD pasando los 3 componentes
 	if hud:
-		# Pasamos stats, health y el sp_comp (que puede ser null si no existe)
 		hud.setup_hud(stats, health_component, sp_comp)
 	
 	# Conexiones adicionales
@@ -68,32 +67,114 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			is_clicking = true
-			if skill_component.armed_skill:
-				_handle_skill_target_selection()
-			else:
-				handle_click_interaction()
+			# Detectamos e interactuamos una vez (spawn del indicador)
+			var result = get_mouse_world_interaction()
+			if result:
+				# Si clickeamos enemigo, atacamos una vez inmediatamente
+				if result.collider and is_instance_valid(result.collider) and result.collider.is_in_group("enemy"):
+					# Guardar target y ejecutar ataque inmediato
+					current_target_enemy = result.collider
+					spawn_flash_effect(result.position, true)
+					# Ejecutar ataque inmediato si es posible
+					if can_attack_player and not is_dead:
+						_start_attack_loop() # ejecuta un ataque y, si mantienes presionado, seguirá atacando
+				else:
+					# Clic en suelo: spawn indicador y empezar a moverse mientras mantengas presionado
+					spawn_flash_effect(result.position, false)
+					current_target_enemy = null
+					nav_agent.target_position = result.position
 		else:
 			# solo cuando se suelta el botón izquierdo
 			is_clicking = false
+			# Al soltar, detenemos el loop de ataque (si estaba atacando por hold)
+			_stop_attack_loop()
 
-	# Opcional: actualizar cursor cuando el mouse se mueve (menos raycasts que cada frame)
+	# Actualizar cursor cuando el mouse se mueve
 	if event is InputEventMouseMotion:
 		update_cursor()
 
+func _start_attack_loop():
+	# Inicia un ataque inmediato y, si el jugador mantiene is_clicking, seguirá atacando automáticamente
+	if not current_target_enemy or not is_instance_valid(current_target_enemy):
+		return
+	if not can_attack_player or is_dead:
+		return
+
+	# Bloqueamos movimiento y marcamos estado de ataque
+	is_attacking = true
+	nav_agent.target_position = global_position
+	velocity = Vector3.ZERO
+
+	# Ejecutar el ataque (execute_attack maneja el await del ASPD)
+	# Usamos una llamada asíncrona para permitir que execute_attack haga await internamente
+	_call_execute_attack_and_maybe_repeat(current_target_enemy)
+
+func _stop_attack_loop():
+	# Desactiva el estado de ataque (al soltar el click)
+	is_attacking = false
+
+# Helper asíncrono que ejecuta un ataque y, si el jugador sigue manteniendo click, repite según ASPD
+func _call_execute_attack_and_maybe_repeat(enemy):
+	# Ejecuta en background (no bloqueante para el hilo principal)
+	# Nota: Godot permite await dentro de funciones normales; aquí lo usamos para controlar el loop.
+	if not enemy or not is_instance_valid(enemy):
+		is_attacking = false
+		return
+
+	# Mientras el jugador mantenga el click y el target sea válido, atacamos en intervalos de ASPD
+	while is_clicking and is_attacking and is_instance_valid(enemy) and not is_dead:
+		# Solo intentar atacar si el agente puede atacar
+		if can_attack_player:
+			# Forzamos que el jugador mire al objetivo y no se mueva
+			nav_agent.target_position = global_position
+			look_at(Vector3(enemy.global_position.x, global_position.y, enemy.global_position.z), Vector3.UP)
+			# Ejecuta el ataque (execute_attack contiene el await del ASPD)
+			await execute_attack(enemy)
+		else:
+			# Si no puede atacar (cooldown), esperamos un pequeño tiempo antes de reintentar
+			await get_tree().create_timer(0.05).timeout
+
+		# Si el jugador soltó el click, salimos
+		if not is_clicking:
+			break
+
+	# Al terminar, liberar lock
+	is_attacking = false
+
 func _physics_process(_delta):
 	if is_dead or is_stunned: return
+
+	# Si estamos atacando, bloquear movimiento y no procesar navegación normal
+	if is_attacking:
+		# Asegurar que no nos movemos
+		nav_agent.target_position = global_position
+		velocity = Vector3.ZERO
+		update_cursor()
+		move_and_slide()
+		return
+
+	# Si mantenemos click y no hay skill armado, actualizar interacción continua
 	if is_clicking and not skill_component.armed_skill:
 		_process_continuous_interaction()
-	# LÓGICA DE AUTO-ATAQUE: Si tenemos un objetivo, lo perseguimos y atacamos
+
+	# LÓGICA DE SEGUIR TARGET (solo seguimiento, no auto-ataque)
 	if current_target_enemy and is_instance_valid(current_target_enemy):
 		var dist = global_position.distance_to(current_target_enemy.global_position)
-		if dist <= attack_range:
-			execute_attack(current_target_enemy)
+		# Si estamos en rango y el jugador está manteniendo click sobre el enemigo, el ataque lo maneja el loop
+		# Si no está haciendo click, no atacamos automáticamente; solo nos acercamos si el jugador lo desea
+		if is_clicking:
+			# Si el jugador mantiene click y está en rango, el loop de ataque se encargará de ejecutar ataques
+			if dist > attack_range:
+				nav_agent.target_position = current_target_enemy.global_position
+			else:
+				nav_agent.target_position = global_position
 		else:
-			# Si está lejos, movernos hacia él
-			nav_agent.target_position = current_target_enemy.global_position
-	
+			# Si no está clickeando, no atacamos automáticamente; opcional: acercarnos si queremos
+			# nav_agent.target_position = current_target_enemy.global_position
+			pass
+
 	elif is_clicking:
+		# Movimiento normal hacia la posición del mouse mientras se mantiene presionado
 		move_to_mouse_position()
 
 	if nav_agent.is_navigation_finished():
@@ -107,7 +188,7 @@ func _physics_process(_delta):
 			look_at(target_flat, Vector3.UP)
 	update_cursor()
 	move_and_slide()
-
+	
 func _process_continuous_interaction():
 	var result = get_mouse_world_interaction()
 	if not result: return
@@ -158,17 +239,6 @@ func move_to_mouse_position():
 		if result:
 			nav_agent.target_position = result.position
 
-#func get_mouse_world_interaction():
-#	var camera = get_viewport().get_camera_3d()
-#	var mouse_pos = get_viewport().get_mouse_position()
-#	var ray_origin = camera.project_ray_origin(mouse_pos)
-#	var ray_end = ray_origin + camera.project_ray_normal(mouse_pos) * 2000
-#	var space_state = get_world_3d().direct_space_state
-#	
-#	var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-#	query.exclude = [get_rid()]
-#	return space_state.intersect_ray(query)
-
 func get_mouse_world_interaction():
 	var camera = get_viewport().get_camera_3d()
 	if not camera: return null
@@ -180,7 +250,7 @@ func get_mouse_world_interaction():
 	var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
 	query.exclude = [get_rid()]
 	var result = space_state.intersect_ray(query)
-	if not result: # intersect_ray devuelve {} si no choca
+	if not result:
 		return null
 	return result
 
@@ -204,20 +274,30 @@ func try_attack_enemy(enemy):
 	else:
 		nav_agent.target_position = enemy.global_position
 
-func execute_attack(enemy):
-	if not can_attack_player or is_dead: return
-	
+func execute_attack(enemy) -> void:
+	# Retorna cuando el ataque y su cooldown (ASPD) finalizan
+	if not can_attack_player or is_dead: 
+		return
+
+	# Si el enemigo dejó de ser válido, salir
+	if not enemy or not is_instance_valid(enemy):
+		return
+
+	# Bloqueo de movimiento mientras atacamos
+	nav_agent.target_position = global_position
+	velocity = Vector3.ZERO
+
 	var enemy_health = enemy.get_node_or_null("HealthComponent")
 	var enemy_data = enemy.data
 
 	if enemy_health and enemy_data and stats:
 		can_attack_player = false
-		# TODO: ESTO TEDRIA QUE ESTAR EN STATSCOMPONENTS COMO LOS DEMAS CALCULOS
+
+		# Cálculo de hit
 		var hit_chance_percent = (stats.get_hit() - enemy_data.flee) + 80
 		hit_chance_percent = clamp(hit_chance_percent, 5, 95)
-		
 		var is_hit = (randi() % 100) < hit_chance_percent
-		
+
 		if not is_hit:
 			get_tree().call_group("hud", "add_log_message", "Fallaste contra " + enemy_data.monster_name, Color.SKY_BLUE)
 			spawn_floating_text(enemy.global_position, 0, true)
@@ -226,9 +306,14 @@ func execute_attack(enemy):
 			get_tree().call_group("hud", "add_log_message", "Golpeaste a %s por %d" % [enemy_data.monster_name, final_damage], Color.WHITE)
 			enemy_health.take_damage(final_damage)
 			spawn_floating_text(enemy.global_position, final_damage, false)
-		
-		await get_tree().create_timer(stats.get_attack_speed()).timeout 
+
+		# Esperar el tiempo de ataque (ASPD) antes de liberar can_attack_player
+		await get_tree().create_timer(stats.get_attack_speed()).timeout
 		can_attack_player = true
+
+	# Al finalizar el ataque, si el jugador no mantiene click, liberamos is_attacking
+	if not is_clicking:
+		is_attacking = false
 
 func _on_player_hit(new_health):
 	if has_node("HealthBar3D") and has_node("HealthComponent"):
