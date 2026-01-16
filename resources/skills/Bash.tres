@@ -6,8 +6,7 @@
 script = ExtResource("1_ucktl")
 skill_name = "Bash"
 type = 1
-sp_cost = 2
-cast_range = 4.0
-damage_multiplier = 15.0
-cooldown = 2.0
+sp_cost = 5
+damage_multiplier = 200.0
+cooldown = 5.0
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

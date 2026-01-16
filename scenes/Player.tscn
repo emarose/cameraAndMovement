@@ -79,6 +79,8 @@ max_sp = 1
 
 [node name="StatsComponent" type="Node" parent="."]
 script = ExtResource("8_khinc")
+str_stat = 9
+dex = 9
 
 [node name="SkillComponent" type="Node" parent="."]
 script = ExtResource("10_d3wef")

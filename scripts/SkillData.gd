@@ -1,7 +1,7 @@
 extends Resource
 class_name SkillData
 
-enum SkillType { TARGET, POINT, SELF }
+enum SkillType { TARGET, POINT, SELF } # Objetivo, Suelo (AOE), Instantánea
 
 @export_group("Configuración")
 @export var skill_name: String = "Habilidad"

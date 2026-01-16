@@ -26,6 +26,8 @@ extends CharacterBody3D
 
 # --- Variables de Ataque y Control ---
 var last_attack_time: int = 0
+var _last_cursor_state := "default" # "default", "attack", "skill"
+
 var is_clicking: bool = false
 var is_dead: bool = false 
 var is_stunned = false
@@ -34,6 +36,7 @@ var can_attack_player: bool = true
 var is_attacking: bool = false
 
 func _ready():
+
 	# 1. Calcular y setear vida inicial
 	var max_hp_calculado = 100 + stats.get_max_hp_bonus()
 	health_component.max_health = max_hp_calculado
@@ -67,78 +70,62 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			is_clicking = true
-			# Detectamos e interactuamos una vez (spawn del indicador)
-			var result = get_mouse_world_interaction()
-			if result:
-				# Si clickeamos enemigo, atacamos una vez inmediatamente
-				if result.collider and is_instance_valid(result.collider) and result.collider.is_in_group("enemy"):
-					# Guardar target y ejecutar ataque inmediato
-					current_target_enemy = result.collider
-					spawn_flash_effect(result.position, true)
-					# Ejecutar ataque inmediato si es posible
-					if can_attack_player and not is_dead:
-						_start_attack_loop() # ejecuta un ataque y, si mantienes presionado, seguirá atacando
-				else:
-					# Clic en suelo: spawn indicador y empezar a moverse mientras mantengas presionado
-					spawn_flash_effect(result.position, false)
-					current_target_enemy = null
-					nav_agent.target_position = result.position
+			if skill_component and skill_component.armed_skill:
+				_handle_skill_target_selection()
+			else:
+				handle_click_interaction()
 		else:
-			# solo cuando se suelta el botón izquierdo
 			is_clicking = false
-			# Al soltar, detenemos el loop de ataque (si estaba atacando por hold)
-			_stop_attack_loop()
 
 	# Actualizar cursor cuando el mouse se mueve
 	if event is InputEventMouseMotion:
 		update_cursor()
 
 func _start_attack_loop():
-	# Inicia un ataque inmediato y, si el jugador mantiene is_clicking, seguirá atacando automáticamente
+	# No bloqueamos movimiento aquí. Solo iniciamos el proceso que llevará al jugador a rango y luego atacará.
 	if not current_target_enemy or not is_instance_valid(current_target_enemy):
 		return
-	if not can_attack_player or is_dead:
+	if is_dead:
 		return
 
-	# Bloqueamos movimiento y marcamos estado de ataque
-	is_attacking = true
-	nav_agent.target_position = global_position
-	velocity = Vector3.ZERO
+	# Lanzamos la rutina asíncrona que se encargará de moverse hasta el objetivo y atacar cuando esté en rango
+	_call_move_to_target_then_attack(current_target_enemy)
 
-	# Ejecutar el ataque (execute_attack maneja el await del ASPD)
-	# Usamos una llamada asíncrona para permitir que execute_attack haga await internamente
-	_call_execute_attack_and_maybe_repeat(current_target_enemy)
+func _call_move_to_target_then_attack(enemy):
+	if not enemy or not is_instance_valid(enemy):
+		return
+
+	# Loop: mientras el jugador mantenga el click y el enemigo sea válido
+	while is_clicking and is_instance_valid(enemy) and not is_dead:
+		var dist = global_position.distance_to(enemy.global_position)
+		# Si estamos fuera de rango, movernos hacia el enemigo
+		if dist > attack_range:
+			# permitir navegación normal hacia el enemigo
+			nav_agent.target_position = enemy.global_position
+			# esperar un pequeño intervalo antes de re-evaluar (evita busy-wait)
+			await get_tree().create_timer(0.08).timeout
+			# si el jugador soltó el click, salimos
+			if not is_clicking:
+				break
+			continue
+		# Si llegamos aquí, estamos dentro de rango: bloquear movimiento y atacar
+		is_attacking = true
+		nav_agent.target_position = global_position
+		velocity = Vector3.ZERO
+		look_at(Vector3(enemy.global_position.x, global_position.y, enemy.global_position.z), Vector3.UP)
+
+		# Ejecutar un ataque y esperar a que termine (execute_attack hace await del ASPD)
+		await execute_attack(enemy)
+
+		# Si el enemigo murió o el jugador soltó el click, salimos del loop
+		if not is_clicking or not is_instance_valid(enemy) or is_dead:
+			break
+
+	# Liberar estado de ataque al salir
+	is_attacking = false
 
 func _stop_attack_loop():
 	# Desactiva el estado de ataque (al soltar el click)
-	is_attacking = false
-
-# Helper asíncrono que ejecuta un ataque y, si el jugador sigue manteniendo click, repite según ASPD
-func _call_execute_attack_and_maybe_repeat(enemy):
-	# Ejecuta en background (no bloqueante para el hilo principal)
-	# Nota: Godot permite await dentro de funciones normales; aquí lo usamos para controlar el loop.
-	if not enemy or not is_instance_valid(enemy):
-		is_attacking = false
-		return
-
-	# Mientras el jugador mantenga el click y el target sea válido, atacamos en intervalos de ASPD
-	while is_clicking and is_attacking and is_instance_valid(enemy) and not is_dead:
-		# Solo intentar atacar si el agente puede atacar
-		if can_attack_player:
-			# Forzamos que el jugador mire al objetivo y no se mueva
-			nav_agent.target_position = global_position
-			look_at(Vector3(enemy.global_position.x, global_position.y, enemy.global_position.z), Vector3.UP)
-			# Ejecuta el ataque (execute_attack contiene el await del ASPD)
-			await execute_attack(enemy)
-		else:
-			# Si no puede atacar (cooldown), esperamos un pequeño tiempo antes de reintentar
-			await get_tree().create_timer(0.05).timeout
-
-		# Si el jugador soltó el click, salimos
-		if not is_clicking:
-			break
-
-	# Al terminar, liberar lock
 	is_attacking = false
 
 func _physics_process(_delta):
@@ -256,13 +243,32 @@ func get_mouse_world_interaction():
 
 func update_cursor():
 	var result = get_mouse_world_interaction()
-	
-	if result and result.collider.is_in_group("enemy"):
-		# Cambiar a cursor de ataque
-		Input.set_custom_mouse_cursor(cursor_attack, Input.CURSOR_ARROW, Vector2(16, 16))
+	var hovering_enemy = false
+	var within_skill_range = false
+
+	if result and result.has("collider"):
+		var col = result.collider
+		if is_instance_valid(col) and col.is_in_group("enemy"):
+			hovering_enemy = true
+			if skill_component and skill_component.armed_skill:
+				var cast_range = skill_component.armed_skill.cast_range
+				if global_position.distance_to(col.global_position) <= cast_range:
+					within_skill_range = true
+
+	if within_skill_range:
+		if _last_cursor_state != "skill":
+			Input.set_custom_mouse_cursor(cursor_skill, Input.CURSOR_ARROW, Vector2(16, 16))
+			_last_cursor_state = "skill"
+		return
+
+	if hovering_enemy:
+		if _last_cursor_state != "attack":
+			Input.set_custom_mouse_cursor(cursor_attack, Input.CURSOR_ARROW, Vector2(16, 16))
+			_last_cursor_state = "attack"
 	else:
-		# Volver al cursor normal
-		Input.set_custom_mouse_cursor(cursor_default, Input.CURSOR_ARROW, Vector2(0, 0))
+		if _last_cursor_state != "default":
+			Input.set_custom_mouse_cursor(cursor_default, Input.CURSOR_ARROW, Vector2(0, 0))
+			_last_cursor_state = "default"
 
 # --- FUNCIONES AUXILIARES DE ATAQUE ---
 
@@ -341,8 +347,6 @@ func _on_player_death():
 	is_clicking = false
 	velocity = Vector3.ZERO
 	
-	print("El jugador ha muerto")
-	
 	# 1. Feedback visual de muerte (caerse de lado)
 	var tween = create_tween()
 	tween.tween_property(self, "rotation:z", deg_to_rad(-90), 0.5).set_trans(Tween.TRANS_BOUNCE)
@@ -364,33 +368,39 @@ func _on_skill_shortcut_pressed(skill: SkillData):
 
 func _handle_skill_target_selection():
 	var result = get_mouse_world_interaction()
-	if result and result.collider.is_in_group("enemy"):
-		var enemy = result.collider
-		var dist = global_position.distance_to(enemy.global_position)
-		
-		if dist <= skill_component.armed_skill.cast_range:
-			# Mirar al enemigo antes de disparar
-			look_at(Vector3(enemy.global_position.x, global_position.y, enemy.global_position.z), Vector3.UP)
-			skill_component.execute_armed_skill(enemy)
-		else:
-			get_tree().call_group("hud", "add_log_message", "Fuera de rango", Color.ORANGE)
+
+	if not result or not result.has("collider"):
+		return
+
+	var collider = result.collider
+	if not is_instance_valid(collider) or not collider.is_in_group("enemy"):
+		return
+
+	# Validar que la skill esté armada
+	if not skill_component or not skill_component.armed_skill:
+		return
+
+	var enemy = collider
+	var dist = global_position.distance_to(enemy.global_position)
+
+	# Usar cast_range desde la skill armada
+	var cast_range = skill_component.armed_skill.cast_range
+	if dist <= cast_range:
+		look_at(Vector3(enemy.global_position.x, global_position.y, enemy.global_position.z), Vector3.UP)
+		# Llamada diferida para evitar problemas de timing
+		skill_component.call_deferred("execute_armed_skill", enemy)
 	else:
-		print("Selecciona un enemigo válido")
+		get_tree().call_group("hud", "add_log_message", "Fuera de rango", Color.ORANGE)
 
 func try_use_skill():
 	if current_target_enemy and is_instance_valid(current_target_enemy):
 		var distance = global_position.distance_to(current_target_enemy.global_position)
-		
 		if distance <= skill_1.cast_range:
-			# 1. Detener el movimiento del NavigationAgent
-			nav_agent.target_position = global_position 
+			nav_agent.target_position = global_position
 			velocity = Vector3.ZERO
-			
-			# 2. Mirar al enemigo (solo en el eje Y para no rotar raro)
 			look_at(Vector3(current_target_enemy.global_position.x, global_position.y, current_target_enemy.global_position.z), Vector3.UP)
-			
-			# 3. Intentar ejecutar
-			skill_component.execute_skill(skill_1, current_target_enemy)
+			# Llamada diferida
+			skill_component.call_deferred("execute_armed_skill", current_target_enemy)
 		else:
 			print("Demasiado lejos")
 
