@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://lw4sjl4cws8q"]
+[gd_scene load_steps=23 format=3 uid="uid://lw4sjl4cws8q"]
 
 [ext_resource type="Script" uid="uid://cjm61wm3wga5a" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://biubb72lqc4a3" path="res://assets/icons/cursor_default.png" id="2_lkdrv"]
@@ -33,6 +33,16 @@ albedo_color = Color(0.056243494, 0.007778925, 0.03827338, 1)
 material = SubResource("StandardMaterial3D_6dkly")
 radius = 0.05
 height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
+transparency = 1
+albedo_color = Color(0.45882353, 0.18431373, 0.21176471, 0.7490196)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0rnld"]
+material = SubResource("StandardMaterial3D_p7iby")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.01
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 script = ExtResource("1_g2els")
@@ -94,3 +104,7 @@ mesh = SubResource("SphereMesh_6eyey")
 [node name="eye2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1563986, 0.5524795, -0.4945358)
 mesh = SubResource("SphereMesh_6eyey")
+
+[node name="AOEIndicator" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("CylinderMesh_0rnld")

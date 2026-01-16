@@ -358,6 +358,17 @@ scroll_following = true
 offset_right = 40.0
 offset_bottom = 23.0
 
+[node name="ArmedSkillLabel" type="RichTextLabel" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 47.0
+offset_right = 20.0
+offset_bottom = 87.0
+grow_horizontal = 2
+text = "FIREBALL"
+
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/VitRow/AddButton" to="." method="_on_add_vit_pressed"]

@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://bfw5g84ulae23"]
+[gd_scene load_steps=20 format=3 uid="uid://bfw5g84ulae23"]
 
 [ext_resource type="Script" uid="uid://bdifrny1pqanx" path="res://scripts/world.gd" id="1_tlwt5"]
 [ext_resource type="Texture2D" uid="uid://c7lpgsw2oj3p6" path="res://textures/texture_13.png" id="2_aqk2v"]
 [ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="3_tlwt5"]
+[ext_resource type="Resource" uid="uid://busgf0y3f23mu" path="res://resources/skills/Fireball.tres" id="3_wse8f"]
 [ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="4_aqk2v"]
 [ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="5_036b0"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="6_gbfbk"]
@@ -55,6 +56,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1590004, 1, 0.51211166)
 speed = 8.0
 attack_range = 1.5
 click_indicator_path = NodePath("../ClickIndicator")
+skill_1 = ExtResource("3_wse8f")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_036b0")

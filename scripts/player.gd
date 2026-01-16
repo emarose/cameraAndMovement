@@ -15,6 +15,7 @@ extends CharacterBody3D
 @export var floating_text_scene: PackedScene
 @export var level_up_effect_scene: PackedScene
 
+@onready var aoe_indicator: MeshInstance3D = $AOEIndicator
 @onready var skill_component = $SkillComponent
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var click_indicator: MeshInstance3D = get_node_or_null(click_indicator_path)
@@ -72,7 +73,9 @@ func _unhandled_input(event):
 			is_clicking = true
 			if skill_component and skill_component.armed_skill:
 				_handle_skill_target_selection()
+				get_viewport().set_input_as_handled()
 			else:
+				is_clicking = true # este
 				handle_click_interaction()
 		else:
 			is_clicking = false
@@ -81,105 +84,62 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		update_cursor()
 
-func _start_attack_loop():
-	# No bloqueamos movimiento aquí. Solo iniciamos el proceso que llevará al jugador a rango y luego atacará.
-	if not current_target_enemy or not is_instance_valid(current_target_enemy):
-		return
-	if is_dead:
-		return
-
-	# Lanzamos la rutina asíncrona que se encargará de moverse hasta el objetivo y atacar cuando esté en rango
-	_call_move_to_target_then_attack(current_target_enemy)
-
-func _call_move_to_target_then_attack(enemy):
-	if not enemy or not is_instance_valid(enemy):
-		return
-
-	# Loop: mientras el jugador mantenga el click y el enemigo sea válido
-	while is_clicking and is_instance_valid(enemy) and not is_dead:
-		var dist = global_position.distance_to(enemy.global_position)
-		# Si estamos fuera de rango, movernos hacia el enemigo
-		if dist > attack_range:
-			# permitir navegación normal hacia el enemigo
-			nav_agent.target_position = enemy.global_position
-			# esperar un pequeño intervalo antes de re-evaluar (evita busy-wait)
-			await get_tree().create_timer(0.08).timeout
-			# si el jugador soltó el click, salimos
-			if not is_clicking:
-				break
-			continue
-		# Si llegamos aquí, estamos dentro de rango: bloquear movimiento y atacar
-		is_attacking = true
-		nav_agent.target_position = global_position
-		velocity = Vector3.ZERO
-		look_at(Vector3(enemy.global_position.x, global_position.y, enemy.global_position.z), Vector3.UP)
-
-		# Ejecutar un ataque y esperar a que termine (execute_attack hace await del ASPD)
-		await execute_attack(enemy)
-
-		# Si el enemigo murió o el jugador soltó el click, salimos del loop
-		if not is_clicking or not is_instance_valid(enemy) or is_dead:
-			break
-
-	# Liberar estado de ataque al salir
-	is_attacking = false
-
-func _stop_attack_loop():
-	# Desactiva el estado de ataque (al soltar el click)
-	is_attacking = false
-
 func _physics_process(_delta):
 	if is_dead or is_stunned: return
-
-	# Si estamos atacando, bloquear movimiento y no procesar navegación normal
+	_update_aoe_indicator()
+	
+	# 1. Bloqueo por animación de ataque (prioridad máxima)
 	if is_attacking:
-		# Asegurar que no nos movemos
 		nav_agent.target_position = global_position
 		velocity = Vector3.ZERO
 		update_cursor()
 		move_and_slide()
 		return
 
-	# Si mantenemos click y no hay skill armado, actualizar interacción continua
+	# 2. PROCESAMIENTO DE INPUT (Solo si NO hay skill armada)
+	# Encapsulamos toda la lógica de "decidir a dónde ir" dentro de este if
 	if is_clicking and not skill_component.armed_skill:
-		_process_continuous_interaction()
-
-	# LÓGICA DE SEGUIR TARGET (solo seguimiento, no auto-ataque)
-	if current_target_enemy and is_instance_valid(current_target_enemy):
-		var dist = global_position.distance_to(current_target_enemy.global_position)
-		# Si estamos en rango y el jugador está manteniendo click sobre el enemigo, el ataque lo maneja el loop
-		# Si no está haciendo click, no atacamos automáticamente; solo nos acercamos si el jugador lo desea
-		if is_clicking:
-			# Si el jugador mantiene click y está en rango, el loop de ataque se encargará de ejecutar ataques
+		
+		if current_target_enemy and is_instance_valid(current_target_enemy):
+			# Lógica de seguimiento de enemigo
+			var dist = global_position.distance_to(current_target_enemy.global_position)
 			if dist > attack_range:
 				nav_agent.target_position = current_target_enemy.global_position
 			else:
 				nav_agent.target_position = global_position
 		else:
-			# Si no está clickeando, no atacamos automáticamente; opcional: acercarnos si queremos
-			# nav_agent.target_position = current_target_enemy.global_position
-			pass
+			
+			# Lógica de movimiento libre (suelo)
+			# Asumo que _process_continuous_interaction o move_to_mouse_position hacen esto
+			move_to_mouse_position() 
+	
+	# Nota: Si skill_component.armed_skill es TRUE, el código salta todo el bloque anterior.
+	# Por lo tanto, no se llama a nav_agent.set_target_position.
 
-	elif is_clicking:
-		# Movimiento normal hacia la posición del mouse mientras se mantiene presionado
-		move_to_mouse_position()
-
+	# 3. EJECUCIÓN FÍSICA DEL MOVIMIENTO
+	# Esto se ejecuta independientemente del input. 
+	# Si ya tenías un camino trazado antes de armar la skill, esto hará que el personaje lo termine.
 	if nav_agent.is_navigation_finished():
-		return
-
-	var next_path_pos = nav_agent.get_next_path_position()
-	velocity = (next_path_pos - global_position).normalized() * speed
-	var target_flat = Vector3(next_path_pos.x, global_position.y, next_path_pos.z)
-	if velocity.length() > 0.1:
-		if global_position.distance_to(target_flat) > 0.1:
+		velocity = Vector3.ZERO
+		# Aquí podrías añadir animación de Idle si estás parado
+	else:
+		var next_path_pos = nav_agent.get_next_path_position()
+		var direction = (next_path_pos - global_position).normalized()
+		velocity = direction * speed
+		
+		# Orientación
+		var target_flat = Vector3(next_path_pos.x, global_position.y, next_path_pos.z)
+		if velocity.length() > 0.1 and global_position.distance_to(target_flat) > 0.1:
 			look_at(target_flat, Vector3.UP)
+	
 	update_cursor()
 	move_and_slide()
 	
 func _process_continuous_interaction():
+	
 	var result = get_mouse_world_interaction()
 	if not result: return
-	
+
 	if result.collider.is_in_group("enemy"):
 		# CASO A: Estamos clickeando un enemigo
 		var enemy = result.collider
@@ -202,6 +162,10 @@ func _process_continuous_interaction():
 # --- FUNCIONES AUXILIARES DE MOVIMIENTO ---
 
 func handle_click_interaction():
+	print("handle_click_interaction skill_component.armed_skill",skill_component.armed_skill)
+	if skill_component.armed_skill:
+		return
+	
 	var result = get_mouse_world_interaction()
 	if result:
 		var collider = result.collider
@@ -215,6 +179,9 @@ func handle_click_interaction():
 			current_target_enemy = null # Si clicamos suelo, cancelamos ataque
 
 func move_to_mouse_position():
+	print("move_to_mouse_position skill_component.armed_skill:",skill_component.armed_skill)
+	if skill_component.armed_skill:
+		return
 	if current_target_enemy != null and is_instance_valid(current_target_enemy):
 		# Opcional: Aquí podrías hacer que persiga al enemigo. 
 		# Por ahora, si clicamos enemigo, no movemos el punto de navegación al suelo
@@ -273,6 +240,7 @@ func update_cursor():
 # --- FUNCIONES AUXILIARES DE ATAQUE ---
 
 func try_attack_enemy(enemy):
+	print("try attack enemy") # no se ejecuta
 	var dist = global_position.distance_to(enemy.global_position)
 	if dist <= attack_range - 0.2:
 		if enemy.has_node("HealthComponent"):
@@ -360,37 +328,54 @@ func _on_player_death():
 # --- FUNCIONES AUXILIARES DE SKILLS ---
 
 func _on_skill_shortcut_pressed(skill: SkillData):
-	# Detener al jugador inmediatamente
-	nav_agent.target_position = global_position
-	velocity = Vector3.ZERO
-	# Armar la skill en el componente
+	is_clicking = false # Resetear el estado del mouse
+	# Armar la skill
 	skill_component.arm_skill(skill)
 
 func _handle_skill_target_selection():
+	
 	var result = get_mouse_world_interaction()
+	if not result: return
 
-	if not result or not result.has("collider"):
-		return
+	if not skill_component or not skill_component.armed_skill: return
+	
+	var skill = skill_component.armed_skill
+	var target_data = null
+	var distance_to_cast = 0.0
+	
+	# 1. Identificar el objetivo y calcular distancia
+	if skill.type == SkillData.SkillType.TARGET:
+		if result.has("collider") and result.collider.is_in_group("enemy"):
+			target_data = result.collider
+			distance_to_cast = global_position.distance_to(target_data.global_position)
+	elif skill.type == SkillData.SkillType.POINT:
+		target_data = result.position
+		distance_to_cast = global_position.distance_to(target_data)
 
-	var collider = result.collider
-	if not is_instance_valid(collider) or not collider.is_in_group("enemy"):
-		return
+	# 2. VALIDACIÓN CRÍTICA
+	if target_data != null:
+		if distance_to_cast <= skill.cast_range:
+			# DENTRO DE RANGO: Ejecutar y asegurar que no nos movemos			
+			var look_pos = target_data.global_position if target_data is Node3D else target_data
+			look_at(Vector3(look_pos.x, global_position.y, look_pos.z), Vector3.UP)
+			
+			skill_component.call_deferred("execute_armed_skill", target_data)
+			is_clicking = false # Forzamos que deje de detectar el "mantener presionado"
+			_stop_movement()
+		else:
+			# FUERA DE RANGO: Solo avisar, NO actualizar target_position
+			get_tree().call_group("hud", "add_log_message", "Distancia insuficiente", Color.ORANGE)
+			# Opcional: Cancelar la skill si quieres que el jugador deba presionar la tecla de nuevo
+			# skill_component.cancel_cast() 
+	
+	# Importante: al procesar este click de skill, forzamos que is_clicking sea false 
+	# momentáneamente para que el physics_process no mueva al jugador en este frame
+	is_clicking = false
 
-	# Validar que la skill esté armada
-	if not skill_component or not skill_component.armed_skill:
-		return
-
-	var enemy = collider
-	var dist = global_position.distance_to(enemy.global_position)
-
-	# Usar cast_range desde la skill armada
-	var cast_range = skill_component.armed_skill.cast_range
-	if dist <= cast_range:
-		look_at(Vector3(enemy.global_position.x, global_position.y, enemy.global_position.z), Vector3.UP)
-		# Llamada diferida para evitar problemas de timing
-		skill_component.call_deferred("execute_armed_skill", enemy)
-	else:
-		get_tree().call_group("hud", "add_log_message", "Fuera de rango", Color.ORANGE)
+# Función auxiliar para frenar en seco
+func _stop_movement():
+	nav_agent.target_position = global_position
+	velocity = Vector3.ZERO
 
 func try_use_skill():
 	if current_target_enemy and is_instance_valid(current_target_enemy):
@@ -403,6 +388,36 @@ func try_use_skill():
 			skill_component.call_deferred("execute_armed_skill", current_target_enemy)
 		else:
 			print("Demasiado lejos")
+
+func _update_aoe_indicator():
+	# 1. Verificamos si hay una skill armada y si es de tipo POINT
+	var skill = skill_component.armed_skill
+	
+	if skill and skill.type == SkillData.SkillType.POINT:
+		var result = get_mouse_world_interaction()
+		if result:
+			aoe_indicator.visible = true
+			# Posicionamos el círculo donde está el mouse
+			aoe_indicator.global_position = result.position + Vector3(0, 0.1, 0)
+			
+			# Escalamos según el radio definido en el Resource
+			var s = skill.aoe_radius
+			aoe_indicator.scale = Vector3(s, 1, s)
+	else:
+		# Si no hay skill o no es POINT, se oculta inmediatamente
+		aoe_indicator.visible = false
+
+# Esta función actualiza el HUD y el Cursor solo cuando el estado cambia
+func _on_skill_state_changed():
+	update_cursor() # Cambia el color del cursor
+	
+	if hud:
+		if skill_component.armed_skill:
+			# Enviamos el nombre al HUD para mostrar el Label
+			hud.show_skill_label(skill_component.armed_skill.skill_name)
+		else:
+			# Si es null, ocultamos el Label
+			hud.hide_skill_label()
 
 # --- FUNCIONES AUXILIARES MISC ---
 

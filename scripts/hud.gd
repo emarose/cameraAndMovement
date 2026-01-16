@@ -9,6 +9,8 @@ extends CanvasLayer
 @onready var log_label: RichTextLabel = $PanelContainer/LogLabel
 @onready var sp_bar = $ManaBar
 @onready var active_skill_label = $ActiveSkillLabel
+@onready var armed_skill_label: RichTextLabel = $ArmedSkillLabel
+
 # --- Referencias a los Valores de Stats ---
 @onready var str_label = $StatsPanel/VBoxContainer_Base/StrRow/Value
 @onready var agi_label = $StatsPanel/VBoxContainer_Base/AgiRow/Value
@@ -29,7 +31,8 @@ var player_stats: StatsComponent
 func _ready():
 	# El HUD comienza oculto
 	stats_panel.visible = false
-	
+	armed_skill_label.text = ""
+
 func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent = null):
 	if not is_node_ready():
 		await ready
@@ -61,8 +64,24 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent =
 		stats.on_level_up.connect(_on_level_up)
 		
 	update_stats_ui()
+func show_skill_label(skill_name: String):
+	armed_skill_label.text = ">> " + skill_name.to_upper() + " <<"
+	armed_skill_label.visible = true
+	# Color cian para que resalte
+	armed_skill_label.modulate = Color.AQUA
 
+func hide_skill_label():
+	armed_skill_label.visible = false	
 
+func update_armed_skill_info(skill_name: String):
+	if skill_name == "":
+		armed_skill_label.text = ""
+		armed_skill_label.hide()
+	else:
+		armed_skill_label.text = ">>> " + skill_name.to_upper() + " <<<"
+		armed_skill_label.show()
+		# Opcional: darle un color cian para que resalte
+		armed_skill_label.modulate = Color.CYAN
 
 func _modify_stat(stat_name: String):
 	# Ahora player_stats ya no será Nil
