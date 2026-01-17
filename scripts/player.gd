@@ -99,19 +99,8 @@ func _physics_process(_delta):
 	# 2. PROCESAMIENTO DE INPUT (Solo si NO hay skill armada)
 	# Encapsulamos toda la lógica de "decidir a dónde ir" dentro de este if
 	if is_clicking and not skill_component.armed_skill:
-		
-		if current_target_enemy and is_instance_valid(current_target_enemy):
-			# Lógica de seguimiento de enemigo
-			var dist = global_position.distance_to(current_target_enemy.global_position)
-			if dist > attack_range:
-				nav_agent.target_position = current_target_enemy.global_position
-			else:
-				nav_agent.target_position = global_position
-		else:
-			
-			# Lógica de movimiento libre (suelo)
-			# Asumo que _process_continuous_interaction o move_to_mouse_position hacen esto
-			move_to_mouse_position() 
+		# Usamos la lógica centralizada (click sostenido ataca y mueve)
+		_process_continuous_interaction()
 	
 	# Nota: Si skill_component.armed_skill es TRUE, el código salta todo el bloque anterior.
 	# Por lo tanto, no se llama a nav_agent.set_target_position.
@@ -162,7 +151,6 @@ func _process_continuous_interaction():
 # --- FUNCIONES AUXILIARES DE MOVIMIENTO ---
 
 func handle_click_interaction():
-	print("handle_click_interaction skill_component.armed_skill",skill_component.armed_skill)
 	if skill_component.armed_skill:
 		return
 	
@@ -257,6 +245,9 @@ func execute_attack(enemy) -> void:
 	if not enemy or not is_instance_valid(enemy):
 		return
 
+	# Marcar el estado de ataque para bloquear input/movimiento durante la animación
+	is_attacking = true
+
 	# Bloqueo de movimiento mientras atacamos
 	nav_agent.target_position = global_position
 	velocity = Vector3.ZERO
@@ -285,9 +276,8 @@ func execute_attack(enemy) -> void:
 		await get_tree().create_timer(stats.get_attack_speed()).timeout
 		can_attack_player = true
 
-	# Al finalizar el ataque, si el jugador no mantiene click, liberamos is_attacking
-	if not is_clicking:
-		is_attacking = false
+	# Liberar estado de ataque al finalizar el ciclo (permite atacar en hold)
+	is_attacking = false
 
 func _on_player_hit(new_health):
 	if has_node("HealthBar3D") and has_node("HealthComponent"):

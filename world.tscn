@@ -54,7 +54,6 @@ metadata/_edit_horizontal_guides_ = [21.0]
 [node name="Player" parent="." instance=ExtResource("3_tlwt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1590004, 1, 0.51211166)
 speed = 8.0
-attack_range = 1.5
 click_indicator_path = NodePath("../ClickIndicator")
 skill_1 = ExtResource("3_wse8f")
 
