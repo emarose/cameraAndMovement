@@ -27,6 +27,22 @@ func set_values_and_animate(value: int, is_miss: bool, is_crit: bool = false):
 	
 	animate_and_destroy()
 
+func set_regen_text(value: int, regen_type: String):
+	label.text = "+" + str(value)
+	
+	# Color según el tipo de regeneración
+	if regen_type == "hp":
+		label.modulate = Color(0.2, 0.8, 0.2) # Verde para HP
+	elif regen_type == "sp":
+		label.modulate = Color(0.2, 0.6, 1.0) # Azul para SP
+	else:
+		label.modulate = Color.WHITE
+	
+	# Asegurarse de que empiece visible
+	label.transparency = 0.0
+	
+	animate_and_destroy()
+
 func animate_and_destroy():
 	var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	

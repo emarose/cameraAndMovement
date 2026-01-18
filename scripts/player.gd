@@ -60,8 +60,11 @@ func _ready():
 	skill_component.skill_state_changed.connect(_on_skill_state_changed)
 	# Conexiones adicionales
 	health_component.on_health_changed.connect(_on_player_hit)
+	health_component.on_damage_taken.connect(_on_player_damaged)
 	health_component.on_death.connect(_on_player_death)
 	regen_component.setup(stats, health_component, sp_component)
+	regen_component.hp_regenerated.connect(_on_hp_regenerated)
+	regen_component.sp_regenerated.connect(_on_sp_regenerated)
 
 func _unhandled_input(event):
 	if is_dead: return
@@ -310,7 +313,9 @@ func _on_player_hit(new_health):
 	if has_node("HealthBar3D") and has_node("HealthComponent"):
 		var max_hp = health_component.max_health
 		$HealthBar3D.update_bar(new_health, max_hp)
-	# 2. Stun / Flinch
+
+func _on_player_damaged(_damage_amount: int):
+	# 2. Stun / Flinch solo cuando recibe daño
 	is_stunned = true
 	velocity = Vector3.ZERO
 	# Interrumpimos el click para que el jugador tenga que volver a dar la orden (opcional, da tensión)
@@ -450,6 +455,14 @@ func _on_skill_state_changed():
 
 			hud.update_armed_skill_info("")
 
+# --- Callbacks de Regeneración ---
+
+func _on_hp_regenerated(amount: int):
+	spawn_regen_floating_text(global_position, amount, "hp")
+
+func _on_sp_regenerated(amount: int):
+	spawn_regen_floating_text(global_position, amount, "sp")
+
 # --- FUNCIONES AUXILIARES MISC ---
 
 func spawn_floating_text(pos: Vector3, value: int, is_miss: bool):
@@ -458,6 +471,13 @@ func spawn_floating_text(pos: Vector3, value: int, is_miss: bool):
 	get_tree().current_scene.add_child(txt_instance)
 	txt_instance.global_position = pos + Vector3(0, 1.5, 0)
 	txt_instance.set_values_and_animate(value, is_miss)
+
+func spawn_regen_floating_text(pos: Vector3, value: int, regen_type: String):
+	if not floating_text_scene: return
+	var txt_instance = floating_text_scene.instantiate()
+	get_tree().current_scene.add_child(txt_instance)
+	txt_instance.global_position = pos + Vector3(0, 1.5, 0)
+	txt_instance.set_regen_text(value, regen_type)
 
 func spawn_flash_effect(pos, is_attack = false):
 	if click_indicator:

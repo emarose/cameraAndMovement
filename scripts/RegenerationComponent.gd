@@ -2,6 +2,9 @@
 extends Node
 class_name RegenerationComponent
 
+signal hp_regenerated(amount: int)
+signal sp_regenerated(amount: int)
+
 var stats: StatsComponent
 var health_comp: HealthComponent
 var sp_comp: SPComponent
@@ -24,15 +27,15 @@ func _on_tick():
 	_regen_sp()
 
 func _regen_hp():
-	var max_hp = stats.get_max_hp_bonus()
-	if health_comp.current_health >= max_hp: return
+	if health_comp.current_health >= health_comp.max_health: return
 	
 	# Fórmula: Base (1 por cada 200) + Bono (1 por cada 5 VIT) + Modificadores
-	var base = max(1, floor(max_hp / 200.0))
+	var base = max(1, floor(health_comp.max_health / 200.0))
 	var vit_bonus = floor(stats.vit / 5.0)
 	
 	var total = int((base + vit_bonus + stats.hp_regen_flat_bonus) * stats.hp_regen_percent_mod)
 	health_comp.heal(total)
+	hp_regenerated.emit(total)
 
 func _regen_sp():
 	var max_sp = stats.get_max_sp()
@@ -50,3 +53,4 @@ func _regen_sp():
 	
 	var total = int((base + sp_bonus + int_bonus + luxury + stats.sp_regen_flat_bonus) * stats.sp_regen_percent_mod)
 	sp_comp.recover(total)
+	sp_regenerated.emit(total)
