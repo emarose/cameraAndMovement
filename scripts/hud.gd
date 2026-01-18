@@ -186,7 +186,7 @@ func update_stats_ui():
 	for btn in get_tree().get_nodes_in_group("stat_buttons"):
 		btn.visible = can_add
 
-func _on_add_str_pressed(): _modify_stat("str")
+func _on_add_str_pressed(): _modify_stat("str_stat")
 func _on_add_agi_pressed(): _modify_stat("agi")
 func _on_add_vit_pressed(): _modify_stat("vit")
 func _on_add_int_pressed(): _modify_stat("int_stat")
