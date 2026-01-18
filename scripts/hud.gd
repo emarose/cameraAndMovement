@@ -2,12 +2,15 @@ extends CanvasLayer
 
 # --- Referencias Principales ---
 @onready var hp_bar = $HealthBar
+@onready var sp_bar = $ManaBar
 @onready var exp_bar = $ExpBar
+@onready var hp_value_label = $HealthBar/HPValueLabel
+@onready var sp_value_label = $ManaBar/SPValueLabel
+
 @onready var level_label = $LevelLabel
 @onready var stats_panel = $StatsPanel
 @onready var points_label = $StatsPanel/VBoxContainer_Base/PointsLabel
 @onready var log_label: RichTextLabel = $PanelContainer/LogLabel
-@onready var sp_bar = $ManaBar
 @onready var active_skill_label = $ActiveSkillLabel
 @onready var armed_skill_label: RichTextLabel = $ArmedSkillLabel
 
@@ -44,12 +47,15 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent =
 	hp_bar.max_value = health.max_health
 	# 2. Luego el VALUE actual
 	hp_bar.value = health.current_health
-	# 3. Finalmente conectar la señal para cambios futuros
+	# 3. Actualizar el label
+	hp_value_label.text = "%d / %d" % [health.current_health, health.max_health]
+	# 4. Finalmente conectar la señal para cambios futuros
 	if not health.on_health_changed.is_connected(_on_hp_changed):
 		health.on_health_changed.connect(_on_hp_changed)
 	
 	# --- Sincronizar SP (Si el componente existe) ---
 	if sp and sp_bar:
+		sp_value_label.text = "%d / %d" % [sp.current_sp, sp.max_sp]
 		sp_bar.max_value = sp.max_sp
 		sp_bar.value = sp.current_sp
 		if not sp.on_sp_changed.is_connected(_on_sp_changed):
@@ -135,9 +141,12 @@ func add_log_message(text: String, color: Color = Color.WHITE):
 func _on_hp_changed(current_hp):
 	if hp_bar:
 		hp_bar.value = current_hp
+		hp_value_label.text = "%d / %d" % [current_hp, int(hp_bar.max_value)]
 		
 func _on_sp_changed(current_sp, max_sp):
 	sp_bar.max_value = max_sp
+	sp_bar.value = current_sp
+	sp_value_label.text = "%d / %d" % [current_sp, max_sp]
 	sp_bar.value = current_sp
 
 func update_exp_bar():
