@@ -3,7 +3,6 @@ class_name StatsComponent
 
 signal on_level_up(new_level)
 signal on_xp_changed(current_xp, max_xp)
-signal on_sp_changed(current_sp, max_sp)
 
 @export_group("Base Stats")
 @export var str_stat: int = 1  # Fuerza -> Aumenta ATK
@@ -13,8 +12,14 @@ signal on_sp_changed(current_sp, max_sp)
 @export var dex: int = 1  # Destreza -> HIT y daño mínimo
 @export var luk: int = 1  # Suerte -> Críticos y evasión perfecta
 
+# Modificadores de Regeneración
+@export_group("Modificadores de Regeneración")
+@export var hp_regen_flat_bonus: int = 0
+@export var sp_regen_flat_bonus: int = 0
+@export var hp_regen_percent_mod: float = 1.0 # 1.0 = 100% (normal)
+@export var sp_regen_percent_mod: float = 1.0
+
 @export_group("Current Resources") # Para que no se pierdan con los base stats
-var current_sp: int = 10
 
 @export_group("Progression")
 @export var current_level: int = 1
@@ -23,6 +28,8 @@ var current_sp: int = 10
 @export var stat_points_available: int = 0
 
 # --- Atributos Derivados (Calculados) ---
+func get_total_vit() -> int: return vit # Es esto lo mismo que get_max_hp_bonus?
+func get_total_int() -> int: return int_stat
 
 func get_atk() -> int:
 	# Fórmula RO simplificada: STR + (STR/10)^2
@@ -65,14 +72,6 @@ func get_def() -> int:
 func get_max_sp() -> int:
 	# Fórmula RO: INT * 10 + Nivel * 2
 	return (int_stat * 10) + (current_level * 2)
-
-func use_sp(amount: int) -> bool:
-	if current_sp >= amount:
-		current_sp -= amount
-		# Avisar al HUD
-		on_sp_changed.emit(current_sp, get_max_sp())
-		return true
-	return false
 
 func add_xp(amount: int):
 	# Log de experiencia ganada

@@ -64,11 +64,10 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent =
 		stats.on_level_up.connect(_on_level_up)
 		
 	update_stats_ui()
+
 func show_skill_label(skill_name: String):
 	armed_skill_label.text = ">> " + skill_name.to_upper() + " <<"
 	armed_skill_label.visible = true
-	# Color cian para que resalte
-	armed_skill_label.modulate = Color.AQUA
 
 func hide_skill_label():
 	armed_skill_label.visible = false	
@@ -177,7 +176,6 @@ func update_stats_ui():
 	var can_add = player_stats.stat_points_available > 0
 	for btn in get_tree().get_nodes_in_group("stat_buttons"):
 		btn.visible = can_add
-# --- Funciones de Botones (Conectar señal 'pressed' de cada botón en el editor) ---
 
 func _on_add_str_pressed(): _modify_stat("str")
 func _on_add_agi_pressed(): _modify_stat("agi")

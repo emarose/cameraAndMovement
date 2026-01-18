@@ -1,9 +1,9 @@
-[gd_scene load_steps=23 format=3 uid="uid://lw4sjl4cws8q"]
+[gd_scene load_steps=24 format=3 uid="uid://lw4sjl4cws8q"]
 
 [ext_resource type="Script" uid="uid://cjm61wm3wga5a" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://biubb72lqc4a3" path="res://assets/icons/cursor_default.png" id="2_lkdrv"]
 [ext_resource type="Script" uid="uid://kpxdh62ijq65" path="res://scripts/camera_rig.gd" id="2_qhqgy"]
-[ext_resource type="Texture2D" uid="uid://cm77u0b3xpnq5" path="res://assets/icons/cursor_skill.png" id="3_lkdrv"]
+[ext_resource type="Texture2D" uid="uid://cm77u0b3xpnq5" path="res://assets/icons/cursor_skill1.png" id="3_lkdrv"]
 [ext_resource type="PackedScene" uid="uid://ce1embig558rd" path="res://scenes/HealthBar3D.tscn" id="3_mdl7e"]
 [ext_resource type="Texture2D" uid="uid://v23ye4xitolj" path="res://assets/icons/cursor_attack.png" id="3_p7iby"]
 [ext_resource type="PackedScene" uid="uid://cjkj6s57v61vn" path="res://scenes/FloatingText.tscn" id="4_bruh7"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="8_khinc"]
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="10_d3wef"]
 [ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="12_o4126"]
+[ext_resource type="Script" uid="uid://bb5m4qisg7fb8" path="res://scripts/RegenerationComponent.gd" id="15_0rnld"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqk2v"]
 albedo_color = Color(0.19338313, 0.65526867, 0.66791755, 1)
@@ -85,7 +86,6 @@ max_health = 1
 
 [node name="SPComponent" type="Node" parent="."]
 script = ExtResource("12_o4126")
-max_sp = 1
 
 [node name="StatsComponent" type="Node" parent="."]
 script = ExtResource("8_khinc")
@@ -108,3 +108,6 @@ mesh = SubResource("SphereMesh_6eyey")
 [node name="AOEIndicator" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("CylinderMesh_0rnld")
+
+[node name="RegenerationComponent" type="Node" parent="."]
+script = ExtResource("15_0rnld")

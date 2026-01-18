@@ -10,6 +10,14 @@ extends CharacterBody3D
 
 @export_group("Skills")
 @export var skill_1: SkillData
+@export var skill_2: SkillData
+@export var skill_3: SkillData
+@export var skill_4: SkillData
+@export var skill_5: SkillData
+@export var skill_6: SkillData
+@export var skill_7: SkillData
+@export var skill_8: SkillData
+@export var skill_9: SkillData
 
 @export_group("Prefabs")
 @export var floating_text_scene: PackedScene
@@ -24,7 +32,7 @@ extends CharacterBody3D
 @onready var hud: CanvasLayer = $"../Hud"
 @onready var stats: Node = $StatsComponent
 @onready var sp_component: SPComponent = $SPComponent
-
+@onready var regen_component = $RegenerationComponent
 # --- Variables de Ataque y Control ---
 var last_attack_time: int = 0
 var _last_cursor_state := "default" # "default", "attack", "skill"
@@ -37,23 +45,23 @@ var can_attack_player: bool = true
 var is_attacking: bool = false
 
 func _ready():
-
 	# 1. Calcular y setear vida inicial
 	var max_hp_calculado = 100 + stats.get_max_hp_bonus()
 	health_component.max_health = max_hp_calculado
 	health_component.current_health = max_hp_calculado
 	skill_component.setup(self, stats, sp_component)
-	var sp_comp = get_node_or_null("SPComponent")
-	if sp_comp:
-		sp_comp.setup(stats) 
-
+	
+	if sp_component:
+		sp_component.setup(stats) 
 	# 3. Configurar HUD pasando los 3 componentes
 	if hud:
-		hud.setup_hud(stats, health_component, sp_comp)
-	
+		hud.setup_hud(stats, health_component, sp_component)
+		
+	skill_component.skill_state_changed.connect(_on_skill_state_changed)
 	# Conexiones adicionales
 	health_component.on_health_changed.connect(_on_player_hit)
 	health_component.on_death.connect(_on_player_death)
+	regen_component.setup(stats, health_component, sp_component)
 
 func _unhandled_input(event):
 	if is_dead: return
@@ -61,6 +69,22 @@ func _unhandled_input(event):
 	# SHORTCUTS
 	if event.is_action_pressed("skill_1"):
 		_on_skill_shortcut_pressed(skill_1)
+	elif event.is_action_pressed("skill_2"):
+		_on_skill_shortcut_pressed(skill_2)
+	elif event.is_action_pressed("skill_3"):
+		_on_skill_shortcut_pressed(skill_3)
+	elif event.is_action_pressed("skill_4"):
+		_on_skill_shortcut_pressed(skill_4)
+	elif event.is_action_pressed("skill_5"):
+		_on_skill_shortcut_pressed(skill_5)
+	elif event.is_action_pressed("skill_6"):
+		_on_skill_shortcut_pressed(skill_6)
+	elif event.is_action_pressed("skill_7"):
+		_on_skill_shortcut_pressed(skill_7)
+	elif event.is_action_pressed("skill_8"):
+		_on_skill_shortcut_pressed(skill_8)
+	elif event.is_action_pressed("skill_9"):
+		_on_skill_shortcut_pressed(skill_9)
 
 	# CLICK DERECHO (cancelar)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
@@ -167,7 +191,6 @@ func handle_click_interaction():
 			current_target_enemy = null # Si clicamos suelo, cancelamos ataque
 
 func move_to_mouse_position():
-	print("move_to_mouse_position skill_component.armed_skill:",skill_component.armed_skill)
 	if skill_component.armed_skill:
 		return
 	if current_target_enemy != null and is_instance_valid(current_target_enemy):
@@ -195,6 +218,10 @@ func get_mouse_world_interaction():
 	if not result:
 		return null
 	return result
+
+func _stop_movement():
+	nav_agent.target_position = global_position
+	velocity = Vector3.ZERO
 
 func update_cursor():
 	var result = get_mouse_world_interaction()
@@ -225,10 +252,10 @@ func update_cursor():
 			Input.set_custom_mouse_cursor(cursor_default, Input.CURSOR_ARROW, Vector2(0, 0))
 			_last_cursor_state = "default"
 
+
 # --- FUNCIONES AUXILIARES DE ATAQUE ---
 
 func try_attack_enemy(enemy):
-	print("try attack enemy") # no se ejecuta
 	var dist = global_position.distance_to(enemy.global_position)
 	if dist <= attack_range - 0.2:
 		if enemy.has_node("HealthComponent"):
@@ -318,9 +345,19 @@ func _on_player_death():
 # --- FUNCIONES AUXILIARES DE SKILLS ---
 
 func _on_skill_shortcut_pressed(skill: SkillData):
+	if not skill: return
+	
 	is_clicking = false # Resetear el estado del mouse
-	# Armar la skill
-	skill_component.arm_skill(skill)
+	
+	# Si es una skill SELF, ejecutar inmediatamente
+	if skill.type == SkillData.SkillType.SELF:
+		skill_component.arm_skill(skill)
+		# Ejecutar de inmediato sin esperar selección del mouse
+		_stop_movement()
+		skill_component.call_deferred("execute_armed_skill", global_position)
+	else:
+		# Para TARGET y POINT, armar la skill para que el jugador seleccione el objetivo
+		skill_component.arm_skill(skill)
 
 func _handle_skill_target_selection():
 	
@@ -330,9 +367,13 @@ func _handle_skill_target_selection():
 	if not skill_component or not skill_component.armed_skill: return
 	
 	var skill = skill_component.armed_skill
+	
+	# SELF skills no deben llegar aquí, pero por seguridad:
+	if skill.type == SkillData.SkillType.SELF:
+		return
+	
 	var target_data = null
 	var distance_to_cast = 0.0
-	
 	# 1. Identificar el objetivo y calcular distancia
 	if skill.type == SkillData.SkillType.TARGET:
 		if result.has("collider") and result.collider.is_in_group("enemy"):
@@ -362,10 +403,6 @@ func _handle_skill_target_selection():
 	# momentáneamente para que el physics_process no mueva al jugador en este frame
 	is_clicking = false
 
-# Función auxiliar para frenar en seco
-func _stop_movement():
-	nav_agent.target_position = global_position
-	velocity = Vector3.ZERO
 
 func try_use_skill():
 	if current_target_enemy and is_instance_valid(current_target_enemy):
@@ -380,34 +417,38 @@ func try_use_skill():
 			print("Demasiado lejos")
 
 func _update_aoe_indicator():
-	# 1. Verificamos si hay una skill armada y si es de tipo POINT
+	# 1. Verificamos si hay una skill armada
 	var skill = skill_component.armed_skill
-	
-	if skill and skill.type == SkillData.SkillType.POINT:
-		var result = get_mouse_world_interaction()
-		if result:
+
+	if skill and skill.aoe_radius > 0:
+		if skill.type == SkillData.SkillType.POINT:
+			# Para POINT skills, mostrar en la posición del mouse
+			var result = get_mouse_world_interaction()
+			if result:
+				aoe_indicator.visible = true
+				aoe_indicator.global_position = result.position + Vector3(0, 0.1, 0)
+				var s = skill.aoe_radius
+				aoe_indicator.scale = Vector3(s, 1, s)
+		elif skill.type == SkillData.SkillType.SELF:
+			# Para SELF skills, mostrar alrededor del jugador
 			aoe_indicator.visible = true
-			# Posicionamos el círculo donde está el mouse
-			aoe_indicator.global_position = result.position + Vector3(0, 0.1, 0)
-			
-			# Escalamos según el radio definido en el Resource
+			aoe_indicator.global_position = global_position + Vector3(0, 0.1, 0)
 			var s = skill.aoe_radius
 			aoe_indicator.scale = Vector3(s, 1, s)
 	else:
-		# Si no hay skill o no es POINT, se oculta inmediatamente
+		# Si no hay skill o no tiene AOE, se oculta inmediatamente
 		aoe_indicator.visible = false
 
-# Esta función actualiza el HUD y el Cursor solo cuando el estado cambia
 func _on_skill_state_changed():
 	update_cursor() # Cambia el color del cursor
 	
 	if hud:
 		if skill_component.armed_skill:
 			# Enviamos el nombre al HUD para mostrar el Label
-			hud.show_skill_label(skill_component.armed_skill.skill_name)
+			hud.update_armed_skill_info(skill_component.armed_skill.skill_name)
 		else:
-			# Si es null, ocultamos el Label
-			hud.hide_skill_label()
+
+			hud.update_armed_skill_info("")
 
 # --- FUNCIONES AUXILIARES MISC ---
 

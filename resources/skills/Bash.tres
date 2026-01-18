@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_ucktl")
 skill_name = "Bash"
-type = 1
 sp_cost = 5
 damage_multiplier = 200.0
 cooldown = 5.0

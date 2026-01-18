@@ -362,12 +362,18 @@ offset_bottom = 23.0
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -20.0
-offset_top = 47.0
-offset_right = 20.0
-offset_bottom = 87.0
+offset_left = -36.0
+offset_top = 74.0
+offset_right = 36.0
+offset_bottom = 114.0
 grow_horizontal = 2
+theme_override_colors/default_color = Color(0.32941177, 1, 1, 1)
+theme_override_font_sizes/normal_font_size = 32
 text = "FIREBALL"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]

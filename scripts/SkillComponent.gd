@@ -21,6 +21,7 @@ func arm_skill(skill: SkillData):
 		return
 
 	armed_skill = skill
+	print("[SkillComponent] Armed skill: ", skill.skill_name)
 	skill_state_changed.emit()
 	
 	var msg = "Selecciona objetivo" if skill.type == SkillData.SkillType.TARGET else "Selecciona área"
