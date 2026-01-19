@@ -432,13 +432,11 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -221.0
-offset_top = -208.0
-offset_right = 221.0
-offset_bottom = -166.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 8
 
 [node name="HotbarSlot7" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
 layout_mode = 2

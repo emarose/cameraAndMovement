@@ -28,13 +28,31 @@ extends CanvasLayer
 @onready var flee_val = $StatsPanel/VBoxContainer_Derived/FleeRow/Value
 @onready var aspd_val = $StatsPanel/VBoxContainer_Derived/AspdRow/Value
 @onready var def_val = $StatsPanel/VBoxContainer_Derived/DefRow/Value
+@onready var hotbar_container: HBoxContainer = $HotbarGrid
 
+var slots: Array = []
 var player_stats: StatsComponent
 
 func _ready():
 	# El HUD comienza oculto
 	stats_panel.visible = false
 	armed_skill_label.text = ""
+	setup_hotbar_ui()
+	
+func setup_hotbar_ui():
+	# Obtener los hijos (los slots) y configurarlos
+	var i = 0
+	if hotbar_container:
+		for child in hotbar_container.get_children():
+			print(child)
+			if child is HotbarSlot:
+				child.setup(i, str(i + 1)) # Asigna índice y tecla (1-9)
+				slots.append(child)
+				i += 1
+
+func update_hotbar_slot(index: int, content):
+	if index >= 0 and index < slots.size():
+		slots[index].update_slot(content)
 
 func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent = null):
 	if not is_node_ready():

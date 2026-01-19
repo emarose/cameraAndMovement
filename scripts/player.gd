@@ -8,16 +8,14 @@ extends CharacterBody3D
 @export var cursor_attack: Texture2D
 @export var cursor_skill: Texture2D
 
-@export_group("Skills")
-@export var skill_1: SkillData
-@export var skill_2: SkillData
-@export var skill_3: SkillData
-@export var skill_4: SkillData
-@export var skill_5: SkillData
-@export var skill_6: SkillData
-@export var skill_7: SkillData
-@export var skill_8: SkillData
-@export var skill_9: SkillData
+@export_group("Hotbar Inicial")
+# Usamos un Array exportado para configurar las skills iniciales desde el editor
+# Arrastra tus recursos de Skills (o Items) aquí en el inspector.
+@export var initial_hotbar: Array[Resource] = [] 
+
+# El array real en tiempo de ejecución (tamaño fijo de 9)
+var hotbar_content: Array = [] 
+var HOTBAR_SIZE = 9
 
 @export_group("Prefabs")
 @export var floating_text_scene: PackedScene
@@ -45,6 +43,12 @@ var can_attack_player: bool = true
 var is_attacking: bool = false
 
 func _ready():
+	hotbar_content.resize(HOTBAR_SIZE)
+		# Cargar configuración inicial
+	for i in range(min(initial_hotbar.size(), HOTBAR_SIZE)):
+		if initial_hotbar[i]:
+			hotbar_content[i] = initial_hotbar[i]
+
 	# 1. Calcular y setear vida inicial
 	var max_hp_calculado = 100 + stats.get_max_hp_bonus()
 	health_component.max_health = max_hp_calculado
@@ -56,6 +60,8 @@ func _ready():
 	# 3. Configurar HUD pasando los 3 componentes
 	if hud:
 		hud.setup_hud(stats, health_component, sp_component)
+		hud.setup_hotbar_ui() # Inicializar los slots visuales
+		_refresh_hotbar_ui()  # Llenarlos con los datos iniciales
 		
 	skill_component.skill_state_changed.connect(_on_skill_state_changed)
 	# Conexiones adicionales
@@ -66,29 +72,18 @@ func _ready():
 	regen_component.hp_regenerated.connect(_on_hp_regenerated)
 	regen_component.sp_regenerated.connect(_on_sp_regenerated)
 
+	
 func _unhandled_input(event):
 	if is_dead: return
-
-	# SHORTCUTS
-	if event.is_action_pressed("skill_1"):
-		_on_skill_shortcut_pressed(skill_1)
-	elif event.is_action_pressed("skill_2"):
-		_on_skill_shortcut_pressed(skill_2)
-	elif event.is_action_pressed("skill_3"):
-		_on_skill_shortcut_pressed(skill_3)
-	elif event.is_action_pressed("skill_4"):
-		_on_skill_shortcut_pressed(skill_4)
-	elif event.is_action_pressed("skill_5"):
-		_on_skill_shortcut_pressed(skill_5)
-	elif event.is_action_pressed("skill_6"):
-		_on_skill_shortcut_pressed(skill_6)
-	elif event.is_action_pressed("skill_7"):
-		_on_skill_shortcut_pressed(skill_7)
-	elif event.is_action_pressed("skill_8"):
-		_on_skill_shortcut_pressed(skill_8)
-	elif event.is_action_pressed("skill_9"):
-		_on_skill_shortcut_pressed(skill_9)
-
+	# LÓGICA DE HOTBAR DINÁMICA
+	# Iteramos del 1 al 9 para ver si se presionó alguna tecla "skill_X"
+	for i in range(1, 10):
+		if event.is_action_pressed("skill_" + str(i)):
+			# Restamos 1 porque el array es base-0 (Tecla 1 -> Slot 0)
+			use_hotbar_slot(i - 1)
+			get_viewport().set_input_as_handled()
+			return
+	
 	# CLICK DERECHO (cancelar)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		if skill_component.armed_skill:
@@ -349,21 +344,6 @@ func _on_player_death():
 
 # --- FUNCIONES AUXILIARES DE SKILLS ---
 
-func _on_skill_shortcut_pressed(skill: SkillData):
-	if not skill: return
-	
-	is_clicking = false # Resetear el estado del mouse
-	
-	# Si es una skill SELF, ejecutar inmediatamente
-	if skill.type == SkillData.SkillType.SELF:
-		skill_component.arm_skill(skill)
-		# Ejecutar de inmediato sin esperar selección del mouse
-		_stop_movement()
-		skill_component.call_deferred("execute_armed_skill", global_position)
-	else:
-		# Para TARGET y POINT, armar la skill para que el jugador seleccione el objetivo
-		skill_component.arm_skill(skill)
-
 func _handle_skill_target_selection():
 	
 	var result = get_mouse_world_interaction()
@@ -410,16 +390,27 @@ func _handle_skill_target_selection():
 
 
 func try_use_skill():
+	# Obtenemos la skill que el jugador intentó activar (la "armada")
+	var skill = skill_component.armed_skill
+	
+	# Si no hay ninguna skill preparada, no hacemos nada
+	if not skill: return 
+
 	if current_target_enemy and is_instance_valid(current_target_enemy):
 		var distance = global_position.distance_to(current_target_enemy.global_position)
-		if distance <= skill_1.cast_range:
-			nav_agent.target_position = global_position
-			velocity = Vector3.ZERO
-			look_at(Vector3(current_target_enemy.global_position.x, global_position.y, current_target_enemy.global_position.z), Vector3.UP)
-			# Llamada diferida
+		
+		# Usamos la variable 'skill' (dinámica) en lugar de 'skill_1'
+		if distance <= skill.cast_range:
+			_stop_movement()
+			
+			var target_pos = current_target_enemy.global_position
+			look_at(Vector3(target_pos.x, global_position.y, target_pos.z), Vector3.UP)
+			
+			# Ejecutamos la que esté armada
 			skill_component.call_deferred("execute_armed_skill", current_target_enemy)
 		else:
-			print("Demasiado lejos")
+			# Opcional: Si está lejos, podrías hacer que el jugador camine hacia el enemigo
+			nav_agent.target_position = current_target_enemy.global_position
 
 func _update_aoe_indicator():
 	# 1. Verificamos si hay una skill armada
@@ -520,3 +511,37 @@ func show_level_up():
 	var text = preload("res://effects/LevelUpEffect.tscn").instantiate()
 	text.position = Vector3(0, 1.8, 0) # arriba de la cabeza
 	add_child(text)
+
+func use_hotbar_slot(index: int):
+	if index < 0 or index >= hotbar_content.size(): return
+	
+	var content = hotbar_content[index]
+	
+	if content == null:
+		# Slot vacío
+		return
+		
+	# DIVERSIFICACIÓN (Skill vs Item)
+	if content is SkillData:
+		# Es una skill: intentamos armarla
+		_on_skill_shortcut_pressed(content)
+		
+	elif content is ItemData:
+		# Es un item: lo usamos directamente (ej. Poción)
+		consume_item(content)
+
+func consume_item(item: ItemData):
+	# Lógica simple de consumo (luego se conecta con inventario)
+	item.use(self)
+	get_tree().call_group("hud", "add_log_message", "Usaste: " + item.item_name, Color.WHITE)
+	# Nota: Aquí luego restarías cantidad del inventario
+
+# Esta función reemplaza a las llamadas individuales de antes
+func _on_skill_shortcut_pressed(skill: SkillData):
+	is_clicking = false # Resetear input mouse
+	skill_component.arm_skill(skill)
+
+func _refresh_hotbar_ui():
+	if not hud: return
+	for i in range(hotbar_content.size()):
+		hud.update_hotbar_slot(i, hotbar_content[i])
