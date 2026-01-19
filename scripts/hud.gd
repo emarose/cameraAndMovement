@@ -32,6 +32,7 @@ extends CanvasLayer
 
 var slots: Array = []
 var player_stats: StatsComponent
+var current_skill_name: String = ""
 
 func _ready():
 	# El HUD comienza oculto
@@ -44,7 +45,6 @@ func setup_hotbar_ui():
 	var i = 0
 	if hotbar_container:
 		for child in hotbar_container.get_children():
-			print(child)
 			if child is HotbarSlot:
 				child.setup(i, str(i + 1)) # Asigna índice y tecla (1-9)
 				slots.append(child)
@@ -222,3 +222,12 @@ func update_active_skill_display(skill_name: String):
 	else:
 		active_skill_label.text = "Habilidad: " + skill_name
 		active_skill_label.modulate = Color.CYAN
+
+func propagate_cooldown(skill_name: String, duration: float):
+	# Iteramos sobre los slots guardados
+	for slot in slots:
+		if slot is HotbarSlot:
+			# Verificamos si este slot tiene la skill que entró en CD
+			if slot.current_skill_name == skill_name:
+				slot.start_cooldown_visual(duration)
+				# Nota: No hacemos 'break' por si tienes la misma skill en 2 slots (raro pero posible)

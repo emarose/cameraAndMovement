@@ -71,7 +71,7 @@ func _ready():
 	regen_component.setup(stats, health_component, sp_component)
 	regen_component.hp_regenerated.connect(_on_hp_regenerated)
 	regen_component.sp_regenerated.connect(_on_sp_regenerated)
-
+	skill_component.skill_cooldown_started.connect(_on_cooldown_started)
 	
 func _unhandled_input(event):
 	if is_dead: return
@@ -319,11 +319,17 @@ func _on_player_damaged(_damage_amount: int):
 	
 	# 3. Feedback Visual
 	var tween = create_tween()
+	
 	tween.tween_property(self, "position:y", position.y + 0.05, 0.05)
 	tween.chain().tween_property(self, "position:y", position.y, 0.1)
 
-	await get_tree().create_timer(0.3).timeout # Tiempo de flinch
+	await get_tree().create_timer(0.2).timeout # Tiempo de flinch
 	is_stunned = false
+	
+	if skill_component and skill_component.armed_skill:
+		skill_component.cancel_cast()
+		# Opcional: Feedback visual de interrupción
+		get_tree().call_group("hud", "add_log_message", "¡Interrumpido!", Color.CRIMSON)
 
 func _on_player_death():
 	if is_dead: return # Evitar que se ejecute dos veces
@@ -413,18 +419,21 @@ func try_use_skill():
 			nav_agent.target_position = current_target_enemy.global_position
 
 func _update_aoe_indicator():
-	# 1. Verificamos si hay una skill armada
 	var skill = skill_component.armed_skill
 
-	if skill and skill.aoe_radius > 0:
-		if skill.type == SkillData.SkillType.POINT:
-			# Para POINT skills, mostrar en la posición del mouse
-			var result = get_mouse_world_interaction()
-			if result:
-				aoe_indicator.visible = true
-				aoe_indicator.global_position = result.position + Vector3(0, 0.1, 0)
-				var s = skill.aoe_radius
-				aoe_indicator.scale = Vector3(s, 1, s)
+	# Si no hay skill armada, ocultar y salir
+	if not skill or skill.aoe_radius <= 0:
+		aoe_indicator.visible = false
+		return
+
+	# Lógica para mostrar el indicador...
+	if skill.type == SkillData.SkillType.POINT:
+		var result = get_mouse_world_interaction()
+		if result:
+			aoe_indicator.visible = true
+			aoe_indicator.global_position = result.position + Vector3(0, 0.1, 0)
+			var s = skill.aoe_radius
+			aoe_indicator.scale = Vector3(s, 1, s)
 		elif skill.type == SkillData.SkillType.SELF:
 			# Para SELF skills, mostrar alrededor del jugador
 			aoe_indicator.visible = true
@@ -437,7 +446,7 @@ func _update_aoe_indicator():
 
 func _on_skill_state_changed():
 	update_cursor() # Cambia el color del cursor
-	
+	_update_aoe_indicator()
 	if hud:
 		if skill_component.armed_skill:
 			# Enviamos el nombre al HUD para mostrar el Label
@@ -536,12 +545,28 @@ func consume_item(item: ItemData):
 	get_tree().call_group("hud", "add_log_message", "Usaste: " + item.item_name, Color.WHITE)
 	# Nota: Aquí luego restarías cantidad del inventario
 
-# Esta función reemplaza a las llamadas individuales de antes
 func _on_skill_shortcut_pressed(skill: SkillData):
-	is_clicking = false # Resetear input mouse
-	skill_component.arm_skill(skill)
+	# Limpiamos estados previos
+	is_clicking = false
+	
+	# LÓGICA DE BIFURCACIÓN
+	if skill.type == SkillData.SkillType.SELF:
+		# CASO A: Skill Instantánea (Buffs, Magnum Break)
+		# Detenemos movimiento para castear
+		_stop_movement()
+		# Ejecutamos directamente sin pasar por armed_skill
+		skill_component.cast_immediate(skill)
+		
+	else:
+		# CASO B: Skills de Target o Point (Fireball, Bash)
+		# Comportamiento clásico de RO (Cursor cambia, espera click)
+		skill_component.arm_skill(skill)
 
 func _refresh_hotbar_ui():
 	if not hud: return
 	for i in range(hotbar_content.size()):
 		hud.update_hotbar_slot(i, hotbar_content[i])
+
+func _on_cooldown_started(skill_name: String, duration: float):
+	if hud:
+		hud.propagate_cooldown(skill_name, duration)
