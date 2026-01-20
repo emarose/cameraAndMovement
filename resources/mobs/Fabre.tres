@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_t0rr6")
 monster_name = "Fabre"
-level = 2
+level = 3
 race = "Insect"
 element = "Earth"
 base_exp = 50
@@ -17,5 +17,8 @@ dex = 13
 luk = 10
 max_hp = 80
 move_spd = 2.0
+attack_range = 1.4
 model_scene = ExtResource("1_fi3od")
+idle_time_max = 4.0
+movement_speed_factor = 1.0
 metadata/_custom_type_script = "uid://e53aoxyegbf"

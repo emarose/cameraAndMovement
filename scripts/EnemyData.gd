@@ -33,10 +33,10 @@ enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slit
 
 @export_group("Locomotion")
 @export var movement_type: MovementType = MovementType.SLIDE
-@export var jump_frequency: float = 0.8 # Solo para tipos JUMP
+@export var jump_frequency: float = 0.3 # Solo para tipos JUMP
 
 @export_group("Patrol")
 @export var wander_radius: float = 18.0
 @export var idle_time_min: float = 2.0
 @export var idle_time_max: float = 7.0
-@export var movement_speed_factor: float = 0.2 # Qué tan rápido camina al patrullar (0.5 = 50% de su move_spd)
+@export var movement_speed_factor: float = 0.5 # Qué tan rápido camina al patrullar (0.5 = 50% de su move_spd)

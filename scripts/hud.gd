@@ -13,6 +13,7 @@ extends CanvasLayer
 @onready var log_label: RichTextLabel = $PanelContainer/LogLabel
 @onready var active_skill_label = $ActiveSkillLabel
 @onready var armed_skill_label: RichTextLabel = $ArmedSkillLabel
+@onready var inventory_window: Control = $InventoryUI
 
 # --- Referencias a los Valores de Stats ---
 @onready var str_label = $StatsPanel/VBoxContainer_Base/StrRow/Value
@@ -54,7 +55,7 @@ func update_hotbar_slot(index: int, content):
 	if index >= 0 and index < slots.size():
 		slots[index].update_slot(content)
 
-func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent = null):
+func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,inventory_comp):
 	if not is_node_ready():
 		await ready
 		
@@ -87,6 +88,9 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent =
 	if not stats.on_level_up.is_connected(_on_level_up):
 		stats.on_level_up.connect(_on_level_up)
 		
+	if inventory_window:
+		inventory_window.setup_inventory(inventory_comp)
+	
 	update_stats_ui()
 
 func show_skill_label(skill_name: String):
@@ -138,6 +142,10 @@ func _update_player_max_hp():
 		_on_hp_changed(health_comp.current_health)
 
 func _input(event):
+
+	if event.is_action_pressed("toggle_inventory"):
+		inventory_window.visible = !inventory_window.visible
+		
 	# Abrir/Cerrar menú con la tecla C (debes configurarla en Input Map)
 	if event.is_action_pressed("toggle_stats"):
 		stats_panel.visible = !stats_panel.visible

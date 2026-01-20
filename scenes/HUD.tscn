@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3mj4b8fx2imj"]
+[gd_scene load_steps=10 format=3 uid="uid://b3mj4b8fx2imj"]
 
 [ext_resource type="Script" uid="uid://u40hupv2b6rf" path="res://scripts/hud.gd" id="1_qpvh6"]
 [ext_resource type="PackedScene" uid="uid://cqd3ossx4ruqj" path="res://scenes/hotbar_slot.tscn" id="2_fls4u"]
+[ext_resource type="PackedScene" uid="uid://5ob0ybkuqcxh" path="res://scenes/InventoryUi.tscn" id="3_1etfg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpvh6"]
 bg_color = Color(0.008578151, 0.0038568254, 0.09549191, 1)
@@ -466,6 +467,20 @@ layout_mode = 2
 
 [node name="HotbarSlot9" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
 layout_mode = 2
+
+[node name="InventoryUI" parent="." instance=ExtResource("3_1etfg")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 408.0
+offset_top = -20.0
+offset_right = 448.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]

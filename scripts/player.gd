@@ -21,6 +21,9 @@ var HOTBAR_SIZE = 9
 @export var floating_text_scene: PackedScene
 @export var level_up_effect_scene: PackedScene
 
+@export var test_potion: ItemData
+
+@onready var inventory_component: InventoryComponent = $InventoryComponent
 @onready var aoe_indicator: MeshInstance3D = $AOEIndicator
 @onready var skill_component = $SkillComponent
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
@@ -31,6 +34,8 @@ var HOTBAR_SIZE = 9
 @onready var stats: Node = $StatsComponent
 @onready var sp_component: SPComponent = $SPComponent
 @onready var regen_component = $RegenerationComponent
+@onready var inventory = $InventoryComponent
+
 # --- Variables de Ataque y Control ---
 var last_attack_time: int = 0
 var _last_cursor_state := "default" # "default", "attack", "skill"
@@ -61,7 +66,7 @@ func _ready():
 		sp_component.setup(stats) 
 	# 3. Configurar HUD pasando los 3 componentes
 	if hud:
-		hud.setup_hud(stats, health_component, sp_component)
+		hud.setup_hud(stats, health_component, sp_component, inventory_component)
 		hud.setup_hotbar_ui()
 		
 		# ESPERA UN FRAME: Esto soluciona problemas donde los slots 
@@ -78,7 +83,8 @@ func _ready():
 	regen_component.hp_regenerated.connect(_on_hp_regenerated)
 	regen_component.sp_regenerated.connect(_on_sp_regenerated)
 	skill_component.skill_cooldown_started.connect(_on_cooldown_started)
-	
+	inventory.add_item(test_potion, 5)	
+
 func _unhandled_input(event):
 	if is_dead: return
 	# LÓGICA DE HOTBAR DINÁMICA
