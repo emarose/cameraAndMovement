@@ -535,12 +535,10 @@ func use_hotbar_slot(index: int):
 	if content == null:
 		# Slot vacío
 		return
-		
 	# DIVERSIFICACIÓN (Skill vs Item)
 	if content is SkillData:
 		# Es una skill: intentamos armarla
 		_on_skill_shortcut_pressed(content)
-		
 	elif content is ItemData:
 		# Es un item: lo usamos directamente (ej. Poción)
 		consume_item(content)

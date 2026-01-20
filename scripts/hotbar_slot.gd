@@ -17,25 +17,31 @@ func setup(index: int, key_text: String):
 	
 func update_slot(resource):
 	if resource == null:
-		print("Slot %d: resource is NULL" % slot_index)
 		clear_slot()
 		return
 	
-	print("Slot %d: Got resource: %s" % [slot_index, resource.get_class()])
 	current_content = resource
 	icon_rect.visible = true
 	
 	# Handle SkillData
 	if resource is SkillData:
 		current_skill_name = resource.skill_name
-		print("  Skill: %s, icon exists: %s" % [resource.skill_name, resource.icon != null])
 		if resource.icon:
-			print("  Setting icon texture: %s" % resource.icon.resource_path)
 			icon_rect.texture = resource.icon
 			icon_rect.self_modulate = Color.WHITE
 		else:
 			icon_rect.texture = null 
 			icon_rect.self_modulate = Color.CADET_BLUE
+			
+	# Handle ItemData
+	elif resource is ItemData:
+		current_skill_name = resource.item_name
+		if resource.icon:
+			icon_rect.texture = resource.icon
+			icon_rect.self_modulate = Color.WHITE
+		else:
+			icon_rect.texture = null
+			icon_rect.self_modulate = Color.LIGHT_GRAY
 
 func clear_slot():
 	current_skill_name = ""
