@@ -23,7 +23,9 @@ script = ExtResource("1_55jtl")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 1.5
-target_desired_distance = 1.5
+target_desired_distance = 1.4
+avoidance_enabled = true
+neighbor_distance = 10.0
 
 [node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7542914, 0)

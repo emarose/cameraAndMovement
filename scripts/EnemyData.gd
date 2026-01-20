@@ -32,7 +32,8 @@ class_name EnemyData
 @export var model_scene: PackedScene
 
 @export_group("Locomotion")
-@export_enum("Normal", "Slime", "Hover") var movement_type: String = "Normal"
+@export_enum("Normal", "Slime", "Hop") # normal -> slides, Slime -> advances in intervals, Hop -> advances by jumping
+var movement_type: String = "Normal"
 
 @export_group("Patrol")
 @export var wander_radius: float = 18.0
