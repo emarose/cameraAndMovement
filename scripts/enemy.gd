@@ -9,6 +9,7 @@ extends CharacterBody3D
 @onready var stats_comp: StatsComponent = $StatsComponent
 
 enum State { IDLE, WANDERING, CHASING, ATTACKING }
+enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slither (Fabre)
 
 var current_state = State.IDLE
 var player = null
@@ -20,6 +21,10 @@ var home_position: Vector3 = Vector3.ZERO
 var can_attack: bool = true
 var is_stunned: bool = false
 var is_aggroed: bool = false
+
+# Variables nuevas para el control de tiempo
+var move_timer: float = 0.0
+var is_jumping: bool = false
 
 func _ready():
 	if not data:
@@ -94,16 +99,48 @@ func _move_logic(target_pos: Vector3, movement_speed: float):
 	
 	var next_pos = nav_agent.get_next_path_position()
 	var direction = (next_pos - global_position).normalized()
-	var intended_velocity = direction * movement_speed
-	
-	# Rotación
-	var look_target = Vector3(next_pos.x, global_position.y, next_pos.z)
-	if global_position.distance_to(look_target) > 0.1:
+	var final_velocity = Vector3.ZERO
+
+	match data.movement_type:
+		data.MovementType.SLIDE:
+			# Movimiento constante normal
+			final_velocity = direction * movement_speed
+			
+		data.MovementType.JUMP:
+			# Lógica tipo Poring: Avanza por impulsos
+			move_timer += get_physics_process_delta_time()
+			# Ciclo: 0.4s moviendo, 0.4s quieto (basado en jump_frequency)
+			if move_timer >= data.jump_frequency:
+				is_jumping = !is_jumping
+				move_timer = 0.0
+				if is_jumping: _visual_jump_effect() # Feedback visual
+			
+			if is_jumping:
+				final_velocity = direction * (movement_speed * 1.5) # Salto rápido
+			else:
+				final_velocity = Vector3.ZERO # Pausa entre saltos
+				
+		data.MovementType.SLITHER:
+			# Lógica tipo Fabre: Movimiento serpenteante
+			move_timer += get_physics_process_delta_time()
+			# Añadimos un vector perpendicular que oscila con un Seno
+			var side_dir = direction.cross(Vector3.UP) 
+			var wave = side_dir * sin(move_timer * 5.0) * 0.5
+			final_velocity = (direction + wave).normalized() * movement_speed
+
+	# Rotación (siempre mirar a donde intenta ir, excepto si está quieto)
+	if final_velocity.length() > 0.1:
+		var look_target = Vector3(next_pos.x, global_position.y, next_pos.z)
 		look_at(look_target, Vector3.UP)
 	
-	# En lugar de mover aquí, pedimos al agente que calcule la velocidad segura
-	nav_agent.set_velocity(intended_velocity)
+	nav_agent.set_velocity(final_velocity)
 
+func _visual_jump_effect():
+	if mesh:
+		var tween = create_tween()
+		tween.tween_property(mesh, "position:y", 0.5, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(mesh, "position:y", 0.0, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		
 func _on_velocity_computed(safe_velocity: Vector3):
 	# Esta función se dispara automáticamente gracias a la conexión en _ready
 	velocity = safe_velocity
