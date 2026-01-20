@@ -51,3 +51,16 @@ func use_item_at_index(index: int, user: Node) -> void:
 			if slot.quantity <= 0:
 				slots[index] = null # Eliminar slot si llega a 0
 			inventory_changed.emit()
+
+func has_item(item_data: ItemData) -> bool:
+	for slot in slots:
+		if slot and slot.item_data == item_data:
+			return true
+	return false
+
+func get_item_amount(item_data: ItemData) -> int:
+	var total = 0
+	for slot in slots:
+		if slot and slot.item_data == item_data:
+			total += slot.quantity
+	return total

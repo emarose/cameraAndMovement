@@ -51,9 +51,9 @@ func setup_hotbar_ui():
 				slots.append(child)
 				i += 1
 
-func update_hotbar_slot(index: int, content):
+func update_hotbar_slot(index: int, content, amount: int = 0):
 	if index >= 0 and index < slots.size():
-		slots[index].update_slot(content)
+		slots[index].update_slot(content, amount)
 
 func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,inventory_comp):
 	if not is_node_ready():

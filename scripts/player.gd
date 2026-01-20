@@ -64,6 +64,11 @@ func _ready():
 	
 	if sp_component:
 		sp_component.setup(stats) 
+	
+	# Agregar items al inventario ANTES de refrescar la hotbar
+	inventory.add_item(test_potion, 5)
+	inventory.inventory_changed.connect(_on_inventory_changed)
+	
 	# 3. Configurar HUD pasando los 3 componentes
 	if hud:
 		hud.setup_hud(stats, health_component, sp_component, inventory_component)
@@ -83,7 +88,6 @@ func _ready():
 	regen_component.hp_regenerated.connect(_on_hp_regenerated)
 	regen_component.sp_regenerated.connect(_on_sp_regenerated)
 	skill_component.skill_cooldown_started.connect(_on_cooldown_started)
-	inventory.add_item(test_potion, 5)	
 
 func _unhandled_input(event):
 	if is_dead: return
@@ -91,7 +95,7 @@ func _unhandled_input(event):
 	# Iteramos del 1 al 9 para ver si se presionó alguna tecla "skill_X"
 	for i in range(1, 10):
 		if event.is_action_pressed("skill_" + str(i)):
-			# Restamos 1 porque el array es base-0 (Tecla 1 -> Slot 0)
+				# Restamos 1 porque el array es base-0 (Tecla 1 -> Slot 0)
 			use_hotbar_slot(i - 1)
 			get_viewport().set_input_as_handled()
 			return
@@ -534,26 +538,22 @@ func show_level_up():
 	add_child(text)
 
 func use_hotbar_slot(index: int):
-	if index < 0 or index >= hotbar_content.size(): return
-	
 	var content = hotbar_content[index]
 	
-	if content == null:
-		# Slot vacío
-		return
-	# DIVERSIFICACIÓN (Skill vs Item)
 	if content is SkillData:
-		# Es una skill: intentamos armarla
-		_on_skill_shortcut_pressed(content)
+		skill_component.arm_skill(content)
 	elif content is ItemData:
-		# Es un item: lo usamos directamente (ej. Poción)
-		consume_item(content)
+		# Buscamos y usamos el ítem desde el inventario
+		_consume_item_from_inventory(content)
 
-func consume_item(item: ItemData):
-	# Lógica simple de consumo (luego se conecta con inventario)
-	item.use(self)
-	get_tree().call_group("hud", "add_log_message", "Usaste: " + item.item_name, Color.WHITE)
-	# Nota: Aquí luego restarías cantidad del inventario
+func _consume_item_from_inventory(item_to_use: ItemData):
+	# Buscamos en qué slot del inventario está este ítem
+	for i in range(inventory.slots.size()):
+		var slot = inventory.slots[i]
+		if slot and slot.item_data == item_to_use:
+			# Usamos la función que ya tenemos en el InventoryComponent
+			inventory.use_item_at_index(i, self)
+			return # Salimos tras usar el primero que encuentre
 
 func _on_skill_shortcut_pressed(skill: SkillData):
 	# Limpiamos estados previos
@@ -578,8 +578,29 @@ func refresh_hotbar_to_hud():
 	# hotbar_content es el Array[Resource] que definimos anteriormente
 	for i in range(hotbar_content.size()):
 		var data = hotbar_content[i]
+		# Get the amount from inventory if it's an item
+		var amount = 0
+		if data is ItemData:
+			amount = inventory.get_item_amount(data)
 		# Aquí es donde realmente se llama a la función del HUD que mencionas
-		hud.update_hotbar_slot(i, data)
+		hud.update_hotbar_slot(i, data, amount)
+		
+func _on_inventory_changed():
+	var changed = false
+	
+	for i in range(hotbar_content.size()):
+		var content = hotbar_content[i]
+		
+		# Solo nos importa si es un ItemData (las Skills no se gastan)
+		if content is ItemData:
+			if not inventory.has_item(content):
+				print("Item agotado, limpiando slot de hotbar: ", content.item_name)
+				hotbar_content[i] = null
+				changed = true
+	
+	# Siempre actualizamos la hotbar cuando el inventario cambia
+	# (esto actualiza las cantidades incluso si no removimos items de la hotbar)
+	refresh_hotbar_to_hud()
 
 func _on_cooldown_started(skill_name: String, duration: float):
 	if hud:

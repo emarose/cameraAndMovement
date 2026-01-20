@@ -1,11 +1,16 @@
 extends Control
 class_name InventoryUISlot
-
+signal slot_clicked(index: int, button: int)
 @onready var icon_rect = $Icon
 @onready var amount_label = $AmountLabel
 
 # Guardamos referencia al dato para tooltips o clics futuros
 var my_slot_data: InventorySlot
+
+func _gui_input(event):
+	if event is InputEventMouseButton and event.pressed:
+		# Detectamos click izquierdo o derecho
+		slot_clicked.emit(get_index(), event.button_index)
 
 func update_slot(slot_data: InventorySlot):
 	my_slot_data = slot_data
