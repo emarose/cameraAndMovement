@@ -45,9 +45,11 @@ var is_attacking: bool = false
 func _ready():
 	hotbar_content.resize(HOTBAR_SIZE)
 		# Cargar configuración inicial
-	for i in range(min(initial_hotbar.size(), HOTBAR_SIZE)):
-		if initial_hotbar[i]:
+	for i in range(HOTBAR_SIZE):
+		if i < initial_hotbar.size() and initial_hotbar[i] != null:
 			hotbar_content[i] = initial_hotbar[i]
+		else:
+			hotbar_content[i] = null
 
 	# 1. Calcular y setear vida inicial
 	var max_hp_calculado = 100 + stats.get_max_hp_bonus()
@@ -60,8 +62,12 @@ func _ready():
 	# 3. Configurar HUD pasando los 3 componentes
 	if hud:
 		hud.setup_hud(stats, health_component, sp_component)
-		hud.setup_hotbar_ui() # Inicializar los slots visuales
-		_refresh_hotbar_ui()  # Llenarlos con los datos iniciales
+		hud.setup_hotbar_ui()
+		
+		# ESPERA UN FRAME: Esto soluciona problemas donde los slots 
+		# aún no existen en el array 'slots' del HUD.
+		await get_tree().process_frame 
+		refresh_hotbar_to_hud()
 		
 	skill_component.skill_state_changed.connect(_on_skill_state_changed)
 	# Conexiones adicionales
@@ -562,10 +568,14 @@ func _on_skill_shortcut_pressed(skill: SkillData):
 		# Comportamiento clásico de RO (Cursor cambia, espera click)
 		skill_component.arm_skill(skill)
 
-func _refresh_hotbar_ui():
+func refresh_hotbar_to_hud():
 	if not hud: return
+	
+	# hotbar_content es el Array[Resource] que definimos anteriormente
 	for i in range(hotbar_content.size()):
-		hud.update_hotbar_slot(i, hotbar_content[i])
+		var data = hotbar_content[i]
+		# Aquí es donde realmente se llama a la función del HUD que mencionas
+		hud.update_hotbar_slot(i, data)
 
 func _on_cooldown_started(skill_name: String, duration: float):
 	if hud:

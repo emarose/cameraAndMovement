@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqd3ossx4ruqj"]
+[gd_scene load_steps=3 format=3 uid="uid://cqd3ossx4ruqj"]
 
 [ext_resource type="Script" uid="uid://xq6bpglviphk" path="res://scripts/hotbar_slot.gd" id="1_ea3t7"]
+[ext_resource type="Texture2D" uid="uid://50aplan2p5pu" path="res://textures/white-square1.png" id="2_sheke"]
 
 [node name="HotbarSlot" type="Panel"]
 custom_minimum_size = Vector2(42, 42)
@@ -9,7 +10,7 @@ offset_bottom = 64.0
 size_flags_vertical = 4
 script = ExtResource("1_ea3t7")
 
-[node name="Icon" type="ColorRect" parent="."]
+[node name="Icon" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 1
 anchors_preset = 15
@@ -17,16 +18,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.4862745, 0.39607844, 0.5921569, 0.827451)
+expand_mode = 2
+stretch_mode = 5
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+fill_mode = 4
+nine_patch_stretch = true
+texture_progress = ExtResource("2_sheke")
+tint_progress = Color(0.9137255, 0.89411765, 0.8745098, 0.627451)
 
 [node name="ShortcutLabel" type="Label" parent="."]
 layout_mode = 1

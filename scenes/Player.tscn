@@ -52,7 +52,7 @@ script = ExtResource("1_g2els")
 cursor_default = ExtResource("2_lkdrv")
 cursor_attack = ExtResource("3_p7iby")
 cursor_skill = ExtResource("3_lkdrv")
-initial_hotbar = Array[Resource]([ExtResource("4_lkdrv"), ExtResource("6_jfpux"), ExtResource("7_61ith")])
+initial_hotbar = Array[Resource]([ExtResource("4_lkdrv"), ExtResource("7_61ith"), ExtResource("6_jfpux")])
 floating_text_scene = ExtResource("4_bruh7")
 level_up_effect_scene = ExtResource("5_6eyey")
 
