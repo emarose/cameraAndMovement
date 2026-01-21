@@ -541,7 +541,21 @@ func use_hotbar_slot(index: int):
 	var content = hotbar_content[index]
 	
 	if content is SkillData:
-		skill_component.arm_skill(content)
+		# Limpiamos estados previos
+		is_clicking = false
+		
+		# LÓGICA DE BIFURCACIÓN
+		if content.type == SkillData.SkillType.SELF:
+			# CASO A: Skill Instantánea (Buffs, Magnum Break)
+			# Detenemos movimiento para castear
+			_stop_movement()
+			# Ejecutamos directamente sin pasar por armed_skill
+			skill_component.cast_immediate(content)
+			
+		else:
+			# CASO B: Skills de Target o Point (Fireball, Bash)
+			# Comportamiento clásico de RO (Cursor cambia, espera click)
+			skill_component.arm_skill(content)
 	elif content is ItemData:
 		# Buscamos y usamos el ítem desde el inventario
 		_consume_item_from_inventory(content)
