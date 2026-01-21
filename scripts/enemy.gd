@@ -307,22 +307,15 @@ func _on_death():
 ## Genera los drops loot según la tabla de drops del enemigo
 func _spawn_loot(death_position: Vector3):
 	if not data or data.drop_table.is_empty():
-		print("No drops para enemigo: ", data.monster_name if data else "sin data")
 		return
-	
-	print("Intentando spawnear loot de: ", data.monster_name, " | Tabla size: ", data.drop_table.size())
-	
+		
 	for drop_entry in data.drop_table:
 		# Validar que sea un resource con los métodos necesarios
 		if drop_entry and drop_entry.has_method("should_drop") and drop_entry.has_method("get_drop_quantity"):
-			print("  Drop entry: ", drop_entry.item_data.item_name if drop_entry.item_data else "sin item")
 			if drop_entry.should_drop():
 				var quantity = drop_entry.get_drop_quantity()
 				_create_item_drop(drop_entry.item_data, quantity, death_position)
-		else:
-			print("  Drop entry inválido: ", drop_entry)
-
-## Crea una instancia de ItemDrop en el mundo
+		
 func _create_item_drop(item_data: ItemData, quantity: int, spawn_position: Vector3):
 	if not item_data:
 		return
@@ -344,9 +337,6 @@ func _create_item_drop(item_data: ItemData, quantity: int, spawn_position: Vecto
 	
 	# 4. Configurar el drop (esto inicia animaciones)
 	item_drop.setup(item_data, quantity)
-	
-	# Log para debugging
-	print("Drop creado: %sx%d" % [item_data.item_name, quantity])
 
 func _play_aggro_effect():
 	if mesh:

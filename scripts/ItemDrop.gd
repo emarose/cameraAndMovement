@@ -100,18 +100,22 @@ func _on_body_entered(body: Node3D):
 
 ## Recoge el item y lo añade al inventario del jugador
 func _pickup_item():
+	if has_been_picked:
+		return
 	has_been_picked = true
 	_is_attracting = false
+	# Usamos deferred para evitar modificar el estado mientras se procesan queries de física
 	if collision_shape:
-		collision_shape.disabled = true
+		collision_shape.set_deferred("disabled", true)
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
 	
 	if player and player.has_node("InventoryComponent"):
 		var inventory = player.get_node("InventoryComponent")
 		inventory.add_item(item_data, quantity)
-		print("Item recogido: %sx%d" % [item_data.item_name, quantity])
 		get_tree().call_group("hud", "show_pickup_message", item_data.item_name, quantity)
 	
-	queue_free()
+	call_deferred("queue_free")
 
 ## Devuelve información del drop para debugging
 func get_drop_info() -> String:

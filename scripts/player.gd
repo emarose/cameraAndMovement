@@ -608,7 +608,6 @@ func _on_inventory_changed():
 		# Solo nos importa si es un ItemData (las Skills no se gastan)
 		if content is ItemData:
 			if not inventory.has_item(content):
-				print("Item agotado, limpiando slot de hotbar: ", content.item_name)
 				hotbar_content[i] = null
 				_changed = true
 	
