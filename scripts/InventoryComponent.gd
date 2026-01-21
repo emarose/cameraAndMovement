@@ -29,7 +29,6 @@ func add_item(item: ItemData, amount: int = 1) -> bool:
 		if slots[i] == null:
 			slots[i] = InventorySlot.new(item, amount)
 			inventory_changed.emit()
-			print("Item añadido en slot %d: %s x%d" % [i, item.item_name, amount])
 			return true
 			
 	print("Inventario lleno!")

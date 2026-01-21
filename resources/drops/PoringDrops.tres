@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DropEntry" load_steps=3 format=3 uid="uid://cgkn67q0hkl8w"]
+
+[ext_resource type="Resource" uid="uid://wqaj1xa0bv6l" path="res://resources/items/RedPotion_new.tres" id="1_item"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+item_data = ExtResource("1_item")
+drop_chance = 1.0
+max_quantity = 2

@@ -40,3 +40,6 @@ enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slit
 @export var idle_time_min: float = 2.0
 @export var idle_time_max: float = 7.0
 @export var movement_speed_factor: float = 0.5 # Qué tan rápido camina al patrullar (0.5 = 50% de su move_spd)
+
+@export_group("Drops (Loot)")
+@export var drop_table: Array = []  # Tabla de posibles drops (Array de DropEntry)

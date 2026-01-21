@@ -87,8 +87,6 @@ func _physics_process(delta):
 	else:
 		is_aggroed = false
 		patrol_logic(delta)
-		
-# --- NUEVA LÓGICA DE MOVIMIENTO INTEGRADA ---
 
 func _move_logic(target_pos: Vector3, movement_speed: float):
 	nav_agent.target_position = target_pos
@@ -140,7 +138,7 @@ func _visual_jump_effect():
 		var tween = create_tween()
 		tween.tween_property(mesh, "position:y", 0.5, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		tween.tween_property(mesh, "position:y", 0.0, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		
+	
 func _on_velocity_computed(safe_velocity: Vector3):
 	# Esta función se dispara automáticamente gracias a la conexión en _ready
 	velocity = safe_velocity
@@ -149,6 +147,7 @@ func _on_velocity_computed(safe_velocity: Vector3):
 func _stop_movement():
 	# Pedimos una velocidad de cero al sistema de evitación
 	nav_agent.set_velocity(Vector3.ZERO)
+	
 func patrol_logic(delta):
 	if home_position == Vector3.ZERO:
 		home_position = global_position
@@ -169,7 +168,7 @@ func patrol_logic(delta):
 				wander_timer = randf_range(data.idle_time_min, data.idle_time_max)
 			else:
 				_move_logic(wander_target, data.move_spd * data.movement_speed_factor)
-				
+	
 func _pick_next_wander_point():
 	var random_direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
 	var random_dist = randf_range(data.wander_radius * 0.3, data.wander_radius)
@@ -264,9 +263,17 @@ func _on_take_damage(new_health):
 func _on_death():
 	if is_dead: return # Si ya está muriendo, ignorar
 	is_dead = true
+	
+	# IMPORTANTE: Capturar posición antes de desactivar el nodo
+	var death_position = global_position
+	
 	get_tree().call_group("hud", "add_log_message", 
 		"Derrotaste a %s!" % data.monster_name, 
 		Color.WHITE)
+	
+	# Generar drops con la posición capturada
+	_spawn_loot(death_position)
+	
 	# 1. Desactivar colisiones e interacciones inmediatamente
 	# Esto evita que el jugador lo pueda seguir clickeando o golpeando
 	if has_node("CollisionShape3D"):
@@ -296,6 +303,50 @@ func _on_death():
 		await tween.finished
 	
 	queue_free()
+
+## Genera los drops loot según la tabla de drops del enemigo
+func _spawn_loot(death_position: Vector3):
+	if not data or data.drop_table.is_empty():
+		print("No drops para enemigo: ", data.monster_name if data else "sin data")
+		return
+	
+	print("Intentando spawnear loot de: ", data.monster_name, " | Tabla size: ", data.drop_table.size())
+	
+	for drop_entry in data.drop_table:
+		# Validar que sea un resource con los métodos necesarios
+		if drop_entry and drop_entry.has_method("should_drop") and drop_entry.has_method("get_drop_quantity"):
+			print("  Drop entry: ", drop_entry.item_data.item_name if drop_entry.item_data else "sin item")
+			if drop_entry.should_drop():
+				var quantity = drop_entry.get_drop_quantity()
+				_create_item_drop(drop_entry.item_data, quantity, death_position)
+		else:
+			print("  Drop entry inválido: ", drop_entry)
+
+## Crea una instancia de ItemDrop en el mundo
+func _create_item_drop(item_data: ItemData, quantity: int, spawn_position: Vector3):
+	if not item_data:
+		return
+	
+	# Cargar la escena de ItemDrop
+	var item_drop_scene = load("res://scenes/ItemDrop.tscn")
+	if not item_drop_scene:
+		push_error("ItemDrop.tscn no encontrada")
+		return
+	
+	# 1. Instanciar
+	var item_drop = item_drop_scene.instantiate()
+	
+	# 2. Añadir al mundo PRIMERO (antes de mover)
+	get_parent().add_child(item_drop)
+	
+	# 3. Ahora sí podemos usar global_position
+	item_drop.global_position = spawn_position + Vector3(0, 1.0, 0)
+	
+	# 4. Configurar el drop (esto inicia animaciones)
+	item_drop.setup(item_data, quantity)
+	
+	# Log para debugging
+	print("Drop creado: %sx%d" % [item_data.item_name, quantity])
 
 func _play_aggro_effect():
 	if mesh:

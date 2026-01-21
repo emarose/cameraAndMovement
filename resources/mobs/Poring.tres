@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://ttnxvkfcc5ku"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=4 format=3 uid="uid://ttnxvkfcc5ku"]
 
+[ext_resource type="Resource" uid="uid://cgkn67q0hkl8w" path="res://resources/drops/PoringDrops.tres" id="1_drops"]
 [ext_resource type="PackedScene" uid="uid://d1nm1abc21fsy" path="res://assets/models/poring-placeholder-model.tscn" id="1_k4j7c"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_yrkqf"]
 
@@ -24,4 +25,5 @@ jump_frequency = 0.6
 wander_radius = 25.0
 idle_time_max = 3.0
 movement_speed_factor = 1.0
+drop_table = [ExtResource("1_drops")]
 metadata/_custom_type_script = "uid://e53aoxyegbf"

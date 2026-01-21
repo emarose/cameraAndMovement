@@ -586,7 +586,7 @@ func refresh_hotbar_to_hud():
 		hud.update_hotbar_slot(i, data, amount)
 		
 func _on_inventory_changed():
-	var changed = false
+	var _changed = false
 	
 	for i in range(hotbar_content.size()):
 		var content = hotbar_content[i]
@@ -596,7 +596,7 @@ func _on_inventory_changed():
 			if not inventory.has_item(content):
 				print("Item agotado, limpiando slot de hotbar: ", content.item_name)
 				hotbar_content[i] = null
-				changed = true
+				_changed = true
 	
 	# Siempre actualizamos la hotbar cuando el inventario cambia
 	# (esto actualiza las cantidades incluso si no removimos items de la hotbar)

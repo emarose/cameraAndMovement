@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_ucktl")
 skill_name = "Bash"
-sp_cost = 5
+sp_cost = 2
 damage_multiplier = 200.0
-cooldown = 5.0
+cooldown = 3.0
 icon = ExtResource("1_as8wx")
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

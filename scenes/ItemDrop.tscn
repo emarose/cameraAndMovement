@@ -1,0 +1,28 @@
+[gd_scene load_steps=7 format=3 uid="uid://ct1is10olyuit"]
+
+[ext_resource type="Script" uid="uid://dto250afbb4ad" path="res://scripts/ItemDrop.gd" id="1_u1qrl"]
+[ext_resource type="Script" uid="uid://br1bl783toxt8" path="res://scripts/ItemData.gd" id="2_a4che"]
+
+[sub_resource type="Resource" id="Resource_bo1jd"]
+script = ExtResource("2_a4che")
+metadata/_custom_type_script = "uid://br1bl783toxt8"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a4che"]
+albedo_color = Color(0.43760973, 0.43749693, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_a4che"]
+material = SubResource("StandardMaterial3D_a4che")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a4che"]
+
+[node name="ItemDrop" type="Area3D"]
+script = ExtResource("1_u1qrl")
+item_data = SubResource("Resource_bo1jd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_a4che")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_a4che")
