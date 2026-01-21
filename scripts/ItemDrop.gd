@@ -3,10 +3,10 @@ class_name ItemDrop
 
 ## Maneja el comportamiento de un item caído por un enemigo
 ## - Area3D como nodo raíz para detectar al jugador (pickup)
-## - MeshInstance3D para la visualización
+## - Sprite3D para mostrar el icono del item
 ## - Física del movimiento (salto inicial + deslizamiento horizontal)
 
-@onready var mesh_visual: MeshInstance3D = $MeshInstance3D
+@onready var icon_sprite: Sprite3D = $Sprite3D
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 
 @export var item_data: ItemData
@@ -37,6 +37,10 @@ func setup(p_item_data: ItemData, p_quantity: int):
 		return
 	
 	initial_position = global_position
+	
+	# Asignar el icono del item al Sprite3D
+	if icon_sprite and item_data.icon:
+		icon_sprite.texture = item_data.icon
 
 	# Iniciar animación de salto y deslizamiento
 	_animate_drop()
@@ -50,9 +54,9 @@ func _animate_drop():
 	var tween = create_tween()
 	tween.set_parallel(true)  # Ejecutar animaciones en paralelo
 	
-	# Salto en el eje Y (visual del mesh)
-	tween.tween_property(mesh_visual, "position:y", jump_height, jump_duration / 2)
-	tween.tween_property(mesh_visual, "position:y", 0.0, jump_duration / 2).set_delay(jump_duration / 2)
+	# Salto en el eje Y (visual del sprite)
+	tween.tween_property(icon_sprite, "position:y", jump_height, jump_duration / 2)
+	tween.tween_property(icon_sprite, "position:y", 0.0, jump_duration / 2).set_delay(jump_duration / 2)
 	
 	# Deslizamiento horizontal (física del Area3D)
 	var random_direction = Vector3(
