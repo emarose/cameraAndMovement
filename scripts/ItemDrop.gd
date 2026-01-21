@@ -16,15 +16,36 @@ class_name ItemDrop
 @export var jump_duration: float = 0.3
 @export var slide_duration: float = 0.3
 @export var slide_distance: float = 2.0
+@export var magnet_radius: float = 2.5
+@export var magnet_speed: float = 6.0
+@export var pickup_distance: float = 0.6
 
 var player: Node3D = null
 var can_pickup: bool = false
 var has_been_picked: bool = false
 var initial_position: Vector3
+var _is_attracting: bool = false
 
 func _ready():
 	body_entered.connect(_on_body_entered)
 	player = get_tree().get_first_node_in_group("player")
+	set_process(true)
+
+func _process(delta):
+	if not can_pickup or has_been_picked:
+		return
+	if not player or not is_instance_valid(player):
+		return
+
+	var dist_to_player = global_position.distance_to(player.global_position)
+	if dist_to_player <= magnet_radius:
+		_is_attracting = true
+
+	if _is_attracting:
+		var target_pos = player.global_position + Vector3(0, 0.6, 0)
+		global_position = global_position.lerp(target_pos, clamp(magnet_speed * delta, 0.0, 1.0))
+		if global_position.distance_to(target_pos) <= pickup_distance:
+			_pickup_item()
 
 ## Configura el ItemDrop después de ser añadido al árbol y posicionado
 func setup(p_item_data: ItemData, p_quantity: int):
@@ -80,11 +101,15 @@ func _on_body_entered(body: Node3D):
 ## Recoge el item y lo añade al inventario del jugador
 func _pickup_item():
 	has_been_picked = true
+	_is_attracting = false
+	if collision_shape:
+		collision_shape.disabled = true
 	
 	if player and player.has_node("InventoryComponent"):
 		var inventory = player.get_node("InventoryComponent")
 		inventory.add_item(item_data, quantity)
 		print("Item recogido: %sx%d" % [item_data.item_name, quantity])
+		get_tree().call_group("hud", "show_pickup_message", item_data.item_name, quantity)
 	
 	queue_free()
 

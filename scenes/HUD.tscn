@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b3mj4b8fx2imj"]
+[gd_scene load_steps=11 format=3 uid="uid://b3mj4b8fx2imj"]
 
 [ext_resource type="Script" uid="uid://u40hupv2b6rf" path="res://scripts/hud.gd" id="1_qpvh6"]
 [ext_resource type="PackedScene" uid="uid://cqd3ossx4ruqj" path="res://scenes/hotbar_slot.tscn" id="2_fls4u"]
@@ -39,6 +39,13 @@ corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pickup"]
+bg_color = Color(0.1, 0.1, 0.1, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="HUD" type="CanvasLayer" groups=["hud"]]
 script = ExtResource("1_qpvh6")
@@ -425,6 +432,25 @@ text = "FIREBALL"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="PickupPanel" type="PanelContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.0
+offset_top = 74.0
+offset_right = 160.0
+offset_bottom = 110.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pickup")
+
+[node name="PickupLabel" type="Label" parent="PickupPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.27, 1)
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HotbarGrid" type="HBoxContainer" parent="."]

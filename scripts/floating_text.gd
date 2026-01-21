@@ -43,6 +43,12 @@ func set_regen_text(value: int, regen_type: String):
 	
 	animate_and_destroy()
 
+func set_pickup_text(text: String):
+	label.text = text
+	label.modulate = Color(0.95, 0.82, 0.27)
+	label.transparency = 0.0
+	animate_and_destroy()
+
 func animate_and_destroy():
 	var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	

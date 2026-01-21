@@ -13,6 +13,8 @@ extends CanvasLayer
 @onready var log_label: RichTextLabel = $PanelContainer/LogLabel
 @onready var active_skill_label = $ActiveSkillLabel
 @onready var armed_skill_label: RichTextLabel = $ArmedSkillLabel
+@onready var pickup_panel: PanelContainer = $PickupPanel
+@onready var pickup_label: Label = $PickupPanel/PickupLabel
 @onready var inventory_window: Control = $InventoryUI
 
 # --- Referencias a los Valores de Stats ---
@@ -34,12 +36,32 @@ extends CanvasLayer
 var slots: Array = []
 var player_stats: StatsComponent
 var current_skill_name: String = ""
+var _pickup_base_pos := Vector2.ZERO
 
 func _ready():
 	# El HUD comienza oculto
 	stats_panel.visible = false
 	armed_skill_label.text = ""
+	if pickup_panel:
+		_pickup_base_pos = pickup_panel.position
+		pickup_panel.visible = false
 	setup_hotbar_ui()
+
+func show_pickup_message(item_name: String, amount: int):
+	if not pickup_panel or not pickup_label:
+		return
+	pickup_label.text = "+%dx %s" % [amount, item_name]
+	pickup_panel.visible = true
+	pickup_panel.modulate = Color(1, 1, 1, 1)
+	pickup_panel.position = _pickup_base_pos
+	var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(pickup_panel, "position:y", _pickup_base_pos.y - 24.0, 0.35)
+	tween.parallel().tween_property(pickup_panel, "modulate:a", 0.0, 0.5).set_delay(0.75)
+	tween.chain().tween_callback(func():
+		pickup_panel.visible = false
+		pickup_panel.modulate.a = 1.0
+		pickup_panel.position = _pickup_base_pos
+	)
 	
 func setup_hotbar_ui():
 	# Obtener los hijos (los slots) y configurarlos
