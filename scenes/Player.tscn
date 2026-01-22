@@ -103,6 +103,7 @@ script = ExtResource("10_d3wef")
 
 [node name="InventoryComponent" type="Node" parent="."]
 script = ExtResource("19_ebwui")
+max_slots = null
 
 [node name="RegenerationComponent" type="Node" parent="."]
 script = ExtResource("15_0rnld")

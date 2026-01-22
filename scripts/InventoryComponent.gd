@@ -78,3 +78,20 @@ func get_item_amount(item_data: ItemData) -> int:
 		if slot and slot.item_data == item_data:
 			total += slot.quantity
 	return total
+	
+# Mueve un item de un índice a otro. Si el destino tiene algo, los intercambia.
+func swap_items(from_index: int, to_index: int):
+	# Validar rangos
+	if from_index < 0 or from_index >= slots.size() or to_index < 0 or to_index >= slots.size():
+		return
+	
+	if from_index == to_index:
+		return
+
+	# Intercambio simple en el array
+	var temp = slots[to_index]
+	slots[to_index] = slots[from_index]
+	slots[from_index] = temp
+	
+	# Avisamos a la UI que hubo cambios
+	inventory_changed.emit()

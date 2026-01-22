@@ -40,6 +40,9 @@ func _initialize_grid():
 		var new_slot = slot_scene.instantiate()
 		grid.add_child(new_slot)
 		ui_slots.append(new_slot)
+		# Asignar índice y referencia al padre
+		new_slot.slot_index = i
+		new_slot.parent_inventory_ui = self
 		# CONECTAR SEÑAL DE CLICK
 		new_slot.slot_clicked.connect(_on_slot_clicked)
 		# CONECTAR SEÑALES DE HOVER
@@ -99,3 +102,8 @@ func _gui_input(event):
 					_drag_offset = get_global_mouse_position() - panel.global_position
 			else:
 				_dragging = false
+
+# Llamado cuando se suelta un item sobre otro slot
+func on_item_dropped(from_index: int, to_index: int):
+	if player_inventory:
+		player_inventory.swap_items(from_index, to_index)
