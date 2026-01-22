@@ -62,7 +62,7 @@ func _process(delta):
 			_pickup_item()
 
 ## Configura el ItemDrop después de ser añadido al árbol y posicionado
-func setup(p_item_data: ItemData, p_quantity: int):
+func setup(p_item_data: ItemData, p_quantity: int, custom_delay: float = 0.0):
 	item_data = p_item_data
 	quantity = p_quantity
 	
@@ -80,8 +80,10 @@ func setup(p_item_data: ItemData, p_quantity: int):
 	# Iniciar animación de salto y deslizamiento
 	_animate_drop()
 	
+	# Usar delay personalizado si se proporciona, si no usar el default
+	var effective_delay = custom_delay if custom_delay > 0.0 else pickup_delay
 	# Timer para permitir pickup después del delay
-	await get_tree().create_timer(pickup_delay).timeout
+	await get_tree().create_timer(effective_delay).timeout
 	can_pickup = true
 
 ## Anima el drop: salto (Y) + deslizamiento horizontal (XZ)
