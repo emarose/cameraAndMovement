@@ -4,10 +4,20 @@ extends Control
 @export var slot_scene: PackedScene
 
 @onready var grid = $Panel/MarginContainer/GridContainer
+@onready var tooltip = $Tooltip
+@onready var tooltip_name = $Tooltip/VBox/NameLabel
+@onready var tooltip_desc = $Tooltip/VBox/DescLabel
+@onready var panel = $Panel
+@onready var close_button = $Panel/TitleBar/CloseButton
 
 var ui_slots: Array[InventoryUISlot] = []
+var _dragging = false
+var _drag_offset = Vector2.ZERO
 
 func _ready():
+	tooltip.visible = false
+	if close_button:
+		close_button.pressed.connect(_on_close_button_pressed)
 	# Si ya tenemos la referencia al inventario, conectamos
 	if player_inventory:
 		setup_inventory(player_inventory)
@@ -32,6 +42,9 @@ func _initialize_grid():
 		ui_slots.append(new_slot)
 		# CONECTAR SEÑAL DE CLICK
 		new_slot.slot_clicked.connect(_on_slot_clicked)
+		# CONECTAR SEÑALES DE HOVER
+		new_slot.slot_hover.connect(_on_slot_hover)
+		new_slot.slot_exit.connect(_on_slot_exit)
 
 func _on_slot_clicked(index: int, button: int):
 	# Si es click derecho (MOUSE_BUTTON_RIGHT), usamos el ítem
@@ -59,3 +72,30 @@ func _on_inventory_changed():
 # Función para el botón cerrar (si le pones uno)
 func _on_close_button_pressed():
 	visible = false
+
+func _on_slot_hover(slot_data: InventorySlot):
+	if slot_data and slot_data.item_data:
+		tooltip_name.text = slot_data.item_data.item_name
+		tooltip_desc.text = slot_data.item_data.description
+		tooltip.visible = true
+
+func _on_slot_exit():
+	tooltip.visible = false
+
+func _process(_delta):
+	if tooltip.visible:
+		tooltip.global_position = get_global_mouse_position() + Vector2(10, 10)
+	
+	if _dragging:
+		panel.global_position = get_global_mouse_position() - _drag_offset
+
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				var local_pos = event.position
+				if local_pos.y <= 36:
+					_dragging = true
+					_drag_offset = get_global_mouse_position() - panel.global_position
+			else:
+				_dragging = false

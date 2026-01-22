@@ -11,6 +11,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1")
 
@@ -32,7 +34,18 @@ offset_left = 12.0
 offset_top = 10.0
 offset_right = 200.0
 offset_bottom = 38.0
-text = "Equip"
+text = "Equipment"
+
+[node name="CloseButton" type="Button" parent="Panel"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = 38.0
+text = "X"
 
 [node name="Body" type="ColorRect" parent="Panel"]
 layout_mode = 0

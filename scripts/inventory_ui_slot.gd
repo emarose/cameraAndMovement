@@ -1,11 +1,24 @@
 extends Control
 class_name InventoryUISlot
 signal slot_clicked(index: int, button: int)
+signal slot_hover(slot_data: InventorySlot)
+signal slot_exit()
 @onready var icon_rect = $Icon
 @onready var amount_label = $AmountLabel
 
 # Guardamos referencia al dato para tooltips o clics futuros
 var my_slot_data: InventorySlot
+
+func _ready():
+	mouse_entered.connect(_on_mouse_enter)
+	mouse_exited.connect(_on_mouse_exit)
+
+func _on_mouse_enter():
+	if my_slot_data and my_slot_data.item_data:
+		slot_hover.emit(my_slot_data)
+
+func _on_mouse_exit():
+	slot_exit.emit()
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
