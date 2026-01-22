@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://bo43i2ygyfmcf"]
+
+[ext_resource type="Script" uid="uid://br1bl783toxt8" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cip2gctkaehdq" path="res://resources/items/fc265.png" id="1_0tcfh"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Small Red Potion"
+icon = ExtResource("1_0tcfh")
+description = "Restores a small amount of HP."
+item_type = 0
+max_stack_size = 20
+sell_price = 15

@@ -32,6 +32,7 @@ extends CanvasLayer
 @onready var aspd_val = $StatsPanel/VBoxContainer_Derived/AspdRow/Value
 @onready var def_val = $StatsPanel/VBoxContainer_Derived/DefRow/Value
 @onready var hotbar_container: HBoxContainer = $HotbarGrid
+@onready var equipment_ui: EquipmentUI = $EquipmentUI
 
 var slots: Array = []
 var player_stats: StatsComponent
@@ -80,7 +81,8 @@ func update_hotbar_slot(index: int, content, amount: int = 0):
 func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,inventory_comp):
 	if not is_node_ready():
 		await ready
-		
+	
+	var player = get_tree().get_first_node_in_group("player")
 	player_stats = stats
 	
 	# --- Sincronizar VIDA ---
@@ -112,7 +114,7 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,i
 		
 	if inventory_window:
 		inventory_window.setup_inventory(inventory_comp)
-	
+	equipment_ui.set_player(player)
 	update_stats_ui()
 
 func show_skill_label(skill_name: String):
@@ -167,6 +169,14 @@ func _input(event):
 
 	if event.is_action_pressed("toggle_inventory"):
 		inventory_window.visible = !inventory_window.visible
+
+	if event.is_action_pressed("toggle_equipment"):
+		if equipment_ui and equipment_ui.is_inside_tree():
+			if not equipment_ui.visible and equipment_ui.player_path == NodePath():
+				var player = get_tree().get_first_node_in_group("player")
+				if player:
+					equipment_ui.set_player(player)
+			equipment_ui.visible = !equipment_ui.visible
 		
 	# Abrir/Cerrar menú con la tecla C (debes configurarla en Input Map)
 	if event.is_action_pressed("toggle_stats"):

@@ -1,8 +1,26 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=4 format=3 uid="uid://ttnxvkfcc5ku"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=10 format=3 uid="uid://ttnxvkfcc5ku"]
 
-[ext_resource type="Resource" uid="uid://cgkn67q0hkl8w" path="res://resources/drops/PoringDrops.tres" id="1_drops"]
+[ext_resource type="Resource" uid="uid://cqun87ymamf71" path="res://resources/items/Knife.tres" id="1_5cela"]
 [ext_resource type="PackedScene" uid="uid://d1nm1abc21fsy" path="res://assets/models/poring-placeholder-model.tscn" id="1_k4j7c"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_yrkqf"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="2_46yos"]
+[ext_resource type="Resource" uid="uid://bo43i2ygyfmcf" path="res://resources/items/SmallRedPotion.tres" id="3_d447p"]
+[ext_resource type="Resource" path="res://resources/items/SilverRing.tres" id="4_o8ls0"]
+
+[sub_resource type="Resource" id="Resource_hky16"]
+script = ExtResource("2_46yos")
+item_data = ExtResource("1_5cela")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_7oa06"]
+script = ExtResource("2_46yos")
+item_data = ExtResource("3_d447p")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_av116"]
+script = ExtResource("2_46yos")
+item_data = ExtResource("4_o8ls0")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1_yrkqf")
@@ -25,5 +43,5 @@ jump_frequency = 0.6
 wander_radius = 25.0
 idle_time_max = 3.0
 movement_speed_factor = 1.0
-drop_table = [ExtResource("1_drops")]
+drop_table = [SubResource("Resource_hky16"), SubResource("Resource_7oa06"), SubResource("Resource_av116")]
 metadata/_custom_type_script = "uid://e53aoxyegbf"

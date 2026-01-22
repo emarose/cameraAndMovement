@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EquipmentItem" load_steps=3 format=3 uid="uid://cekll1bd772jt"]
+
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ca5880un3u67r" path="res://resources/items/fc1981.png" id="1_367y3"]
+
+[resource]
+script = ExtResource("1")
+slot = 2
+def_bonus = 8
+vit_bonus = 1
+item_name = "Leather Armor"
+icon = ExtResource("1_367y3")
+description = "Light body armor. DEF +8, VIT +1"
+item_type = 1
+stackable = false
+max_stack_size = 1
+sell_price = 120

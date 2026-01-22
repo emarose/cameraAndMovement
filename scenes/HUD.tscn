@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://b3mj4b8fx2imj"]
+[gd_scene load_steps=12 format=3 uid="uid://b3mj4b8fx2imj"]
 
 [ext_resource type="Script" uid="uid://u40hupv2b6rf" path="res://scripts/hud.gd" id="1_qpvh6"]
 [ext_resource type="PackedScene" uid="uid://cqd3ossx4ruqj" path="res://scenes/hotbar_slot.tscn" id="2_fls4u"]
 [ext_resource type="PackedScene" uid="uid://5ob0ybkuqcxh" path="res://scenes/InventoryUi.tscn" id="3_1etfg"]
+[ext_resource type="PackedScene" uid="uid://1vfmbcliamnd" path="res://scenes/EquipmentUI.tscn" id="4_7hsmw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpvh6"]
 bg_color = Color(0.008578151, 0.0038568254, 0.09549191, 1)
@@ -501,6 +502,11 @@ offset_top = -20.0
 offset_right = 448.0
 offset_bottom = 20.0
 size_flags_horizontal = 4
+
+[node name="EquipmentUI" parent="." instance=ExtResource("4_7hsmw")]
+visible = false
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]

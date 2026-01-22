@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EquipmentItem" load_steps=3 format=3 uid="uid://dyg64ibd5bqdy"]
+
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cq7oulwh4nraw" path="res://resources/items/fc2052.png" id="1_ti7pu"]
+
+[resource]
+script = ExtResource("1")
+slot = 1
+def_bonus = 5
+item_name = "Iron Helmet"
+icon = ExtResource("1_ti7pu")
+description = "Sturdy headgear. DEF +5"
+item_type = 1
+stackable = false
+max_stack_size = 1
+sell_price = 80
