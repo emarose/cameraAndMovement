@@ -106,8 +106,8 @@ func _drop_data(at_position, data):
 	
 	# Si viene del equipo
 	elif data["source"] == "equipment":
-		# Item desequipado: agregarlo al inventario
+		# Item desequipado: agregarlo al inventario en este slot
 		var item = data["item"]
 		var slot_type = data["slot_type"]
 		if parent_inventory_ui:
-			parent_inventory_ui.on_item_from_equipment(item, slot_type)
+			parent_inventory_ui.on_item_from_equipment(item, slot_type, slot_index)

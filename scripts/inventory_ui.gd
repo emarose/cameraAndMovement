@@ -114,7 +114,30 @@ func on_item_dropped(from_index: int, to_index: int):
 		player_inventory.swap_items(from_index, to_index)
 
 # Llamado cuando se arrastra un item desde el equipo al inventario
-func on_item_from_equipment(item: EquipmentItem, slot_type: EquipmentItem.EquipmentSlot):
-	# unequip_slot ya añade el item al inventario, no hay que hacerlo dos veces
-	if equipment_component:
-		equipment_component.unequip_slot(slot_type)
+func on_item_from_equipment(item: EquipmentItem, slot_type: EquipmentItem.EquipmentSlot, target_slot_index: int = -1):
+	if not equipment_component or not player_inventory:
+		return
+	
+	var old_item = equipment_component.get_equipped_item(slot_type)
+	# Remover del equipamiento
+	equipment_component.equipped_items[slot_type] = null
+	
+	# Añadir al inventario en el slot específico si es válido y está vacío
+	if target_slot_index >= 0 and target_slot_index < player_inventory.max_slots:
+		if player_inventory.slots[target_slot_index] == null:
+			# Slot destino vacío: añadir ahí
+			player_inventory.slots[target_slot_index] = InventorySlot.new(old_item, 1)
+		else:
+			# Slot destino ocupado: buscar primer slot vacío
+			if not player_inventory.add_item(old_item, 1):
+				print("No hay espacio en el inventario")
+				return
+	else:
+		# Sin slot específico: buscar primer slot vacío
+		if not player_inventory.add_item(old_item, 1):
+			print("No hay espacio en el inventario")
+			return
+	
+	equipment_component._recalculate_equipment_bonuses()
+	equipment_component.equipment_changed.emit()
+	player_inventory.inventory_changed.emit()
