@@ -85,17 +85,29 @@ func _can_drop_data(at_position, data):
 	if typeof(data) == TYPE_DICTIONARY and data.has("source"):
 		if data["source"] == "inventory":
 			return true
+		# También aceptar desde equipo (para desequipar items)
+		elif data["source"] == "equipment":
+			return true
 	return false
 
 # 3. Cuando sueltan el click SOBRE este slot
 func _drop_data(at_position, data):
-	var origin_index = data["origin_index"]
+	# Si viene del inventario
+	if data["source"] == "inventory":
+		var origin_index = data["origin_index"]
+		
+		# Si soltamos en el mismo slot, no hacemos nada
+		if origin_index == slot_index:
+			return
+		
+		# Intercambio entre slots del inventario
+		if parent_inventory_ui:
+			parent_inventory_ui.on_item_dropped(origin_index, slot_index)
 	
-	# Si soltamos en el mismo slot, no hacemos nada
-	if origin_index == slot_index:
-		return
-	
-	# Llamamos a la UI principal para gestionar el cambio
-	# (Es mejor centralizarlo en el padre InventoryUI)
-	if parent_inventory_ui:
-		parent_inventory_ui.on_item_dropped(origin_index, slot_index)
+	# Si viene del equipo
+	elif data["source"] == "equipment":
+		# Item desequipado: agregarlo al inventario
+		var item = data["item"]
+		var slot_type = data["slot_type"]
+		if parent_inventory_ui:
+			parent_inventory_ui.on_item_from_equipment(item, slot_type)

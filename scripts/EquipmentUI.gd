@@ -35,12 +35,16 @@ func set_player(player: Node) -> void:
 func _assign_slot_types():
 	if weapon_slot:
 		weapon_slot.set_slot_type(EquipmentItem.EquipmentSlot.WEAPON)
+		weapon_slot.parent_equipment_ui = self
 	if head_slot:
 		head_slot.set_slot_type(EquipmentItem.EquipmentSlot.HEAD)
+		head_slot.parent_equipment_ui = self
 	if body_slot:
 		body_slot.set_slot_type(EquipmentItem.EquipmentSlot.BODY)
+		body_slot.parent_equipment_ui = self
 	if accessory_slot:
 		accessory_slot.set_slot_type(EquipmentItem.EquipmentSlot.ACCESSORY)
+		accessory_slot.parent_equipment_ui = self
 
 func _refresh_slots():
 	if not equipment_component:
@@ -67,3 +71,33 @@ func _gui_input(event):
 
 func _on_close_button_pressed():
 	visible = false
+
+# Llamado cuando se arrastra un item del inventario a un slot de equipo
+func on_item_from_inventory(item: EquipmentItem, slot_type: EquipmentItem.EquipmentSlot, origin_index: int):
+	if equipment_component and inventory_component:
+		# Primero remover del inventario
+		inventory_component.slots[origin_index] = null
+		inventory_component.inventory_changed.emit()
+		# Luego equipar (esto devolverá el item viejo al inventario si existe)
+		equipment_component.equip_item(item)
+
+# Llamado cuando se intercambian dos slots de equipo
+func on_equipment_swapped(from_slot: EquipmentItem.EquipmentSlot, to_slot: EquipmentItem.EquipmentSlot):
+	if not equipment_component or not inventory_component:
+		return
+	
+	var from_item = equipment_component.get_equipped_item(from_slot)
+	var to_item = equipment_component.get_equipped_item(to_slot)
+	
+	# Intercambiar items entre slots
+	equipment_component.equipped_items[from_slot] = to_item
+	equipment_component.equipped_items[to_slot] = from_item
+	
+	# Recalcular bonos y emitir señal
+	equipment_component._recalculate_equipment_bonuses()
+	equipment_component.equipment_changed.emit()
+
+# Llamado cuando se hace click izquierdo para desequipar
+func on_unequip_clicked(slot_type: EquipmentItem.EquipmentSlot):
+	if equipment_component:
+		equipment_component.unequip_slot(slot_type)

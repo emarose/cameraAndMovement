@@ -11,6 +11,7 @@ extends Control
 @onready var close_button = $Panel/TitleBar/CloseButton
 
 var ui_slots: Array[InventoryUISlot] = []
+var equipment_component: EquipmentComponent = null
 var _dragging = false
 var _drag_offset = Vector2.ZERO
 
@@ -24,6 +25,10 @@ func _ready():
 
 func setup_inventory(inventory: InventoryComponent):
 	player_inventory = inventory
+	# Obtener equipment_component del padre
+	var parent = inventory.get_parent()
+	if parent:
+		equipment_component = parent.get_node_or_null("EquipmentComponent")
 	# Conectamos la señal que creamos en el paso anterior
 	player_inventory.inventory_changed.connect(_on_inventory_changed)
 	
@@ -107,3 +112,9 @@ func _gui_input(event):
 func on_item_dropped(from_index: int, to_index: int):
 	if player_inventory:
 		player_inventory.swap_items(from_index, to_index)
+
+# Llamado cuando se arrastra un item desde el equipo al inventario
+func on_item_from_equipment(item: EquipmentItem, slot_type: EquipmentItem.EquipmentSlot):
+	# unequip_slot ya añade el item al inventario, no hay que hacerlo dos veces
+	if equipment_component:
+		equipment_component.unequip_slot(slot_type)
