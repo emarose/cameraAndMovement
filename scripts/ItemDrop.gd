@@ -25,6 +25,7 @@ var can_pickup: bool = false
 var has_been_picked: bool = false
 var initial_position: Vector3
 var _is_attracting: bool = false
+var _pickup_fail_cooldown: float = 0.0 # Cooldown entre intentos fallidos
 
 func _ready():
 	body_entered.connect(_on_body_entered)
@@ -36,9 +37,22 @@ func _process(delta):
 		return
 	if not player or not is_instance_valid(player):
 		return
+	
+	# Actualizar cooldown de intento fallido
+	if _pickup_fail_cooldown > 0:
+		_pickup_fail_cooldown -= delta
+		_is_attracting = false # No atraerse mientras hay cooldown
+		return
 
 	var dist_to_player = global_position.distance_to(player.global_position)
-	if dist_to_player <= magnet_radius:
+	
+	# Si salimos del radio de magnetismo, reseteamos el flag de atracción
+	if dist_to_player > magnet_radius:
+		_is_attracting = false
+		return
+	
+	# Estamos dentro del radio, atraerse
+	if not _is_attracting:
 		_is_attracting = true
 
 	if _is_attracting:
@@ -102,20 +116,30 @@ func _on_body_entered(body: Node3D):
 func _pickup_item():
 	if has_been_picked:
 		return
-	has_been_picked = true
-	_is_attracting = false
-	# Usamos deferred para evitar modificar el estado mientras se procesan queries de física
-	if collision_shape:
-		collision_shape.set_deferred("disabled", true)
-	set_deferred("monitoring", false)
-	set_deferred("monitorable", false)
 	
-	if player and player.has_node("InventoryComponent"):
-		var inventory = player.get_node("InventoryComponent")
-		inventory.add_item(item_data, quantity)
+	if not player or not player.has_node("InventoryComponent"):
+		return
+	
+	var inventory = player.get_node("InventoryComponent")
+	
+	# Intentar agregar el item al inventario
+	if inventory.add_item(item_data, quantity):
+		# Éxito: item agregado
+		has_been_picked = true
+		_is_attracting = false
+		if collision_shape:
+			collision_shape.set_deferred("disabled", true)
+		set_deferred("monitoring", false)
+		set_deferred("monitorable", false)
+		
 		get_tree().call_group("hud", "show_pickup_message", item_data.item_name, quantity)
-	
-	call_deferred("queue_free")
+		call_deferred("queue_free")
+	else:
+		# Fallo: inventario lleno
+		get_tree().call_group("hud", "add_log_message", "Inventario lleno!", Color.ORANGE)
+		_is_attracting = false
+		_pickup_fail_cooldown = 1.0 # Reintentar en 1 segundo
+		return
 
 ## Devuelve información del drop para debugging
 func get_drop_info() -> String:

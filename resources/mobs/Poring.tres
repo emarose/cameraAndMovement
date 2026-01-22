@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=10 format=3 uid="uid://ttnxvkfcc5ku"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=14 format=3 uid="uid://ttnxvkfcc5ku"]
 
 [ext_resource type="Resource" uid="uid://cqun87ymamf71" path="res://resources/items/Knife.tres" id="1_5cela"]
 [ext_resource type="PackedScene" uid="uid://d1nm1abc21fsy" path="res://assets/models/poring-placeholder-model.tscn" id="1_k4j7c"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_yrkqf"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="2_46yos"]
 [ext_resource type="Resource" uid="uid://bo43i2ygyfmcf" path="res://resources/items/SmallRedPotion.tres" id="3_d447p"]
-[ext_resource type="Resource" path="res://resources/items/SilverRing.tres" id="4_o8ls0"]
+[ext_resource type="Resource" uid="uid://ih33gmx7n4ag" path="res://resources/items/SilverRing.tres" id="4_o8ls0"]
+[ext_resource type="Resource" uid="uid://cekll1bd772jt" path="res://resources/items/LeatherArmor.tres" id="5_d447p"]
+[ext_resource type="Resource" uid="uid://dyg64ibd5bqdy" path="res://resources/items/IronHelmet.tres" id="6_o8ls0"]
 
 [sub_resource type="Resource" id="Resource_hky16"]
 script = ExtResource("2_46yos")
@@ -20,6 +22,18 @@ metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 [sub_resource type="Resource" id="Resource_av116"]
 script = ExtResource("2_46yos")
 item_data = ExtResource("4_o8ls0")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_lm5im"]
+script = ExtResource("2_46yos")
+item_data = ExtResource("5_d447p")
+drop_chance = 1.0
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_v8jtj"]
+script = ExtResource("2_46yos")
+item_data = ExtResource("6_o8ls0")
+drop_chance = 1.0
 metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
@@ -43,5 +57,5 @@ jump_frequency = 0.6
 wander_radius = 25.0
 idle_time_max = 3.0
 movement_speed_factor = 1.0
-drop_table = [SubResource("Resource_hky16"), SubResource("Resource_7oa06"), SubResource("Resource_av116")]
+drop_table = Array[ExtResource("2_46yos")]([SubResource("Resource_hky16"), SubResource("Resource_7oa06"), SubResource("Resource_av116"), SubResource("Resource_lm5im"), SubResource("Resource_v8jtj")])
 metadata/_custom_type_script = "uid://e53aoxyegbf"
