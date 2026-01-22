@@ -13,6 +13,7 @@ func _ready():
 
 # Función principal para recoger objetos
 func add_item(item: ItemData, amount: int = 1) -> bool:
+
 	# CASO 1: El item es STACKABLE (Pociones, Loot)
 	if item.stackable:
 		# Buscamos si ya existe un slot con este item
@@ -42,6 +43,20 @@ func use_item_at_index(index: int, user: Node) -> void:
 	var slot = slots[index]
 	var item = slot.item_data
 	
+	# CASO ESPECIAL: Item de Equipamiento
+	if item.item_type == ItemData.ItemType.EQUIPMENT:
+		var equipment_comp = user.get_node_or_null("EquipmentComponent")
+		if equipment_comp:
+			# IMPORTANTE: Primero removemos del inventario, luego equipamos
+			# Esto asegura que si hay swap, el item viejo tenga espacio
+			slots[index] = null # Remover del inventario
+			inventory_changed.emit()
+			
+			# Equipar (si hay algo en ese slot, EquipmentComponent lo devolverá al inventario)
+			equipment_comp.equip_item(item)
+		return
+	
+	# CASO NORMAL: Consumibles y otros
 	# Intentamos usar el item
 	if item.use(user):
 		# Si se usó con éxito y es consumible, restamos cantidad

@@ -19,6 +19,12 @@ signal on_xp_changed(current_xp, max_xp)
 @export var hp_regen_percent_mod: float = 1.0 # 1.0 = 100% (normal)
 @export var sp_regen_percent_mod: float = 1.0
 
+@export_group("Equipment Bonuses")
+var equipment_atk_bonus: int = 0
+var equipment_def_bonus: int = 0
+var equipment_str_bonus: int = 0
+var equipment_vit_bonus: int = 0
+
 @export_group("Current Resources") # Para que no se pierdan con los base stats
 
 @export_group("Progression")
@@ -28,12 +34,14 @@ signal on_xp_changed(current_xp, max_xp)
 @export var stat_points_available: int = 0
 
 # --- Atributos Derivados (Calculados) ---
-func get_total_vit() -> int: return vit # Es esto lo mismo que get_max_hp_bonus?
+func get_total_vit() -> int: return vit + equipment_vit_bonus
 func get_total_int() -> int: return int_stat
+func get_total_str() -> int: return str_stat + equipment_str_bonus
 
 func get_atk() -> int:
-	# Fórmula RO simplificada: STR + (STR/10)^2
-	return str_stat + int(pow(str_stat / 10.0, 2))
+	# Fórmula RO simplificada: STR + (STR/10)^2 + Bono de Equipo
+	var total_str = get_total_str()
+	return total_str + int(pow(total_str / 10.0, 2)) + equipment_atk_bonus
 	
 func get_matk() -> int:
 	return int_stat + int(pow(int_stat / 8.0, 2))
@@ -47,8 +55,8 @@ func get_flee() -> int:
 	return current_level + agi
 
 func get_max_hp_bonus() -> int:
-	# Vida extra por vitalidad
-	return vit * 15
+	# Vida extra por vitalidad (con bonos de equipo)
+	return get_total_vit() * 15
 
 func get_attack_speed() -> float:
 	# Cuanto más AGI, menor es el tiempo entre ataques (cooldown)
@@ -65,7 +73,7 @@ func calculate_hit_chance(attacker_hit: int, defender_flee: int) -> float:
 	return clamp(chance, 0.05, 0.95)
 
 func get_def() -> int:
-	return vit + (current_level / 2)
+	return vit + (current_level / 2) + equipment_def_bonus
 
 # --- Lógica de Nivel ---
 
@@ -102,3 +110,11 @@ func initialize_from_resource(data: EnemyData):
 	luk = data.luk
 	current_level = data.level
 	# Puedes inicializar más cosas si el recurso las tiene
+
+## Función para que EquipmentComponent actualice los bonos
+func set_equipment_bonuses(atk: int, def: int, str_bonus: int, vit_bonus: int):
+	equipment_atk_bonus = atk
+	equipment_def_bonus = def
+	equipment_str_bonus = str_bonus
+	equipment_vit_bonus = vit_bonus
+	print("Stats actualizados con bonos de equipo: ATK+%d, DEF+%d, STR+%d, VIT+%d" % [atk, def, str_bonus, vit_bonus])

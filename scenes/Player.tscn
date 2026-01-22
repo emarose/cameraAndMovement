@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://lw4sjl4cws8q"]
+[gd_scene load_steps=29 format=3 uid="uid://lw4sjl4cws8q"]
 
 [ext_resource type="Script" uid="uid://cjm61wm3wga5a" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://biubb72lqc4a3" path="res://assets/icons/cursor_default.png" id="2_lkdrv"]
@@ -19,6 +19,7 @@
 [ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="12_o4126"]
 [ext_resource type="Script" uid="uid://bb5m4qisg7fb8" path="res://scripts/RegenerationComponent.gd" id="15_0rnld"]
 [ext_resource type="Script" uid="uid://b1hf11y1cgjtr" path="res://scripts/InventoryComponent.gd" id="19_ebwui"]
+[ext_resource type="Script" uid="uid://gvc84ejulk4" path="res://scripts/EquipmentComponent.gd" id="19_sfy4j"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqk2v"]
 albedo_color = Color(0.19338313, 0.65526867, 0.66791755, 1)
@@ -105,6 +106,9 @@ script = ExtResource("19_ebwui")
 
 [node name="RegenerationComponent" type="Node" parent="."]
 script = ExtResource("15_0rnld")
+
+[node name="EquipmentComponent" type="Node" parent="."]
+script = ExtResource("19_sfy4j")
 
 [node name="GameOverUI" parent="." instance=ExtResource("5_qu4a1")]
 

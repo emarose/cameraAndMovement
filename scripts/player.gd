@@ -48,6 +48,8 @@ var can_attack_player: bool = true
 var is_attacking: bool = false
 
 func _ready():
+	var knife = load("res://resources/items/Knife.tres")
+
 	hotbar_content.resize(HOTBAR_SIZE)
 		# Cargar configuración inicial
 	for i in range(HOTBAR_SIZE):
@@ -67,6 +69,7 @@ func _ready():
 	
 	# Agregar items al inventario ANTES de refrescar la hotbar
 	inventory.add_item(test_potion, 5)
+	inventory.add_item(knife, 1)
 	inventory.inventory_changed.connect(_on_inventory_changed)
 	
 	# 3. Configurar HUD pasando los 3 componentes
