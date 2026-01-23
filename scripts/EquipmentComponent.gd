@@ -100,12 +100,14 @@ func _recalculate_equipment_bonuses():
 	# Aplicar los bonos al StatsComponent
 	# NOTA: Necesitaremos agregar estas variables en StatsComponent
 	if stats_component.has_method("set_equipment_bonuses"):
-		stats_component.set_equipment_bonuses(
-			total_atk_bonus,
-			total_def_bonus,
-			total_str_bonus,
-			total_vit_bonus
-		)
+		var bonuses = {
+		"atk": total_atk_bonus,
+		"def": total_def_bonus,
+		"str": total_str_bonus,
+		"vit": total_vit_bonus
+		}
+		stats_component.set_equipment_bonuses(bonuses)
+
 	
 	print("Bonos recalculados: ATK+%d, DEF+%d, STR+%d, VIT+%d" % [
 		total_atk_bonus, total_def_bonus, total_str_bonus, total_vit_bonus

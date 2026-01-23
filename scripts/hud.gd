@@ -40,44 +40,35 @@ var current_skill_name: String = ""
 var _pickup_base_pos := Vector2.ZERO
 
 func _ready():
-	# El HUD comienza oculto
-	stats_panel.visible = false
 	armed_skill_label.text = ""
 	if pickup_panel:
 		_pickup_base_pos = pickup_panel.position
 		pickup_panel.visible = false
+		
 	setup_hotbar_ui()
 
-func show_pickup_message(item_name: String, amount: int):
-	if not pickup_panel or not pickup_label:
-		return
-	pickup_label.text = "+%dx %s" % [amount, item_name]
-	pickup_panel.visible = true
-	pickup_panel.modulate = Color(1, 1, 1, 1)
-	pickup_panel.position = _pickup_base_pos
-	var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(pickup_panel, "position:y", _pickup_base_pos.y - 24.0, 0.35)
-	tween.parallel().tween_property(pickup_panel, "modulate:a", 0.0, 0.5).set_delay(0.75)
-	tween.chain().tween_callback(func():
-		pickup_panel.visible = false
-		pickup_panel.modulate.a = 1.0
-		pickup_panel.position = _pickup_base_pos
-	)
-	
-func setup_hotbar_ui():
-	# Obtener los hijos (los slots) y configurarlos
-	var i = 0
-	if hotbar_container:
-		for child in hotbar_container.get_children():
-			if child is HotbarSlot:
-				child.setup(i, str(i + 1)) # Asigna índice y tecla (1-9)
-				child.parent_hud = self # Pasar referencia al HUD
-				slots.append(child)
-				i += 1
+func refresh_ui():
+	# Stats Base y Totales (mostrando el bono si existe)
+	str_label.text = str(player_stats.get_total_str())
+	agi_label.text = str(player_stats.get_total_agi())
+	dex_label.text = str(player_stats.get_total_dex())
+	int_label.text = str(player_stats.get_total_int())
+	vit_label.text = str(player_stats.get_total_vit())
+	luk_label.text = str(player_stats.get_total_luk())
 
-func update_hotbar_slot(index: int, content, amount: int = 0):
-	if index >= 0 and index < slots.size():
-		slots[index].update_slot(content, amount)
+	# Stats Derivados
+	atk_val.text = str(player_stats.get_atk())
+	matk_val.text = str(player_stats.get_matk())
+	def_val.text = str(player_stats.get_def())
+	hit_val.text = str(player_stats.get_hit())
+	aspd_val.text = str(player_stats.get_aspd())
+	flee_val.text = str(player_stats.get_flee())
+	# Puntos disponibles
+	points_label.text = "Puntos disponibles: " + str(player_stats.stat_points_available)
+	# Control de botones
+	var can_add = player_stats.stat_points_available > 0
+	for btn in get_tree().get_nodes_in_group("stat_buttons"):
+		btn.visible = can_add
 
 func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,inventory_comp):
 	if not is_node_ready():
@@ -106,7 +97,7 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,i
 			sp.on_sp_changed.connect(_on_sp_changed)
 	
 	# --- Sincronizar XP y Nivel ---
-	level_label.text = "Nivel: " + str(stats.current_level)
+	level_label.text = "Lvl: " + str(stats.current_level)
 	_on_xp_changed(stats.current_xp, stats.xp_to_next_level)
 	if not stats.on_xp_changed.is_connected(_on_xp_changed):
 		stats.on_xp_changed.connect(_on_xp_changed)
@@ -116,7 +107,42 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,i
 	if inventory_window:
 		inventory_window.setup_inventory(inventory_comp)
 	equipment_ui.set_player(player)
-	update_stats_ui()
+	
+	if not player_stats.stats_changed.is_connected(refresh_ui):
+		player_stats.stats_changed.connect(refresh_ui)
+
+	refresh_ui()
+	
+func setup_hotbar_ui():
+	# Obtener los hijos (los slots) y configurarlos
+	var i = 0
+	if hotbar_container:
+		for child in hotbar_container.get_children():
+			if child is HotbarSlot:
+				child.setup(i, str(i + 1)) # Asigna índice y tecla (1-9)
+				child.parent_hud = self # Pasar referencia al HUD
+				slots.append(child)
+				i += 1
+
+func update_hotbar_slot(index: int, content, amount: int = 0):
+	if index >= 0 and index < slots.size():
+		slots[index].update_slot(content, amount)
+
+func show_pickup_message(item_name: String, amount: int):
+	if not pickup_panel or not pickup_label:
+		return
+	pickup_label.text = "+%dx %s" % [amount, item_name]
+	pickup_panel.visible = true
+	pickup_panel.modulate = Color(1, 1, 1, 1)
+	pickup_panel.position = _pickup_base_pos
+	var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(pickup_panel, "position:y", _pickup_base_pos.y - 24.0, 0.35)
+	tween.parallel().tween_property(pickup_panel, "modulate:a", 0.0, 0.5).set_delay(0.75)
+	tween.chain().tween_callback(func():
+		pickup_panel.visible = false
+		pickup_panel.modulate.a = 1.0
+		pickup_panel.position = _pickup_base_pos
+	)
 
 func show_skill_label(skill_name: String):
 	armed_skill_label.text = ">> " + skill_name.to_upper() + " <<"
@@ -150,7 +176,7 @@ func _modify_stat(stat_name: String):
 			_update_player_max_hp()
 			
 		# 4. Refrescar la UI
-		update_stats_ui()
+		refresh_ui()
 		add_log_message("Aumentaste %s a %d" % [stat_name.to_upper(), current_val + 1], Color.AQUA)
 
 func _update_player_max_hp():
@@ -183,7 +209,7 @@ func _input(event):
 	if event.is_action_pressed("toggle_stats"):
 		stats_panel.visible = !stats_panel.visible
 		if stats_panel.visible:
-			update_stats_ui()
+			refresh_ui()
 
 func add_log_message(text: String, color: Color = Color.WHITE):
 	if log_label:
@@ -218,32 +244,7 @@ func update_exp_bar():
 func _on_level_up(new_level):
 	level_label.text = "Nivel: " + str(new_level)
 	update_exp_bar()
-	update_stats_ui()
-
-func update_stats_ui():
-	if not player_stats: return
-	
-	# 1. Stats Base (Lo que ya tenías)
-	points_label.text = "Puntos: " + str(player_stats.stat_points_available)
-	str_label.text = str(player_stats.str_stat)
-	agi_label.text = str(player_stats.agi)
-	vit_label.text = str(player_stats.vit)
-	int_label.text = str(player_stats.int_stat)
-	dex_label.text = str(player_stats.dex)
-	luk_label.text = str(player_stats.luk)
-	
-	# 2. Sub-Stats Derivados (La columna derecha estilo RO)
-	atk_val.text = str(player_stats.get_atk())
-	matk_val.text = str(player_stats.get_matk())
-	hit_val.text = str(player_stats.get_hit())
-	flee_val.text = str(player_stats.get_flee())
-	def_val.text = str(player_stats.get_def())
-	aspd_val.text = str(player_stats.get_aspd())
-	
-	# Control de botones
-	var can_add = player_stats.stat_points_available > 0
-	for btn in get_tree().get_nodes_in_group("stat_buttons"):
-		btn.visible = can_add
+	refresh_ui()
 
 func _on_add_str_pressed(): _modify_stat("str_stat")
 func _on_add_agi_pressed(): _modify_stat("agi")

@@ -47,7 +47,13 @@ var current_target_enemy = null
 var can_attack_player: bool = true
 var is_attacking: bool = false
 
+func _input(event):
+	if event.is_action_pressed("ui_focus_next"): # Por ejemplo, la tecla TAB
+		# Simulamos un buff de "Blessing" que da +5 STR
+		stats.apply_status_bonus("str", 5)
+
 func _ready():
+	
 	var knife = load("res://resources/items/Knife.tres")
 
 	hotbar_content.resize(HOTBAR_SIZE)
@@ -626,4 +632,3 @@ func _assign_item_to_hotbar(slot_index: int, item: ItemData):
 	if slot_index >= 0 and slot_index < HOTBAR_SIZE:
 		hotbar_content[slot_index] = item
 		refresh_hotbar_to_hud()
-
