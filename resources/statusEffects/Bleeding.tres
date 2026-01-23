@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://b24a2wu3p8ypm"]
+
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_15nli"]
+
+[resource]
+script = ExtResource("1_15nli")
+effect_name = "Bleeding"
+type = 1
+value = 15
+metadata/_custom_type_script = "uid://y6wkl8vhgid"

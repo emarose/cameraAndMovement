@@ -21,7 +21,12 @@ var HOTBAR_SIZE = 9
 @export var floating_text_scene: PackedScene
 @export var level_up_effect_scene: PackedScene
 
+# -- TESTIN VARS
+
 @export var test_potion: ItemData
+@export var test_buff: StatusEffectData
+
+
 
 @onready var inventory_component: InventoryComponent = $InventoryComponent
 @onready var aoe_indicator: MeshInstance3D = $AOEIndicator
@@ -35,6 +40,7 @@ var HOTBAR_SIZE = 9
 @onready var sp_component: SPComponent = $SPComponent
 @onready var regen_component = $RegenerationComponent
 @onready var inventory = $InventoryComponent
+@onready var status_effect_manager: StatusEffectManager = $StatusEffectManagerComponent
 
 # --- Variables de Ataque y Control ---
 var last_attack_time: int = 0
@@ -49,8 +55,9 @@ var is_attacking: bool = false
 
 func _input(event):
 	if event.is_action_pressed("ui_focus_next"): # Por ejemplo, la tecla TAB
-		# Simulamos un buff de "Blessing" que da +5 STR
-		stats.apply_status_bonus("str", 5)
+		print("input added status:",test_buff)
+		if status_effect_manager and test_buff:
+			status_effect_manager.add_effect(test_buff)
 
 func _ready():
 	
