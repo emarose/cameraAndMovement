@@ -1,15 +1,13 @@
-[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://clc3d08pxdbri"]
 
-[ext_resource type="Script" path="res://scripts/StatusEffectData.gd" id="1_oyxem"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_oyxem"]
 
 [resource]
 script = ExtResource("1_oyxem")
-metadata/_custom_type_script = "uid://y6wkl8vhgid"
 effect_name = "Swift Step"
-type = 0
-duration = 40.0
-tick_rate = 1.0
+duration = 5.0
 modifiers = {
 "agi": 8,
-"speed_percent": 0.25
+"speed_percent": 1.0
 }
+metadata/_custom_type_script = "uid://y6wkl8vhgid"

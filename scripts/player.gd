@@ -139,7 +139,7 @@ func _unhandled_input(event):
 		update_cursor()
 
 func _physics_process(_delta):
-	if is_dead or is_stunned: return
+	if is_dead or (stats and stats.is_stunned): return
 	_update_aoe_indicator()
 	
 	# 1. Bloqueo por animación de ataque (prioridad máxima)
@@ -168,7 +168,8 @@ func _physics_process(_delta):
 	else:
 		var next_path_pos = nav_agent.get_next_path_position()
 		var direction = (next_path_pos - global_position).normalized()
-		velocity = direction * speed
+		var speed_mult : int = (stats.get_move_speed_modifier() if stats else 1.0)
+		velocity = direction * speed * speed_mult
 		
 		# Orientación
 		var target_flat = Vector3(next_path_pos.x, global_position.y, next_path_pos.z)
@@ -343,7 +344,8 @@ func _on_player_hit(new_health):
 
 func _on_player_damaged(_damage_amount: int):
 	# 2. Stun / Flinch solo cuando recibe daño
-	is_stunned = true
+	if stats:
+		stats.is_stunned = true
 	velocity = Vector3.ZERO
 	# Interrumpimos el click para que el jugador tenga que volver a dar la orden (opcional, da tensión)
 	#is_clicking = false 
@@ -356,7 +358,8 @@ func _on_player_damaged(_damage_amount: int):
 	tween.chain().tween_property(self, "position:y", position.y, 0.1)
 
 	await get_tree().create_timer(0.2).timeout # Tiempo de flinch
-	is_stunned = false
+	if stats:
+		stats.is_stunned = false
 	
 	if skill_component and skill_component.armed_skill:
 		skill_component.cancel_cast()

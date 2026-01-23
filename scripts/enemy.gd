@@ -63,7 +63,7 @@ func _ready():
 		scale = Vector3(2.0, 2.0, 2.0)
 
 func _physics_process(delta):
-	if is_stunned or is_dead or not data: return
+	if (stats_comp and stats_comp.is_stunned) or is_dead or not data: return
 
 	if player and !player.is_dead:
 		var dist_to_player = global_position.distance_to(player.global_position)
@@ -99,10 +99,12 @@ func _move_logic(target_pos: Vector3, movement_speed: float):
 	var direction = (next_pos - global_position).normalized()
 	var final_velocity = Vector3.ZERO
 
+	var speed_mult := (stats_comp.get_move_speed_modifier() if stats_comp else 1.0)
+
 	match data.movement_type:
 		data.MovementType.SLIDE:
 			# Movimiento constante normal
-			final_velocity = direction * movement_speed
+			final_velocity = direction * movement_speed * speed_mult
 			
 		data.MovementType.JUMP:
 			# Lógica tipo Poring: Avanza por impulsos
@@ -114,7 +116,7 @@ func _move_logic(target_pos: Vector3, movement_speed: float):
 				if is_jumping: _visual_jump_effect() # Feedback visual
 			
 			if is_jumping:
-				final_velocity = direction * (movement_speed * 1.5) # Salto rápido
+				final_velocity = direction * (movement_speed * 1.5) * speed_mult # Salto rápido
 			else:
 				final_velocity = Vector3.ZERO # Pausa entre saltos
 				
@@ -124,7 +126,7 @@ func _move_logic(target_pos: Vector3, movement_speed: float):
 			# Añadimos un vector perpendicular que oscila con un Seno
 			var side_dir = direction.cross(Vector3.UP) 
 			var wave = side_dir * sin(move_timer * 5.0) * 0.5
-			final_velocity = (direction + wave).normalized() * movement_speed
+			final_velocity = (direction + wave).normalized() * movement_speed * speed_mult
 
 	# Rotación (siempre mirar a donde intenta ir, excepto si está quieto)
 	if final_velocity.length() > 0.1:
@@ -193,7 +195,8 @@ func chase_target(target_pos: Vector3, movement_speed: float):
 	if current_pos.distance_to(look_target) > 0.1:
 		look_at(look_target, Vector3.UP)
 	
-	velocity = (next_pos - current_pos).normalized() * movement_speed
+	var speed_mult := (stats_comp.get_move_speed_modifier() if stats_comp else 1.0)
+	velocity = (next_pos - current_pos).normalized() * movement_speed * speed_mult
 	move_and_slide()
 
 func attack_player():
@@ -249,7 +252,8 @@ func _play_attack_anim():
 func _on_take_damage(new_health):
 	if health_bar:
 		health_bar.update_bar(new_health, health_comp.max_health)
-	is_stunned = true
+	if stats_comp:
+		stats_comp.is_stunned = true
 	velocity = Vector3.ZERO
 	
 	if mesh: # Solo crear el tween SI tenemos el mesh listo
@@ -258,7 +262,8 @@ func _on_take_damage(new_health):
 		tween.tween_property(mesh, "scale", Vector3(1, 1, 1), 0.1)
 	
 	await get_tree().create_timer(0.2).timeout
-	is_stunned = false
+	if stats_comp:
+		stats_comp.is_stunned = false
 
 func _on_death():
 	if is_dead: return # Si ya está muriendo, ignorar
@@ -282,7 +287,8 @@ func _on_death():
 	# 2. Detener toda la lógica
 	set_physics_process(false)
 	set_process(false)
-	is_stunned = true
+	if stats_comp:
+		stats_comp.is_stunned = true
 	
 	# 3. Dar XP al jugador
 	if player and player.has_node("StatsComponent"):
