@@ -617,7 +617,13 @@ func _on_inventory_changed():
 	# Siempre actualizamos la hotbar cuando el inventario cambia
 	# (esto actualiza las cantidades incluso si no removimos items de la hotbar)
 	refresh_hotbar_to_hud()
-
 func _on_cooldown_started(skill_name: String, duration: float):
 	if hud:
 		hud.propagate_cooldown(skill_name, duration)
+
+func _assign_item_to_hotbar(slot_index: int, item: ItemData):
+	# Asignar el item al slot del hotbar
+	if slot_index >= 0 and slot_index < HOTBAR_SIZE:
+		hotbar_content[slot_index] = item
+		refresh_hotbar_to_hud()
+

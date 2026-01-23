@@ -10,6 +10,7 @@ var current_skill_name: String = ""
 var current_content: Resource = null
 
 var slot_index: int = 0
+var parent_hud = null # Referencia al HUD para callbacks
 
 func setup(index: int, key_text: String):
 	slot_index = index
@@ -72,3 +73,29 @@ func start_cooldown_visual(duration: float):
 	var tween = create_tween()
 	tween.tween_property(cooldown_overlay, "value", 0.0, duration).set_trans(Tween.TRANS_LINEAR)
 	tween.tween_callback(func(): cooldown_overlay.visible = false)
+
+# --- DRAG AND DROP DESDE INVENTARIO ---
+
+# Aceptar items arrastrados del inventario
+func _can_drop_data(_at_position, data):
+	if typeof(data) == TYPE_DICTIONARY and data.has("source"):
+		if data["source"] == "inventory":
+			var item = data.get("item")
+			# Solo aceptar items consumibles
+			if item and item is ItemData:
+				return item.item_type == ItemData.ItemType.CONSUMABLE
+	return false
+
+# Soltar item en el slot del hotbar
+func _drop_data(_at_position, data):
+	var item = data.get("item")
+	
+	if not item or item.item_type != ItemData.ItemType.CONSUMABLE:
+		# Rechazar si no es consumible
+		if parent_hud and item:
+			parent_hud.reject_non_consumable_item(item)
+		return
+	
+	# Notificar al HUD para que maneje la lógica de duplicados
+	if parent_hud:
+		parent_hud.on_item_dropped_to_hotbar(slot_index, item)

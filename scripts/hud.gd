@@ -71,6 +71,7 @@ func setup_hotbar_ui():
 		for child in hotbar_container.get_children():
 			if child is HotbarSlot:
 				child.setup(i, str(i + 1)) # Asigna índice y tecla (1-9)
+				child.parent_hud = self # Pasar referencia al HUD
 				slots.append(child)
 				i += 1
 
@@ -271,3 +272,47 @@ func propagate_cooldown(skill_name: String, duration: float):
 			if slot.current_skill_name == skill_name:
 				slot.start_cooldown_visual(duration)
 				# Nota: No hacemos 'break' por si tienes la misma skill en 2 slots (raro pero posible)
+
+# Callback cuando se asigna un item consumible al hotbar
+func on_item_assigned_to_hotbar(slot_index: int, item: ItemData):
+	# Obtener referencia al player para actualizar hotbar_content
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("_assign_item_to_hotbar"):
+		player._assign_item_to_hotbar(slot_index, item)
+	
+	# Mostrar mensaje de éxito
+	add_log_message("Asignado %s a slot %d" % [item.item_name, slot_index + 1], Color.LIGHT_GREEN)
+
+# Nuevo callback que maneja la lógica de duplicados
+func on_item_dropped_to_hotbar(target_slot_index: int, item: ItemData):
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		return
+	
+	# Buscar si el item ya está en la hotbar
+	var existing_slot_index = -1
+	for i in range(player.hotbar_content.size()):
+		var content = player.hotbar_content[i]
+		if content is ItemData and content == item:
+			existing_slot_index = i
+			break
+	
+	if existing_slot_index >= 0:
+		# El item ya existe en la hotbar: hacer swap
+		if existing_slot_index != target_slot_index:
+			# Intercambiar posiciones
+			var temp = player.hotbar_content[target_slot_index]
+			player.hotbar_content[target_slot_index] = player.hotbar_content[existing_slot_index]
+			player.hotbar_content[existing_slot_index] = temp
+			player.refresh_hotbar_to_hud()
+			add_log_message("Movido %s a slot %d" % [item.item_name, target_slot_index + 1], Color.LIGHT_BLUE)
+		# Si es el mismo slot, no hacer nada
+	else:
+		# El item NO está en la hotbar: asignarlo normalmente
+		player.hotbar_content[target_slot_index] = item
+		player.refresh_hotbar_to_hud()
+		add_log_message("Asignado %s a slot %d" % [item.item_name, target_slot_index + 1], Color.LIGHT_GREEN)
+
+# Callback para rechazar items no-consumibles
+func reject_non_consumable_item(item: ItemData):
+	add_log_message("Solo se pueden asignar items consumibles", Color.ORANGE)
