@@ -316,3 +316,20 @@ func on_item_dropped_to_hotbar(target_slot_index: int, item: ItemData):
 # Callback para rechazar items no-consumibles
 func reject_non_consumable_item(item: ItemData):
 	add_log_message("Solo se pueden asignar items consumibles", Color.ORANGE)
+
+# Callback para hacer swap entre slots del hotbar
+func on_hotbar_slot_swap(origin_slot_index: int, target_slot_index: int):
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		return
+	
+	# Hacer swap en el array hotbar_content
+	var temp = player.hotbar_content[target_slot_index]
+	player.hotbar_content[target_slot_index] = player.hotbar_content[origin_slot_index]
+	player.hotbar_content[origin_slot_index] = temp
+	
+	# Refrescar la UI del hotbar
+	player.refresh_hotbar_to_hud()
+	
+	# Mensaje opcional
+	add_log_message("Slots intercambiados", Color.LIGHT_BLUE)
