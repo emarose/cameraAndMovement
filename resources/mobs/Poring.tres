@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=14 format=3 uid="uid://ttnxvkfcc5ku"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=16 format=3 uid="uid://ttnxvkfcc5ku"]
 
 [ext_resource type="Resource" uid="uid://cqun87ymamf71" path="res://resources/items/Knife.tres" id="1_5cela"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_hky16"]
 [ext_resource type="PackedScene" uid="uid://d1nm1abc21fsy" path="res://assets/models/poring-placeholder-model.tscn" id="1_k4j7c"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_yrkqf"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="2_46yos"]
@@ -8,6 +9,7 @@
 [ext_resource type="Resource" uid="uid://ih33gmx7n4ag" path="res://resources/items/SilverRing.tres" id="4_o8ls0"]
 [ext_resource type="Resource" uid="uid://cekll1bd772jt" path="res://resources/items/LeatherArmor.tres" id="5_d447p"]
 [ext_resource type="Resource" uid="uid://dyg64ibd5bqdy" path="res://resources/items/IronHelmet.tres" id="6_o8ls0"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="10_7oa06"]
 
 [sub_resource type="Resource" id="Resource_hky16"]
 script = ExtResource("2_46yos")

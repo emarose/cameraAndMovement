@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=3 format=3 uid="uid://dqmpnpux0u6em"]
 
-[ext_resource type="Script" path="res://scripts/StatusEffectData.gd" id="1_oyxem"]
+[ext_resource type="Texture2D" uid="uid://cyhk0uqe0vrnn" path="res://resources/items/fc657.png" id="1_kqstt"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_oyxem"]
 
 [resource]
 script = ExtResource("1_oyxem")
-metadata/_custom_type_script = "uid://y6wkl8vhgid"
 effect_name = "Power Surge"
-type = 0
-duration = 30.0
-tick_rate = 1.0
+icon = ExtResource("1_kqstt")
+duration = 5.0
 modifiers = {
-"str": 5,
-"atk": 15
+"atk": 15,
+"str": 5
 }
+metadata/_custom_type_script = "uid://y6wkl8vhgid"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bfw5g84ulae23"]
+[gd_scene load_steps=21 format=3 uid="uid://bfw5g84ulae23"]
 
 [ext_resource type="Script" uid="uid://bdifrny1pqanx" path="res://scripts/world.gd" id="1_tlwt5"]
 [ext_resource type="Texture2D" uid="uid://dfvukw2s583tt" path="res://assets/icons/cursor_skill.png" id="3_ic0uy"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b3mj4b8fx2imj" path="res://scenes/HUD.tscn" id="7_pkg7o"]
 [ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="8_ioo17"]
 [ext_resource type="Resource" uid="uid://b5sbonaifogvd" path="res://resources/mobs/Fabre.tres" id="9_ioo17"]
+[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="11_ic0uy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tlwt5"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -91,5 +92,12 @@ mob_pool = Array[ExtResource("6_gbfbk")]([ExtResource("8_ioo17")])
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 30)
 enemy_scene = ExtResource("4_aqk2v")
 mob_pool = Array[ExtResource("6_gbfbk")]([ExtResource("9_ioo17")])
+spawn_radius = 10.0
+max_mobs = 10
+
+[node name="MobSpawner - Venomous Spider" parent="." instance=ExtResource("5_036b0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.582314, 0, 30)
+enemy_scene = ExtResource("4_aqk2v")
+mob_pool = Array[ExtResource("6_gbfbk")]([ExtResource("11_ic0uy")])
 spawn_radius = 10.0
 max_mobs = 10

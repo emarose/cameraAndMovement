@@ -43,3 +43,9 @@ enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slit
 
 @export_group("Drops (Loot)")
 @export var drop_table: Array[DropEntry] = []  # Tabla de posibles drops (Array de DropEntry)
+
+@export_group("Combat Abilities")
+@export var attack_status_effects: Array[StatusEffectData] = []  # Status effects que puede infligir al atacar
+@export var status_effect_chance: float = 0.15  # 15% chance por defecto
+@export var skills: Array[SkillData] = []  # Skills que el enemigo puede usar
+@export var skill_use_chance: float = 0.3  # 30% chance de usar skill cuando puede

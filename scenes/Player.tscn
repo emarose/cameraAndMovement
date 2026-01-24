@@ -14,8 +14,8 @@
 [ext_resource type="Resource" uid="uid://busgf0y3f23mu" path="res://resources/skills/Fireball.tres" id="6_jfpux"]
 [ext_resource type="Resource" uid="uid://bk1ypdbbuvqcj" path="res://resources/skills/MagnumBreak.tres" id="7_61ith"]
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="8_khinc"]
+[ext_resource type="Resource" uid="uid://v01uhi7vf7p2" path="res://resources/items/BerserkPill.tres" id="9_b8lor"]
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="10_d3wef"]
-[ext_resource type="Resource" uid="uid://enx68pi80x8m" path="res://resources/statusEffects/stun_shot.tres" id="11_b8lor"]
 [ext_resource type="Resource" uid="uid://wqaj1xa0bv6l" path="res://resources/items/RedPotion_new.tres" id="11_sfy4j"]
 [ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="12_o4126"]
 [ext_resource type="Script" uid="uid://bb5m4qisg7fb8" path="res://scripts/RegenerationComponent.gd" id="15_0rnld"]
@@ -57,11 +57,9 @@ script = ExtResource("1_g2els")
 cursor_default = ExtResource("2_lkdrv")
 cursor_attack = ExtResource("3_p7iby")
 cursor_skill = ExtResource("3_lkdrv")
-initial_hotbar = Array[Resource]([ExtResource("4_lkdrv"), ExtResource("7_61ith"), ExtResource("6_jfpux"), ExtResource("11_sfy4j")])
+initial_hotbar = Array[Resource]([ExtResource("4_lkdrv"), ExtResource("7_61ith"), ExtResource("6_jfpux"), ExtResource("11_sfy4j"), ExtResource("9_b8lor")])
 floating_text_scene = ExtResource("4_bruh7")
 level_up_effect_scene = ExtResource("5_6eyey")
-test_potion = ExtResource("11_sfy4j")
-test_buff = ExtResource("11_b8lor")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 

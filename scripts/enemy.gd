@@ -7,6 +7,7 @@ extends CharacterBody3D
 @onready var health_bar = $HealthBar3D
 @onready var mob_name: Label3D = $Label3D
 @onready var stats_comp: StatsComponent = $StatsComponent
+@onready var skill_comp: SkillComponent = $SkillComponent
 
 enum State { IDLE, WANDERING, CHASING, ATTACKING }
 enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slither (Fabre)
@@ -53,6 +54,15 @@ func _ready():
 		
 	player = get_tree().get_first_node_in_group("player")
 	
+	# Setup skill component if enemy has skills
+	if skill_comp and data.skills.size() > 0:
+		var sp_comp = get_node_or_null("SPComponent")
+		if not sp_comp:
+			sp_comp = SPComponent.new()
+			add_child(sp_comp)
+			sp_comp.setup(stats_comp)
+		skill_comp.setup(self, stats_comp, sp_comp)
+	
 	# --- CONFIGURACIÓN DE EVITACIÓN ---
 	# Conectamos la señal que nos da la velocidad segura calculada por el server de navegación
 	nav_agent.velocity_computed.connect(_on_velocity_computed)
@@ -75,6 +85,10 @@ func _physics_process(delta):
 			is_aggroed = false
 
 		if is_aggroed:
+			# Chance de usar skill si está disponible
+			if data.skills.size() > 0 and randf() < data.skill_use_chance:
+				_try_use_skill()
+			
 			if dist_to_player <= data.attack_range:
 				# Detenerse para atacar
 				_stop_movement()
@@ -230,6 +244,10 @@ func attack_player():
 				if player.has_method("_on_player_hit"):
 					player._on_player_hit(health_node.current_health)
 				_play_attack_anim()
+				
+				# Chance de aplicar status effect
+				if data.attack_status_effects.size() > 0 and randf() < data.status_effect_chance:
+					_apply_random_status_effect(player)
 			else:
 				# FALLÓ EL GOLPE (MISS)
 				get_tree().call_group("hud", "add_log_message", 
@@ -343,6 +361,43 @@ func _create_item_drop(item_data: ItemData, quantity: int, spawn_position: Vecto
 	
 	# 4. Configurar el drop (esto inicia animaciones)
 	item_drop.setup(item_data, quantity)
+
+func _try_use_skill() -> void:
+	if not skill_comp or not player:
+		return
+	
+	# Elegir skill aleatoria
+	var available_skills = data.skills.filter(func(s): return skill_comp.can_use_skill(s))
+	if available_skills.is_empty():
+		return
+	
+	var skill = available_skills[randi() % available_skills.size()]
+	
+	# Usar según tipo de skill
+	match skill.type:
+		SkillData.SkillType.SELF:
+			skill_comp.cast_immediate(skill)
+		SkillData.SkillType.TARGET:
+			if skill_comp.can_use_skill(skill):
+				skill_comp.execute_armed_skill(player)
+		SkillData.SkillType.POINT:
+			# Usar en posición del jugador
+			if skill_comp.can_use_skill(skill):
+				skill_comp.armed_skill = skill
+				skill_comp.execute_armed_skill(player.global_position)
+
+func _apply_random_status_effect(target: Node) -> void:
+	if data.attack_status_effects.is_empty():
+		return
+	
+	var effect = data.attack_status_effects[randi() % data.attack_status_effects.size()]
+	
+	if target.has_node("StatusEffectManagerComponent"):
+		var status_mgr = target.get_node("StatusEffectManagerComponent")
+		status_mgr.add_effect(effect)
+		get_tree().call_group("hud", "add_log_message", 
+			"¡%s te infligió %s!" % [data.monster_name, effect.effect_name], 
+			Color.ORANGE)
 
 func _play_aggro_effect():
 	if mesh:

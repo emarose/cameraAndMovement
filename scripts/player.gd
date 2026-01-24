@@ -21,13 +21,6 @@ var HOTBAR_SIZE = 9
 @export var floating_text_scene: PackedScene
 @export var level_up_effect_scene: PackedScene
 
-# -- TESTIN VARS
-
-@export var test_potion: ItemData
-@export var test_buff: StatusEffectData
-
-
-
 @onready var inventory_component: InventoryComponent = $InventoryComponent
 @onready var aoe_indicator: MeshInstance3D = $AOEIndicator
 @onready var skill_component = $SkillComponent
@@ -53,12 +46,6 @@ var current_target_enemy = null
 var can_attack_player: bool = true
 var is_attacking: bool = false
 
-func _input(event):
-	if event.is_action_pressed("ui_focus_next"): # Por ejemplo, la tecla TAB
-		print("input added status:",test_buff)
-		if status_effect_manager and test_buff:
-			status_effect_manager.add_effect(test_buff)
-
 func _ready():
 	
 	var knife = load("res://resources/items/Knife.tres")
@@ -80,9 +67,6 @@ func _ready():
 	if sp_component:
 		sp_component.setup(stats) 
 	
-	# Agregar items al inventario ANTES de refrescar la hotbar
-	inventory.add_item(test_potion, 5)
-	inventory.add_item(knife, 1)
 	inventory.inventory_changed.connect(_on_inventory_changed)
 	
 	# 3. Configurar HUD pasando los 3 componentes

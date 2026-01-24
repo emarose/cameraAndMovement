@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ConsumableItem" load_steps=4 format=3 uid="uid://v01uhi7vf7p2"]
+
+[ext_resource type="Script" uid="uid://stic2b3p5t05" path="res://scripts/ConsumableItem.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://j0n8pt3mtoni" path="res://resources/items/fc176.png" id="1_5qu5h"]
+[ext_resource type="Resource" uid="uid://dqmpnpux0u6em" path="res://resources/statusEffects/power_surge.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+effect_type = 3
+amount = 1
+duration = 4.0
+status_effect = ExtResource("2")
+item_name = "Berserk Pill"
+icon = ExtResource("1_5qu5h")
+item_type = 0
+max_stack_size = 10
