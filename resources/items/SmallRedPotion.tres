@@ -1,7 +1,14 @@
-[gd_resource type="Resource" script_class="ConsumableItem" load_steps=2 format=3 uid="uid://bq6j45wyyofjk"]
+[gd_resource type="Resource" script_class="ConsumableItem" load_steps=3 format=3 uid="uid://bq6j45wyyofjk"]
 
+[ext_resource type="Texture2D" uid="uid://b0q8lo8srlikb" path="res://resources/items/fc959.png" id="1_irri5"]
 [ext_resource type="Script" uid="uid://stic2b3p5t05" path="res://scripts/ConsumableItem.gd" id="1_vlyxu"]
 
 [resource]
 script = ExtResource("1_vlyxu")
+amount = 10
+item_name = "Small HP potion"
+icon = ExtResource("1_irri5")
+description = "Small HP potion"
+item_type = 0
+max_stack_size = 10
 metadata/_custom_type_script = "uid://stic2b3p5t05"

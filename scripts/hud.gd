@@ -33,8 +33,10 @@ extends CanvasLayer
 @onready var def_val = $StatsPanel/VBoxContainer_Derived/DefRow/Value
 @onready var hotbar_container: HBoxContainer = $HotbarGrid
 @onready var equipment_ui: EquipmentUI = $EquipmentUI
+@onready var status_effects_container: HBoxContainer = $StatusEffectsContainer
 
 var slots: Array = []
+var active_effect_indicators: Dictionary = {}  # effect_name -> indicator_node
 var player_stats: StatsComponent
 var current_skill_name: String = ""
 var _pickup_base_pos := Vector2.ZERO
@@ -110,6 +112,14 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,i
 	
 	if not player_stats.stats_changed.is_connected(refresh_ui):
 		player_stats.stats_changed.connect(refresh_ui)
+	
+	# Setup status effect manager UI
+	if player.has_node("StatusEffectManagerComponent"):
+		var status_mgr = player.get_node("StatusEffectManagerComponent")
+		if not status_mgr.effect_started.is_connected(_on_status_effect_started):
+			status_mgr.effect_started.connect(_on_status_effect_started)
+		if not status_mgr.effect_ended.is_connected(_on_status_effect_ended):
+			status_mgr.effect_ended.connect(_on_status_effect_ended)
 
 	refresh_ui()
 	
@@ -334,3 +344,31 @@ func on_hotbar_slot_swap(origin_slot_index: int, target_slot_index: int):
 	
 	# Mensaje opcional
 	add_log_message("Slots intercambiados", Color.LIGHT_BLUE)
+
+# --- Status Effect UI Handlers ---
+
+func _on_status_effect_started(status_data: StatusEffectData) -> void:
+	if not status_effects_container:
+		return
+	
+	# Crear indicator
+	var indicator_scene = load("res://scenes/StatusEffectIndicator.tscn")
+	if not indicator_scene:
+		return
+	
+	var indicator = indicator_scene.instantiate()
+	status_effects_container.add_child(indicator)
+	indicator.setup(status_data, status_data.duration)
+	
+	# Guardar referencia
+	active_effect_indicators[status_data.effect_name] = indicator
+	
+	# Log feedback
+	add_log_message("Efecto: %s" % status_data.effect_name, Color.CYAN)
+
+func _on_status_effect_ended(status_data: StatusEffectData) -> void:
+	if status_data.effect_name in active_effect_indicators:
+		var indicator = active_effect_indicators[status_data.effect_name]
+		if indicator and is_instance_valid(indicator):
+			indicator.queue_free()
+		active_effect_indicators.erase(status_data.effect_name)

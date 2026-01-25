@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cjm7w4gbf7dry" path="res://assets/models/fabre-placeholder-model.tscn" id="1_fi3od"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_t0rr6"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="2_qyyyq"]
-[ext_resource type="Resource" path="res://resources/items/SpeedPotion.tres" id="3_yig24"]
+[ext_resource type="Resource" uid="uid://olrtslcbifoc" path="res://resources/items/SpeedPotion.tres" id="3_yig24"]
 [ext_resource type="Resource" uid="uid://v01uhi7vf7p2" path="res://resources/items/BerserkPill.tres" id="4_p7rhg"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="7_idgaq"]
 

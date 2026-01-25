@@ -454,7 +454,7 @@ func _update_aoe_indicator():
 			var s = skill.aoe_radius
 			aoe_indicator.scale = Vector3(s, 1, s)
 		elif skill.type == SkillData.SkillType.SELF:
-			# Para SELF skills, mostrar alrededor del jugador
+		# Para SELF skills, mostrar alrededor del jugador -- En realidad serían mejor nombradas "INSTANT" y no necesitan AOE
 			aoe_indicator.visible = true
 			aoe_indicator.global_position = global_position + Vector3(0, 0.1, 0)
 			var s = skill.aoe_radius

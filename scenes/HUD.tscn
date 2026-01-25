@@ -530,8 +530,11 @@ offset_bottom = 20.0
 size_flags_horizontal = 4
 
 [node name="StatusEffectsContainer" type="HBoxContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 16.0
+offset_top = 78.0
+offset_right = 350.0
+offset_bottom = 130.0
+theme_override_constants/separation = 6
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]

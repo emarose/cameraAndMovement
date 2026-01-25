@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3 uid="uid://gi2n0s0sq6du"]
+
+[ext_resource type="Script" uid="uid://bh3wwn24gsxkq" path="res://scripts/StatusEffectIndicator.gd" id="1_o7xfr"]
+
+[node name="StatusEffectIndicator" type="Control"]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_o7xfr")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 12
+text = "Effect"
+horizontal_alignment = 1
+autowrap_trim_flags = 0
+text_overrun_behavior = 3
+
+[node name="Icon" type="ColorRect" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="Timer" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 12
+text = "30s"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
