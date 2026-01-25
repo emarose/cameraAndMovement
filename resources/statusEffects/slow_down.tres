@@ -7,7 +7,19 @@ script = ExtResource("1_oyxem")
 effect_name = "Slow Down"
 duration = 12.0
 modifiers = {
-"agi": -6,
-"speed_percent": -0.565
+"agi": 0,
+"aspd_fixed": 0,
+"atk": 0,
+"def": 0,
+"dex": 0,
+"flee": -5,
+"hit": 0,
+"int": 0,
+"luk": 0,
+"matk": 0,
+"mdef": 0,
+"speed_percent": -0.25,
+"str": 0,
+"vit": 0
 }
 metadata/_custom_type_script = "uid://y6wkl8vhgid"

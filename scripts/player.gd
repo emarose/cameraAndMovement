@@ -152,7 +152,7 @@ func _physics_process(_delta):
 	else:
 		var next_path_pos = nav_agent.get_next_path_position()
 		var direction = (next_path_pos - global_position).normalized()
-		var speed_mult : int = (stats.get_move_speed_modifier() if stats else 1.0)
+		var speed_mult : float = (stats.get_move_speed_modifier() if stats else 1.0)
 		velocity = direction * speed * speed_mult
 		
 		# Orientación

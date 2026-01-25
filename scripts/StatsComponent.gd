@@ -65,8 +65,9 @@ func get_matk() -> int:
 
 func get_move_speed_modifier() -> float:
 	if is_stunned: return 0.0
-	# 1.0 (base) + bonos (ej: 0.25 para Peco Peco Ride)
-	return 1.0 + status_bonuses.speed_percent
+	# 1.0 (base) + bonos (ej: 0.25 para Peco Peco Ride). Valores negativos ralentizan.
+	# Clamp para evitar velocidades demasiado bajas.
+	return max(0.2, 1.0 + status_bonuses.speed_percent)
 	
 func get_def() -> int:
 	return get_total_vit() + (current_level / 2) + equipment_bonuses.def + status_bonuses.def
