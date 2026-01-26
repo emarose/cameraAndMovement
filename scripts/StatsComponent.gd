@@ -6,6 +6,12 @@ signal on_level_up(new_level)
 signal on_xp_changed(current_xp, max_xp)
 signal stats_changed
 
+# Definiciones de Tipos (Enums)
+enum Element { NEUTRAL, WATER, EARTH, FIRE, WIND, POISON, HOLY, SHADOW, GHOST, UNDEAD }
+enum Race { FORMLESS, UNDEAD, BRUTE, PLANT, INSECT, FISH, DEMON, DEMI_HUMAN, ANGEL, DRAGON }
+enum Size { SMALL, MEDIUM, LARGE }
+enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slither (Fabre)
+
 @export_group("Base Stats")
 @export var str_stat: int = 1
 @export var agi: int = 1
@@ -19,6 +25,11 @@ signal stats_changed
 @export var current_xp: int = 0
 @export var xp_to_next_level: int = 100
 @export var stat_points_available: int = 0
+
+@export_group("Atributos de Combate")
+@export var element: Element = Element.NEUTRAL
+@export var race: Race = Race.FORMLESS
+@export var size: Size = Size.MEDIUM
 
 # --- Diccionarios de Bonos (Más limpio que 20 variables sueltas) ---
 var equipment_bonuses = {"str": 0, "agi": 0, "vit": 0, "int": 0, "dex": 0, "luk": 0, "atk": 0, "def": 0}

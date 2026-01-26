@@ -10,7 +10,6 @@ extends CharacterBody3D
 @onready var skill_comp: SkillComponent = $SkillComponent
 
 enum State { IDLE, WANDERING, CHASING, ATTACKING }
-enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slither (Fabre)
 
 var current_state = State.IDLE
 var player = null
@@ -69,7 +68,7 @@ func _ready():
 	# Ajustamos el radio de evitación al tamaño del enemigo (puedes ajustarlo en el inspector)
 	nav_agent.avoidance_enabled = true 
 	
-	if data.type == "Boss":
+	if data.type == StatsComponent.Size.LARGE:
 		scale = Vector3(2.0, 2.0, 2.0)
 
 func _physics_process(delta):
@@ -116,11 +115,11 @@ func _move_logic(target_pos: Vector3, movement_speed: float):
 	var speed_mult := (stats_comp.get_move_speed_modifier() if stats_comp else 1.0)
 
 	match data.movement_type:
-		data.MovementType.SLIDE:
+		StatsComponent.MovementType.SLIDE:
 			# Movimiento constante normal
 			final_velocity = direction * movement_speed * speed_mult
 			
-		data.MovementType.JUMP:
+		StatsComponent.MovementType.JUMP:
 			# Lógica tipo Poring: Avanza por impulsos
 			move_timer += get_physics_process_delta_time()
 			# Ciclo: 0.4s moviendo, 0.4s quieto (basado en jump_frequency)
@@ -134,7 +133,7 @@ func _move_logic(target_pos: Vector3, movement_speed: float):
 			else:
 				final_velocity = Vector3.ZERO # Pausa entre saltos
 				
-		data.MovementType.SLITHER:
+		StatsComponent.MovementType.SLITHER:
 			# Lógica tipo Fabre: Movimiento serpenteante
 			move_timer += get_physics_process_delta_time()
 			# Añadimos un vector perpendicular que oscila con un Seno

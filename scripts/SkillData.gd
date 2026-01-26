@@ -12,6 +12,8 @@ enum SkillType { TARGET, POINT, SELF }
 @export var cooldown: float = 1.0
 @export var icon: Texture2D
 
+@export var element: StatsComponent.Element = StatsComponent.Element.NEUTRAL
+
 @export_group("Área de Efecto")
 @export var aoe_radius: float = 3.0 # Radio de la explosión
 @export var effect_scene: PackedScene # El prefab visual (fuego, hielo, etc)

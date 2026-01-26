@@ -183,28 +183,63 @@ func _finalize_skill_execution(skill: SkillData, target_data):
 		get_tree().current_scene.add_child(fx)
 		fx.global_position = pos
 
-# --- FUNCIONES DE DAÑO ACTUALIZADAS ---
+# --- FUNCIONES DE DAÑO ACTUALIZADAS CON MATRIZ ELEMENTAL ---
 
-# Ahora aceptan 'skill' como argumento para leer el radio y el multiplicador
+func _apply_damage(target: Node3D, skill: SkillData):
+	if not is_instance_valid(target): return
+	
+	if target.has_node("HealthComponent") and target.has_node("StatsComponent"):
+		var target_stats = target.get_node("StatsComponent") as StatsComponent
+		
+		# 1. Calculamos el daño base (ATK * Multiplicador de Skill)
+		var base_damage = int(stats.get_atk() * skill.damage_multiplier)
+		
+		# 2. Obtenemos el daño final pasando por la matriz de CombatMath
+		# Usamos el elemento que viene definido en el recurso de la Skill
+		var final_damage = CombatMath.calculate_skill_damage(
+			base_damage, 
+			skill.element, 
+			target_stats
+		)
+		
+		# 3. Aplicar daño y feedback
+		target.get_node("HealthComponent").take_damage(final_damage)
+		
+		if actor.has_method("spawn_floating_text"):
+			# Podemos pasar un color diferente si el daño fue elementalmente fuerte (opcional)
+			actor.spawn_floating_text(target.global_position, final_damage, false)
+
+
 func _apply_aoe_damage(center_pos: Vector3, skill: SkillData):
-	var damage = int(stats.get_atk() * skill.damage_multiplier)
 	var enemies = get_tree().get_nodes_in_group("enemy")
 	var hit_count = 0
 	
+	# Daño base antes de los multiplicadores por enemigo
+	var base_damage = int(stats.get_atk() * skill.damage_multiplier)
+	
 	for enemy in enemies:
+		if not is_instance_valid(enemy): continue
+		
 		if enemy.global_position.distance_to(center_pos) <= skill.aoe_radius:
-			if enemy.has_node("HealthComponent"):
-				enemy.get_node("HealthComponent").take_damage(damage)
+			if enemy.has_node("HealthComponent") and enemy.has_node("StatsComponent"):
+				var target_stats = enemy.get_node("StatsComponent") as StatsComponent
+				
+				# Cada enemigo en el área puede tener un elemento distinto
+				# Calculamos el daño específico para este objetivo
+				var final_damage = CombatMath.calculate_skill_damage(
+					base_damage, 
+					skill.element, 
+					target_stats
+				)
+				
+				enemy.get_node("HealthComponent").take_damage(final_damage)
+				
 				if actor.has_method("spawn_floating_text"):
-					actor.spawn_floating_text(enemy.global_position, damage, false)
+					actor.spawn_floating_text(enemy.global_position, final_damage, false)
+				
 				hit_count += 1
 	
 	if hit_count > 0:
-		get_tree().call_group("hud", "add_log_message", "AOE golpeó a %d enemigos" % hit_count, Color.YELLOW)
-
-func _apply_damage(target: Node3D, skill: SkillData):
-	var final_damage = int(stats.get_atk() * skill.damage_multiplier)
-	if target.has_node("HealthComponent"):
-		target.get_node("HealthComponent").take_damage(final_damage)
-		if actor.has_method("spawn_floating_text"):
-			actor.spawn_floating_text(target.global_position, final_damage, false)
+		get_tree().call_group("hud", "add_log_message", 
+			"%s golpeó a %d enemigos" % [skill.skill_name, hit_count], 
+			Color.YELLOW)

@@ -4,12 +4,14 @@ class_name EnemyData
 @export_group("Common")
 @export var monster_name: String = "Monster"
 @export var level: int = 1
-@export_enum("Monster", "Boss", "Mini-Boss") var type: String = "Monster"
-@export_enum("Brute", "Plant", "Insect", "Undead", "Demon") var race: String = "Brute"
-@export_enum("Neutral", "Water", "Earth", "Fire", "Wind", "Ghost") var element: String = "Neutral"
+
+@export var type: StatsComponent.Size = StatsComponent.Size.MEDIUM
+@export var race: StatsComponent.Race = StatsComponent.Race.FORMLESS
+@export var element: StatsComponent.Element = StatsComponent.Element.NEUTRAL
+
 @export var base_exp: int = 10
 @export var job_exp: int = 10 # Por si luego añades sistema de jobs
-enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slither (Fabre)
+
 @export_group("Stats (Base)")
 @export var str_stat: int = 1
 @export var agi: int = 1
@@ -32,7 +34,7 @@ enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slit
 @export var model_scene: PackedScene
 
 @export_group("Locomotion")
-@export var movement_type: MovementType = MovementType.SLIDE
+@export var movement_type: StatsComponent.MovementType = StatsComponent.MovementType.SLIDE
 @export var jump_frequency: float = 0.3 # Solo para tipos JUMP
 
 @export_group("Patrol")
