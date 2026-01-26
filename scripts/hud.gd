@@ -13,8 +13,14 @@ extends CanvasLayer
 @onready var log_label: RichTextLabel = $PanelContainer/LogLabel
 @onready var active_skill_label = $ActiveSkillLabel
 @onready var armed_skill_label: RichTextLabel = $ArmedSkillLabel
+@onready var enemy_debug_panel: PanelContainer = $EnemyDebugPanel
+@onready var enemy_name_label: Label = $EnemyDebugPanel/VBoxContainer/EnemyNameLabel
+@onready var enemy_stats_label: Label = $EnemyDebugPanel/VBoxContainer/StatsLabel
 @onready var pickup_panel: PanelContainer = $PickupPanel
 @onready var pickup_label: Label = $PickupPanel/PickupLabel
+@onready var hotbar_tooltip: PanelContainer = $HotbarTooltip
+@onready var hotbar_tooltip_name: Label = $HotbarTooltip/VBox/NameLabel
+@onready var hotbar_tooltip_desc: Label = $HotbarTooltip/VBox/DescLabel
 @onready var inventory_window: Control = $InventoryUI
 
 # --- Referencias a los Valores de Stats ---
@@ -48,6 +54,8 @@ func _ready():
 	if pickup_panel:
 		_pickup_base_pos = pickup_panel.position
 		pickup_panel.visible = false
+	if hotbar_tooltip:
+		hotbar_tooltip.visible = false
 		
 	setup_hotbar_ui()
 
@@ -145,6 +153,11 @@ func setup_hotbar_ui():
 			if child is HotbarSlot:
 				child.setup(i, str(i + 1)) # Asigna índice y tecla (1-9)
 				child.parent_hud = self # Pasar referencia al HUD
+				# Conectar señales de hover
+				if not child.slot_hover.is_connected(_on_hotbar_slot_hover):
+					child.slot_hover.connect(_on_hotbar_slot_hover)
+				if not child.slot_exit.is_connected(_on_hotbar_slot_exit):
+					child.slot_exit.connect(_on_hotbar_slot_exit)
 				slots.append(child)
 				i += 1
 
@@ -415,5 +428,69 @@ func _on_cast_ended() -> void:
 		return
 	
 	cast_bar.visible = false
+
+# --- Enemy Debug Panel ---
+
+func update_enemy_debug_panel(enemy: Node3D) -> void:
+	if not enemy_debug_panel:
+		return
+	
+	if not enemy or not is_instance_valid(enemy):
+		enemy_debug_panel.visible = false
+		return
+	
+	# Get enemy data
+	var enemy_data = enemy.data if enemy.has_meta("data") or enemy.get("data") else null
+	var stats_comp = enemy.get_node_or_null("StatsComponent")
+	
+	if not enemy_data:
+		enemy_debug_panel.visible = false
+		return
+	
+	# Update name
+	enemy_name_label.text = enemy_data.monster_name
+	
+	# Get enum names for display
+	var size_names = ["SMALL", "MEDIUM", "LARGE"]
+	var race_names = ["FORMLESS", "UNDEAD", "BRUTE", "PLANT", "INSECT", "FISH", "DEMON", "DEMI_HUMAN", "ANGEL", "DRAGON"]
+	var element_names = ["NEUTRAL", "WATER", "EARTH", "FIRE", "WIND", "POISON", "HOLY", "SHADOW", "GHOST", "UNDEAD"]
+	var movement_names = ["SLIDE", "JUMP", "SLITHER"]
+	
+	var size_str = size_names[enemy_data.type] if enemy_data.type < size_names.size() else "UNKNOWN"
+	var race_str = race_names[enemy_data.race] if enemy_data.race < race_names.size() else "UNKNOWN"
+	var element_str = element_names[enemy_data.element] if enemy_data.element < element_names.size() else "UNKNOWN"
+	var movement_str = movement_names[enemy_data.movement_type] if enemy_data.movement_type < movement_names.size() else "UNKNOWN"
+	
+	# Update stats display
+	enemy_stats_label.text = "Size: %s\nRace: %s\nElement: %s\nMovement: %s" % [size_str, race_str, element_str, movement_str]
+	
+	enemy_debug_panel.visible = true
+
+func hide_enemy_debug_panel() -> void:
+	if enemy_debug_panel:
+		enemy_debug_panel.visible = false
 	if cast_label:
 		cast_label.text = ""
+
+# --- Hotbar Tooltip Handlers ---
+
+func _on_hotbar_slot_hover(resource: Resource) -> void:
+	if not hotbar_tooltip or not resource:
+		return
+	
+	if resource is SkillData:
+		hotbar_tooltip_name.text = resource.skill_name
+		hotbar_tooltip_desc.text = "SP Cost: %d | Cooldown: %.1fs" % [resource.sp_cost, resource.cooldown]
+		hotbar_tooltip.visible = true
+	elif resource is ItemData:
+		hotbar_tooltip_name.text = resource.item_name
+		hotbar_tooltip_desc.text = resource.description
+		hotbar_tooltip.visible = true
+
+func _on_hotbar_slot_exit() -> void:
+	if hotbar_tooltip:
+		hotbar_tooltip.visible = false
+
+func _process(_delta):
+	if hotbar_tooltip and hotbar_tooltip.visible:
+		hotbar_tooltip.global_position = get_viewport().get_mouse_position() + Vector2(10, 10)

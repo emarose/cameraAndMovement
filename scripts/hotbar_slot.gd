@@ -1,6 +1,9 @@
 extends Control
 class_name HotbarSlot
 
+signal slot_hover(resource: Resource)
+signal slot_exit
+
 @onready var shortcut_label = $ShortcutLabel
 @onready var cooldown_overlay: TextureProgressBar = $TextureProgressBar
 @onready var icon_rect: TextureRect = $Icon
@@ -14,10 +17,21 @@ var parent_hud = null # Referencia al HUD para callbacks
 var _last_click_time: float = 0.0
 var _double_click_threshold: float = 0.3 # Tiempo máximo entre clicks para doble click
 
+func _ready():
+	mouse_entered.connect(_on_mouse_enter)
+	mouse_exited.connect(_on_mouse_exit)
+
 func setup(index: int, key_text: String):
 	slot_index = index
 	shortcut_label.text = key_text
 	clear_slot()
+
+func _on_mouse_enter():
+	if current_content:
+		slot_hover.emit(current_content)
+
+func _on_mouse_exit():
+	slot_exit.emit()
 	
 func update_slot(resource, amount: int = 0):
 	if resource == null:

@@ -251,15 +251,23 @@ func update_cursor():
 	var result = get_mouse_world_interaction()
 	var hovering_enemy = false
 	var within_skill_range = false
+	var hovered_enemy = null
 
 	if result and result.has("collider"):
 		var col = result.collider
 		if is_instance_valid(col) and col.is_in_group("enemy"):
 			hovering_enemy = true
+			hovered_enemy = col
 			if skill_component and skill_component.armed_skill:
 				var cast_range = skill_component.armed_skill.cast_range
 				if global_position.distance_to(col.global_position) <= cast_range:
 					within_skill_range = true
+
+	# Update debug panel
+	if hud and hovered_enemy:
+		hud.update_enemy_debug_panel(hovered_enemy)
+	elif hud:
+		hud.hide_enemy_debug_panel()
 
 	if within_skill_range:
 		if _last_cursor_state != "skill":

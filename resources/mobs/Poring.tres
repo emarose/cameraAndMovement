@@ -10,7 +10,7 @@
 script = ExtResource("1_yrkqf")
 monster_name = "Poring"
 level = 3
-element = 2
+element = 8
 base_exp = 50
 job_exp = 50
 agi = 3

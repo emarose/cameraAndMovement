@@ -6,9 +6,12 @@
 [resource]
 script = ExtResource("1_owcb6")
 skill_name = "Fire Blast"
+type = 1
 sp_cost = 2
-cast_range = 6.0
+cast_range = 10.0
+damage_multiplier = 2.0
 icon = ExtResource("1_8msir")
 element = 3
+cast_time = 1.5
 is_interruptible = false
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

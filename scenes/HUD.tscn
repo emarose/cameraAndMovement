@@ -574,6 +574,56 @@ grow_vertical = 2
 text = "Casting..."
 theme_override_font_sizes/font_size = 12
 
+[node name="EnemyDebugPanel" type="PanelContainer" parent="."]
+visible = false
+offset_left = 1250.0
+offset_top = 400.0
+offset_right = 1900.0
+offset_bottom = 600.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_1etfg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EnemyDebugPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="EnemyNameLabel" type="Label" parent="EnemyDebugPanel/VBoxContainer"]
+layout_mode = 2
+text = "Enemy Name"
+theme_override_font_sizes/font_size = 14
+
+[node name="HSeparator" type="HSeparator" parent="EnemyDebugPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="StatsLabel" type="Label" parent="EnemyDebugPanel/VBoxContainer"]
+layout_mode = 2
+text = "Size: MEDIUM
+Race: FORMLESS
+Element: NEUTRAL
+Type: SLIDE"
+theme_override_font_sizes/font_size = 12
+
+[node name="HotbarTooltip" type="PanelContainer" parent="."]
+visible = false
+offset_left = 100.0
+offset_top = 100.0
+offset_right = 300.0
+offset_bottom = 150.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_1etfg")
+
+[node name="VBox" type="VBoxContainer" parent="HotbarTooltip"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="NameLabel" type="Label" parent="HotbarTooltip/VBox"]
+layout_mode = 2
+text = "Skill/Item Name"
+theme_override_font_sizes/font_size = 12
+
+[node name="DescLabel" type="Label" parent="HotbarTooltip/VBox"]
+layout_mode = 2
+text = "Description or stats"
+theme_override_font_sizes/font_size = 11
+
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/VitRow/AddButton" to="." method="_on_add_vit_pressed"]

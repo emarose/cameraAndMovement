@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=3 format=3 uid="uid://cfinqd7ctbmlv"]
+
+[ext_resource type="Texture2D" uid="uid://cd6fxwcpqmfps" path="res://assets/icons/fc790.png" id="1_2im5q"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="2_qy2y2"]
+
+[resource]
+script = ExtResource("2_qy2y2")
+skill_name = "Ice Blast"
+type = 1
+sp_cost = 2
+cast_range = 10.0
+damage_multiplier = 2.0
+icon = ExtResource("1_2im5q")
+element = 1
+cast_time = 1.5
+is_interruptible = false
+metadata/_custom_type_script = "uid://bdyuj5busdh3c"
