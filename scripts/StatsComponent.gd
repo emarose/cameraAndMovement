@@ -53,11 +53,23 @@ var element_dmg_boosts: Dictionary = {}
 var size_dmg_boosts: Dictionary = {}
 
 # Función de ayuda para obtener el bono de forma segura
-func get_race_modifier(race_id: int) -> float:
-	return race_dmg_boosts.get(race_id, 0.0)
+func get_race_modifier(target_race: int) -> float:
+	return race_dmg_boosts.get(target_race, 0.0)
 
-func get_element_modifier_bonus(elem_id: int) -> float:
-	return element_dmg_boosts.get(elem_id, 0.0)
+func get_element_modifier_bonus(target_elem: int) -> float:
+	return element_dmg_boosts.get(target_elem, 0.0)
+
+# Aplicar bonos de equipamiento (Cards, armas, etc)
+func apply_equipment_element_bonus(elem_id: int, value: float) -> void:
+	element_dmg_boosts[elem_id] = value
+
+func apply_equipment_race_bonus(race_id: int, value: float) -> void:
+	race_dmg_boosts[race_id] = value
+
+func clear_equipment_bonuses() -> void:
+	race_dmg_boosts.clear()
+	element_dmg_boosts.clear()
+	weapon_element = Element.NEUTRAL
 @export_group("Modificadores de Regeneración")
 @export var hp_regen_flat_bonus: int = 0
 @export var sp_regen_flat_bonus: int = 0

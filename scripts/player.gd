@@ -8,10 +8,15 @@ extends CharacterBody3D
 @export var cursor_attack: Texture2D
 @export var cursor_skill: Texture2D
 
+
 @export_group("Hotbar Inicial")
 # Usamos un Array exportado para configurar las skills iniciales desde el editor
 # Arrastra tus recursos de Skills (o Items) aquí en el inspector.
-@export var initial_hotbar: Array[Resource] = [] 
+@export var initial_hotbar: Array[Resource] = []
+
+# Nuevo: Inventario inicial para pruebas/debug
+@export_group("Inventario Inicial")
+@export var initial_inventory: Array[Resource] = []
 
 # El array real en tiempo de ejecución (tamaño fijo de 9)
 var hotbar_content: Array = [] 
@@ -48,12 +53,17 @@ var is_attacking: bool = false
 
 func _ready():
 	hotbar_content.resize(HOTBAR_SIZE)
-		# Cargar configuración inicial
+	# Cargar configuración inicial de hotbar
 	for i in range(HOTBAR_SIZE):
 		if i < initial_hotbar.size() and initial_hotbar[i] != null:
 			hotbar_content[i] = initial_hotbar[i]
 		else:
 			hotbar_content[i] = null
+
+	# Cargar inventario inicial
+	for item in initial_inventory:
+		if item != null:
+			inventory.add_item(item, 1)
 
 	# 1. Calcular y setear vida inicial
 	var max_hp_calculado = 100 + stats.get_max_hp_bonus()
@@ -326,7 +336,21 @@ func execute_attack(enemy) -> void:
 			get_tree().call_group("hud", "add_log_message", "Fallaste contra " + enemy_data.monster_name, Color.SKY_BLUE)
 			spawn_floating_text(enemy.global_position, 0, true)
 		else:
-			var final_damage = max(1, stats.get_atk() - enemy_data.def)
+			# Obtener stats del enemigo
+			var enemy_stats = enemy.get_node_or_null("StatsComponent")
+			var base_atk = stats.get_atk()
+			
+			# Usar CombatMath para aplicar elemento del arma y bonos vs raza/elemento
+			var final_damage = CombatMath.calculate_final_damage(
+				base_atk, 
+				stats, 
+				enemy_stats,
+				-1  # -1 significa usar weapon_element, no un elemento de skill específico
+			)
+			
+			# Aplicar defensa del enemigo
+			final_damage = max(1, final_damage - enemy_data.def)
+			
 			get_tree().call_group("hud", "add_log_message", "Golpeaste a %s por %d" % [enemy_data.monster_name, final_damage], Color.WHITE)
 			enemy_health.take_damage(final_damage)
 			spawn_floating_text(enemy.global_position, final_damage, false)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://lw4sjl4cws8q"]
+[gd_scene load_steps=33 format=3 uid="uid://lw4sjl4cws8q"]
 
 [ext_resource type="Script" uid="uid://cjm61wm3wga5a" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://biubb72lqc4a3" path="res://assets/icons/cursor_default.png" id="2_lkdrv"]
@@ -15,7 +15,10 @@
 [ext_resource type="Resource" uid="uid://cj3jo6gvfvaxn" path="res://resources/skills/FireBlast.tres" id="7_sfy4j"]
 [ext_resource type="Resource" uid="uid://cfinqd7ctbmlv" path="res://resources/skills/IceBlast.tres" id="8_gv3ic"]
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="8_khinc"]
+[ext_resource type="Resource" uid="uid://cr7luqw1pv8n" path="res://resources/items/AntiFormlessAxe.tres" id="9_b8lor"]
+[ext_resource type="Resource" uid="uid://n2amivuv4ep7" path="res://resources/items/FireSword.tres" id="10_6e537"]
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="10_d3wef"]
+[ext_resource type="Resource" uid="uid://cqun87ymamf71" path="res://resources/items/Knife.tres" id="11_p07f3"]
 [ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="12_o4126"]
 [ext_resource type="Script" uid="uid://bb5m4qisg7fb8" path="res://scripts/RegenerationComponent.gd" id="15_0rnld"]
 [ext_resource type="Script" uid="uid://b1hf11y1cgjtr" path="res://scripts/InventoryComponent.gd" id="19_ebwui"]
@@ -57,6 +60,7 @@ cursor_default = ExtResource("2_lkdrv")
 cursor_attack = ExtResource("3_p7iby")
 cursor_skill = ExtResource("3_lkdrv")
 initial_hotbar = Array[Resource]([ExtResource("4_lkdrv"), ExtResource("7_61ith"), ExtResource("7_sfy4j"), ExtResource("8_gv3ic")])
+initial_inventory = Array[Resource]([ExtResource("9_b8lor"), ExtResource("10_6e537"), ExtResource("11_p07f3")])
 floating_text_scene = ExtResource("4_bruh7")
 level_up_effect_scene = ExtResource("5_6eyey")
 

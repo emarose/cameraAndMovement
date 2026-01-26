@@ -73,6 +73,10 @@ func unequip_slot(slot_type: EquipmentItem.EquipmentSlot) -> bool:
 	# Remover del slot
 	equipped_items[slot_type] = null
 	
+	# Limpiar bonos de elemento si era un arma
+	if slot_type == EquipmentItem.EquipmentSlot.WEAPON:
+		stats_component.weapon_element = StatsComponent.Element.NEUTRAL
+	
 	# Recalcular stats
 	_recalculate_equipment_bonuses()
 	equipment_changed.emit()

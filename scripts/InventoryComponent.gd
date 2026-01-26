@@ -9,6 +9,7 @@ var slots: Array[InventorySlot] = []
 
 func _ready():
 	# Inicializar slots vacíos o predefinidos
+	
 	slots.resize(max_slots)
 
 # Función principal para recoger objetos

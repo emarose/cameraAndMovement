@@ -10,8 +10,7 @@
 script = ExtResource("1")
 monster_name = "Venomous Spider"
 level = 7
-race = "Insect"
-element = "Earth"
+race = 4
 base_exp = 120
 job_exp = 80
 agi = 7

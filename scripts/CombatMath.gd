@@ -52,7 +52,7 @@ func calculate_skill_damage(base_dmg: int, skill_elem: StatsComponent.Element, t
 func calculate_final_damage(base_dmg: int, atk_stats: StatsComponent, target_stats: StatsComponent, skill_elem: int = -1) -> int:
 	# 1. Determinar el elemento del ataque
 	# Si skill_elem es -1, es un golpe normal (usa el elemento del arma)
-	var final_atk_elem = skill_elem if skill_elem != -1 else atk_stats.weapon_element
+	var final_atk_elem = skill_elem if skill_elem >= 0 else atk_stats.weapon_element
 	
 	# 2. Multiplicador de Tabla Elemental (Fuego vs Agua, etc)
 	var multiplier = get_element_modifier(final_atk_elem, target_stats.element)
