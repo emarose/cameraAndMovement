@@ -154,3 +154,8 @@ func initialize_from_resource(data: EnemyData):
 	dex = data.dex
 	luk = data.luk
 	current_level = data.level
+	
+	# Inicializar atributos de combate
+	element = data.element
+	race = data.race
+	size = data.type
