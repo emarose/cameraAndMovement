@@ -4,6 +4,7 @@ class_name StatusEffectManager
 # Señales para que el HUD dibuje/borre los iconos
 signal effect_started(status_data)
 signal effect_ended(status_data)
+signal effect_refreshed(status_data, new_duration)
 
 # Referencias
 @onready var stats_comp: StatsComponent = get_parent().get_node("StatsComponent")
@@ -42,7 +43,9 @@ func add_effect(data: StatusEffectData):
 	if active_effects.has(data.effect_name):
 		# CASO A: Ya lo tengo -> Refrescar duración (Reset timer)
 		active_effects[data.effect_name].remaining = data.duration
+		active_effects[data.effect_name].duration = data.duration
 		print("Efecto refrescado: ", data.effect_name)
+		effect_refreshed.emit(data, data.duration)
 		# Nota: En RO algunos buffs no se refrescan, pero lo estándar hoy día es que sí.
 	else:
 		# CASO B: Es nuevo -> Aplicar y guardar

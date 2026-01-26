@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://d32apxuk1vawh" path="res://scripts/healthComponent.gd" id="4_qu4a1"]
 [ext_resource type="PackedScene" uid="uid://bqulpcolhat05" path="res://effects/LevelUpEffect.tscn" id="5_6eyey"]
 [ext_resource type="PackedScene" uid="uid://765vokj83tna" path="res://scenes/GameOverUI.tscn" id="5_qu4a1"]
-[ext_resource type="Resource" uid="uid://busgf0y3f23mu" path="res://resources/skills/Fireball.tres" id="6_jfpux"]
+[ext_resource type="Resource" uid="uid://cloo1cx1g1rok" path="res://resources/skills/Fireball.tres" id="6_jfpux"]
 [ext_resource type="Resource" uid="uid://bk1ypdbbuvqcj" path="res://resources/skills/MagnumBreak.tres" id="7_61ith"]
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="8_khinc"]
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="10_d3wef"]

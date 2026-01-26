@@ -4,7 +4,7 @@ class_name StatsComponent
 # Señales para comunicación con la UI
 signal on_level_up(new_level)
 signal on_xp_changed(current_xp, max_xp)
-signal stats_changed # <-- NUEVA: Avisa a la UI que cualquier stat cambió
+signal stats_changed
 
 @export_group("Base Stats")
 @export var str_stat: int = 1
@@ -121,8 +121,19 @@ func level_up():
 	on_level_up.emit(current_level)
 	stats_changed.emit()
 
-# Función para inicializar stats desde un recurso (para enemigos)
+# Cast de Skills
+func get_cast_time_reduction(base_time: float) -> float:
+	if base_time <= 0: return 0.0
+	
+	var total_dex = get_total_dex()
+	
+	# Fórmula: Tiempo * (1 - (DEX / 150))
+	# Clamp para que nunca sea menor a 0
+	var reduced_time = base_time * (1.0 - (float(total_dex) / 150.0))
+	
+	return max(0.0, reduced_time)
 
+# Función para inicializar stats desde un recurso (para enemigos)
 func initialize_from_resource(data: EnemyData):
 
 	str_stat = data.str_stat

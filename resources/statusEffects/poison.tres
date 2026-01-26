@@ -7,5 +7,5 @@ script = ExtResource("1_oyxem")
 effect_name = "Poison"
 type = 1
 duration = 10.0
-value = 5
+value = 1
 metadata/_custom_type_script = "uid://y6wkl8vhgid"

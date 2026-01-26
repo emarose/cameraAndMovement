@@ -4,6 +4,16 @@ class_name SkillComponent
 signal skill_state_changed
 signal skill_cooldown_started(skill_name: String, duration: float)
 
+# SEÑALES NUEVAS PARA LA UI DE CASTEO
+signal cast_started(skill_name: String, duration: float)
+signal cast_interrupted
+signal cast_completed
+
+var is_casting: bool = false
+var current_cast_tween: Tween # Usaremos un Tween para manejar el tiempo
+var pending_skill: SkillData = null # La skill que se está casteando
+var pending_target = null # El objetivo guardado
+
 var stats: StatsComponent
 var sp_comp: SPComponent
 var actor: Node3D
@@ -50,48 +60,128 @@ func _start_cooldown(skill: SkillData):
 	skill_cooldown_started.emit(skill.skill_name, skill.cooldown)
 
 func arm_skill(skill: SkillData):
+	if is_casting: return # No puedes armar si estás casteando
 	if not can_use_skill(skill): return
 	armed_skill = skill
 	skill_state_changed.emit()
 
 func cancel_cast():
+	# 1. Si estaba solo apuntando (armed)
 	if armed_skill:
 		armed_skill = null
 		skill_state_changed.emit()
-		get_tree().call_group("hud", "add_log_message", "Cancelado.", Color.GRAY)
-		
+	
+	get_tree().call_group("hud", "add_log_message", "Cancelado.", Color.GRAY)
+
+	# 2. Si estaba activamente casteando (barra de progreso)
+	if is_casting:
+		_interrupt_casting()
+
 func execute_armed_skill(target_data) -> void:
 	if not armed_skill: return
 	
-	# Guardamos referencia local porque al final la limpiaremos
-	var skill_to_use = armed_skill 
+	var skill_to_use = armed_skill
 	
-	if sp_comp:
-		sp_comp.use_sp(skill_to_use.sp_cost)
+	# 1. Calculamos el tiempo real basado en DEX
+	var final_cast_time = stats.get_cast_time_reduction(skill_to_use.cast_time)
 	
-	# Registrar el cooldown también aquí para skills con target/point
-	_start_cooldown(skill_to_use)
+	# CASO A: INSTANTÁNEO
+	if final_cast_time <= 0.05: # Margen pequeño
+		_finalize_skill_execution(skill_to_use, target_data)
+		armed_skill = null # Desarmamos inmediatamente
+		skill_state_changed.emit()
+		
+	# CASO B: REQUIERE CASTEO
+	else:
+		_start_casting_process(skill_to_use, target_data, final_cast_time)
+		# Nota: NO desarmamos 'armed_skill' aún, esperamos a que termine
+		# o lo manejamos según prefieras la UX (normalmente se desarma al iniciar cast)
+		armed_skill = null 
+		skill_state_changed.emit()
 
-	match skill_to_use.type:
+# --- LÓGICA DE CASTEO ---
+
+func _start_casting_process(skill: SkillData, target, time: float):
+	is_casting = true
+	pending_skill = skill
+	pending_target = target
+	
+	# Emitir señal para que aparezca la barra sobre la cabeza
+	cast_started.emit(skill.skill_name, time)
+	get_tree().call_group("hud", "add_log_message", "Casteando %s..." % skill.skill_name, Color.CYAN)
+	
+	# Crear un Tween que funcione como Timer
+	if current_cast_tween: current_cast_tween.kill()
+	current_cast_tween = create_tween()
+	
+	# Simplemente esperamos el tiempo. Si el tween termina, el cast tuvo éxito.
+	current_cast_tween.tween_interval(time)
+	current_cast_tween.tween_callback(_on_cast_finished)
+
+func _on_cast_finished():
+	if not is_casting: return
+	
+	is_casting = false
+	cast_completed.emit()
+	
+	# Ejecutar el efecto real
+	_finalize_skill_execution(pending_skill, pending_target)
+	
+	# Limpieza
+	pending_skill = null
+	pending_target = null
+
+func _interrupt_casting():
+	if not is_casting: return
+	
+	# Solo interrumpir si la skill lo permite (algunas skills como "Endure" evitan esto)
+	if pending_skill and not pending_skill.is_interruptible:
+		return
+
+	is_casting = false
+	if current_cast_tween:
+		current_cast_tween.kill()
+	
+	cast_interrupted.emit()
+	get_tree().call_group("hud", "add_log_message", "¡Casteo interrumpido!", Color.RED)
+	
+	pending_skill = null
+	pending_target = null
+
+# --- EJECUCIÓN FINAL (Lo que antes hacía execute_armed_skill) ---
+
+func _finalize_skill_execution(skill: SkillData, target_data):
+	# Validar SP y Cooldown justo antes de disparar (por si el SP bajó durante el cast)
+	if sp_comp and sp_comp.current_sp < skill.sp_cost:
+		get_tree().call_group("hud", "add_log_message", "SP insuficiente al terminar cast", Color.RED)
+		return
+
+	if sp_comp:
+		sp_comp.use_sp(skill.sp_cost)
+	
+	_start_cooldown(skill)
+
+	# Lógica de Efectos (Tu código existente)
+	match skill.type:
 		SkillData.SkillType.TARGET:
-			if target_data is Node3D:
-				_apply_damage(target_data, skill_to_use)
-				
+			if target_data is Node3D and is_instance_valid(target_data):
+				_apply_damage(target_data, skill)
 		SkillData.SkillType.POINT:
 			if target_data is Vector3:
-				_apply_aoe_damage(target_data, skill_to_use)
-				
+				_apply_aoe_damage(target_data, skill)
 		SkillData.SkillType.SELF:
-			_apply_aoe_damage(actor.global_position, skill_to_use)
+			_apply_aoe_damage(actor.global_position, skill)
 
-	if skill_to_use.effect_scene and target_data:
+	# Visuals
+	if skill.effect_scene:
 		var pos = target_data if target_data is Vector3 else target_data.global_position
-		var fx = skill_to_use.effect_scene.instantiate()
+		# Ajuste por si el target murió/desapareció durante el cast
+		if target_data is Node3D and not is_instance_valid(target_data):
+			return 
+			
+		var fx = skill.effect_scene.instantiate()
 		get_tree().current_scene.add_child(fx)
 		fx.global_position = pos
-
-	armed_skill = null
-	skill_state_changed.emit()
 
 # --- FUNCIONES DE DAÑO ACTUALIZADAS ---
 

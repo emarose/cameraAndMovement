@@ -2,19 +2,18 @@
 
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_ip2de"]
-[ext_resource type="Resource" uid="uid://dxie4tqxcxx8x" path="res://resources/statusEffects/slow_down.tres" id="3"]
+[ext_resource type="Resource" uid="uid://dxvgj38ylbxal" path="res://resources/statusEffects/poison.tres" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="4_b40yg"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="6_0xt7n"]
 
 [resource]
 script = ExtResource("1")
 monster_name = "Venomous Spider"
-level = 8
+level = 7
 race = "Insect"
 element = "Earth"
 base_exp = 120
 job_exp = 80
-str_stat = 5
 agi = 7
 vit = 4
 int_stat = 2
@@ -31,6 +30,6 @@ wander_radius = 15.0
 idle_time_min = 1.5
 idle_time_max = 4.0
 movement_speed_factor = 0.6
-attack_status_effects = Array[ExtResource("1_ip2de")]([ExtResource("3")])
+attack_status_effects = Array[ExtResource("1_ip2de")]([ExtResource("2")])
 status_effect_chance = 0.25
 skill_use_chance = 50.0

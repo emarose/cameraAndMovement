@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctkcy4vcqrtu6"]
+
+[sub_resource type="GDScript" id="GDScript_xlu4n"]
+script/source = "extends TextureRect
+class_name StatusIconUI
+
+@onready var progress_bar = $ProgressBar # Opcional: para el cooldown visual
+
+var effect_name: String
+var remaining: float
+var duration: float
+
+func setup(instance):
+	texture = instance.data.icon
+	effect_name = instance.data.effect_name
+	duration = instance.data.duration
+	remaining = instance.remaining_duration
+	
+	if progress_bar:
+		progress_bar.max_value = duration
+
+func _process(delta):
+	remaining -= delta
+	if progress_bar:
+		progress_bar.value = remaining
+	
+	# Un pequeño parpadeo cuando falten 2 segundos (estilo RPG clásico)
+	if remaining < 2.0:
+		modulate.a = 0.5 if Engine.get_frames_drawn() % 10 < 5 else 1.0
+"
+
+[node name="StatusIconUI" type="TextureRect"]
+offset_right = 24.0
+offset_bottom = 24.0
+script = SubResource("GDScript_xlu4n")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+show_percentage = false

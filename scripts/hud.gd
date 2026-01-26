@@ -34,6 +34,8 @@ extends CanvasLayer
 @onready var hotbar_container: HBoxContainer = $HotbarGrid
 @onready var equipment_ui: EquipmentUI = $EquipmentUI
 @onready var status_effects_container: HBoxContainer = $StatusEffectsContainer
+@onready var cast_bar: ProgressBar = $CastBar
+@onready var cast_label: Label = $CastBar/CastLabel
 
 var slots: Array = []
 var active_effect_indicators: Dictionary = {}  # effect_name -> indicator_node
@@ -120,6 +122,18 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,i
 			status_mgr.effect_started.connect(_on_status_effect_started)
 		if not status_mgr.effect_ended.is_connected(_on_status_effect_ended):
 			status_mgr.effect_ended.connect(_on_status_effect_ended)
+		if not status_mgr.effect_refreshed.is_connected(_on_status_effect_refreshed):
+			status_mgr.effect_refreshed.connect(_on_status_effect_refreshed)
+	
+	# Setup skill component for cast bar
+	if player.has_node("SkillComponent"):
+		var skill_comp = player.get_node("SkillComponent")
+		if not skill_comp.cast_started.is_connected(_on_cast_started):
+			skill_comp.cast_started.connect(_on_cast_started)
+		if not skill_comp.cast_interrupted.is_connected(_on_cast_ended):
+			skill_comp.cast_interrupted.connect(_on_cast_ended)
+		if not skill_comp.cast_completed.is_connected(_on_cast_ended):
+			skill_comp.cast_completed.connect(_on_cast_ended)
 
 	refresh_ui()
 	
@@ -372,3 +386,34 @@ func _on_status_effect_ended(status_data: StatusEffectData) -> void:
 		if indicator and is_instance_valid(indicator):
 			indicator.queue_free()
 		active_effect_indicators.erase(status_data.effect_name)
+
+func _on_status_effect_refreshed(status_data: StatusEffectData, new_duration: float) -> void:
+	if status_data.effect_name in active_effect_indicators:
+		var indicator = active_effect_indicators[status_data.effect_name]
+		if indicator and is_instance_valid(indicator):
+			indicator.refresh_timer(new_duration)
+			add_log_message("Efecto refrescado: %s" % status_data.effect_name, Color.YELLOW)
+
+# --- Cast Bar Handlers ---
+
+func _on_cast_started(skill_name: String, duration: float) -> void:
+	if not cast_bar or not cast_label:
+		return
+	
+	cast_bar.visible = true
+	cast_bar.max_value = duration
+	cast_bar.value = 0.0
+	cast_label.text = skill_name
+	
+	# Tween para animar la barra de cast (se llena durante la duración)
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(cast_bar, "value", duration, duration)
+
+func _on_cast_ended() -> void:
+	if not cast_bar:
+		return
+	
+	cast_bar.visible = false
+	if cast_label:
+		cast_label.text = ""

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=3 format=3 uid="uid://busgf0y3f23mu"]
+[gd_resource type="Resource" script_class="SkillData" load_steps=3 format=3 uid="uid://cloo1cx1g1rok"]
 
 [ext_resource type="Texture2D" uid="uid://c1kp41w816j0i" path="res://assets/icons/fc840.png" id="1_hffen"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_len4x"]
@@ -7,10 +7,10 @@
 script = ExtResource("1_len4x")
 skill_name = "Fireball"
 type = 1
-sp_cost = 1
-cast_range = 10.0
-damage_multiplier = 10.0
-cooldown = 3.0
+sp_cost = 2
+cast_range = 8.0
+damage_multiplier = 1.5
+cooldown = 2.0
 icon = ExtResource("1_hffen")
-aoe_radius = 5.0
+cast_time = 1.5
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

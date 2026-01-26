@@ -47,9 +47,6 @@ var can_attack_player: bool = true
 var is_attacking: bool = false
 
 func _ready():
-	
-	var knife = load("res://resources/items/Knife.tres")
-
 	hotbar_content.resize(HOTBAR_SIZE)
 		# Cargar configuración inicial
 	for i in range(HOTBAR_SIZE):
@@ -100,10 +97,13 @@ func _unhandled_input(event):
 			get_viewport().set_input_as_handled()
 			return
 	
-	# CLICK DERECHO (cancelar)
+	# CLICK DERECHO (cancelar skill o cast)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		if skill_component.armed_skill:
 			skill_component.cancel_cast()
+		elif skill_component.is_casting:
+			skill_component.cancel_cast()
+		return
 
 	# CLICK IZQUIERDO: manejar PRESIONADO y LIBERADO explícitamente
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -116,7 +116,9 @@ func _unhandled_input(event):
 				is_clicking = true # este
 				handle_click_interaction()
 		else:
-			is_clicking = false
+			# No cambiar is_clicking durante el cast para no interrumpirlo
+			if not skill_component.is_casting:
+				is_clicking = false
 
 	# Actualizar cursor cuando el mouse se mueve
 	if event is InputEventMouseMotion:
@@ -133,10 +135,17 @@ func _physics_process(_delta):
 		update_cursor()
 		move_and_slide()
 		return
-
-	# 2. PROCESAMIENTO DE INPUT (Solo si NO hay skill armada)
+		
+	if skill_component.is_casting:
+		velocity = Vector3.ZERO
+		# Aquí podrías forzar la animación de "casteo"
+		# animation_player.play("cast")
+		move_and_slide() # Para mantener gravedad si es necesario
+		return
+		
+	# 2. PROCESAMIENTO DE INPUT (Solo si NO hay skill armada Y NO estamos casteando)
 	# Encapsulamos toda la lógica de "decidir a dónde ir" dentro de este if
-	if is_clicking and not skill_component.armed_skill:
+	if is_clicking and not skill_component.armed_skill and not skill_component.is_casting:
 		# Usamos la lógica centralizada (click sostenido ataca y mueve)
 		_process_continuous_interaction()
 	
@@ -326,8 +335,16 @@ func _on_player_hit(new_health):
 		var max_hp = health_component.max_health
 		$HealthBar3D.update_bar(new_health, max_hp)
 
-func _on_player_damaged(_damage_amount: int):
-	# 2. Stun / Flinch solo cuando recibe daño
+func _on_player_damaged(damage_amount: int):
+	# 1. Mostrar floating text de daño (rojo para el jugador)
+	spawn_floating_text_player_damage(global_position, damage_amount)
+	
+	# 2. Interrumpir cast solo si la skill lo permite
+	if skill_component.is_casting:
+		# cancel_cast llama a _interrupt_casting que ya maneja la lógica de is_interruptible
+		skill_component.cancel_cast()
+
+	# 3. Stun / Flinch solo cuando recibe daño
 	if stats:
 		stats.is_stunned = true
 	velocity = Vector3.ZERO
@@ -384,6 +401,7 @@ func _handle_skill_target_selection():
 	
 	var target_data = null
 	var distance_to_cast = 0.0
+	
 	# 1. Identificar el objetivo y calcular distancia
 	if skill.type == SkillData.SkillType.TARGET:
 		if result.has("collider") and result.collider.is_in_group("enemy"):
@@ -490,6 +508,13 @@ func spawn_floating_text(pos: Vector3, value: int, is_miss: bool):
 	get_tree().current_scene.add_child(txt_instance)
 	txt_instance.global_position = pos + Vector3(0, 1.5, 0)
 	txt_instance.set_values_and_animate(value, is_miss)
+
+func spawn_floating_text_player_damage(pos: Vector3, value: int):
+	if not floating_text_scene: return
+	var txt_instance = floating_text_scene.instantiate()
+	get_tree().current_scene.add_child(txt_instance)
+	txt_instance.global_position = pos + Vector3(0, 1.5, 0)
+	txt_instance.set_values_and_animate(value, false, false, true) # is_player_damage = true
 
 func spawn_regen_floating_text(pos: Vector3, value: int, regen_type: String):
 	if not floating_text_scene: return

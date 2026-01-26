@@ -10,7 +10,7 @@ func _ready():
 	# Iniciar la animación tan pronto aparece
 	animate_and_destroy()
 
-func set_values_and_animate(value: int, is_miss: bool, is_crit: bool = false):
+func set_values_and_animate(value: int, is_miss: bool, is_crit: bool = false, is_player_damage: bool = false):
 	if is_miss:
 		label.text = "Miss"
 		label.modulate = Color(0.7, 0.7, 0.7) # Gris para miss
@@ -19,12 +19,13 @@ func set_values_and_animate(value: int, is_miss: bool, is_crit: bool = false):
 		if is_crit:
 			label.modulate = Color(1, 0.2, 0.2) # Rojo para críticos
 			label.pixel_size *= 1.5 # Más grande
+		elif is_player_damage:
+			label.modulate = Color(1, 0.2, 0.2) # Rojo para daño recibido por el jugador
 		else:
-			label.modulate = Color(0.883, 0.711, 0.061, 1.0) # Blanco normal
+			label.modulate = Color(0.883, 0.711, 0.061, 1.0) # Blanco normal (enemigos)
 
 	# Asegurarse de que empiece visible
 	label.transparency = 0.0
-	
 	animate_and_destroy()
 
 func set_regen_text(value: int, regen_type: String):

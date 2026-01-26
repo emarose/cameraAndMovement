@@ -46,6 +46,17 @@ func _update_timer_display() -> void:
 		var alpha = 0.5 + sin(remaining_time * PI * 2) * 0.3
 		panel.self_modulate = Color(1, 0.5, 0.5, alpha)
 
+func refresh_timer(new_duration: float) -> void:
+	"""Actualiza el timer cuando el efecto se refresca"""
+	remaining_time = new_duration
+	duration = new_duration
+	_update_timer_display()
+	
+	# Feedback visual rápido
+	var tween = create_tween()
+	tween.tween_property(panel, "scale", Vector2(1.2, 1.2), 0.1)
+	tween.tween_property(panel, "scale", Vector2(1.0, 1.0), 0.1)
+
 func _get_effect_color(effect_type: int) -> Color:
 	match effect_type:
 		StatusEffectData.EffectType.STAT_MODIFIER:
