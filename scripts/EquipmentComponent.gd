@@ -42,7 +42,14 @@ func equip_item(item: EquipmentItem) -> bool:
 	# Si había un item viejo, lo devolvemos al inventario
 	if old_item and inventory_component:
 		inventory_component.add_item(old_item, 1)
+		
+	# Agregar elemento
+	stats_component.weapon_element = item.weapon_element
 	
+	# Bonus por raza
+	if item.race_bonus_value > 0:
+		stats_component.race_dmg_boosts[item.race_bonus] = item.race_bonus_value
+		
 	# Recalculamos stats
 	_recalculate_equipment_bonuses()
 	equipment_changed.emit()

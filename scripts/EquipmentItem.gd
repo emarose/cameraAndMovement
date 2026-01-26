@@ -9,7 +9,6 @@ enum EquipmentSlot { WEAPON, HEAD, BODY, ACCESSORY }
 @export var def_bonus: int = 0
 @export var str_bonus: int = 0
 @export var vit_bonus: int = 0
-# ... agrega los stats que necesites
 
 func _init():
 	item_type = ItemType.EQUIPMENT

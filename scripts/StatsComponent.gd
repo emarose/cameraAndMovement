@@ -43,6 +43,21 @@ var status_bonuses = {
 	"speed_percent": 0.0 # 0.0 es base, 0.1 es +10%
 }
 
+# --- Elemento del Ataque Físico ---
+var weapon_element: Element = Element.NEUTRAL
+
+# --- Diccionarios de Multiplicadores Pasivos (Estilo Cards) ---
+# Clave: El ID del enum (int). Valor: El multiplicador (0.2 = +20% daño)
+var race_dmg_boosts: Dictionary = {}
+var element_dmg_boosts: Dictionary = {}
+var size_dmg_boosts: Dictionary = {}
+
+# Función de ayuda para obtener el bono de forma segura
+func get_race_modifier(race_id: int) -> float:
+	return race_dmg_boosts.get(race_id, 0.0)
+
+func get_element_modifier_bonus(elem_id: int) -> float:
+	return element_dmg_boosts.get(elem_id, 0.0)
 @export_group("Modificadores de Regeneración")
 @export var hp_regen_flat_bonus: int = 0
 @export var sp_regen_flat_bonus: int = 0

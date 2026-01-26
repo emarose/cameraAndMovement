@@ -43,9 +43,26 @@ func get_element_modifier(atk_elem: StatsComponent.Element, def_elem: StatsCompo
 
 func calculate_skill_damage(base_dmg: int, skill_elem: StatsComponent.Element, target_stats: StatsComponent) -> int:
 	var multiplier = get_element_modifier(skill_elem, target_stats.element)
-	
 	# Ejemplo de bonos por raza (esto es deuda técnica que pagamos ahora):
 	# if skill_elem == StatsComponent.Element.HOLY and target_stats.race == StatsComponent.Race.DEMON:
 	#    multiplier += 0.5
 	
+	return int(base_dmg * multiplier)
+
+func calculate_final_damage(base_dmg: int, atk_stats: StatsComponent, target_stats: StatsComponent, skill_elem: int = -1) -> int:
+	# 1. Determinar el elemento del ataque
+	# Si skill_elem es -1, es un golpe normal (usa el elemento del arma)
+	var final_atk_elem = skill_elem if skill_elem != -1 else atk_stats.weapon_element
+	
+	# 2. Multiplicador de Tabla Elemental (Fuego vs Agua, etc)
+	var multiplier = get_element_modifier(final_atk_elem, target_stats.element)
+	
+	# 3. Aplicar Bonos Pasivos (Cards/Equipamiento)
+	# Bono contra Raza
+	multiplier += atk_stats.get_race_modifier(target_stats.race)
+	
+	# Bono contra Elemento del enemigo (Ej: +20% daño a enemigos de Agua)
+	multiplier += atk_stats.get_element_modifier_bonus(target_stats.element)
+	
+	# 4. Cálculo final
 	return int(base_dmg * multiplier)
