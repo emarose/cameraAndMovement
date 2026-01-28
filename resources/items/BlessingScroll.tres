@@ -1,17 +1,14 @@
-[gd_resource type="Resource" script_class="ConsumableItem" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="ConsumableItem" format=3 uid="uid://c8gw20ha2d6o0"]
 
-[ext_resource type="Script" path="res://scripts/ConsumableItem.gd" id="1"]
-[ext_resource type="Resource" path="res://resources/statusEffects/Blessing.tres" id="2"]
+[ext_resource type="Script" uid="uid://stic2b3p5t05" path="res://scripts/ConsumableItem.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cvsikglnm3s80" path="res://resources/items/fc300.png" id="1_eb1yy"]
+[ext_resource type="Resource" uid="uid://cjbdlmxuwqke6" path="res://resources/statusEffects/Blessing.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
-item_name = "Blessing Scroll"
-item_type = 0
-icon = null
-stackable = true
-max_stack_size = 10
 effect_type = 3
-target_type = 0
-amount = 0
-duration = 0.0
 status_effect = ExtResource("2")
+item_name = "Blessing Scroll"
+icon = ExtResource("1_eb1yy")
+item_type = 0
+max_stack_size = 10

@@ -629,8 +629,11 @@ theme_override_font_sizes/font_size = 11
 text = "Description or stats"
 
 [node name="ZenyLabel" type="Label" parent="." unique_id=947122153]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 16.0
+offset_top = 84.0
+offset_right = 56.0
+offset_bottom = 107.0
+text = "999999 Z"
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]
