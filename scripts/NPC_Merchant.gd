@@ -2,6 +2,7 @@ extends StaticBody3D
 
 @export var npc_name: String = "Shop"
 @export var interact_distance: float = 8.0 
+@export var items_for_sale: Array[ItemData] = [] # Arrastra pociones, espadas, etc aquí
 
 func interact(player: Node3D):
 	var dist = global_position.distance_to(player.global_position)
@@ -15,5 +16,5 @@ func _open_shop(player):
 	
 	if shop_ui:
 		var inv = player.get_node("InventoryComponent")
-		shop_ui.open_shop(inv)
+		shop_ui.open_shop(inv, items_for_sale)
 	

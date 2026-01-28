@@ -1,6 +1,13 @@
 [gd_scene format=3 uid="uid://cxmfbmm1ex652"]
 
 [ext_resource type="Script" uid="uid://d0ug7mgpswyw2" path="res://scripts/NPC_Merchant.gd" id="1"]
+[ext_resource type="Script" uid="uid://br1bl783toxt8" path="res://scripts/ItemData.gd" id="2_885ar"]
+[ext_resource type="Resource" uid="uid://v01uhi7vf7p2" path="res://resources/items/BerserkPill.tres" id="3_guji4"]
+[ext_resource type="Resource" path="res://resources/items/BlessingScroll.tres" id="4_kquv3"]
+[ext_resource type="Resource" uid="uid://cr7luqw1pv8n" path="res://resources/items/AntiFormlessAxe.tres" id="5_l5dco"]
+[ext_resource type="Resource" uid="uid://dyg64ibd5bqdy" path="res://resources/items/IronHelmet.tres" id="6_c10d3"]
+[ext_resource type="Resource" uid="uid://cekll1bd772jt" path="res://resources/items/LeatherArmor.tres" id="7_mrcmr"]
+[ext_resource type="Resource" uid="uid://bq6j45wyyofjk" path="res://resources/items/smallRedPotion.tres" id="8_kjcis"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gx0qm"]
 albedo_color = Color(0.09411765, 0.6, 1, 1)
@@ -14,6 +21,7 @@ size = Vector3(1, 2, 1)
 [node name="NPC_Merchant" type="StaticBody3D" unique_id=753893127 groups=["npc"]]
 script = ExtResource("1")
 interact_distance = 10.0
+items_for_sale = Array[ExtResource("2_885ar")]([ExtResource("3_guji4"), ExtResource("4_kquv3"), ExtResource("5_l5dco"), ExtResource("6_c10d3"), ExtResource("7_mrcmr"), ExtResource("8_kjcis")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=413515101]
 mesh = SubResource("CapsuleMesh_bxo51")
