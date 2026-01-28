@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://d32apxuk1vawh" path="res://scripts/healthComponent.gd" id="4_qu4a1"]
 [ext_resource type="PackedScene" uid="uid://bqulpcolhat05" path="res://effects/LevelUpEffect.tscn" id="5_6eyey"]
 [ext_resource type="PackedScene" uid="uid://765vokj83tna" path="res://scenes/GameOverUI.tscn" id="5_qu4a1"]
+[ext_resource type="Texture2D" uid="uid://c25ftshpwa0jg" path="res://assets/icons/message_dots_square.png" id="5_viqgg"]
 [ext_resource type="Resource" uid="uid://bk1ypdbbuvqcj" path="res://resources/skills/MagnumBreak.tres" id="7_61ith"]
 [ext_resource type="Resource" uid="uid://cj3jo6gvfvaxn" path="res://resources/skills/FireBlast.tres" id="7_sfy4j"]
 [ext_resource type="Resource" uid="uid://cfinqd7ctbmlv" path="res://resources/skills/IceBlast.tres" id="8_gv3ic"]
@@ -33,7 +34,7 @@ material = SubResource("StandardMaterial3D_aqk2v")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_viqgg"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_fgkxt"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6dkly"]
@@ -59,6 +60,7 @@ script = ExtResource("1_g2els")
 cursor_default = ExtResource("2_lkdrv")
 cursor_attack = ExtResource("3_p7iby")
 cursor_skill = ExtResource("4_p07f3")
+cursor_talk = ExtResource("5_viqgg")
 initial_hotbar = Array[Resource]([ExtResource("4_lkdrv"), ExtResource("7_61ith"), ExtResource("7_sfy4j"), ExtResource("8_gv3ic")])
 initial_inventory = Array[Resource]([ExtResource("9_b8lor"), ExtResource("10_6e537"), ExtResource("11_p07f3")])
 floating_text_scene = ExtResource("4_bruh7")
@@ -88,7 +90,7 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6195009, 0)
-texture = SubResource("ViewportTexture_viqgg")
+texture = SubResource("ViewportTexture_fgkxt")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")
