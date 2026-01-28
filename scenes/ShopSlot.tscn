@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cda7m6pecx8dc"]
+
+[ext_resource type="Script" uid="uid://bu2i65gnp346" path="res://scripts/shop_slot.gd" id="1_0lmm0"]
+
+[node name="ShopSlot" type="Button" unique_id=868003517]
+custom_minimum_size = Vector2(0, 40)
+script = ExtResource("1_0lmm0")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1126678862]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=980414289]
+layout_mode = 2
+
+[node name="LabelName" type="Label" parent="HBoxContainer" unique_id=420711572]
+layout_mode = 2
+
+[node name="LabelPrice" type="Label" parent="HBoxContainer" unique_id=89592933]
+layout_mode = 2

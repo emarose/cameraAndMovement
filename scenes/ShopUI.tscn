@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://culrpsios6lin"]
 
 [ext_resource type="Script" uid="uid://qbwi70jk6b6f" path="res://scripts/shop_ui.gd" id="1_au2f5"]
+[ext_resource type="PackedScene" uid="uid://cda7m6pecx8dc" path="res://scenes/ShopSlot.tscn" id="2_yoj64"]
 
-[node name="ShopUI" type="Control" groups=["shop_ui"]]
+[node name="ShopUI" type="Control" unique_id=1538832224 groups=["shop_ui"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,8 +12,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_au2f5")
+shop_slot_prefab = ExtResource("2_yoj64")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=2030670196]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -26,7 +28,7 @@ offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=266548749]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,21 +37,22 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/VBoxContainer" unique_id=1681218205]
 layout_mode = 2
-text = "Merchant"
 theme_override_font_sizes/font_size = 24
+text = "Merchant"
 
-[node name="TabContainer" type="TabContainer" parent="Panel/VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="Panel/VBoxContainer" unique_id=636173767]
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
-clip_contents = true
+current_tab = 0
 
-[node name="Comprar" type="Control" parent="Panel/VBoxContainer/TabContainer"]
+[node name="Comprar" type="Control" parent="Panel/VBoxContainer/TabContainer" unique_id=371828241]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Comprar"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Comprar" unique_id=1968795697]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,25 +60,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer" unique_id=551262839]
 layout_mode = 2
-text = "Tienda del Vendedor"
 theme_override_font_sizes/font_size = 16
+text = "Tienda del Vendedor"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer" unique_id=1627753937]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BuyListContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer/ScrollContainer"]
+[node name="BuyListContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer/ScrollContainer" unique_id=203433972]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Vender" type="Control" parent="Panel/VBoxContainer/TabContainer"]
+[node name="Vender" type="Control" parent="Panel/VBoxContainer/TabContainer" unique_id=1249607952]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Vender"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Vender" unique_id=1562442799]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,25 +87,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer/TabContainer/Vender/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/VBoxContainer/TabContainer/Vender/VBoxContainer" unique_id=551327543]
 layout_mode = 2
-text = "Vender Items"
 theme_override_font_sizes/font_size = 16
+text = "Vender Items"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer/TabContainer/Vender/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer/TabContainer/Vender/VBoxContainer" unique_id=389108008]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SellListContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Vender/VBoxContainer/ScrollContainer"]
+[node name="SellListContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Vender/VBoxContainer/ScrollContainer" unique_id=1839828117]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1453306290]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="CloseButton" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+[node name="CloseButton" type="Button" parent="Panel/VBoxContainer/HBoxContainer" unique_id=863129866]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Close"
