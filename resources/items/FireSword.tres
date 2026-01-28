@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="EquipmentItem" load_steps=3 format=3 uid="uid://n2amivuv4ep7"]
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://n2amivuv4ep7"]
 
 [ext_resource type="Texture2D" uid="uid://djau0623obpr1" path="res://resources/items/fc1717.png" id="1_67ym7"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="1_i1vrn"]
 
 [resource]
 script = ExtResource("1_i1vrn")
-atk_bonus = 15
+atk_bonus = 30
 item_name = "Fire Sword"
 icon = ExtResource("1_67ym7")
 description = "A fire sword that should do more damage to earth type monsters, in theory."

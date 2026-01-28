@@ -41,13 +41,13 @@ func _drop_data(_pos, data):
 		"Has descartado %s" % item_data.item_name, 
 		Color.LIGHT_CORAL)
 
-func _drop_item_to_ground(item_data: ItemData, quantity: int, position: Vector3):
+func _drop_item_to_ground(item_data: ItemData, quantity: int, pos: Vector3):
 	if not item_drop_scene:
 		push_error("ItemDrop scene not found!")
 		return
 	
 	var drop_instance = item_drop_scene.instantiate()
 	get_tree().current_scene.add_child(drop_instance)
-	drop_instance.global_position = position
+	drop_instance.global_position = pos
 	# Pasar delay de 1.5 segundos para items descartados (vs 0.2s para drops de enemigos)
 	drop_instance.setup(item_data, quantity, 1.5)

@@ -114,7 +114,7 @@ func on_item_dropped(from_index: int, to_index: int):
 		player_inventory.swap_items(from_index, to_index)
 
 # Llamado cuando se arrastra un item desde el equipo al inventario
-func on_item_from_equipment(item: EquipmentItem, slot_type: EquipmentItem.EquipmentSlot, target_slot_index: int = -1):
+func on_item_from_equipment(_item: EquipmentItem, slot_type: EquipmentItem.EquipmentSlot, target_slot_index: int = -1):
 	if not equipment_component or not player_inventory:
 		return
 	

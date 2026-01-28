@@ -73,7 +73,7 @@ func _on_close_button_pressed():
 	visible = false
 
 # Llamado cuando se arrastra un item del inventario a un slot de equipo
-func on_item_from_inventory(item: EquipmentItem, slot_type: EquipmentItem.EquipmentSlot, origin_index: int):
+func on_item_from_inventory(item: EquipmentItem, _slot_type: EquipmentItem.EquipmentSlot, origin_index: int):
 	if equipment_component and inventory_component:
 		# Primero remover del inventario
 		inventory_component.slots[origin_index] = null

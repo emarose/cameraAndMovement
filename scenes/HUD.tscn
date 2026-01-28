@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://b3mj4b8fx2imj"]
+[gd_scene format=3 uid="uid://b3mj4b8fx2imj"]
 
 [ext_resource type="Script" uid="uid://u40hupv2b6rf" path="res://scripts/hud.gd" id="1_qpvh6"]
 [ext_resource type="PackedScene" uid="uid://cqd3ossx4ruqj" path="res://scenes/hotbar_slot.tscn" id="2_fls4u"]
 [ext_resource type="PackedScene" uid="uid://5ob0ybkuqcxh" path="res://scenes/InventoryUi.tscn" id="3_1etfg"]
 [ext_resource type="PackedScene" uid="uid://1vfmbcliamnd" path="res://scenes/EquipmentUI.tscn" id="4_7hsmw"]
 [ext_resource type="Script" uid="uid://p2s75lqlwldk" path="res://scripts/dropZone.gd" id="5_nysna"]
+[ext_resource type="PackedScene" uid="uid://culrpsios6lin" path="res://scenes/ShopUI.tscn" id="6_f6qnu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpvh6"]
 bg_color = Color(0.008578151, 0.0038568254, 0.09549191, 1)
@@ -57,16 +58,16 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cast_fill"]
-bg_color = Color(0.2, 0.6, 1.0, 1.0)
+bg_color = Color(0.2, 0.6, 1, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[node name="HUD" type="CanvasLayer" groups=["hud"]]
+[node name="HUD" type="CanvasLayer" unique_id=157647800 groups=["hud"]]
 script = ExtResource("1_qpvh6")
 
-[node name="WorldDropZone" type="Control" parent="."]
+[node name="WorldDropZone" type="Control" parent="." unique_id=1500875543]
 z_index = -334
 layout_mode = 3
 anchors_preset = 15
@@ -77,7 +78,7 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("5_nysna")
 
-[node name="ManaBar" type="ProgressBar" parent="."]
+[node name="ManaBar" type="ProgressBar" parent="." unique_id=754499211]
 offset_left = 16.0
 offset_top = 47.0
 offset_right = 336.0
@@ -86,7 +87,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_qpvh6")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fls4u")
 show_percentage = false
 
-[node name="SPLabel" type="Label" parent="ManaBar"]
+[node name="SPLabel" type="Label" parent="ManaBar" unique_id=2012058524]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -98,7 +99,7 @@ offset_bottom = 11.5
 grow_vertical = 2
 text = "SP"
 
-[node name="SPValueLabel" type="Label" parent="ManaBar"]
+[node name="SPValueLabel" type="Label" parent="ManaBar" unique_id=1262084950]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -114,7 +115,7 @@ grow_vertical = 2
 text = "100 / 100"
 horizontal_alignment = 2
 
-[node name="HealthBar" type="ProgressBar" parent="."]
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=73739580]
 offset_left = 16.0
 offset_top = 16.0
 offset_right = 336.0
@@ -123,7 +124,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_nysna")
 theme_override_styles/fill = SubResource("StyleBoxFlat_f6qnu")
 show_percentage = false
 
-[node name="HPLabel" type="Label" parent="HealthBar"]
+[node name="HPLabel" type="Label" parent="HealthBar" unique_id=1306978050]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -135,7 +136,7 @@ offset_bottom = 11.5
 grow_vertical = 2
 text = "HP"
 
-[node name="HPValueLabel" type="Label" parent="HealthBar"]
+[node name="HPValueLabel" type="Label" parent="HealthBar" unique_id=521286374]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -151,7 +152,7 @@ grow_vertical = 2
 text = "100 / 100"
 horizontal_alignment = 2
 
-[node name="LevelLabel" type="Label" parent="."]
+[node name="LevelLabel" type="Label" parent="." unique_id=794694238]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -167,7 +168,7 @@ theme_override_font_sizes/font_size = 16
 text = "Base lvl"
 vertical_alignment = 1
 
-[node name="ExpBar" type="ProgressBar" parent="."]
+[node name="ExpBar" type="ProgressBar" parent="." unique_id=1947092839]
 custom_minimum_size = Vector2(500, 10)
 anchors_preset = 7
 anchor_left = 0.5
@@ -184,7 +185,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_1etfg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_7hsmw")
 show_percentage = false
 
-[node name="StatsPanel" type="Panel" parent="."]
+[node name="StatsPanel" type="Panel" parent="." unique_id=266531704]
 visible = false
 anchors_preset = -1
 anchor_left = 0.014
@@ -198,7 +199,7 @@ offset_bottom = 162.30396
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer_Base" type="VBoxContainer" parent="StatsPanel"]
+[node name="VBoxContainer_Base" type="VBoxContainer" parent="StatsPanel" unique_id=953648610]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -209,142 +210,142 @@ offset_bottom = 152.5
 grow_vertical = 2
 theme_override_constants/separation = 16
 
-[node name="PointsLabel" type="Label" parent="StatsPanel/VBoxContainer_Base"]
+[node name="PointsLabel" type="Label" parent="StatsPanel/VBoxContainer_Base" unique_id=911063108]
 layout_mode = 2
 text = "Points: 0"
 
-[node name="StrRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base"]
+[node name="StrRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base" unique_id=1114617325]
 layout_mode = 2
 theme_override_constants/separation = 69
 
-[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/StrRow"]
+[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/StrRow" unique_id=1372694037]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "STR"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/StrRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/StrRow" unique_id=2035102774]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "1"
 
-[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/StrRow" groups=["stat_buttons"]]
+[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/StrRow" unique_id=1937725186 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "+"
 
-[node name="AgiRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base"]
+[node name="AgiRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base" unique_id=1970109898]
 layout_mode = 2
 theme_override_constants/separation = 71
 
-[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/AgiRow"]
+[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/AgiRow" unique_id=574660681]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "AGI"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/AgiRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/AgiRow" unique_id=340398957]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
 
-[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/AgiRow" groups=["stat_buttons"]]
+[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/AgiRow" unique_id=118630988 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "+"
 
-[node name="VitRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base"]
+[node name="VitRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base" unique_id=2102639842]
 layout_mode = 2
 theme_override_constants/separation = 75
 
-[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/VitRow"]
+[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/VitRow" unique_id=2078268871]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "VIT"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/VitRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/VitRow" unique_id=743834020]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
 
-[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/VitRow" groups=["stat_buttons"]]
+[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/VitRow" unique_id=1970002606 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "+"
 
-[node name="IntRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base"]
+[node name="IntRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base" unique_id=762603433]
 layout_mode = 2
 theme_override_constants/separation = 71
 
-[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/IntRow"]
+[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/IntRow" unique_id=1831342796]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "INT"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/IntRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/IntRow" unique_id=2005531932]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
 
-[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/IntRow" groups=["stat_buttons"]]
+[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/IntRow" unique_id=750985661 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "+"
 
-[node name="DexRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base"]
+[node name="DexRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base" unique_id=174419724]
 layout_mode = 2
 theme_override_constants/separation = 66
 
-[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/DexRow"]
+[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/DexRow" unique_id=199516466]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "DEX"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/DexRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/DexRow" unique_id=333506775]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
 
-[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/DexRow" groups=["stat_buttons"]]
+[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/DexRow" unique_id=302757956 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "+"
 
-[node name="LukRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base"]
+[node name="LukRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Base" unique_id=743298749]
 layout_mode = 2
 theme_override_constants/separation = 66
 
-[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/LukRow"]
+[node name="Name" type="Label" parent="StatsPanel/VBoxContainer_Base/LukRow" unique_id=1022999154]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "LUK"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/LukRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Base/LukRow" unique_id=480471290]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
 
-[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/LukRow" groups=["stat_buttons"]]
+[node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/LukRow" unique_id=251258081 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "+"
 
-[node name="VBoxContainer_Derived" type="VBoxContainer" parent="StatsPanel"]
+[node name="VBoxContainer_Derived" type="VBoxContainer" parent="StatsPanel" unique_id=932575487]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -357,79 +358,79 @@ offset_bottom = 79.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="AtkRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived"]
+[node name="AtkRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived" unique_id=1383769553]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/AtkRow"]
+[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/AtkRow" unique_id=411138745]
 layout_mode = 2
 text = "Attack:"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/AtkRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/AtkRow" unique_id=160193445]
 layout_mode = 2
 text = "Points: 0"
 
-[node name="MatkRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived"]
+[node name="MatkRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived" unique_id=682888918]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/MatkRow"]
+[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/MatkRow" unique_id=2007566896]
 layout_mode = 2
 text = "Matk:"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/MatkRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/MatkRow" unique_id=1609154431]
 layout_mode = 2
 text = "Points: 0"
 
-[node name="HitRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived"]
+[node name="HitRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived" unique_id=701843922]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/HitRow"]
+[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/HitRow" unique_id=152010697]
 layout_mode = 2
 text = "Hit:"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/HitRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/HitRow" unique_id=1633745175]
 layout_mode = 2
 text = "Points: 0"
 
-[node name="DefRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived"]
+[node name="DefRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived" unique_id=1125253079]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/DefRow"]
+[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/DefRow" unique_id=1773171923]
 layout_mode = 2
 text = "Def:"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/DefRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/DefRow" unique_id=1048860677]
 layout_mode = 2
 text = "Points: 0"
 
-[node name="AspdRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived"]
+[node name="AspdRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived" unique_id=1868642514]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/AspdRow"]
+[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/AspdRow" unique_id=1425601442]
 layout_mode = 2
 text = "ASPD:"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/AspdRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/AspdRow" unique_id=372016784]
 layout_mode = 2
 text = "Points: 0"
 
-[node name="FleeRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived"]
+[node name="FleeRow" type="HBoxContainer" parent="StatsPanel/VBoxContainer_Derived" unique_id=1454786968]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/FleeRow"]
+[node name="Label" type="Label" parent="StatsPanel/VBoxContainer_Derived/FleeRow" unique_id=1327574862]
 layout_mode = 2
 text = "Flee:"
 
-[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/FleeRow"]
+[node name="Value" type="Label" parent="StatsPanel/VBoxContainer_Derived/FleeRow" unique_id=250632284]
 layout_mode = 2
 text = "Points: 0"
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1068917056]
 anchors_preset = -1
 anchor_left = 0.021000002
 anchor_top = 0.77400005
@@ -441,7 +442,7 @@ offset_right = 10.199951
 offset_bottom = -0.30004883
 grow_vertical = 0
 
-[node name="LogLabel" type="RichTextLabel" parent="PanelContainer"]
+[node name="LogLabel" type="RichTextLabel" parent="PanelContainer" unique_id=786478318]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 22
 theme_override_font_sizes/bold_font_size = 22
@@ -451,11 +452,11 @@ theme_override_font_sizes/mono_font_size = 22
 bbcode_enabled = true
 scroll_following = true
 
-[node name="ActiveSkillLabel" type="Label" parent="."]
+[node name="ActiveSkillLabel" type="Label" parent="." unique_id=809535093]
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="ArmedSkillLabel" type="RichTextLabel" parent="."]
+[node name="ArmedSkillLabel" type="RichTextLabel" parent="." unique_id=628967581]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -472,7 +473,7 @@ scroll_active = false
 autowrap_mode = 0
 vertical_alignment = 1
 
-[node name="PickupPanel" type="PanelContainer" parent="."]
+[node name="PickupPanel" type="PanelContainer" parent="." unique_id=1971229163]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 5
 anchor_left = 0.5
@@ -484,14 +485,14 @@ offset_bottom = 110.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pickup")
 
-[node name="PickupLabel" type="Label" parent="PickupPanel"]
+[node name="PickupLabel" type="Label" parent="PickupPanel" unique_id=9127308]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.82, 0.27, 1)
 theme_override_font_sizes/font_size = 26
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HotbarGrid" type="HBoxContainer" parent="."]
+[node name="HotbarGrid" type="HBoxContainer" parent="." unique_id=980914948]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -505,37 +506,37 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 8
 
-[node name="HotbarSlot7" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
+[node name="HotbarSlot7" parent="HotbarGrid" unique_id=794456153 instance=ExtResource("2_fls4u")]
 layout_mode = 2
 
-[node name="HotbarSlot2" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
+[node name="HotbarSlot2" parent="HotbarGrid" unique_id=1294909110 instance=ExtResource("2_fls4u")]
 layout_mode = 2
 
-[node name="HotbarSlot" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
+[node name="HotbarSlot" parent="HotbarGrid" unique_id=1644147308 instance=ExtResource("2_fls4u")]
 layout_mode = 2
 
-[node name="HotbarSlot3" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
+[node name="HotbarSlot3" parent="HotbarGrid" unique_id=1309107117 instance=ExtResource("2_fls4u")]
 layout_mode = 2
 
-[node name="HotbarSlot4" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
+[node name="HotbarSlot4" parent="HotbarGrid" unique_id=79590730 instance=ExtResource("2_fls4u")]
 layout_mode = 2
 
-[node name="HotbarSlot5" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
+[node name="HotbarSlot5" parent="HotbarGrid" unique_id=2107895199 instance=ExtResource("2_fls4u")]
 layout_mode = 2
 
-[node name="HotbarSlot6" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
+[node name="HotbarSlot6" parent="HotbarGrid" unique_id=1612660578 instance=ExtResource("2_fls4u")]
 layout_mode = 2
 
-[node name="HotbarSlot8" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
+[node name="HotbarSlot8" parent="HotbarGrid" unique_id=1086181629 instance=ExtResource("2_fls4u")]
 layout_mode = 2
 
-[node name="HotbarSlot9" parent="HotbarGrid" instance=ExtResource("2_fls4u")]
+[node name="HotbarSlot9" parent="HotbarGrid" unique_id=2130619368 instance=ExtResource("2_fls4u")]
 layout_mode = 2
 
-[node name="EquipmentUI" parent="." instance=ExtResource("4_7hsmw")]
+[node name="EquipmentUI" parent="." unique_id=660406053 instance=ExtResource("4_7hsmw")]
 visible = false
 
-[node name="InventoryUI" parent="." instance=ExtResource("3_1etfg")]
+[node name="InventoryUI" parent="." unique_id=2013767484 instance=ExtResource("3_1etfg")]
 visible = false
 offset_left = 408.0
 offset_top = -20.0
@@ -543,25 +544,28 @@ offset_right = 448.0
 offset_bottom = 20.0
 size_flags_horizontal = 4
 
-[node name="StatusEffectsContainer" type="HBoxContainer" parent="."]
+[node name="ShopUI" parent="." unique_id=705718006 instance=ExtResource("6_f6qnu")]
+visible = false
+
+[node name="StatusEffectsContainer" type="HBoxContainer" parent="." unique_id=1362824390]
 offset_left = 16.0
 offset_top = 78.0
 offset_right = 350.0
 offset_bottom = 130.0
 theme_override_constants/separation = 6
 
-[node name="CastBar" type="ProgressBar" parent="."]
+[node name="CastBar" type="ProgressBar" parent="." unique_id=1015402083]
 visible = false
+custom_minimum_size = Vector2(350, 27)
 offset_left = 350.0
 offset_top = 16.0
 offset_right = 700.0
 offset_bottom = 43.0
-custom_minimum_size = Vector2(350, 27)
 theme_override_styles/background = SubResource("StyleBoxFlat_cast_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_cast_fill")
 show_percentage = false
 
-[node name="CastLabel" type="Label" parent="CastBar"]
+[node name="CastLabel" type="Label" parent="CastBar" unique_id=1284179428]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -571,10 +575,10 @@ offset_top = -11.5
 offset_right = 200.0
 offset_bottom = 11.5
 grow_vertical = 2
-text = "Casting..."
 theme_override_font_sizes/font_size = 12
+text = "Casting..."
 
-[node name="EnemyDebugPanel" type="PanelContainer" parent="."]
+[node name="EnemyDebugPanel" type="PanelContainer" parent="." unique_id=829720940]
 visible = false
 offset_left = 1250.0
 offset_top = 400.0
@@ -582,27 +586,27 @@ offset_right = 1900.0
 offset_bottom = 600.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_1etfg")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="EnemyDebugPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="EnemyDebugPanel" unique_id=2047551334]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="EnemyNameLabel" type="Label" parent="EnemyDebugPanel/VBoxContainer"]
+[node name="EnemyNameLabel" type="Label" parent="EnemyDebugPanel/VBoxContainer" unique_id=1572544420]
 layout_mode = 2
-text = "Enemy Name"
 theme_override_font_sizes/font_size = 14
+text = "Enemy Name"
 
-[node name="HSeparator" type="HSeparator" parent="EnemyDebugPanel/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="EnemyDebugPanel/VBoxContainer" unique_id=1075986408]
 layout_mode = 2
 
-[node name="StatsLabel" type="Label" parent="EnemyDebugPanel/VBoxContainer"]
+[node name="StatsLabel" type="Label" parent="EnemyDebugPanel/VBoxContainer" unique_id=978870944]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Size: MEDIUM
 Race: FORMLESS
 Element: NEUTRAL
 Type: SLIDE"
-theme_override_font_sizes/font_size = 12
 
-[node name="HotbarTooltip" type="PanelContainer" parent="."]
+[node name="HotbarTooltip" type="PanelContainer" parent="." unique_id=2052810523]
 visible = false
 offset_left = 100.0
 offset_top = 100.0
@@ -610,19 +614,23 @@ offset_right = 300.0
 offset_bottom = 150.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_1etfg")
 
-[node name="VBox" type="VBoxContainer" parent="HotbarTooltip"]
+[node name="VBox" type="VBoxContainer" parent="HotbarTooltip" unique_id=1028543674]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="NameLabel" type="Label" parent="HotbarTooltip/VBox"]
+[node name="NameLabel" type="Label" parent="HotbarTooltip/VBox" unique_id=841462129]
 layout_mode = 2
-text = "Skill/Item Name"
 theme_override_font_sizes/font_size = 12
+text = "Skill/Item Name"
 
-[node name="DescLabel" type="Label" parent="HotbarTooltip/VBox"]
+[node name="DescLabel" type="Label" parent="HotbarTooltip/VBox" unique_id=220832543]
 layout_mode = 2
-text = "Description or stats"
 theme_override_font_sizes/font_size = 11
+text = "Description or stats"
+
+[node name="ZenyLabel" type="Label" parent="." unique_id=947122153]
+offset_right = 40.0
+offset_bottom = 23.0
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]

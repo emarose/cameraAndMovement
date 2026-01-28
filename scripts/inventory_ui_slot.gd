@@ -52,7 +52,7 @@ func update_slot(slot_data: InventorySlot):
 # --- DRAG AND DROP NATIVO DE GODOT ---
 
 # 1. Cuando el usuario intenta arrastrar este slot
-func _get_drag_data(at_position):
+func _get_drag_data(_at_position):
 	if my_slot_data == null or my_slot_data.item_data == null:
 		return null # No arrastrar si está vacío
 	
@@ -80,7 +80,7 @@ func _get_drag_data(at_position):
 	return data
 
 # 2. Cuando alguien arrastra algo POR ENCIMA de este slot
-func _can_drop_data(at_position, data):
+func _can_drop_data(_at_position, data):
 	# Verificamos si los datos vienen de nuestro sistema de inventario
 	if typeof(data) == TYPE_DICTIONARY and data.has("source"):
 		if data["source"] == "inventory":
@@ -91,7 +91,7 @@ func _can_drop_data(at_position, data):
 	return false
 
 # 3. Cuando sueltan el click SOBRE este slot
-func _drop_data(at_position, data):
+func _drop_data(_at_position, data):
 	# Si viene del inventario
 	if data["source"] == "inventory":
 		var origin_index = data["origin_index"]

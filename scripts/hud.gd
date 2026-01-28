@@ -42,13 +42,14 @@ extends CanvasLayer
 @onready var status_effects_container: HBoxContainer = $StatusEffectsContainer
 @onready var cast_bar: ProgressBar = $CastBar
 @onready var cast_label: Label = $CastBar/CastLabel
+@onready var zeny_label: Label = $ZenyLabel
 
 var slots: Array = []
 var active_effect_indicators: Dictionary = {}  # effect_name -> indicator_node
 var player_stats: StatsComponent
 var current_skill_name: String = ""
 var _pickup_base_pos := Vector2.ZERO
-
+	
 func _ready():
 	armed_skill_label.text = ""
 	if pickup_panel:
@@ -142,6 +143,13 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,i
 			skill_comp.cast_interrupted.connect(_on_cast_ended)
 		if not skill_comp.cast_completed.is_connected(_on_cast_ended):
 			skill_comp.cast_completed.connect(_on_cast_ended)
+
+	# --- Setup Zeny (Currency) ---
+	if inventory_comp and inventory_comp.has_signal("zeny_changed"):
+		if not inventory_comp.zeny_changed.is_connected(_on_zeny_changed):
+			inventory_comp.zeny_changed.connect(_on_zeny_changed)
+		# Force initial update
+		_on_zeny_changed(inventory_comp.zeny)
 
 	refresh_ui()
 	
@@ -352,7 +360,7 @@ func on_item_dropped_to_hotbar(target_slot_index: int, item: ItemData):
 		add_log_message("Asignado %s a slot %d" % [item.item_name, target_slot_index + 1], Color.LIGHT_GREEN)
 
 # Callback para rechazar items no-consumibles
-func reject_non_consumable_item(item: ItemData):
+func reject_non_consumable_item(_item: ItemData):
 	add_log_message("Solo se pueden asignar items consumibles", Color.ORANGE)
 
 # Callback para hacer swap entre slots del hotbar
@@ -441,7 +449,6 @@ func update_enemy_debug_panel(enemy: Node3D) -> void:
 	
 	# Get enemy data
 	var enemy_data = enemy.data if enemy.has_meta("data") or enemy.get("data") else null
-	var stats_comp = enemy.get_node_or_null("StatsComponent")
 	
 	if not enemy_data:
 		enemy_debug_panel.visible = false
@@ -494,3 +501,6 @@ func _on_hotbar_slot_exit() -> void:
 func _process(_delta):
 	if hotbar_tooltip and hotbar_tooltip.visible:
 		hotbar_tooltip.global_position = get_viewport().get_mouse_position() + Vector2(10, 10)
+
+func _on_zeny_changed(amount: int):
+	zeny_label.text = str(amount) + " Z"

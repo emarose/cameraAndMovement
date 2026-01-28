@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cxmfbmm1ex652"]
+
+[ext_resource type="Script" uid="uid://d0ug7mgpswyw2" path="res://scripts/NPC_Merchant.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gx0qm"]
+albedo_color = Color(0.09411765, 0.6, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bxo51"]
+material = SubResource("StandardMaterial3D_gx0qm")
+
+[sub_resource type="BoxShape3D" id="2"]
+size = Vector3(1, 2, 1)
+
+[node name="NPC_Merchant" type="StaticBody3D" unique_id=753893127 groups=["npc"]]
+script = ExtResource("1")
+interact_distance = 10.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=413515101]
+mesh = SubResource("CapsuleMesh_bxo51")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=852781927]
+shape = SubResource("2")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

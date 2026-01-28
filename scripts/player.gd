@@ -7,7 +7,7 @@ extends CharacterBody3D
 @export var cursor_default: Texture2D
 @export var cursor_attack: Texture2D
 @export var cursor_skill: Texture2D
-
+@export var cursor_talk: Texture2D
 
 @export_group("Hotbar Inicial")
 # Usamos un Array exportado para configurar las skills iniciales desde el editor
@@ -186,7 +186,12 @@ func _process_continuous_interaction():
 	
 	var result = get_mouse_world_interaction()
 	if not result: return
-
+	
+	# ¿El objeto golpeado es un NPC/Area3D con el método interact?
+	if result.collider.has_method("interact"):
+		result.collider.interact(self) # Le pasamos 'self' (el jugador) al NPC
+		return
+	
 	if result.collider.is_in_group("enemy"):
 		# CASO A: Estamos clickeando un enemigo
 		var enemy = result.collider
@@ -247,6 +252,8 @@ func get_mouse_world_interaction():
 	var space_state = get_world_3d().direct_space_state
 
 	var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+	query.collide_with_areas = true  
+	query.collide_with_bodies = true
 	query.exclude = [get_rid()]
 	var result = space_state.intersect_ray(query)
 	if not result:
@@ -260,40 +267,48 @@ func _stop_movement():
 func update_cursor():
 	var result = get_mouse_world_interaction()
 	var hovering_enemy = false
+	var hovering_npc = false 
 	var within_skill_range = false
 	var hovered_enemy = null
 
 	if result and result.has("collider"):
 		var col = result.collider
-		if is_instance_valid(col) and col.is_in_group("enemy"):
-			hovering_enemy = true
-			hovered_enemy = col
-			if skill_component and skill_component.armed_skill:
-				var cast_range = skill_component.armed_skill.cast_range
-				if global_position.distance_to(col.global_position) <= cast_range:
-					within_skill_range = true
+		if is_instance_valid(col):
+			# 1. Detectar Enemigos
+			if col.is_in_group("enemy"):
+				hovering_enemy = true
+				hovered_enemy = col
+				if skill_component and skill_component.armed_skill:
+					var cast_range = skill_component.armed_skill.cast_range
+					if global_position.distance_to(col.global_position) <= cast_range:
+						within_skill_range = true
+			
+			# 2. Detectar NPCs (NUEVO)
+			elif col.has_method("interact"):
+				hovering_npc = true
 
-	# Update debug panel
-	if hud and hovered_enemy:
-		hud.update_enemy_debug_panel(hovered_enemy)
-	elif hud:
-		hud.hide_enemy_debug_panel()
+	# --- LÓGICA DE ACTUALIZACIÓN VISUAL ---
 
 	if within_skill_range:
-		if _last_cursor_state != "skill":
-			Input.set_custom_mouse_cursor(cursor_skill, Input.CURSOR_ARROW, Vector2(16, 16))
-			_last_cursor_state = "skill"
+		_set_cursor(cursor_skill, "skill", Vector2(16,16))
 		return
 
 	if hovering_enemy:
-		if _last_cursor_state != "attack":
-			Input.set_custom_mouse_cursor(cursor_attack, Input.CURSOR_ARROW, Vector2(16, 16))
-			_last_cursor_state = "attack"
-	else:
-		if _last_cursor_state != "default":
-			Input.set_custom_mouse_cursor(cursor_default, Input.CURSOR_ARROW, Vector2(0, 0))
-			_last_cursor_state = "default"
+		_set_cursor(cursor_attack, "attack", Vector2(16,16))
+		return
+		
+	if hovering_npc: # <--- NUEVO ESTADO
+		_set_cursor(cursor_talk, "talk", Vector2(16,16))
+		return
 
+	# Si no hay nada, cursor default
+	_set_cursor(cursor_default, "default", Vector2(0,0))
+
+# Función auxiliar para no repetir código de cursor
+func _set_cursor(texture, state_name, offset):
+	if _last_cursor_state != state_name:
+		Input.set_custom_mouse_cursor(texture, Input.CURSOR_ARROW, offset)
+		_last_cursor_state = state_name
 
 # --- FUNCIONES AUXILIARES DE ATAQUE ---
 

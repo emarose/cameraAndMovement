@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EquipmentItem" load_steps=3 format=3 uid="uid://cr7luqw1pv8n"]
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://cr7luqw1pv8n"]
 
 [ext_resource type="Texture2D" uid="uid://dchtgcpix3sce" path="res://resources/items/fc1778.png" id="1_emeqq"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="1_fcscp"]
@@ -11,5 +11,6 @@ icon = ExtResource("1_emeqq")
 description = "Axe to damage formless"
 item_type = 1
 stackable = false
+race_bonus = 2
 race_bonus_value = 0.5
 metadata/_custom_type_script = "uid://7bv08dur57x"

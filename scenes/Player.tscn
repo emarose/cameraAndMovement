@@ -1,13 +1,13 @@
-[gd_scene load_steps=33 format=3 uid="uid://lw4sjl4cws8q"]
+[gd_scene format=3 uid="uid://lw4sjl4cws8q"]
 
 [ext_resource type="Script" uid="uid://cjm61wm3wga5a" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://biubb72lqc4a3" path="res://assets/icons/cursor_default.png" id="2_lkdrv"]
 [ext_resource type="Script" uid="uid://kpxdh62ijq65" path="res://scripts/camera_rig.gd" id="2_qhqgy"]
-[ext_resource type="Texture2D" uid="uid://cm77u0b3xpnq5" path="res://assets/icons/cursor_skill1.png" id="3_lkdrv"]
 [ext_resource type="PackedScene" uid="uid://ce1embig558rd" path="res://scenes/HealthBar3D.tscn" id="3_mdl7e"]
 [ext_resource type="Texture2D" uid="uid://v23ye4xitolj" path="res://assets/icons/cursor_attack.png" id="3_p7iby"]
 [ext_resource type="PackedScene" uid="uid://cjkj6s57v61vn" path="res://scenes/FloatingText.tscn" id="4_bruh7"]
 [ext_resource type="Resource" uid="uid://cudaytyrcelie" path="res://resources/skills/Bash.tres" id="4_lkdrv"]
+[ext_resource type="Texture2D" uid="uid://dfvukw2s583tt" path="res://assets/icons/cursor_skill.png" id="4_p07f3"]
 [ext_resource type="Script" uid="uid://d32apxuk1vawh" path="res://scripts/healthComponent.gd" id="4_qu4a1"]
 [ext_resource type="PackedScene" uid="uid://bqulpcolhat05" path="res://effects/LevelUpEffect.tscn" id="5_6eyey"]
 [ext_resource type="PackedScene" uid="uid://765vokj83tna" path="res://scenes/GameOverUI.tscn" id="5_qu4a1"]
@@ -33,7 +33,7 @@ material = SubResource("StandardMaterial3D_aqk2v")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_70d11"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_viqgg"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6dkly"]
@@ -54,79 +54,79 @@ top_radius = 1.0
 bottom_radius = 1.0
 height = 0.01
 
-[node name="Player" type="CharacterBody3D" groups=["player"]]
+[node name="Player" type="CharacterBody3D" unique_id=1179624594 groups=["player"]]
 script = ExtResource("1_g2els")
 cursor_default = ExtResource("2_lkdrv")
 cursor_attack = ExtResource("3_p7iby")
-cursor_skill = ExtResource("3_lkdrv")
+cursor_skill = ExtResource("4_p07f3")
 initial_hotbar = Array[Resource]([ExtResource("4_lkdrv"), ExtResource("7_61ith"), ExtResource("7_sfy4j"), ExtResource("8_gv3ic")])
 initial_inventory = Array[Resource]([ExtResource("9_b8lor"), ExtResource("10_6e537"), ExtResource("11_p07f3")])
 floating_text_scene = ExtResource("4_bruh7")
 level_up_effect_scene = ExtResource("5_6eyey")
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=167663048]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=461812279]
 mesh = SubResource("CapsuleMesh_dqkch")
 skeleton = NodePath("")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=732221772]
 shape = SubResource("CapsuleShape3D_qlg0r")
 
-[node name="CameraPivot" type="Node3D" parent="."]
+[node name="CameraPivot" type="Node3D" parent="." unique_id=764086905]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1.8, 0)
 top_level = true
 script = ExtResource("2_qhqgy")
 zoom_speed = 2.0
 
-[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot" unique_id=795005348]
 spring_length = 8.0
 
-[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=1839852354]
 current = true
 fov = 84.6
 
-[node name="HealthBar3D" parent="." groups=["player"] instance=ExtResource("3_mdl7e")]
+[node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6195009, 0)
-texture = SubResource("ViewportTexture_70d11")
+texture = SubResource("ViewportTexture_viqgg")
 
-[node name="HealthComponent" type="Node" parent="."]
+[node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")
 max_health = 1
 
-[node name="SPComponent" type="Node" parent="."]
+[node name="SPComponent" type="Node" parent="." unique_id=810258990]
 script = ExtResource("12_o4126")
 
-[node name="StatsComponent" type="Node" parent="."]
+[node name="StatsComponent" type="Node" parent="." unique_id=1372930636]
 script = ExtResource("8_khinc")
 str_stat = 9
 dex = 9
 
-[node name="SkillComponent" type="Node" parent="."]
+[node name="SkillComponent" type="Node" parent="." unique_id=1172722662]
 script = ExtResource("10_d3wef")
 
-[node name="InventoryComponent" type="Node" parent="."]
+[node name="InventoryComponent" type="Node" parent="." unique_id=1940651935]
 script = ExtResource("19_ebwui")
 
-[node name="RegenerationComponent" type="Node" parent="."]
+[node name="RegenerationComponent" type="Node" parent="." unique_id=838240900]
 script = ExtResource("15_0rnld")
 
-[node name="EquipmentComponent" type="Node" parent="."]
+[node name="EquipmentComponent" type="Node" parent="." unique_id=1701170461]
 script = ExtResource("19_sfy4j")
 
-[node name="StatusEffectManagerComponent" type="Node" parent="."]
+[node name="StatusEffectManagerComponent" type="Node" parent="." unique_id=203511814]
 script = ExtResource("20_gv3ic")
 
-[node name="GameOverUI" parent="." instance=ExtResource("5_qu4a1")]
+[node name="GameOverUI" parent="." unique_id=1480085280 instance=ExtResource("5_qu4a1")]
 
-[node name="eye" type="MeshInstance3D" parent="."]
+[node name="eye" type="MeshInstance3D" parent="." unique_id=712278464]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.049024224, 0.5524795, -0.4945358)
 mesh = SubResource("SphereMesh_6eyey")
 
-[node name="eye2" type="MeshInstance3D" parent="."]
+[node name="eye2" type="MeshInstance3D" parent="." unique_id=2045127416]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1563986, 0.5524795, -0.4945358)
 mesh = SubResource("SphereMesh_6eyey")
 
-[node name="AOEIndicator" type="MeshInstance3D" parent="."]
+[node name="AOEIndicator" type="MeshInstance3D" parent="." unique_id=288806777]
 visible = false
 mesh = SubResource("CylinderMesh_0rnld")

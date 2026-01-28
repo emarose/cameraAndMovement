@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bfw5g84ulae23"]
+[gd_scene format=3 uid="uid://bfw5g84ulae23"]
 
 [ext_resource type="Script" uid="uid://bdifrny1pqanx" path="res://scripts/world.gd" id="1_tlwt5"]
 [ext_resource type="Texture2D" uid="uid://dfvukw2s583tt" path="res://assets/icons/cursor_skill.png" id="3_ic0uy"]
@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="8_ioo17"]
 [ext_resource type="Resource" uid="uid://b5sbonaifogvd" path="res://resources/mobs/Fabre.tres" id="9_ioo17"]
 [ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="11_ic0uy"]
+[ext_resource type="PackedScene" uid="uid://cxmfbmm1ex652" path="res://scenes/NPC_Merchant.tscn" id="12_k3n1d"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tlwt5"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -48,56 +49,60 @@ material = SubResource("StandardMaterial3D_aqk2v")
 inner_radius = 0.854
 outer_radius = 0.934
 
-[node name="World" type="Node3D"]
+[node name="World" type="Node3D" unique_id=103671102]
 script = ExtResource("1_tlwt5")
 metadata/_edit_horizontal_guides_ = [21.0]
 
-[node name="Player" parent="." instance=ExtResource("3_tlwt5")]
+[node name="Player" parent="." unique_id=1274764420 instance=ExtResource("3_tlwt5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1590004, 1, 0.51211166)
 speed = 8.0
 click_indicator_path = NodePath("../ClickIndicator")
 cursor_skill = ExtResource("3_ic0uy")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1782287698]
 environment = SubResource("Environment_036b0")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1527984308]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 12.960707, 0)
 shadow_enabled = true
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=756201079]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011876106, -0.008881569, 0.00404644)
 navigation_mesh = SubResource("NavigationMesh_aqk2v")
 
-[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D"]
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=619443438]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ground"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ground" unique_id=997647204]
 mesh = SubResource("PlaneMesh_aqk2v")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=88804735]
 shape = SubResource("WorldBoundaryShape3D_036b0")
 
-[node name="ClickIndicator" type="MeshInstance3D" parent="."]
+[node name="ClickIndicator" type="MeshInstance3D" parent="." unique_id=717626243]
 visible = false
 mesh = SubResource("TorusMesh_036b0")
 
-[node name="Hud" parent="." instance=ExtResource("7_pkg7o")]
+[node name="Hud" parent="." unique_id=1157172872 instance=ExtResource("7_pkg7o")]
 
-[node name="MobSpawner - Poring" parent="." instance=ExtResource("5_036b0")]
+[node name="MobSpawner - Poring" parent="." unique_id=2082216849 instance=ExtResource("5_036b0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.501255, -0.00886631, -24.764254)
 enemy_scene = ExtResource("4_aqk2v")
 mob_pool = Array[ExtResource("6_gbfbk")]([ExtResource("8_ioo17")])
 
-[node name="MobSpawner - Fabre" parent="." instance=ExtResource("5_036b0")]
+[node name="MobSpawner - Fabre" parent="." unique_id=1651610004 instance=ExtResource("5_036b0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 30)
 enemy_scene = ExtResource("4_aqk2v")
 mob_pool = Array[ExtResource("6_gbfbk")]([ExtResource("9_ioo17")])
 spawn_radius = 10.0
 max_mobs = 10
 
-[node name="MobSpawner - Venomous Spider" parent="." instance=ExtResource("5_036b0")]
+[node name="MobSpawner - Venomous Spider" parent="." unique_id=1720212322 instance=ExtResource("5_036b0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.582314, 0, 30)
 enemy_scene = ExtResource("4_aqk2v")
 mob_pool = Array[ExtResource("6_gbfbk")]([ExtResource("11_ic0uy")])
 spawn_radius = 10.0
 max_mobs = 10
+
+[node name="NPC_Merchant" parent="." unique_id=1627112747 instance=ExtResource("12_k3n1d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0861006, 8.725811)
+shop_ui_path = NodePath("res://scenes/ShopUI.tscn")
