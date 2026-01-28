@@ -189,7 +189,10 @@ func _process_continuous_interaction():
 	
 	# ¿El objeto golpeado es un NPC/Area3D con el método interact?
 	if result.collider.has_method("interact"):
+		# Stop movement when interacting with NPC
+		_stop_movement()
 		result.collider.interact(self) # Le pasamos 'self' (el jugador) al NPC
+		is_clicking = false # Stop clicking to prevent continuous movement
 		return
 	
 	if result.collider.is_in_group("enemy"):
@@ -220,6 +223,13 @@ func handle_click_interaction():
 	var result = get_mouse_world_interaction()
 	if result:
 		var collider = result.collider
+		
+		# Check if clicking on NPC
+		if collider.has_method("interact"):
+			# Don't spawn effect or set movement for NPCs
+			current_target_enemy = null
+			return
+		
 		var is_attack_click = collider.is_in_group("enemy")
 		
 		spawn_flash_effect(result.position, is_attack_click)
