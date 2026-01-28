@@ -131,11 +131,12 @@ func _on_cast_finished():
 	pending_skill = null
 	pending_target = null
 
-func _interrupt_casting():
+func _interrupt_casting(force: bool = false):
 	if not is_casting: return
 	
 	# Solo interrumpir si la skill lo permite (algunas skills como "Endure" evitan esto)
-	if pending_skill and not pending_skill.is_interruptible:
+	# EXCEPTO cuando force=true (como cuando el jugador recibe daño)
+	if not force and pending_skill and not pending_skill.is_interruptible:
 		return
 
 	is_casting = false

@@ -631,7 +631,7 @@ text = "Description or stats"
 [node name="ZenyLabel" type="Label" parent="." unique_id=947122153]
 offset_left = 16.0
 offset_top = 84.0
-offset_right = 56.0
+offset_right = 85.0
 offset_bottom = 107.0
 text = "999999 Z"
 

@@ -43,7 +43,6 @@ func get_element_modifier(atk_elem: StatsComponent.Element, def_elem: StatsCompo
 
 func calculate_skill_damage(base_dmg: int, skill_elem: StatsComponent.Element, target_stats: StatsComponent) -> int:
 	var multiplier = get_element_modifier(skill_elem, target_stats.element)
-	# Ejemplo de bonos por raza (esto es deuda técnica que pagamos ahora):
 	# if skill_elem == StatsComponent.Element.HOLY and target_stats.race == StatsComponent.Race.DEMON:
 	#    multiplier += 0.5
 	

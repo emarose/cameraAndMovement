@@ -396,20 +396,17 @@ func _on_player_damaged(damage_amount: int):
 	# 1. Mostrar floating text de daño (rojo para el jugador)
 	spawn_floating_text_player_damage(global_position, damage_amount)
 	
-	# 2. Interrumpir cast solo si la skill lo permite
+	# 2. Interrumpir cast SIEMPRE que el jugador reciba daño (force=true)
 	if skill_component.is_casting:
-		# cancel_cast llama a _interrupt_casting que ya maneja la lógica de is_interruptible
+		skill_component._interrupt_casting(true)
+	
+	# Desabilitar skill armada si hay una
+	if skill_component.armed_skill:
 		skill_component.cancel_cast()
-
-	# 3. Stun / Flinch solo cuando recibe daño
-	if stats:
-		stats.is_stunned = true
 	velocity = Vector3.ZERO
-	# Interrumpimos el click para que el jugador tenga que volver a dar la orden (opcional, da tensión)
-	#is_clicking = false 
 	nav_agent.target_position = global_position # Cancelar ruta actual
 	
-	# 3. Feedback Visual
+	# 4. Feedback Visual
 	var tween = create_tween()
 	
 	tween.tween_property(self, "position:y", position.y + 0.05, 0.05)
@@ -418,11 +415,6 @@ func _on_player_damaged(damage_amount: int):
 	await get_tree().create_timer(0.2).timeout # Tiempo de flinch
 	if stats:
 		stats.is_stunned = false
-	
-	if skill_component and skill_component.armed_skill:
-		skill_component.cancel_cast()
-		# Opcional: Feedback visual de interrupción
-		get_tree().call_group("hud", "add_log_message", "¡Interrumpido!", Color.CRIMSON)
 
 func _on_player_death():
 	if is_dead: return # Evitar que se ejecute dos veces
