@@ -504,3 +504,9 @@ func _process(_delta):
 
 func _on_zeny_changed(amount: int):
 	zeny_label.text = str(amount) + " Z"
+
+func open_inventory_window():
+	inventory_window.visible = true
+	
+func close_inventory_window():
+	inventory_window.visible = false

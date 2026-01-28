@@ -2,16 +2,17 @@
 
 [ext_resource type="Script" uid="uid://qbwi70jk6b6f" path="res://scripts/shop_ui.gd" id="1_au2f5"]
 
-[node name="ShopUI" type="Control" unique_id=705718006 groups=["shop_ui"]]
+[node name="ShopUI" type="Control" groups=["shop_ui"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_au2f5")
 
-[node name="Panel" type="Panel" parent="." unique_id=972570536]
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -25,36 +26,82 @@ offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="Panel" unique_id=1780668369]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 590.0
-offset_bottom = 50.0
-theme_override_font_sizes/font_size = 24
-text = "Merchant"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Panel" unique_id=405593462]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -280.0
-offset_top = 60.0
-offset_right = 280.0
-offset_bottom = -50.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Merchant"
+theme_override_font_sizes/font_size = 24
+
+[node name="TabContainer" type="TabContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+clip_contents = true
+
+[node name="Comprar" type="Control" parent="Panel/VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Comprar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer" unique_id=778643966]
+[node name="Label" type="Label" parent="Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer"]
+layout_mode = 2
+text = "Tienda del Vendedor"
+theme_override_font_sizes/font_size = 16
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BuyListContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="CloseButton" type="Button" parent="Panel" unique_id=84761424]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 460.0
-offset_right = 590.0
-offset_bottom = 490.0
+[node name="Vender" type="Control" parent="Panel/VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Vender"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/TabContainer/Vender/VBoxContainer"]
+layout_mode = 2
+text = "Vender Items"
+theme_override_font_sizes/font_size = 16
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer/TabContainer/Vender/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SellListContainer" type="VBoxContainer" parent="Panel/VBoxContainer/TabContainer/Vender/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CloseButton" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Close"

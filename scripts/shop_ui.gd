@@ -4,26 +4,35 @@ extends Control
 var player_inventory: InventoryComponent
 
 # Referencia al contenedor de la lista visual
-@onready var item_list_container = $Panel/ScrollContainer/VBoxContainer
-@onready var close_button = $Panel/CloseButton
+@onready var sell_list_container = $Panel/VBoxContainer/TabContainer/Vender/VBoxContainer/ScrollContainer/SellListContainer
+@onready var buy_list_container = $Panel/VBoxContainer/TabContainer/Comprar/VBoxContainer/ScrollContainer/BuyListContainer
+@onready var close_button = $Panel/VBoxContainer/HBoxContainer/CloseButton
+@onready var tab_container = $Panel/VBoxContainer/TabContainer
 
 func _ready():
 	if close_button:
 		close_button.pressed.connect(close_shop)
 	self.visible = false
-
+	
 func open_shop(inventory: InventoryComponent):
-	player_inventory = inventory
 	self.visible = true
+	player_inventory = inventory
+	
+	# 1. Abrimos también el Inventario del jugador (asumiendo que está en el HUD)
+	get_tree().call_group("hud", "open_inventory_window") 
+	
+	# 2. Llenamos la lista de ventas
 	refresh_sell_list()
 
 func close_shop():
 	self.visible = false
 	player_inventory = null
+	# Opcional: Cerrar inventario al cerrar tienda
+	# get_tree().call_group("hud", "close_inventory_window")
 
 func refresh_sell_list():
 	# 1. Limpiar lista actual
-	for child in item_list_container.get_children():
+	for child in sell_list_container.get_children():
 		child.queue_free()
 	
 	# 2. Llenar con items vendibles del inventario
@@ -41,7 +50,7 @@ func refresh_sell_list():
 		var sell_button = Button.new()
 		sell_button.text = "Vender %s - %dZ" % [item.item_name, item.sell_price]
 		sell_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		item_list_container.add_child(sell_button)
+		sell_list_container.add_child(sell_button)
 		
 		# Conectar click del botón para vender
 		sell_button.pressed.connect(_on_item_sell_pressed.bind(item))
