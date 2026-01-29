@@ -15,12 +15,13 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="cameraAndMovement"
-run/main_scene="uid://bfw5g84ulae23"
+run/main_scene="uid://fe2tshx87c7v"
 config/features=PackedStringArray("4.6", "Forward Plus")
 
 [autoload]
 
 CombatMath="*res://scripts/CombatMath.gd"
+GameManager="*uid://bhkmp36f0twct"
 
 [display]
 

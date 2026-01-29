@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://fe2tshx87c7v"]
+
+[ext_resource type="Script" uid="uid://ckccqew73gy66" path="res://scenes/maps/BaseMap.gd" id="1_28kaw"]
+[ext_resource type="PackedScene" uid="uid://b3mj4b8fx2imj" path="res://scenes/HUD.tscn" id="2_28kaw"]
+[ext_resource type="Texture2D" uid="uid://s5vvlnu0pvns" path="res://textures/texture_08.png" id="2_fhsio"]
+[ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="2_ici1b"]
+[ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="4_28kaw"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ici1b"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_ici1b"]
+sky_material = SubResource("ProceduralSkyMaterial_ici1b")
+
+[sub_resource type="Environment" id="Environment_w5gqo"]
+background_mode = 2
+sky = SubResource("Sky_ici1b")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_hh4ub"]
+vertices = PackedVector3Array(-24.5, 0.5, -24.5, -24.5, 0.5, 24.5, 24.5, 0.5, 24.5, 24.5, 0.5, -24.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_28kaw"]
+albedo_texture = ExtResource("2_fhsio")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_bddx0"]
+material = SubResource("StandardMaterial3D_28kaw")
+size = Vector2(50, 50)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_f7ls3"]
+
+[node name="StartingField" type="Node3D" unique_id=1874073899]
+script = ExtResource("1_28kaw")
+
+[node name="HUD" parent="." unique_id=157647800 instance=ExtResource("2_28kaw")]
+
+[node name="Player" parent="." unique_id=1179624594 instance=ExtResource("2_ici1b")]
+transform = Transform3D(0.07405631, 0, 0.9972541, 0, 1, 0, -0.9972541, 0, 0.07405631, 9.380917, 0.99112606, -0.46658134)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1789178224]
+environment = SubResource("Environment_w5gqo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1401511390]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 2.3548467, 0)
+shadow_enabled = true
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=362194281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011876106, -0.008881569, 0.00404644)
+navigation_mesh = SubResource("NavigationMesh_hh4ub")
+
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=484598853]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ground" unique_id=1097867219]
+mesh = SubResource("PlaneMesh_bddx0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=2028462704]
+shape = SubResource("WorldBoundaryShape3D_f7ls3")
+
+[node name="SpawnPoints" type="Node" parent="." unique_id=1834783217]
+
+[node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=1442950470]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.437561, 0, 0)
+
+[node name="FromCity" type="Marker3D" parent="SpawnPoints" unique_id=1396455640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.759727, 0, 0)
+
+[node name="NPCs" type="Node" parent="." unique_id=443774008]
+
+[node name="Portals" type="Node" parent="." unique_id=333638632]
+
+[node name="Portal" parent="Portals" unique_id=2093780239 instance=ExtResource("4_28kaw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.034922, 0.016118431, -0.11616039)
+target_map_path = "uid://cb6k7k3xysq84"
+target_spawn_id = "FromField"

@@ -10,7 +10,14 @@ signal on_damage_taken(amount: int)
 var current_health: int
 
 func _ready():
-	current_health = max_health
+	if _should_initialize_full_health():
+		current_health = max_health
+
+func _should_initialize_full_health() -> bool:
+	var parent = get_parent()
+	if parent and parent.is_in_group("player"):
+		return not GameManager.has_saved_data
+	return true
 	
 func heal(amount: int):
 	current_health = min(current_health + amount, max_health)

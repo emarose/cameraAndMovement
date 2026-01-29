@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://cb6k7k3xysq84"]
+
+[ext_resource type="PackedScene" uid="uid://b3mj4b8fx2imj" path="res://scenes/HUD.tscn" id="1_ll35h"]
+[ext_resource type="Script" uid="uid://ckccqew73gy66" path="res://scenes/maps/BaseMap.gd" id="1_mxm8b"]
+[ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="2_d23ae"]
+[ext_resource type="Texture2D" uid="uid://s5vvlnu0pvns" path="res://textures/texture_08.png" id="3_mxm8b"]
+[ext_resource type="PackedScene" uid="uid://cxmfbmm1ex652" path="res://scenes/NPC_Merchant.tscn" id="4_d23ae"]
+[ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="4_db6y7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_stf4j"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_28kaw"]
+sky_material = SubResource("ProceduralSkyMaterial_stf4j")
+
+[sub_resource type="Environment" id="Environment_ll35h"]
+background_mode = 2
+sky = SubResource("Sky_28kaw")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_d23ae"]
+vertices = PackedVector3Array(-24.5, 0.5, -24.5, -24.5, 0.5, 24.5, 24.5, 0.5, 24.5, 24.5, 0.5, -24.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tlwt5"]
+albedo_texture = ExtResource("3_mxm8b")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_mxm8b"]
+material = SubResource("StandardMaterial3D_tlwt5")
+size = Vector2(50, 50)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_db6y7"]
+
+[node name="StartingCity" type="Node3D" unique_id=180658432]
+script = ExtResource("1_mxm8b")
+
+[node name="HUD" parent="." unique_id=157647800 instance=ExtResource("1_ll35h")]
+
+[node name="Player" parent="." unique_id=1179624594 instance=ExtResource("2_d23ae")]
+transform = Transform3D(0.037899435, 0, 0.99928164, 0, 1, 0, -0.99928164, 0, 0.037899435, 10.666683, 0.99112606, -0.09869194)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1075299080]
+environment = SubResource("Environment_ll35h")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1149427702]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 2.3548467, 0)
+shadow_enabled = true
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=51434764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.017453194, -0.0175457, -0.024853706)
+navigation_mesh = SubResource("NavigationMesh_d23ae")
+
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1452075551]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ground" unique_id=2091344092]
+mesh = SubResource("PlaneMesh_mxm8b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=361296424]
+shape = SubResource("WorldBoundaryShape3D_db6y7")
+
+[node name="SpawnPoints" type="Node" parent="." unique_id=616821737]
+
+[node name="FromField" type="Marker3D" parent="SpawnPoints" unique_id=684994209]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.371647, 0, 0)
+
+[node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=563012788]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.016617, 0, 0)
+
+[node name="NPCs" type="Node" parent="." unique_id=1746226566]
+
+[node name="NPC_Merchant" parent="NPCs" unique_id=753893127 instance=ExtResource("4_d23ae")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.889069, 1.1700063, -6.117123)
+
+[node name="Portals" type="Node" parent="." unique_id=1005359231]
+
+[node name="Portal" parent="Portals" unique_id=2093780239 instance=ExtResource("4_db6y7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.945515, 0.016118431, -0.11616039)
+target_map_path = "uid://fe2tshx87c7v"
+target_spawn_id = "FromCity"

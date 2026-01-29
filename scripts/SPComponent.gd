@@ -11,8 +11,15 @@ var stats: StatsComponent
 func setup(stats_ref: StatsComponent):
 	stats = stats_ref
 	update_max_sp()
-	current_sp = max_sp
+	if not _should_preserve_sp():
+		current_sp = max_sp
 	on_sp_changed.emit(current_sp, max_sp)
+
+func _should_preserve_sp() -> bool:
+	var parent = get_parent()
+	if parent and parent.is_in_group("player"):
+		return GameManager.has_saved_data
+	return false
 
 func update_max_sp():
 	if stats:

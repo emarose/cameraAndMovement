@@ -33,12 +33,13 @@ var HOTBAR_SIZE = 9
 @onready var click_indicator: MeshInstance3D = get_node_or_null(click_indicator_path)
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var game_over_ui: CanvasLayer = $GameOverUI
-@onready var hud: CanvasLayer = $"../Hud"
 @onready var stats: Node = $StatsComponent
 @onready var sp_component: SPComponent = $SPComponent
 @onready var regen_component = $RegenerationComponent
 @onready var inventory = $InventoryComponent
 @onready var status_effect_manager: StatusEffectManager = $StatusEffectManagerComponent
+@onready var player: CharacterBody3D = $"."
+@onready var hud: CanvasLayer = $"../HUD"
 
 # --- Variables de Ataque y Control ---
 var last_attack_time: int = 0

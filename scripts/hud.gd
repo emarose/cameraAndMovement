@@ -61,6 +61,8 @@ func _ready():
 	setup_hotbar_ui()
 
 func refresh_ui():
+	if not is_inside_tree() or get_tree() == null:
+		return
 	# Stats Base y Totales (mostrando el bono si existe)
 	str_label.text = str(player_stats.get_total_str())
 	agi_label.text = str(player_stats.get_total_agi())

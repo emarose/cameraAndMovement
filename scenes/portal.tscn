@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cjti4ahfu47rf"]
+
+[ext_resource type="Script" uid="uid://cmq6xnt12nikr" path="res://scripts/portal.gd" id="1_v0xau"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_v0xau"]
+radius = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v0xau"]
+transparency = 1
+albedo_color = Color(0.40392157, 0.69803923, 0.827451, 0.33333334)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1ffj6"]
+material = SubResource("StandardMaterial3D_v0xau")
+top_radius = 1.5
+bottom_radius = 1.5
+height = 0.05
+
+[node name="Portal" type="Area3D" unique_id=2093780239]
+script = ExtResource("1_v0xau")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=723786633]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7481103, 0)
+shape = SubResource("CylinderShape3D_v0xau")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=195364160]
+mesh = SubResource("CylinderMesh_1ffj6")

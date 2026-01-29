@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=6 format=3 uid="uid://ttnxvkfcc5ku"]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://ttnxvkfcc5ku"]
 
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_hky16"]
 [ext_resource type="PackedScene" uid="uid://d1nm1abc21fsy" path="res://assets/models/poring-placeholder-model.tscn" id="1_k4j7c"]
@@ -13,6 +13,7 @@ level = 3
 element = 2
 base_exp = 50
 job_exp = 50
+str_stat = 14
 agi = 3
 vit = 2
 dex = 3

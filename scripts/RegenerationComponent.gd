@@ -9,17 +9,30 @@ var stats: StatsComponent
 var health_comp: HealthComponent
 var sp_comp: SPComponent
 var timer: Timer
+var is_timer_running: bool = false
 
 func setup(s: StatsComponent, h: HealthComponent, sp: SPComponent):
 	stats = s
 	health_comp = h
 	sp_comp = sp
 	
-	timer = Timer.new()
-	add_child(timer)
-	timer.wait_time = 3.0 # El tick estándar de RO
-	timer.timeout.connect(_on_tick)
-	timer.start()
+	# Crear timer solo una vez
+	if timer == null:
+		timer = Timer.new()
+		timer.wait_time = 3.0 # El tick estándar de RO
+		timer.timeout.connect(_on_tick)
+		add_child(timer)
+	
+	# Iniciar timer solo si no está corriendo
+	if not is_timer_running and is_inside_tree():
+		is_timer_running = true
+		# Esperar un frame para que el timer esté completamente en el árbol
+		get_tree().create_timer(0.01).timeout.connect(func(): 
+			if timer and not timer.is_stopped():
+				return
+			if timer:
+				timer.start()
+		)
 
 func _on_tick():
 	if not stats: return
