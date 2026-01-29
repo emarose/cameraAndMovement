@@ -16,6 +16,7 @@ var player_stats = {
 
 var target_spawn_id: String = ""
 var has_saved_data: bool = false
+const SAVE_PATH = "user://savegame.data"
 
 # Guardar datos del jugador antes de cambiar de mapa
 func save_player_data(player):
@@ -136,3 +137,59 @@ func load_player_data(player):
 func change_map(map_path: String, spawn_id: String):
 	target_spawn_id = spawn_id
 	get_tree().change_scene_to_file.call_deferred(map_path)
+
+func save_game_to_disk():
+	# 1. Asegurarnos de tener los datos más recientes del jugador actual
+	# Buscamos al player en el grupo "player" (asegúrate de que tu Player esté en ese grupo)
+	var player_node = get_tree().get_first_node_in_group("player")
+	if player_node:
+		save_player_data(player_node)
+		# Guardamos también en qué mapa está actualmente
+		player_stats["current_map"] = player_node.owner.scene_file_path
+		# Guardamos dónde debería aparecer (cerca de donde guardó)
+		# Nota: Esto es simple. Para algo exacto, necesitarías guardar Vector3 position.
+		player_stats["spawn_id"] = "InitialSpawn" 
+		player_stats["saved_position"] = player_node.global_position
+	# 2. Abrir archivo para escribir
+	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	if file:
+		# 3. Guardar el diccionario completo
+		file.store_var(player_stats)
+		print("[System] Partida guardada exitosamente en: ", SAVE_PATH)
+	else:
+		print("[System] Error al intentar guardar la partida.")
+
+func load_game_from_disk():
+	get_tree().paused = false
+	# 1. Verificar si existe el archivo
+	if not FileAccess.file_exists(SAVE_PATH):
+		print("[System] No existe archivo de guardado.")
+		return false # Retornamos falso para saber que falló
+	
+	# 2. Abrir archivo para leer
+	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
+	if file:
+		# 3. Leer los datos y sobreescribir player_stats
+		player_stats = file.get_var()
+		has_saved_data = true
+		
+		print("[System] Partida cargada. Nivel: ", player_stats["level"])
+		
+		# 4. Cambiar al mapa donde se guardó
+		var map_path = player_stats.get("current_map", "res://scenes/maps/starting_field.tscn")
+		var spawn_id = player_stats.get("spawn_id", "InitialSpawn")
+		
+		# Usamos tu función existente para cambiar de mapa
+		change_map(map_path, spawn_id)
+		return true
+	return false
+
+func _input(event):
+	# Solo para pruebas (luego esto va en un menú UI)
+	if event.is_action_pressed("ui_save"): # Configura esta acción o usa KEY_F5
+		save_game_to_disk()
+		# Feedback visual opcional:
+		get_tree().call_group("hud", "show_message", "Partida Guardada")
+		
+	if event.is_action_pressed("ui_load"): # Configura esta acción o usa KEY_F9
+		load_game_from_disk()

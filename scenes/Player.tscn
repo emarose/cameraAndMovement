@@ -34,7 +34,7 @@ material = SubResource("StandardMaterial3D_aqk2v")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_fgkxt"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_viqgg"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6dkly"]
@@ -90,7 +90,7 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6195009, 0)
-texture = SubResource("ViewportTexture_fgkxt")
+texture = SubResource("ViewportTexture_viqgg")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")

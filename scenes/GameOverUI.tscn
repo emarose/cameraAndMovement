@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://765vokj83tna"]
+[gd_scene format=3 uid="uid://765vokj83tna"]
 
 [ext_resource type="Script" uid="uid://r8mbj7rrcdad" path="res://scripts/revive_button.gd" id="1_ovv0w"]
 
-[node name="GameOverUI" type="CanvasLayer"]
+[node name="GameOverUI" type="CanvasLayer" unique_id=646176011]
 visible = false
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1865232223]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.36862746, 0.36862746, 0.36862746, 0.4627451)
 
-[node name="ReviveButton" type="Button" parent="ColorRect"]
+[node name="ReviveButton" type="Button" parent="ColorRect" unique_id=1054235614]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
