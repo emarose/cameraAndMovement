@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=3 format=3 uid="uid://cudaytyrcelie"]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://cudaytyrcelie"]
 
 [ext_resource type="Texture2D" uid="uid://wqshs34yat4f" path="res://assets/icons/fc811.png" id="1_as8wx"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
@@ -12,5 +12,4 @@ damage_multiplier = 200.0
 cooldown = 3.0
 icon = ExtResource("1_as8wx")
 max_level = 10
-required_job_level = 1
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

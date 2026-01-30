@@ -159,6 +159,9 @@ func _can_drop_data(_at_position, data):
 		# Desde hotbar: siempre permitir swap
 		elif data["source"] == "hotbar":
 			return true
+		# Desde skills: siempre permitir
+		elif data["source"] == "skill":
+			return true
 	return false
 
 # Soltar item en el slot del hotbar
@@ -188,3 +191,11 @@ func _drop_data(_at_position, data):
 		# Llamar al HUD para hacer el swap
 		if parent_hud:
 			parent_hud.on_hotbar_slot_swap(origin_slot_index, slot_index)
+	
+	# CASO 3: Viene del árbol de skills
+	elif data["source"] == "skill":
+		# Llamamos a la función que ya creaste en el HUD
+		var hud = get_tree().get_first_node_in_group("hud")
+		if hud:
+			# slot_index es una variable que tu slot debería tener (0 a 8)
+			hud.on_skill_dropped_to_hotbar(self.slot_index, data["skill"])

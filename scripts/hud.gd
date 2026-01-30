@@ -410,6 +410,34 @@ func on_hotbar_slot_swap(origin_slot_index: int, target_slot_index: int):
 	# Mensaje opcional
 	add_log_message("Slots intercambiados", Color.LIGHT_BLUE)
 
+# Callback para asignar una skill al hotbar
+func on_skill_dropped_to_hotbar(target_slot_index: int, skill: SkillData):
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		return
+	# Buscar si la skill ya está en la hotbar
+	var existing_slot_index = -1
+	for i in range(player.hotbar_content.size()):
+		var content = player.hotbar_content[i]
+		if content is SkillData and content == skill:
+			existing_slot_index = i
+			break
+	
+	if existing_slot_index >= 0:
+		# La skill ya existe en la hotbar: hacer swap
+		if existing_slot_index != target_slot_index:
+			var temp = player.hotbar_content[target_slot_index]
+			player.hotbar_content[target_slot_index] = player.hotbar_content[existing_slot_index]
+			player.hotbar_content[existing_slot_index] = temp
+			player.refresh_hotbar_to_hud()
+			add_log_message("Movida %s a slot %d" % [skill.skill_name, target_slot_index + 1], Color.LIGHT_BLUE)
+		# Si es el mismo slot, no hacer nada
+	else:
+		# La skill NO está en la hotbar: asignarla normalmente
+		player.hotbar_content[target_slot_index] = skill
+		player.refresh_hotbar_to_hud()
+		add_log_message("Asignada %s a slot %d" % [skill.skill_name, target_slot_index + 1], Color.LIGHT_CYAN)
+
 # --- Status Effect UI Handlers ---
 
 func _on_status_effect_started(status_data: StatusEffectData) -> void:
