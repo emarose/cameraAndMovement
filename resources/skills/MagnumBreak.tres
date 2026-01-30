@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=3 format=3 uid="uid://bk1ypdbbuvqcj"]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://bk1ypdbbuvqcj"]
 
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_4h8em"]
 [ext_resource type="Texture2D" uid="uid://dq4mp4g4io5x1" path="res://assets/icons/fc841.png" id="1_50351"]
 
 [resource]
 script = ExtResource("1_4h8em")
+id = "magnum_break"
 skill_name = "Magnum Break"
 type = 2
 sp_cost = 1
@@ -12,4 +13,7 @@ cast_range = 2.0
 damage_multiplier = 5.0
 icon = ExtResource("1_50351")
 aoe_radius = 4.0
+is_interruptible = false
+max_level = 5
+required_job_level = 5
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

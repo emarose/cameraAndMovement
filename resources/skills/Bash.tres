@@ -5,9 +5,12 @@
 
 [resource]
 script = ExtResource("1_ucktl")
+id = "bash"
 skill_name = "Bash"
 sp_cost = 2
 damage_multiplier = 200.0
 cooldown = 3.0
 icon = ExtResource("1_as8wx")
+max_level = 10
+required_job_level = 1
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

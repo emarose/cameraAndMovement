@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://1vfmbcliamnd" path="res://scenes/EquipmentUI.tscn" id="4_7hsmw"]
 [ext_resource type="Script" uid="uid://p2s75lqlwldk" path="res://scripts/dropZone.gd" id="5_nysna"]
 [ext_resource type="PackedScene" uid="uid://culrpsios6lin" path="res://scenes/ShopUI.tscn" id="6_f6qnu"]
+[ext_resource type="PackedScene" uid="uid://c5by8a6qdojnt" path="res://scenes/skill_tree_ui.tscn" id="7_k4w17"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpvh6"]
 bg_color = Color(0.008578151, 0.0038568254, 0.09549191, 1)
@@ -65,12 +66,10 @@ corner_radius_bottom_left = 16
 corner_detail = 16
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4w17"]
-bg_color = Color(0.37323222, 0.30818784, 0.37629285, 0.6784314)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-corner_detail = 16
+bg_color = Color(0.124082975, 0.124082975, 0.1240829, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_twldb"]
+bg_color = Color(0.6, 0.3019608, 0.6, 1)
 
 [node name="HUD" type="CanvasLayer" unique_id=157647800 groups=["hud"]]
 script = ExtResource("1_qpvh6")
@@ -522,6 +521,8 @@ size_flags_horizontal = 4
 [node name="ShopUI" parent="." unique_id=705718006 instance=ExtResource("6_f6qnu")]
 visible = false
 
+[node name="SkillTreeUI" parent="." unique_id=1410101209 instance=ExtResource("7_k4w17")]
+
 [node name="StatusEffectsContainer" type="HBoxContainer" parent="." unique_id=1362824390]
 offset_left = 16.0
 offset_top = 78.0
@@ -604,10 +605,10 @@ theme_override_font_sizes/font_size = 11
 text = "Description or stats"
 
 [node name="ZenyLabel" type="Label" parent="." unique_id=947122153]
-offset_left = 16.0
-offset_top = 84.0
-offset_right = 85.0
-offset_bottom = 107.0
+offset_left = 358.0
+offset_top = 16.0
+offset_right = 427.0
+offset_bottom = 39.0
 text = "999999 Z"
 
 [node name="Level" type="VBoxContainer" parent="." unique_id=638744842]
@@ -639,7 +640,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(150, 10)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_k4w17")
-theme_override_styles/fill = SubResource("StyleBoxFlat_7hsmw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_twldb")
 show_percentage = false
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]

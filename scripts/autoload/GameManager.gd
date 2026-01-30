@@ -17,6 +17,9 @@ var player_stats = {
 	"base_exp": 0,
 	"skill_points": 0,
 	"stat_points_available": 0,
+	# NUEVO: Diccionario para skills aprendidas
+	# Formato: { "bash": 5, "magnum_break": 1 }
+	"learned_skills": {}
 }
 
 signal base_exp_gained(current_exp, next_level_exp)
@@ -237,3 +240,43 @@ func gain_experience(amount: int, is_job: bool = false):
 			req_exp = get_required_exp(player_stats["level"], false)
 		
 		base_exp_gained.emit(player_stats["base_exp"], req_exp)
+func can_learn_skill(skill: SkillData) -> bool:
+	# 1. ¿Tengo puntos de habilidad?
+	if player_stats["skill_points"] <= 0:
+		return false
+	
+	# 2. ¿He llegado al nivel máximo de esta skill?
+	var current_lv = get_skill_level(skill.id)
+	if current_lv >= skill.max_level:
+		return false
+		
+	# 3. ¿Tengo el Job Level necesario?
+	if player_stats["job_level"] < skill.required_job_level:
+		return false
+		
+	# 4. ¿Tengo las skills previas requeridas?
+	for req_skill in skill.required_skills:
+		if get_skill_level(req_skill.id) < 1: # O el nivel que pidas
+			return false
+			
+	return true
+
+# Devuelve el nivel actual (0 si no la tienes)
+func get_skill_level(skill_id: String) -> int:
+	if player_stats["learned_skills"].has(skill_id):
+		return player_stats["learned_skills"][skill_id]
+	return 0
+
+# La función que realmente gasta el punto
+func level_up_skill(skill: SkillData) -> bool:
+	if can_learn_skill(skill):
+		player_stats["skill_points"] -= 1
+		
+		var new_level = get_skill_level(skill.id) + 1
+		player_stats["learned_skills"][skill.id] = new_level
+		
+		print("Skill %s subida a nivel %d" % [skill.id, new_level])
+		return true # Éxito
+	
+	print("No se puede subir la skill")
+	return false # Fallo

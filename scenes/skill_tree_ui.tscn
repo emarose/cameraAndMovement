@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://c5by8a6qdojnt"]
+
+[ext_resource type="PackedScene" uid="uid://dvg5q02mfqa8l" path="res://scenes/SkillButton.tscn" id="1_0u12c"]
+[ext_resource type="Script" uid="uid://d2qkk5q5kt1w7" path="res://scripts/skill_tree_ui.gd" id="1_230bi"]
+[ext_resource type="Resource" uid="uid://bk1ypdbbuvqcj" path="res://resources/skills/MagnumBreak.tres" id="2_230bi"]
+[ext_resource type="Texture2D" uid="uid://wqshs34yat4f" path="res://assets/icons/fc811.png" id="3_3mrnv"]
+[ext_resource type="Resource" uid="uid://cudaytyrcelie" path="res://resources/skills/Bash.tres" id="4_2ikev"]
+[ext_resource type="Texture2D" uid="uid://dq4mp4g4io5x1" path="res://assets/icons/fc841.png" id="5_6iomi"]
+
+[node name="SkillTreeUI" type="Control" unique_id=1410101209]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_230bi")
+
+[node name="Panel" type="Panel" parent="." unique_id=755569857]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelPoints" type="Label" parent="Panel" unique_id=1735371949]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "Skill Points: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel" unique_id=1172964463]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="Panel/ScrollContainer" unique_id=1013846094]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 3
+
+[node name="SkillButton" parent="Panel/ScrollContainer/GridContainer" unique_id=1413863955 instance=ExtResource("1_0u12c")]
+layout_mode = 2
+text = "Bash"
+icon = ExtResource("3_3mrnv")
+skill_data = ExtResource("4_2ikev")
+
+[node name="SkillButton2" parent="Panel/ScrollContainer/GridContainer" unique_id=1768361175 instance=ExtResource("1_0u12c")]
+layout_mode = 2
+text = "Magnum Break"
+icon = ExtResource("5_6iomi")
+skill_data = ExtResource("2_230bi")
+
+[node name="BtnClose" type="Button" parent="Panel" unique_id=585878730]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -100.0
+offset_bottom = 40.0
+grow_horizontal = 0
+text = "Close [ESC]"

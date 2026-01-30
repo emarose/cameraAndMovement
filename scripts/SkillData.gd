@@ -4,6 +4,7 @@ class_name SkillData
 enum SkillType { TARGET, POINT, SELF }
 
 @export_group("Configuración")
+@export var id: String = "" # Identificador único (ej: "bash", "magnum_break")
 @export var skill_name: String = "Habilidad"
 @export var type: SkillType = SkillType.TARGET # Define si es click a enemigo o al suelo
 @export var sp_cost: int = 10
@@ -22,3 +23,8 @@ enum SkillType { TARGET, POINT, SELF }
 @export var cast_time: float = 0.0 # 0.0 = Instantáneo
 @export var is_interruptible: bool = true # Si es true, moverse o recibir daño cancela
 @export var cast_animation_name: String = "cast" # Nombre de la animación a reproducir
+
+@export_group("Árbol de Habilidades")
+@export var max_level: int = 5 # Nivel máximo de la skill
+@export var required_job_level: int = 1 # Job Level requerido para aprender
+@export var required_skills: Array[SkillData] = [] # Skills previas requeridas

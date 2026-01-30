@@ -79,6 +79,7 @@ func _ready():
 		
 	setup_hotbar_ui()
 
+
 func refresh_ui():
 	if not is_inside_tree() or get_tree() == null:
 		return
