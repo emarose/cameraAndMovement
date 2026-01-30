@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://s5vvlnu0pvns" path="res://textures/texture_08.png" id="2_fhsio"]
 [ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="2_ici1b"]
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="4_28kaw"]
+[ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="6_hh4ub"]
+[ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="7_bddx0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ici1b"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -75,3 +77,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.759727, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.034922, 0.016118431, -0.11616039)
 target_map_path = "uid://cb6k7k3xysq84"
 target_spawn_id = "FromField"
+
+[node name="Enemy" parent="." unique_id=1282349523 instance=ExtResource("6_hh4ub")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.364694, 0.7213302, 7.653618)
+data = ExtResource("7_bddx0")

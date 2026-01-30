@@ -308,9 +308,9 @@ func _on_death():
 		stats_comp.is_stunned = true
 	
 	# 3. Dar XP al jugador
-	if player and player.has_node("StatsComponent"):
-		player.get_node("StatsComponent").add_xp(data.base_exp)
-
+	GameManager.gain_experience(data.base_exp, false) # Exp Base from resource
+	GameManager.gain_experience(data.job_exp, true)   # Exp Job from resource
+	
 	# 4. Feedback Visual (Animación)
 	if mesh:
 		var tween = create_tween()

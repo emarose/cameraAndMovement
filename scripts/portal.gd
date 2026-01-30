@@ -9,5 +9,6 @@ func _ready():
 func _on_body_entered(body):
 	if body.is_in_group("player"):
 		print("Portal activado!")
-		GameManager.save_player_data(body)
+		# No need to save_player_data here - GameManager already has all persistent data
+		# and load_player_data() will restore it in the new map
 		GameManager.change_map(target_map_path, target_spawn_id)

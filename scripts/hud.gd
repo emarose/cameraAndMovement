@@ -3,11 +3,14 @@ extends CanvasLayer
 # --- Referencias Principales ---
 @onready var hp_bar = $HealthBar
 @onready var sp_bar = $ManaBar
-@onready var exp_bar = $ExpBar
 @onready var hp_value_label = $HealthBar/HPValueLabel
 @onready var sp_value_label = $ManaBar/SPValueLabel
 
-@onready var level_label = $LevelLabel
+@onready var exp_bar = $Level/BaseExpBar
+@onready var level_label = $Level/BaseLevelLabel
+@onready var job_exp_bar = $Level/JobExpBar
+@onready var job_level_label = $Level/JobLevelLabel
+
 @onready var stats_panel = $StatsPanel
 @onready var points_label = $StatsPanel/VBoxContainer_Base/PointsLabel
 @onready var log_label: RichTextLabel = $PanelContainer/LogLabel
@@ -51,6 +54,22 @@ var current_skill_name: String = ""
 var _pickup_base_pos := Vector2.ZERO
 	
 func _ready():
+	# Connect to GameManager exp signals
+	GameManager.base_exp_gained.connect(_on_xp_changed)
+	GameManager.base_level_up.connect(_on_level_up)
+	GameManager.job_exp_gained.connect(_update_job_bar)
+	GameManager.job_level_up.connect(_on_job_level_up)
+	
+	# Initialize level labels with current values
+	level_label.text = "Base Lvl: " + str(GameManager.player_stats["level"])
+	job_level_label.text = "Job Lvl: " + str(GameManager.player_stats["job_level"])
+	
+	# Initialize bars with current values
+	var base_req = GameManager.get_required_exp(GameManager.player_stats["level"], false)
+	_on_xp_changed(GameManager.player_stats["base_exp"], base_req)
+	var job_req = GameManager.get_required_exp(GameManager.player_stats["job_level"], true)
+	_update_job_bar(GameManager.player_stats["job_exp"], job_req)
+	
 	armed_skill_label.text = ""
 	if pickup_panel:
 		_pickup_base_pos = pickup_panel.position
@@ -79,9 +98,9 @@ func refresh_ui():
 	aspd_val.text = str(player_stats.get_aspd())
 	flee_val.text = str(player_stats.get_flee())
 	# Puntos disponibles
-	points_label.text = "Puntos disponibles: " + str(player_stats.stat_points_available)
+	points_label.text = "Puntos disponibles: " + str(GameManager.player_stats["stat_points_available"])
 	# Control de botones
-	var can_add = player_stats.stat_points_available > 0
+	var can_add = GameManager.player_stats["stat_points_available"] > 0
 	for btn in get_tree().get_nodes_in_group("stat_buttons"):
 		btn.visible = can_add
 
@@ -112,12 +131,15 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,i
 			sp.on_sp_changed.connect(_on_sp_changed)
 	
 	# --- Sincronizar XP y Nivel ---
-	level_label.text = "Lvl: " + str(stats.current_level)
-	_on_xp_changed(stats.current_xp, stats.xp_to_next_level)
-	if not stats.on_xp_changed.is_connected(_on_xp_changed):
-		stats.on_xp_changed.connect(_on_xp_changed)
-	if not stats.on_level_up.is_connected(_on_level_up):
-		stats.on_level_up.connect(_on_level_up)
+	# Levels are now managed by GameManager, so we read from there
+	level_label.text = "Base Lvl: " + str(GameManager.player_stats["level"])
+	job_level_label.text = "Job Lvl: " + str(GameManager.player_stats["job_level"])
+	
+	# Update exp bars with current GameManager values
+	var base_req = GameManager.get_required_exp(GameManager.player_stats["level"], false)
+	_on_xp_changed(GameManager.player_stats["base_exp"], base_req)
+	var job_req = GameManager.get_required_exp(GameManager.player_stats["job_level"], true)
+	_update_job_bar(GameManager.player_stats["job_exp"], job_req)
 		
 	if inventory_window:
 		inventory_window.setup_inventory(inventory_comp)
@@ -210,13 +232,13 @@ func update_armed_skill_info(skill_name: String):
 
 func _modify_stat(stat_name: String):
 	# Ahora player_stats ya no será Nil
-	if player_stats and player_stats.stat_points_available > 0:
+	if GameManager.player_stats["stat_points_available"] > 0:
 		# 1. Aumentar el stat
 		var current_val = player_stats.get(stat_name)
 		player_stats.set(stat_name, current_val + 1)
 		
 		# 2. Restar punto disponible
-		player_stats.stat_points_available -= 1
+		GameManager.player_stats["stat_points_available"] -= 1
 		
 		# 3. Lógica especial para VIT (Actualizar vida máxima)
 		if stat_name == "vit":
@@ -282,14 +304,19 @@ func _on_sp_changed(current_sp, max_sp):
 	sp_bar.value = current_sp
 
 func update_exp_bar():
-	if exp_bar and player_stats:
-		exp_bar.max_value = player_stats.xp_to_next_level
-		exp_bar.value = player_stats.current_xp
+	if exp_bar:
+		var req_exp = GameManager.get_required_exp(GameManager.player_stats["level"], false)
+		exp_bar.max_value = req_exp
+		exp_bar.value = GameManager.player_stats["base_exp"]
 
 # --- Actualización de Ventana de Stats ---
 
 func _on_level_up(new_level):
-	level_label.text = "Nivel: " + str(new_level)
+	level_label.text = "Base Lvl: " + str(new_level)
+	update_exp_bar()
+	refresh_ui()
+func _on_job_level_up(new_level):
+	job_level_label.text = "Job Lvl: " + str(new_level)
 	update_exp_bar()
 	refresh_ui()
 
@@ -512,3 +539,8 @@ func open_inventory_window():
 	
 func close_inventory_window():
 	inventory_window.visible = false
+
+func _update_job_bar(current, total):
+	job_exp_bar.max_value = total
+	job_exp_bar.value = current
+	# Opcional: actualizar texto "Job Lv. 10"

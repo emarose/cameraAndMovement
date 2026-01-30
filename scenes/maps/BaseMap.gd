@@ -35,12 +35,12 @@ func _ready():
 			camera.set_target(player)
 			
 	print("Mapa inicializado. Cámara asignada al jugador.")
-	# 3. Cargar o guardar datos
-	if GameManager.has_saved_data:
-		GameManager.load_player_data(player)
+	# 3. Cargar datos (SIEMPRE, no solo cuando has_saved_data)
+	# Esto asegura que los datos persistentes de GameManager se sincronizan con el nuevo Player
+	GameManager.load_player_data(player)
 
-		# SI venimos de un "Load Game" y tenemos posición guardada
-		if GameManager.player_stats.has("saved_position"):
-			player.global_position = GameManager.player_stats["saved_position"]
-			# Borramos la posición para que si cruza un portal normal, no se use esto
-			GameManager.player_stats.erase("saved_position")
+	# SI venimos de un "Load Game" y tenemos posición guardada
+	if GameManager.player_stats.has("saved_position"):
+		player.global_position = GameManager.player_stats["saved_position"]
+		# Borramos la posición para que si cruza un portal normal, no se use esto
+		GameManager.player_stats.erase("saved_position")

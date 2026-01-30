@@ -22,6 +22,7 @@ enum MovementType { SLIDE, JUMP, SLITHER } # Slide (Normal), Jump (Poring), Slit
 
 @export_group("Progression")
 @export var current_level: int = 1
+@export var current_job_level: int = 1
 @export var current_xp: int = 0
 @export var xp_to_next_level: int = 100
 @export var stat_points_available: int = 0

@@ -8,17 +8,26 @@ var player_stats = {
 	"max_sp": 0,
 	"zeny": 0,
 	"level": 1,
-	"exp": 0,
 	"inventory_slots": [], # Array de {"item_path": String, "quantity": int}
 	"equipped_items": {}, # {slot_type: item_path}
-	"hotbar_content": [] # Array de item_paths
+	"hotbar_content": [], # Array de item_paths
+	"job_name": "Novice",
+	"job_level": 1,
+	"job_exp": 0,
+	"base_exp": 0,
+	"skill_points": 0,
+	"stat_points_available": 0,
 }
+
+signal base_exp_gained(current_exp, next_level_exp)
+signal job_exp_gained(current_exp, next_level_exp)
+signal job_level_up(new_level)
+signal base_level_up(new_level)
 
 var target_spawn_id: String = ""
 var has_saved_data: bool = false
 const SAVE_PATH = "user://savegame.data"
 
-# Guardar datos del jugador antes de cambiar de mapa
 func save_player_data(player):
 	player_stats["current_hp"] = player.health_component.current_health
 	player_stats["max_hp"] = player.health_component.max_health
@@ -26,9 +35,6 @@ func save_player_data(player):
 	player_stats["max_sp"] = player.sp_component.max_sp
 	player_stats["zeny"] = player.inventory_component.zeny
 	player_stats["level"] = player.stats.current_level
-	
-	# Guardar inventario
-	player_stats["inventory_slots"] = []
 	for slot in player.inventory_component.slots:
 		if slot != null and slot.item_data != null:
 			player_stats["inventory_slots"].append({
@@ -64,16 +70,17 @@ func save_player_data(player):
 		player_stats["zeny"], player_stats["inventory_slots"].size()
 	])
 
-# Cargar datos al jugador al entrar a un nuevo mapa
 
 func load_player_data(player):
-	if not has_saved_data:
-		print("[GameManager] No hay datos guardados, usando valores iniciales")
-		return
-
+	# Load player data from GameManager (always, not just when manually saved)
 	# 1. NIVEL Y ZENY (Básico)
 	player.stats.current_level = player_stats["level"]
+	player.stats.current_job_level = player_stats.get("job_level", 1)
 	player.inventory_component.zeny = player_stats["zeny"]
+	
+	# Restaurar progresión (exp y stat points)
+	# Nota: base_exp, job_exp, stat_points_available ya están en GameManager.player_stats
+	# Solo necesitamos emitir las señales para actualizar la UI
 
 	# 2. EQUIPAMIENTO (Prioridad Alta)
 	# Cargamos el equipo antes que la vida para que los bonos de vitalidad/HP se apliquen primero
@@ -110,7 +117,6 @@ func load_player_data(player):
 		player.refresh_hotbar_to_hud()
 
 	# 5. SALUD Y SP (Al final para evitar el clamping)
-	# Ahora que el equipo ya subió el Max HP, podemos poner el current_hp sin que se recorte
 	if player_stats["max_hp"] > 0:
 		player.health_component.max_health = player_stats["max_hp"]
 		player.health_component.current_health = player_stats["current_hp"]
@@ -124,6 +130,12 @@ func load_player_data(player):
 	# 6. ACTUALIZAR UI Y SEÑALES
 	player.inventory_component.inventory_changed.emit()
 	player.inventory_component.zeny_changed.emit(player.inventory_component.zeny)
+	
+	# Emitir señales de experiencia para actualizar las barras de exp en el HUD
+	var base_req = get_required_exp(player_stats["level"], false)
+	var job_req = get_required_exp(player_stats["job_level"], true)
+	base_exp_gained.emit(player_stats["base_exp"], base_req)
+	job_exp_gained.emit(player_stats["job_exp"], job_req)
 	
 	# Forzar actualización de barras en el HUD si existe la función
 	if player.hud and player.hud.has_method("update_hp"):
@@ -140,14 +152,12 @@ func change_map(map_path: String, spawn_id: String):
 
 func save_game_to_disk():
 	# 1. Asegurarnos de tener los datos más recientes del jugador actual
-	# Buscamos al player en el grupo "player" (asegúrate de que tu Player esté en ese grupo)
 	var player_node = get_tree().get_first_node_in_group("player")
 	if player_node:
 		save_player_data(player_node)
 		# Guardamos también en qué mapa está actualmente
 		player_stats["current_map"] = player_node.owner.scene_file_path
 		# Guardamos dónde debería aparecer (cerca de donde guardó)
-		# Nota: Esto es simple. Para algo exacto, necesitarías guardar Vector3 position.
 		player_stats["spawn_id"] = "InitialSpawn" 
 		player_stats["saved_position"] = player_node.global_position
 	# 2. Abrir archivo para escribir
@@ -185,11 +195,45 @@ func load_game_from_disk():
 	return false
 
 func _input(event):
+
 	# Solo para pruebas (luego esto va en un menú UI)
 	if event.is_action_pressed("ui_save"): # Configura esta acción o usa KEY_F5
 		save_game_to_disk()
-		# Feedback visual opcional:
 		get_tree().call_group("hud", "show_message", "Partida Guardada")
 		
 	if event.is_action_pressed("ui_load"): # Configura esta acción o usa KEY_F9
 		load_game_from_disk()
+
+func get_required_exp(level: int, is_job: bool = false) -> int:
+	if is_job:
+		# Ejemplo: El Job pide un poco más que el nivel base
+		return int(40 * pow(level, 1.6)) 
+	else:
+		return int(50 * pow(level, 1.5))
+
+# Función unificada para ganar experiencia
+func gain_experience(amount: int, is_job: bool = false):
+	if is_job:
+		player_stats["job_exp"] += amount
+		var req_exp = get_required_exp(player_stats["job_level"], true)
+		
+		while player_stats["job_exp"] >= req_exp:
+			player_stats["job_exp"] -= req_exp
+			player_stats["job_level"] += 1
+			player_stats["skill_points"] += 1 # Ganamos un punto por nivel
+			job_level_up.emit(player_stats["job_level"])
+			req_exp = get_required_exp(player_stats["job_level"], true)
+		
+		job_exp_gained.emit(player_stats["job_exp"], req_exp)
+	else:
+		player_stats["base_exp"] += amount
+		var req_exp = get_required_exp(player_stats["level"], false)
+		
+		while player_stats["base_exp"] >= req_exp:
+			player_stats["base_exp"] -= req_exp
+			player_stats["level"] += 1
+			player_stats["stat_points_available"] += 1 # Ganamos un punto por nivel
+			base_level_up.emit(player_stats["level"])
+			req_exp = get_required_exp(player_stats["level"], false)
+		
+		base_exp_gained.emit(player_stats["base_exp"], req_exp)

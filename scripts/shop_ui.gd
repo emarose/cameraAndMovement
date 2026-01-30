@@ -81,7 +81,7 @@ func close_shop():
 	self.visible = false
 	player_inventory = null
 	# Opcional: Cerrar inventario al cerrar tienda
-	# get_tree().call_group("hud", "close_inventory_window")
+	get_tree().call_group("hud", "close_inventory_window")
 
 func refresh_sell_list():
 	for child in sell_list_container.get_children():

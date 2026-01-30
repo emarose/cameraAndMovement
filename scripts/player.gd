@@ -53,8 +53,6 @@ var can_attack_player: bool = true
 var is_attacking: bool = false
 
 func _ready():
-	if get_tree().paused:
-		print("¡ALERTA: El árbol sigue pausado!")
 	hotbar_content.resize(HOTBAR_SIZE)
 	# Cargar configuración inicial de hotbar
 	for i in range(HOTBAR_SIZE):

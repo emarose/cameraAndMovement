@@ -10,7 +10,7 @@ class_name EnemyData
 @export var element: StatsComponent.Element = StatsComponent.Element.NEUTRAL
 
 @export var base_exp: int = 10
-@export var job_exp: int = 10 # Por si luego añades sistema de jobs
+@export var job_exp: int = 10 
 
 @export_group("Stats (Base)")
 @export var str_stat: int = 1

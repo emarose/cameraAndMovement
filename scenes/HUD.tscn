@@ -27,22 +27,6 @@ bg_color = Color(3.3841934e-09, 0.070141844, 0.0021222443, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f6qnu"]
 bg_color = Color(0.16116467, 0.3884881, 0.13327041, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1etfg"]
-bg_color = Color(0.15294118, 0.015686275, 0.22745098, 0.6784314)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-corner_detail = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hsmw"]
-bg_color = Color(0.49802518, 0.19211283, 0.7222289, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-corner_detail = 16
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pickup"]
 bg_color = Color(0.1, 0.1, 0.1, 0.8)
 corner_radius_top_left = 8
@@ -63,6 +47,30 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1etfg"]
+bg_color = Color(0.15294118, 0.015686275, 0.22745098, 0.6784314)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hsmw"]
+bg_color = Color(0.5494167, 0.30167305, 0.24412882, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4w17"]
+bg_color = Color(0.37323222, 0.30818784, 0.37629285, 0.6784314)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 16
 
 [node name="HUD" type="CanvasLayer" unique_id=157647800 groups=["hud"]]
 script = ExtResource("1_qpvh6")
@@ -151,39 +159,6 @@ grow_horizontal = 0
 grow_vertical = 2
 text = "100 / 100"
 horizontal_alignment = 2
-
-[node name="LevelLabel" type="Label" parent="." unique_id=794694238]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -58.5
-offset_top = -232.0
-offset_right = 0.5
-offset_bottom = -199.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 16
-text = "Base lvl"
-vertical_alignment = 1
-
-[node name="ExpBar" type="ProgressBar" parent="." unique_id=1947092839]
-custom_minimum_size = Vector2(500, 10)
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -250.0
-offset_top = -201.0
-offset_right = 250.0
-offset_bottom = -191.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/background = SubResource("StyleBoxFlat_1etfg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_7hsmw")
-show_percentage = false
 
 [node name="StatsPanel" type="Panel" parent="." unique_id=266531704]
 visible = false
@@ -608,10 +583,10 @@ Type: SLIDE"
 
 [node name="HotbarTooltip" type="PanelContainer" parent="." unique_id=2052810523]
 visible = false
-offset_left = 100.0
-offset_top = 100.0
-offset_right = 300.0
-offset_bottom = 150.0
+offset_left = 16.0
+offset_top = 304.0
+offset_right = 216.0
+offset_bottom = 354.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_1etfg")
 
 [node name="VBox" type="VBoxContainer" parent="HotbarTooltip" unique_id=1028543674]
@@ -634,6 +609,38 @@ offset_top = 84.0
 offset_right = 85.0
 offset_bottom = 107.0
 text = "999999 Z"
+
+[node name="Level" type="VBoxContainer" parent="." unique_id=638744842]
+offset_left = 16.0
+offset_top = 130.0
+offset_right = 166.0
+offset_bottom = 208.0
+
+[node name="BaseLevelLabel" type="Label" parent="Level" unique_id=794694238]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Base lvl"
+vertical_alignment = 1
+
+[node name="BaseExpBar" type="ProgressBar" parent="Level" unique_id=1947092839]
+custom_minimum_size = Vector2(150, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_1etfg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7hsmw")
+show_percentage = false
+
+[node name="JobLevelLabel" type="Label" parent="Level" unique_id=1717767909]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Job lvl"
+vertical_alignment = 1
+
+[node name="JobExpBar" type="ProgressBar" parent="Level" unique_id=2024236940]
+custom_minimum_size = Vector2(150, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_k4w17")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7hsmw")
+show_percentage = false
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]
