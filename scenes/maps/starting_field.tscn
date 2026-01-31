@@ -6,7 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="2_ici1b"]
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="4_28kaw"]
 [ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="6_hh4ub"]
+[ext_resource type="Script" uid="uid://2hly3rjalyea" path="res://resources/jobs/JobData.gd" id="6_sgx1w"]
 [ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="7_bddx0"]
+[ext_resource type="PackedScene" uid="uid://bjiye15nkrf5y" path="res://scenes/JobChanger.tscn" id="8_jobchanger"]
+[ext_resource type="Resource" path="res://resources/jobs/Swordsman.tres" id="10_swordsman"]
+[ext_resource type="Resource" path="res://resources/jobs/Mage.tres" id="11_mage"]
+[ext_resource type="Resource" path="res://resources/jobs/Archer.tres" id="12_archer"]
+[ext_resource type="Resource" path="res://resources/jobs/Priest.tres" id="13_priest"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ici1b"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -70,6 +76,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.437561, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.759727, 0, 0)
 
 [node name="NPCs" type="Node" parent="." unique_id=443774008]
+
+[node name="JobChanger" parent="NPCs" unique_id=1720238571 instance=ExtResource("8_jobchanger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
+available_jobs = Array[ExtResource("6_sgx1w")]([ExtResource("12_archer"), ExtResource("11_mage"), ExtResource("13_priest"), ExtResource("10_swordsman")])
 
 [node name="Portals" type="Node" parent="." unique_id=333638632]
 

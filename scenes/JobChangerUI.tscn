@@ -1,0 +1,72 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmqe4j5xn3k2p"]
+
+[ext_resource type="Script" path="res://scripts/JobChangerUI.gd" id="1_efgh2"]
+[ext_resource type="PackedScene" uid="uid://d3f5p3x2p3g8n" path="res://scenes/JobSlot.tscn" id="2_jobslot"]
+
+[node name="JobChangerUI" type="Control" groups=["job_changer_ui"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_efgh2")
+job_slot_prefab = ExtResource("2_jobslot")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Elige tu Clase"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="JobsContainer" type="VBoxContainer" parent="Panel/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="InfoPanel" type="PanelContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+
+[node name="InfoVBox" type="VBoxContainer" parent="Panel/VBoxContainer/InfoPanel"]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="Panel/VBoxContainer/InfoPanel/InfoVBox"]
+layout_mode = 2
+text = "Selecciona una clase"
+
+[node name="CloseButton" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Cerrar"
+
+[connection signal="pressed" from="Panel/VBoxContainer/CloseButton" to="." method="close_job_changer"]

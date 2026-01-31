@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="JobData" load_steps=2 format=3 uid="uid://dxc3o4y2vpu6o"]
+
+[ext_resource type="Script" path="res://resources/jobs/JobData.gd" id="1_gpl7k"]
+
+[resource]
+script = ExtResource("1_gpl7k")
+job_name = "Mage"
+job_icon = null
+base_skills = []
+str_bonus = -1
+agi_bonus = 1
+int_bonus = 3
+job_level_bonuses = {
+2: {"int": 1},
+3: {"int": 1},
+4: {"int": 1},
+5: {"int": 1, "agi": 1}
+}

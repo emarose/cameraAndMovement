@@ -213,15 +213,23 @@ func get_required_exp(level: int, is_job: bool = false) -> int:
 # Función unificada para ganar experiencia
 func gain_experience(amount: int, is_job: bool = false):
 	if is_job:
+		# Si ya alcanzaste Job Level 5, no ganas más job_exp
+		if player_stats["job_level"] >= 5:
+			return
+		
 		player_stats["job_exp"] += amount
 		var req_exp = get_required_exp(player_stats["job_level"], true)
 		
-		while player_stats["job_exp"] >= req_exp:
+		while player_stats["job_exp"] >= req_exp and player_stats["job_level"] < 5:
 			player_stats["job_exp"] -= req_exp
 			player_stats["job_level"] += 1
 			player_stats["skill_points"] += 1 # Ganamos un punto por nivel
 			job_level_up.emit(player_stats["job_level"])
 			req_exp = get_required_exp(player_stats["job_level"], true)
+		
+		# Si alcanzaste level 5, limpiar exp restante
+		if player_stats["job_level"] >= 5:
+			player_stats["job_exp"] = 0
 		
 		job_exp_gained.emit(player_stats["job_exp"], req_exp)
 	else:
@@ -274,3 +282,21 @@ func level_up_skill(skill: SkillData) -> bool:
 		return true # Éxito
 	
 	return false # Fallo
+
+func change_job(new_job_resource: JobData):
+	if player_stats["job_level"] >= 5:
+		var player = get_tree().get_first_node_in_group("player")
+		if not player:
+			return
+		
+		player_stats["job_name"] = new_job_resource.job_name
+		player_stats["job_level"] = 1
+		player_stats["job_exp"] = 0
+		
+		# Emitir señal para actualizar UI
+		job_level_up.emit(player_stats["job_level"])
+		
+		print("¡Felicidades! Ahora eres un %s" % new_job_resource.job_name)
+		save_game_to_disk() # Guardar progreso inmediatamente
+	else:
+		print("Debes alcanzar Job Level 5 para cambiar de clase")

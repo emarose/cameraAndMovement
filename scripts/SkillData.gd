@@ -12,7 +12,6 @@ enum SkillType { TARGET, POINT, SELF }
 @export var damage_multiplier: float = 1.0
 @export var cooldown: float = 1.0
 @export var icon: Texture2D
-
 @export var element: StatsComponent.Element = StatsComponent.Element.NEUTRAL
 
 @export_group("Área de Efecto")

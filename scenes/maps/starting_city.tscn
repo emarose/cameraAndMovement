@@ -63,7 +63,7 @@ shape = SubResource("WorldBoundaryShape3D_db6y7")
 [node name="SpawnPoints" type="Node" parent="." unique_id=616821737]
 
 [node name="FromField" type="Marker3D" parent="SpawnPoints" unique_id=684994209]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.371647, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.845758, 0, 0)
 
 [node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=563012788]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.016617, 0, 0)
@@ -76,6 +76,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.889069, 1.1700063, -6.11712
 [node name="Portals" type="Node" parent="." unique_id=1005359231]
 
 [node name="Portal" parent="Portals" unique_id=2093780239 instance=ExtResource("4_db6y7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.945515, 0.016118431, -0.11616039)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.68052, 0.016118431, -0.11616039)
 target_map_path = "uid://fe2tshx87c7v"
 target_spawn_id = "FromCity"

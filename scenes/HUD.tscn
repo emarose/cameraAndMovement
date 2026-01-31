@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://p2s75lqlwldk" path="res://scripts/dropZone.gd" id="5_nysna"]
 [ext_resource type="PackedScene" uid="uid://culrpsios6lin" path="res://scenes/ShopUI.tscn" id="6_f6qnu"]
 [ext_resource type="PackedScene" uid="uid://c5by8a6qdojnt" path="res://scenes/skill_tree_ui.tscn" id="7_k4w17"]
+[ext_resource type="PackedScene" uid="uid://dmqe4j5xn3k2p" path="res://scenes/JobChangerUI.tscn" id="8_jobchangerui"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpvh6"]
 bg_color = Color(0.008578151, 0.0038568254, 0.09549191, 1)
@@ -642,6 +643,8 @@ layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_k4w17")
 theme_override_styles/fill = SubResource("StyleBoxFlat_twldb")
 show_percentage = false
+
+[node name="JobChangerUI" parent="." instance=ExtResource("8_jobchangerui")]
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JobData" load_steps=2 format=3 uid="uid://dk86qxhjclpla"]
+
+[ext_resource type="Script" path="res://resources/jobs/JobData.gd" id="1_gpl7k"]
+
+[resource]
+script = ExtResource("1_gpl7k")
+job_name = "Novice"
+job_icon = null
+base_skills = []
+str_bonus = 0
+agi_bonus = 0
+int_bonus = 0
+job_level_bonuses = {}
