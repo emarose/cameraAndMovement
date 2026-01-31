@@ -71,8 +71,7 @@ func add_item(item: ItemData, amount: int = 1) -> bool:
 			slots[i] = InventorySlot.new(item, amount)
 			inventory_changed.emit()
 			return true
-			
-	print("Inventario lleno!")
+
 	return false
 
 # Función para usar un item desde el índice del inventario

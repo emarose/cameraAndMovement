@@ -13,12 +13,16 @@ func _ready():
 		player.global_position = spawn_node.global_position
 		if player.has_node("NavigationAgent3D"):
 			player.get_node("NavigationAgent3D").set_velocity(Vector3.ZERO)
-	else:
-		print("[BaseMap] Spawn point '%s' no encontrado" % spawn_id)
-	
-	# 2. Esperar a que el jugador termine su inicialización
+
+	# 2. Esperar a que el jugador y todos los hijos terminen su inicialización
 	await get_tree().process_frame
-	# 1. Buscamos la cámara activa de esta escena
+	await get_tree().process_frame
+	
+	# 3. Cargar datos ANTES de configurar la cámara
+	# Esto asegura que los datos persistentes de GameManager se sincronizan con el nuevo Player
+	GameManager.load_player_data(player)
+	
+	# 4. Configurar cámara
 	var camera = get_viewport().get_camera_3d()
 	
 	if camera:
@@ -34,11 +38,6 @@ func _ready():
 		elif camera.has_method("set_target"):
 			camera.set_target(player)
 			
-	print("Mapa inicializado. Cámara asignada al jugador.")
-	# 3. Cargar datos (SIEMPRE, no solo cuando has_saved_data)
-	# Esto asegura que los datos persistentes de GameManager se sincronizan con el nuevo Player
-	GameManager.load_player_data(player)
-
 	# SI venimos de un "Load Game" y tenemos posición guardada
 	if GameManager.player_stats.has("saved_position"):
 		player.global_position = GameManager.player_stats["saved_position"]

@@ -38,6 +38,9 @@ func save_player_data(player):
 	player_stats["max_sp"] = player.sp_component.max_sp
 	player_stats["zeny"] = player.inventory_component.zeny
 	player_stats["level"] = player.stats.current_level
+	
+	# Limpiar y guardar inventario
+	player_stats["inventory_slots"] = []
 	for slot in player.inventory_component.slots:
 		if slot != null and slot.item_data != null:
 			player_stats["inventory_slots"].append({
@@ -58,20 +61,15 @@ func save_player_data(player):
 			else:
 				player_stats["equipped_items"][slot_type] = null
 	
-	# Guardar hotbar
+	# Guardar hotbar (items Y skills)
 	player_stats["hotbar_content"] = []
-	for item in player.hotbar_content:
-		if item != null:
-			player_stats["hotbar_content"].append(item.resource_path)
+	for content in player.hotbar_content:
+		if content != null:
+			player_stats["hotbar_content"].append(content.resource_path)
 		else:
 			player_stats["hotbar_content"].append(null)
 	
 	has_saved_data = true
-	print("[GameManager] Datos guardados: HP=%d/%d, SP=%d/%d, Zeny=%d, Items=%d" % [
-		player_stats["current_hp"], player_stats["max_hp"], 
-		player_stats["current_sp"], player_stats["max_sp"],
-		player_stats["zeny"], player_stats["inventory_slots"].size()
-	])
 
 
 func load_player_data(player):
@@ -113,10 +111,12 @@ func load_player_data(player):
 	# 4. HOTBAR
 	if player_stats["hotbar_content"].size() > 0:
 		for i in range(min(player_stats["hotbar_content"].size(), player.hotbar_content.size())):
-			var item_path = player_stats["hotbar_content"][i]
-			if item_path:
-				var item = load(item_path)
-				player.hotbar_content[i] = item if item else null
+			var resource_path = player_stats["hotbar_content"][i]
+			if resource_path:
+				var resource = load(resource_path)
+				player.hotbar_content[i] = resource if resource else null
+			else:
+				player.hotbar_content[i] = null
 		player.refresh_hotbar_to_hud()
 
 	# 5. SALUD Y SP (Al final para evitar el clamping)
@@ -146,7 +146,6 @@ func load_player_data(player):
 	if player.hud and player.hud.has_method("update_sp"):
 		player.hud.update_sp(player.sp_component.current_sp, player.sp_component.max_sp)
 
-	print("[GameManager] Carga exitosa: HP %d/%d" % [player.health_component.current_health, player.health_component.max_health])
 
 
 func change_map(map_path: String, spawn_id: String):
@@ -168,7 +167,6 @@ func save_game_to_disk():
 	if file:
 		# 3. Guardar el diccionario completo
 		file.store_var(player_stats)
-		print("[System] Partida guardada exitosamente en: ", SAVE_PATH)
 	else:
 		print("[System] Error al intentar guardar la partida.")
 
@@ -185,9 +183,7 @@ func load_game_from_disk():
 		# 3. Leer los datos y sobreescribir player_stats
 		player_stats = file.get_var()
 		has_saved_data = true
-		
-		print("[System] Partida cargada. Nivel: ", player_stats["level"])
-		
+				
 		# 4. Cambiar al mapa donde se guardó
 		var map_path = player_stats.get("current_map", "res://scenes/maps/starting_field.tscn")
 		var spawn_id = player_stats.get("spawn_id", "InitialSpawn")
@@ -275,8 +271,6 @@ func level_up_skill(skill: SkillData) -> bool:
 		var new_level = get_skill_level(skill.id) + 1
 		player_stats["learned_skills"][skill.id] = new_level
 		
-		print("Skill %s subida a nivel %d" % [skill.id, new_level])
 		return true # Éxito
 	
-	print("No se puede subir la skill")
 	return false # Fallo

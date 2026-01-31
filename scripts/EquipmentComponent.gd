@@ -28,7 +28,6 @@ func _ready():
 ## Equipar un ítem desde el inventario
 func equip_item(item: EquipmentItem) -> bool:
 	if not item or item.item_type != ItemData.ItemType.EQUIPMENT:
-		print("Error: El item no es de tipo EQUIPMENT")
 		return false
 	
 	var slot_type = item.slot
@@ -54,7 +53,6 @@ func equip_item(item: EquipmentItem) -> bool:
 	_recalculate_equipment_bonuses()
 	equipment_changed.emit()
 	
-	print("Equipado: %s en slot %s" % [item.item_name, EquipmentItem.EquipmentSlot.keys()[slot_type]])
 	return true
 
 ## Desequipar un ítem de un slot específico
@@ -62,12 +60,10 @@ func unequip_slot(slot_type: EquipmentItem.EquipmentSlot) -> bool:
 	var item = equipped_items[slot_type]
 	
 	if not item:
-		print("No hay nada equipado en ese slot")
 		return false
 	
 	# Verificar si hay espacio en el inventario
 	if inventory_component and not inventory_component.add_item(item, 1):
-		print("No hay espacio en el inventario para desequipar")
 		return false
 	
 	# Remover del slot
@@ -81,7 +77,6 @@ func unequip_slot(slot_type: EquipmentItem.EquipmentSlot) -> bool:
 	_recalculate_equipment_bonuses()
 	equipment_changed.emit()
 	
-	print("Desequipado: %s" % item.item_name)
 	return true
 
 ## Obtener el item equipado en un slot específico
@@ -118,11 +113,6 @@ func _recalculate_equipment_bonuses():
 		"vit": total_vit_bonus
 		}
 		stats_component.set_equipment_bonuses(bonuses)
-
-	
-	print("Bonos recalculados: ATK+%d, DEF+%d, STR+%d, VIT+%d" % [
-		total_atk_bonus, total_def_bonus, total_str_bonus, total_vit_bonus
-	])
 
 ## Obtener resumen de stats totales del equipo
 func get_total_equipment_stats() -> Dictionary:

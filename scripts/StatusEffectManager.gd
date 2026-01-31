@@ -39,12 +39,10 @@ func _process(delta: float):
 
 ## Función principal para recibir un efecto
 func add_effect(data: StatusEffectData):
-	print("add effect", data)
 	if active_effects.has(data.effect_name):
 		# CASO A: Ya lo tengo -> Refrescar duración (Reset timer)
 		active_effects[data.effect_name].remaining = data.duration
 		active_effects[data.effect_name].duration = data.duration
-		print("Efecto refrescado: ", data.effect_name)
 		effect_refreshed.emit(data, data.duration)
 		# Nota: En RO algunos buffs no se refrescan, pero lo estándar hoy día es que sí.
 	else:
@@ -59,7 +57,6 @@ func add_effect(data: StatusEffectData):
 		_apply_effect_logic(data, true) # true = aplicar
 		
 		effect_started.emit(data)
-		print("Efecto iniciado: ", data.effect_name)
 
 ## Función para quitar un efecto forzosamente o por tiempo
 func remove_effect(effect_name: String):
@@ -69,7 +66,6 @@ func remove_effect(effect_name: String):
 		
 		active_effects.erase(effect_name)
 		effect_ended.emit(instance.data)
-		print("Efecto finalizado: ", effect_name)
 
 # --- Lógica Interna de Aplicación ---
 
@@ -91,6 +87,5 @@ func _apply_effect_logic(data: StatusEffectData, is_applying: bool):
 				stats_comp.stats_changed.emit()
 
 func _apply_dot_damage(damage: int):
-	print("Sufriendo daño por veneno/quemadura: ", damage)
 	if health_comp:
 		health_comp.take_damage(damage)

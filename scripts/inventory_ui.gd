@@ -130,12 +130,10 @@ func on_item_from_equipment(_item: EquipmentItem, slot_type: EquipmentItem.Equip
 		else:
 			# Slot destino ocupado: buscar primer slot vacío
 			if not player_inventory.add_item(old_item, 1):
-				print("No hay espacio en el inventario")
 				return
 	else:
 		# Sin slot específico: buscar primer slot vacío
 		if not player_inventory.add_item(old_item, 1):
-			print("No hay espacio en el inventario")
 			return
 	
 	equipment_component._recalculate_equipment_bonuses()
