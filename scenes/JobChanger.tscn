@@ -4,7 +4,11 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h5y4y"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h5y4y"]
+albedo_color = Color(0.67331433, 0.6171171, 0.34920895, 1)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_2sihs"]
+material = SubResource("StandardMaterial3D_h5y4y")
 
 [node name="JobChanger" type="StaticBody3D" unique_id=2086174041]
 script = ExtResource("1_ijkl3")

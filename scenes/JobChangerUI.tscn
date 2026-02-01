@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmqe4j5xn3k2p"]
+[gd_scene format=3 uid="uid://dmqe4j5xn3k2p"]
 
-[ext_resource type="Script" path="res://scripts/JobChangerUI.gd" id="1_efgh2"]
+[ext_resource type="Script" uid="uid://43cay2huvnif" path="res://scripts/JobChangerUI.gd" id="1_efgh2"]
 [ext_resource type="PackedScene" uid="uid://d3f5p3x2p3g8n" path="res://scenes/JobSlot.tscn" id="2_jobslot"]
 
-[node name="JobChangerUI" type="Control" groups=["job_changer_ui"]]
+[node name="JobChangerUI" type="Control" unique_id=1728040454 groups=["job_changer_ui"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,7 +14,7 @@ mouse_filter = 1
 script = ExtResource("1_efgh2")
 job_slot_prefab = ExtResource("2_jobslot")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1858297446]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -25,47 +25,49 @@ offset_left = -400.0
 offset_top = -300.0
 offset_right = 400.0
 offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=409310749]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 offset_left = 20.0
 offset_top = 20.0
 offset_right = -20.0
 offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer" unique_id=963792564]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Elige tu Clase"
+text = "Choose your class"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer" unique_id=2059042636]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="JobsContainer" type="VBoxContainer" parent="Panel/VBoxContainer/ScrollContainer"]
+[node name="JobsContainer" type="VBoxContainer" parent="Panel/VBoxContainer/ScrollContainer" unique_id=1268045184]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
-[node name="InfoPanel" type="PanelContainer" parent="Panel/VBoxContainer"]
-layout_mode = 2
+[node name="InfoPanel" type="PanelContainer" parent="Panel/VBoxContainer" unique_id=1792939325]
 custom_minimum_size = Vector2(0, 80)
-
-[node name="InfoVBox" type="VBoxContainer" parent="Panel/VBoxContainer/InfoPanel"]
 layout_mode = 2
 
-[node name="InfoLabel" type="Label" parent="Panel/VBoxContainer/InfoPanel/InfoVBox"]
+[node name="InfoVBox" type="VBoxContainer" parent="Panel/VBoxContainer/InfoPanel" unique_id=1387109036]
 layout_mode = 2
-text = "Selecciona una clase"
 
-[node name="CloseButton" type="Button" parent="Panel/VBoxContainer"]
+[node name="InfoLabel" type="Label" parent="Panel/VBoxContainer/InfoPanel/InfoVBox" unique_id=773305474]
+layout_mode = 2
+text = "Choose your class"
+
+[node name="CloseButton" type="Button" parent="Panel/VBoxContainer" unique_id=683048286]
 layout_mode = 2
 text = "Cerrar"
 

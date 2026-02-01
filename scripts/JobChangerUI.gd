@@ -13,8 +13,6 @@ var available_jobs: Array[JobData] = []
 @export var job_slot_prefab: PackedScene
 
 func _ready():
-	if close_button:
-		close_button.pressed.connect(close_job_changer)
 	add_to_group("job_changer_ui")
 	self.visible = false
 
@@ -22,10 +20,7 @@ func open_job_changer(p_player: Node3D, jobs: Array[JobData]):
 	self.visible = true
 	player = p_player
 	available_jobs = jobs
-	
-	title_label.text = "Elige tu Clase"
-	
-	# Llenar la lista de trabajos
+		# Llenar la lista de trabajos
 	refresh_jobs_list()
 
 func refresh_jobs_list():
