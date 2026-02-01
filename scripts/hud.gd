@@ -103,13 +103,15 @@ func refresh_ui():
 
 	# Display job bonuses
 	var current_job = GameManager.player_stats.get("current_job_data")
-	if current_job == null:
+	if not current_job is JobData:
 		var job_name = GameManager.player_stats.get("job_name", "Novice")
 		var job_path = "res://resources/jobs/%s.tres" % job_name
-		var loaded_job = load(job_path)
-		if loaded_job:
-			current_job = loaded_job
-			GameManager.player_stats["current_job_data"] = loaded_job
+		if FileAccess.file_exists(job_path):
+			current_job = load(job_path)
+			GameManager.player_stats["current_job_data"] = current_job
+		else:
+			current_job = null
+			
 	if current_job:
 		str_bonus_label.text = "+%d" % current_job.str_bonus if current_job.str_bonus != 0 else ""
 		agi_bonus_label.text = "+%d" % current_job.agi_bonus if current_job.agi_bonus != 0 else ""
@@ -326,7 +328,7 @@ func _on_hp_changed(current_hp):
 	if hp_bar:
 		hp_bar.value = current_hp
 		hp_value_label.text = "%d / %d" % [current_hp, int(hp_bar.max_value)]
-		
+	
 func _on_sp_changed(current_sp, max_sp):
 	sp_bar.max_value = max_sp
 	sp_bar.value = current_sp
@@ -345,6 +347,7 @@ func _on_level_up(new_level):
 	level_label.text = "Base Lvl: " + str(new_level)
 	update_exp_bar()
 	refresh_ui()
+
 func _on_job_level_up(new_level):
 	job_level_label.text = "Job Lvl: " + str(new_level)
 	job_name_label.text = "(" + GameManager.player_stats["job_name"] + ")"

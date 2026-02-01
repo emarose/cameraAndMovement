@@ -150,10 +150,15 @@ func load_player_data(player):
 	if player.hud and player.hud.has_method("update_sp"):
 		player.hud.update_sp(player.sp_component.current_sp, player.sp_component.max_sp)
 	
-	# 7. Initialize current_job_data if null (default to Novice)
+	# 7. Initialize current_job_data if invalid (e.g. after loading from save)
 	var novice_res = load("res://resources/jobs/Novice.tres")
-	if player_stats.get("current_job_data") == null:
-		player_stats["current_job_data"] = novice_res
+	if not player_stats.get("current_job_data") is JobData:
+		var job_name = player_stats.get("job_name", "Novice")
+		var job_path = "res://resources/jobs/%s.tres" % job_name
+		if FileAccess.file_exists(job_path):
+			player_stats["current_job_data"] = load(job_path)
+		else:
+			player_stats["current_job_data"] = novice_res
 	
 	# Ensure current job and novice are in unlocked_jobs
 	var novice_path = novice_res.resource_path
