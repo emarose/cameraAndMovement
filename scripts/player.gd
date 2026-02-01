@@ -51,6 +51,7 @@ var is_stunned = false
 var current_target_enemy = null
 var can_attack_player: bool = true
 var is_attacking: bool = false
+var hovered_enemy = null
 
 func _ready():
 	hotbar_content.resize(HOTBAR_SIZE)
@@ -274,19 +275,21 @@ func get_mouse_world_interaction():
 func _stop_movement():
 	nav_agent.target_position = global_position
 	velocity = Vector3.ZERO
-
 func update_cursor():
 	var result = get_mouse_world_interaction()
 	var hovering_enemy = false
 	var hovering_npc = false 
 	var within_skill_range = false
-	var hovered_enemy = null
 
 	if result and result.has("collider"):
 		var col = result.collider
 		if is_instance_valid(col):
+		
+
 			# 1. Detectar Enemigos
+			
 			if col.is_in_group("enemy"):
+				
 				hovering_enemy = true
 				hovered_enemy = col
 				if skill_component and skill_component.armed_skill:

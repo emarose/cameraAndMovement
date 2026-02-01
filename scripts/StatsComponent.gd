@@ -109,7 +109,7 @@ func get_move_speed_modifier() -> float:
 	return max(0.2, 1.0 + status_bonuses.speed_percent)
 	
 func get_def() -> int:
-	return get_total_vit() + (current_level / 2) + equipment_bonuses.def + status_bonuses.def
+	return get_total_vit() + int(float(current_level) / 2.0) + equipment_bonuses.def + status_bonuses.def
 
 func get_hit() -> int:
 	return current_level + get_total_dex() + status_bonuses.hit

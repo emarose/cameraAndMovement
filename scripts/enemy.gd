@@ -25,6 +25,7 @@ var is_aggroed: bool = false
 # Variables nuevas para el control de tiempo
 var move_timer: float = 0.0
 var is_jumping: bool = false
+var navigation_ready: bool = false
 
 func _ready():
 	if not data:
@@ -67,12 +68,17 @@ func _ready():
 	nav_agent.velocity_computed.connect(_on_velocity_computed)
 	# Ajustamos el radio de evitación al tamaño del enemigo (puedes ajustarlo en el inspector)
 	nav_agent.avoidance_enabled = true 
+
+	# Esperar a que el mapa de navegación termine su primera sincronización
+	await _wait_for_navigation_ready()
 	
 	if data.type == StatsComponent.Size.LARGE:
 		scale = Vector3(2.0, 2.0, 2.0)
 
 func _physics_process(delta):
 	if (stats_comp and stats_comp.is_stunned) or is_dead or not data: return
+	if not navigation_ready:
+		return
 
 	if player and !player.is_dead:
 		var dist_to_player = global_position.distance_to(player.global_position)
@@ -185,6 +191,8 @@ func patrol_logic(delta):
 				_move_logic(wander_target, data.move_spd * data.movement_speed_factor)
 	
 func _pick_next_wander_point():
+	if not navigation_ready:
+		return
 	var random_direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
 	var random_dist = randf_range(data.wander_radius * 0.3, data.wander_radius)
 	var target_pos = home_position + (random_direction * random_dist)
@@ -192,6 +200,15 @@ func _pick_next_wander_point():
 	var map = get_world_3d().navigation_map
 	wander_target = NavigationServer3D.map_get_closest_point(map, target_pos)
 	nav_agent.target_position = wander_target
+
+func _wait_for_navigation_ready() -> void:
+	var map = get_world_3d().navigation_map
+	if map == RID():
+		return
+	# Espera hasta que el mapa tenga al menos una iteración válida
+	while NavigationServer3D.map_get_iteration_id(map) == 0:
+		await NavigationServer3D.map_changed
+	navigation_ready = true
 
 func chase_target(target_pos: Vector3, movement_speed: float):
 	nav_agent.target_position = target_pos

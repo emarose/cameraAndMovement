@@ -36,9 +36,12 @@ extends CanvasLayer
 @onready var luk_label = $StatsPanel/VBoxContainer_Base/LukRow/Value
 
 # --- Referencias a los Bonos de Job ---
-@onready var str_bonus_label = $StatsPanel/VBoxContainer_Base/StrRow/BonusLabel
-@onready var agi_bonus_label = $StatsPanel/VBoxContainer_Base/AgiRow/BonusLabel
-@onready var int_bonus_label = $StatsPanel/VBoxContainer_Base/IntRow/BonusLabel
+@onready var str_bonus_label: Label = $StatsPanel/VBoxContainer_Base/StrRow/BonusLabel
+@onready var agi_bonus_label: Label = $StatsPanel/VBoxContainer_Base/AgiRow/BonusLabel
+@onready var int_bonus_label: Label = $StatsPanel/VBoxContainer_Base/IntRow/BonusLabel
+@onready var vit_bonus_label: Label = $StatsPanel/VBoxContainer_Base/VitRow/BonusLabel
+@onready var luk_bonus_label: Label = $StatsPanel/VBoxContainer_Base/LukRow/BonusLabel
+@onready var dex_bonus_label: Label = $StatsPanel/VBoxContainer_Base/DexRow/BonusLabel
 
 @onready var atk_val = $StatsPanel/VBoxContainer_Derived/AtkRow/Value
 @onready var matk_val = $StatsPanel/VBoxContainer_Derived/MatkRow/Value

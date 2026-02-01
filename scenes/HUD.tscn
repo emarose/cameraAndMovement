@@ -169,7 +169,7 @@ anchor_right = 0.014
 anchor_bottom = 0.55200005
 offset_left = -0.12800026
 offset_top = -178.69604
-offset_right = 380.6
+offset_right = 523.12
 offset_bottom = 162.30396
 grow_horizontal = 2
 grow_vertical = 2
@@ -180,7 +180,7 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_top = -152.5
-offset_right = 222.0
+offset_right = 316.0
 offset_bottom = 152.5
 grow_vertical = 2
 theme_override_constants/separation = 16
@@ -258,6 +258,11 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
 
+[node name="BonusLabel" type="Label" parent="StatsPanel/VBoxContainer_Base/VitRow" unique_id=1117939756]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+
 [node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/VitRow" unique_id=1970002606 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
@@ -307,6 +312,11 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
 
+[node name="BonusLabel" type="Label" parent="StatsPanel/VBoxContainer_Base/DexRow" unique_id=1770849426]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+
 [node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/DexRow" unique_id=302757956 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
@@ -329,6 +339,11 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
 
+[node name="BonusLabel" type="Label" parent="StatsPanel/VBoxContainer_Base/LukRow" unique_id=152865318]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+
 [node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/LukRow" unique_id=251258081 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
@@ -342,7 +357,7 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -67.0
+offset_left = -148.0
 offset_top = -79.0
 offset_bottom = 79.0
 grow_horizontal = 0
@@ -539,6 +554,8 @@ visible = false
 
 [node name="SkillTreeUI" parent="." unique_id=1410101209 instance=ExtResource("7_k4w17")]
 
+[node name="JobChangerUI" parent="." unique_id=237121793 instance=ExtResource("8_jobchangerui")]
+
 [node name="StatusEffectsContainer" type="HBoxContainer" parent="." unique_id=1362824390]
 offset_left = 16.0
 offset_top = 78.0
@@ -664,8 +681,6 @@ layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_k4w17")
 theme_override_styles/fill = SubResource("StyleBoxFlat_twldb")
 show_percentage = false
-
-[node name="JobChangerUI" parent="." unique_id=237121793 instance=ExtResource("8_jobchangerui")]
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]
