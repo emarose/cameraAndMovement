@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="JobData" load_steps=2 format=3 uid="uid://bvhh6lp4tuj3n"]
+[gd_resource type="Resource" script_class="JobData" load_steps=4 format=3 uid="uid://bvhh6lp4tuj3n"]
 
 [ext_resource type="Script" path="res://resources/jobs/JobData.gd" id="1_gpl7k"]
+[ext_resource type="Resource" uid="uid://d9v1a2s3d4f5g" path="res://resources/skills/DoubleStrafe.tres" id="2_double"]
+[ext_resource type="Resource" uid="uid://e1r2t3y4u5i6o" path="res://resources/skills/ArrowShower.tres" id="3_shower"]
 
 [resource]
 script = ExtResource("1_gpl7k")
 job_name = "Archer"
 job_icon = null
-base_skills = []
+base_skills = Array[Resource("res://scripts/SkillData.gd")]([ExtResource("2_double"), ExtResource("3_shower")])
 str_bonus = 1
 agi_bonus = 3
 int_bonus = 0

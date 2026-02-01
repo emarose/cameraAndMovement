@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="JobData" load_steps=2 format=3 uid="uid://dk86qxhjclpla"]
+[gd_resource type="Resource" script_class="JobData" load_steps=3 format=3 uid="uid://dk86qxhjclpla"]
 
 [ext_resource type="Script" path="res://resources/jobs/JobData.gd" id="1_gpl7k"]
+[ext_resource type="Resource" uid="uid://c8n2p3q5r1s2t" path="res://resources/skills/FirstAid.tres" id="2_skill"]
 
 [resource]
 script = ExtResource("1_gpl7k")
 job_name = "Novice"
 job_icon = null
-base_skills = []
+base_skills = Array[Resource("res://scripts/SkillData.gd")]([ExtResource("2_skill")])
 str_bonus = 0
 agi_bonus = 0
 int_bonus = 0

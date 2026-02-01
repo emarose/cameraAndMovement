@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://h4r5t6y7u8i9o"]
+
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
+
+[resource]
+script = ExtResource("1_ucktl")
+id = "thunderstorm"
+skill_name = "Thunderstorm"
+type = 1
+sp_cost = 25
+aoe_radius = 5.0
+damage_multiplier = 4.0
+cast_time = 2.0
+cooldown = 2.5
+element = 4
+max_level = 10
+required_job_level = 10
+metadata/_custom_type_script = "uid://bdyuj5busdh3c"

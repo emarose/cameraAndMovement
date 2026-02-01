@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://g3r4t5y6u7i8o"]
+
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
+
+[resource]
+script = ExtResource("1_ucktl")
+id = "blessing"
+skill_name = "Blessing"
+type = 2
+sp_cost = 20
+damage_multiplier = 0.0
+cooldown = 3.0
+max_level = 10
+required_job_level = 5
+metadata/_custom_type_script = "uid://bdyuj5busdh3c"

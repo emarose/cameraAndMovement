@@ -16,6 +16,7 @@ var player_stats = {
 	"job_exp": 0,
 	"is_transcended": false,
 	"current_job_data": null, # Reference to the current JobData resource
+	"unlocked_jobs": [], # Array of resource paths to JobData
 	"base_exp": 0,
 	"skill_points": 0,
 	"stat_points_available": 0,
@@ -28,6 +29,7 @@ signal base_exp_gained(current_exp, next_level_exp)
 signal job_exp_gained(current_exp, next_level_exp)
 signal job_level_up(new_level)
 signal base_level_up(new_level)
+signal job_changed(new_job_name)
 
 var target_spawn_id: String = ""
 var has_saved_data: bool = false
@@ -149,8 +151,20 @@ func load_player_data(player):
 		player.hud.update_sp(player.sp_component.current_sp, player.sp_component.max_sp)
 	
 	# 7. Initialize current_job_data if null (default to Novice)
+	var novice_res = load("res://resources/jobs/Novice.tres")
 	if player_stats.get("current_job_data") == null:
-		player_stats["current_job_data"] = load("res://resources/jobs/Novice.tres")
+		player_stats["current_job_data"] = novice_res
+	
+	# Ensure current job and novice are in unlocked_jobs
+	var novice_path = novice_res.resource_path
+	if not player_stats["unlocked_jobs"].has(novice_path):
+		player_stats["unlocked_jobs"].append(novice_path)
+	
+	if player_stats["current_job_data"] and not player_stats["unlocked_jobs"].has(player_stats["current_job_data"].resource_path):
+		player_stats["unlocked_jobs"].append(player_stats["current_job_data"].resource_path)
+
+	# Emit job changed signal to ensure UI components (like SkillTree) refresh
+	job_changed.emit(player_stats["job_name"])
 
 
 
@@ -313,8 +327,13 @@ func change_job(new_job_resource: JobData):
 	player_stats["job_exp"] = 0
 	player_stats["current_job_data"] = new_job_resource
 	
+	# Add to unlocked jobs if not already there
+	if not player_stats["unlocked_jobs"].has(new_job_resource.resource_path):
+		player_stats["unlocked_jobs"].append(new_job_resource.resource_path)
+	
 	# Emitir señal para actualizar UI
 	job_level_up.emit(player_stats["job_level"])
+	job_changed.emit(player_stats["job_name"])
 	
 	print("¡Felicidades! Ahora eres un %s" % new_job_resource.job_name)
 	save_game_to_disk() # Guardar progreso inmediatamente

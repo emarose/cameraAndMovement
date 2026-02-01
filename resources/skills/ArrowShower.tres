@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://e1r2t3y4u5i6o"]
+
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
+
+[resource]
+script = ExtResource("1_ucktl")
+id = "arrow_shower"
+skill_name = "Arrow Shower"
+type = 1
+sp_cost = 15
+aoe_radius = 4.0
+damage_multiplier = 1.8
+cooldown = 1.0
+max_level = 10
+required_job_level = 5
+metadata/_custom_type_script = "uid://bdyuj5busdh3c"

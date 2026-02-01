@@ -14,6 +14,9 @@ func update_ui():
 	var can_learn = GameManager.can_learn_skill(skill_data)
 	
 	text = "%s [%d/%d]" % [skill_data.skill_name, current_level, skill_data.max_level]
+	if skill_data.icon:
+		icon = skill_data.icon
+		expand_icon = true
 	
 	# NO USAR disabled = true, ya que bloquea el Drag & Drop.
 	# En su lugar, modulamos el color y controlamos el clic manualmente.
