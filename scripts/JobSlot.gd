@@ -23,3 +23,12 @@ func set_data(job: JobData):
 		bonus_label.modulate = Color.CYAN  # INT bonus
 	else:
 		bonus_label.modulate = Color.WHITE  # Neutral (Novice)
+
+func set_selected(is_selected: bool):
+	if is_selected:
+		# Brighten and add border effect for selected
+		self_modulate = Color(1.3, 1.3, 1.0, 1.0)  # Slightly golden tint
+		custom_minimum_size = Vector2(300, 80)
+	else:
+		self_modulate = Color.WHITE
+		custom_minimum_size = Vector2(300, 80)

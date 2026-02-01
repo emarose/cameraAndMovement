@@ -10,6 +10,7 @@ extends CanvasLayer
 @onready var level_label = $Level/BaseLevelLabel
 @onready var job_exp_bar = $Level/JobExpBar
 @onready var job_level_label = $Level/JobLevelLabel
+@onready var job_name_label = $Level/JobNameLabel
 
 @onready var stats_panel = $StatsPanel
 @onready var points_label = $StatsPanel/VBoxContainer_Base/PointsLabel
@@ -33,6 +34,11 @@ extends CanvasLayer
 @onready var int_label = $StatsPanel/VBoxContainer_Base/IntRow/Value
 @onready var dex_label = $StatsPanel/VBoxContainer_Base/DexRow/Value
 @onready var luk_label = $StatsPanel/VBoxContainer_Base/LukRow/Value
+
+# --- Referencias a los Bonos de Job ---
+@onready var str_bonus_label = $StatsPanel/VBoxContainer_Base/StrRow/BonusLabel
+@onready var agi_bonus_label = $StatsPanel/VBoxContainer_Base/AgiRow/BonusLabel
+@onready var int_bonus_label = $StatsPanel/VBoxContainer_Base/IntRow/BonusLabel
 
 @onready var atk_val = $StatsPanel/VBoxContainer_Derived/AtkRow/Value
 @onready var matk_val = $StatsPanel/VBoxContainer_Derived/MatkRow/Value
@@ -59,10 +65,11 @@ func _ready():
 	GameManager.base_level_up.connect(_on_level_up)
 	GameManager.job_exp_gained.connect(_update_job_bar)
 	GameManager.job_level_up.connect(_on_job_level_up)
-	
+
 	# Initialize level labels with current values
 	level_label.text = "Base Lvl: " + str(GameManager.player_stats["level"])
 	job_level_label.text = "Job Lvl: " + str(GameManager.player_stats["job_level"])
+	job_name_label.text = "(" + GameManager.player_stats["job_name"] + ")"
 	
 	# Initialize bars with current values
 	var base_req = GameManager.get_required_exp(GameManager.player_stats["level"], false)
@@ -90,6 +97,24 @@ func refresh_ui():
 	int_label.text = str(player_stats.get_total_int())
 	vit_label.text = str(player_stats.get_total_vit())
 	luk_label.text = str(player_stats.get_total_luk())
+
+	# Display job bonuses
+	var current_job = GameManager.player_stats.get("current_job_data")
+	if current_job == null:
+		var job_name = GameManager.player_stats.get("job_name", "Novice")
+		var job_path = "res://resources/jobs/%s.tres" % job_name
+		var loaded_job = load(job_path)
+		if loaded_job:
+			current_job = loaded_job
+			GameManager.player_stats["current_job_data"] = loaded_job
+	if current_job:
+		str_bonus_label.text = "+%d" % current_job.str_bonus if current_job.str_bonus != 0 else ""
+		agi_bonus_label.text = "+%d" % current_job.agi_bonus if current_job.agi_bonus != 0 else ""
+		int_bonus_label.text = "+%d" % current_job.int_bonus if current_job.int_bonus != 0 else ""
+	else:
+		str_bonus_label.text = ""
+		agi_bonus_label.text = ""
+		int_bonus_label.text = ""
 
 	# Stats Derivados
 	atk_val.text = str(player_stats.get_atk())
@@ -135,6 +160,7 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,i
 	# Levels are now managed by GameManager, so we read from there
 	level_label.text = "Base Lvl: " + str(GameManager.player_stats["level"])
 	job_level_label.text = "Job Lvl: " + str(GameManager.player_stats["job_level"])
+	job_name_label.text = "(" + GameManager.player_stats["job_name"] + ")"
 	
 	# Update exp bars with current GameManager values
 	var base_req = GameManager.get_required_exp(GameManager.player_stats["level"], false)
@@ -318,6 +344,7 @@ func _on_level_up(new_level):
 	refresh_ui()
 func _on_job_level_up(new_level):
 	job_level_label.text = "Job Lvl: " + str(new_level)
+	job_name_label.text = "(" + GameManager.player_stats["job_name"] + ")"
 	update_exp_bar()
 	refresh_ui()
 

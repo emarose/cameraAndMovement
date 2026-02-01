@@ -91,3 +91,11 @@ target_spawn_id = "FromField"
 [node name="Enemy" parent="." unique_id=1282349523 instance=ExtResource("6_hh4ub")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.364694, 0.7213302, 7.653618)
 data = ExtResource("7_bddx0")
+
+[node name="Enemy2" parent="." unique_id=1340775201 instance=ExtResource("6_hh4ub")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.364694, 0.7213302, 4.81654)
+data = ExtResource("7_bddx0")
+
+[node name="Enemy3" parent="." unique_id=134449731 instance=ExtResource("6_hh4ub")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.364694, 0.7213302, 13.317089)
+data = ExtResource("7_bddx0")

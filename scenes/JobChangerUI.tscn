@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://dmqe4j5xn3k2p"]
 
 [ext_resource type="Script" uid="uid://43cay2huvnif" path="res://scripts/JobChangerUI.gd" id="1_efgh2"]
-[ext_resource type="PackedScene" uid="uid://d3f5p3x2p3g8n" path="res://scenes/JobSlot.tscn" id="2_jobslot"]
 
 [node name="JobChangerUI" type="Control" unique_id=1728040454 groups=["job_changer_ui"]]
 layout_mode = 3
@@ -12,7 +11,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_efgh2")
-job_slot_prefab = ExtResource("2_jobslot")
 
 [node name="Panel" type="Panel" parent="." unique_id=1858297446]
 layout_mode = 1

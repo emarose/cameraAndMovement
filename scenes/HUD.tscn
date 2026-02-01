@@ -204,6 +204,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "1"
 
+[node name="BonusLabel" type="Label" parent="StatsPanel/VBoxContainer_Base/StrRow" unique_id=217402211]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+
 [node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/StrRow" unique_id=1937725186 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
 layout_mode = 2
@@ -225,6 +230,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
+
+[node name="BonusLabel" type="Label" parent="StatsPanel/VBoxContainer_Base/AgiRow" unique_id=1384279984]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 16
 
 [node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/AgiRow" unique_id=118630988 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
@@ -269,6 +279,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "1"
+
+[node name="BonusLabel" type="Label" parent="StatsPanel/VBoxContainer_Base/IntRow" unique_id=617721824]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 16
 
 [node name="AddButton" type="Button" parent="StatsPanel/VBoxContainer_Base/IntRow" unique_id=750985661 groups=["stat_buttons"]]
 custom_minimum_size = Vector2(48, 28)
@@ -637,6 +652,12 @@ theme_override_font_sizes/font_size = 16
 text = "Job lvl"
 vertical_alignment = 1
 
+[node name="JobNameLabel" type="Label" parent="Level" unique_id=2140614231]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "(Novice)"
+vertical_alignment = 1
+
 [node name="JobExpBar" type="ProgressBar" parent="Level" unique_id=2024236940]
 custom_minimum_size = Vector2(150, 10)
 layout_mode = 2
@@ -644,7 +665,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_k4w17")
 theme_override_styles/fill = SubResource("StyleBoxFlat_twldb")
 show_percentage = false
 
-[node name="JobChangerUI" parent="." instance=ExtResource("8_jobchangerui")]
+[node name="JobChangerUI" parent="." unique_id=237121793 instance=ExtResource("8_jobchangerui")]
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]

@@ -14,6 +14,8 @@ var player_stats = {
 	"job_name": "Novice",
 	"job_level": 1,
 	"job_exp": 0,
+	"is_transcended": false,
+	"current_job_data": null, # Reference to the current JobData resource
 	"base_exp": 0,
 	"skill_points": 0,
 	"stat_points_available": 0,
@@ -145,6 +147,10 @@ func load_player_data(player):
 		player.hud.update_hp(player.health_component.current_health, player.health_component.max_health)
 	if player.hud and player.hud.has_method("update_sp"):
 		player.hud.update_sp(player.sp_component.current_sp, player.sp_component.max_sp)
+	
+	# 7. Initialize current_job_data if null (default to Novice)
+	if player_stats.get("current_job_data") == null:
+		player_stats["current_job_data"] = load("res://resources/jobs/Novice.tres")
 
 
 
@@ -284,19 +290,31 @@ func level_up_skill(skill: SkillData) -> bool:
 	return false # Fallo
 
 func change_job(new_job_resource: JobData):
-	if player_stats["job_level"] >= 5:
-		var player = get_tree().get_first_node_in_group("player")
-		if not player:
+	# Check if player can transcend (reached job level 40, unless first job change from Novice)
+	if player_stats["job_name"] == "Novice":
+		# First job change requires job level 5
+		if player_stats["job_level"] < 5:
+			print("Debes alcanzar Job Level 5 para elegir tu primera clase")
 			return
-		
-		player_stats["job_name"] = new_job_resource.job_name
-		player_stats["job_level"] = 1
-		player_stats["job_exp"] = 0
-		
-		# Emitir señal para actualizar UI
-		job_level_up.emit(player_stats["job_level"])
-		
-		print("¡Felicidades! Ahora eres un %s" % new_job_resource.job_name)
-		save_game_to_disk() # Guardar progreso inmediatamente
+		player_stats["is_transcended"] = true
 	else:
-		print("Debes alcanzar Job Level 5 para cambiar de clase")
+		# Subsequent job changes require job level 40 (transcendence requirement)
+		if player_stats["job_level"] < 40:
+			print("Debes alcanzar Job Level 40 para transcender a %s" % new_job_resource.job_name)
+			return
+		player_stats["is_transcended"] = true
+	
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		return
+	
+	player_stats["job_name"] = new_job_resource.job_name
+	player_stats["job_level"] = 1
+	player_stats["job_exp"] = 0
+	player_stats["current_job_data"] = new_job_resource
+	
+	# Emitir señal para actualizar UI
+	job_level_up.emit(player_stats["job_level"])
+	
+	print("¡Felicidades! Ahora eres un %s" % new_job_resource.job_name)
+	save_game_to_disk() # Guardar progreso inmediatamente
