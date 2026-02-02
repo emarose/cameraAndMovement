@@ -15,7 +15,7 @@ var player_stats = {
 	"job_level": 1,
 	"job_exp": 0,
 	"is_transcended": false,
-	"current_job_data": null, # Reference to the current JobData resource
+	"current_job_path": "res://resources/jobs/Novice.tres",
 	"unlocked_jobs": [], # Array of resource paths to JobData
 	"base_exp": 0,
 	"skill_points": 0,
@@ -30,6 +30,8 @@ signal job_exp_gained(current_exp, next_level_exp)
 signal job_level_up(new_level)
 signal base_level_up(new_level)
 signal job_changed(new_job_name)
+
+var current_job_data: JobData # Runtime reference to active job resource
 
 var target_spawn_id: String = ""
 var has_saved_data: bool = false
@@ -72,6 +74,10 @@ func save_player_data(player):
 			player_stats["hotbar_content"].append(content.resource_path)
 		else:
 			player_stats["hotbar_content"].append(null)
+	
+	# Guardar el path del job actual
+	if current_job_data:
+		player_stats["current_job_path"] = current_job_data.resource_path
 	
 	has_saved_data = true
 
@@ -151,22 +157,20 @@ func load_player_data(player):
 		player.hud.update_sp(player.sp_component.current_sp, player.sp_component.max_sp)
 	
 	# 7. Initialize current_job_data if invalid (e.g. after loading from save)
-	var novice_res = load("res://resources/jobs/Novice.tres")
-	if not player_stats.get("current_job_data") is JobData:
-		var job_name = player_stats.get("job_name", "Novice")
-		var job_path = "res://resources/jobs/%s.tres" % job_name
-		if FileAccess.file_exists(job_path):
-			player_stats["current_job_data"] = load(job_path)
-		else:
-			player_stats["current_job_data"] = novice_res
+	# Now using current_job_path from dictionary to populate runtime reference
+	var path = player_stats.get("current_job_path", "res://resources/jobs/Novice.tres")
+	if FileAccess.file_exists(path):
+		current_job_data = load(path)
+	else:
+		current_job_data = load("res://resources/jobs/Novice.tres")
 	
 	# Ensure current job and novice are in unlocked_jobs
-	var novice_path = novice_res.resource_path
+	var novice_path = "res://resources/jobs/Novice.tres"
 	if not player_stats["unlocked_jobs"].has(novice_path):
 		player_stats["unlocked_jobs"].append(novice_path)
 	
-	if player_stats["current_job_data"] and not player_stats["unlocked_jobs"].has(player_stats["current_job_data"].resource_path):
-		player_stats["unlocked_jobs"].append(player_stats["current_job_data"].resource_path)
+	if current_job_data and not player_stats["unlocked_jobs"].has(current_job_data.resource_path):
+		player_stats["unlocked_jobs"].append(current_job_data.resource_path)
 
 	# Emit job changed signal to ensure UI components (like SkillTree) refresh
 	job_changed.emit(player_stats["job_name"])
@@ -237,23 +241,26 @@ func get_required_exp(level: int, is_job: bool = false) -> int:
 
 # Función unificada para ganar experiencia
 func gain_experience(amount: int, is_job: bool = false):
+	var job_res = get_current_job_data()
+	var max_jl = job_res.max_job_level if job_res else 5
+	
 	if is_job:
-		# Si ya alcanzaste Job Level 5, no ganas más job_exp
-		if player_stats["job_level"] >= 5:
+		# Si ya alcanzaste el nivel máximo, no ganas más job_exp
+		if player_stats["job_level"] >= max_jl:
 			return
 		
 		player_stats["job_exp"] += amount
 		var req_exp = get_required_exp(player_stats["job_level"], true)
 		
-		while player_stats["job_exp"] >= req_exp and player_stats["job_level"] < 5:
+		while player_stats["job_exp"] >= req_exp and player_stats["job_level"] < max_jl:
 			player_stats["job_exp"] -= req_exp
 			player_stats["job_level"] += 1
 			player_stats["skill_points"] += 1 # Ganamos un punto por nivel
 			job_level_up.emit(player_stats["job_level"])
 			req_exp = get_required_exp(player_stats["job_level"], true)
 		
-		# Si alcanzaste level 5, limpiar exp restante
-		if player_stats["job_level"] >= 5:
+		# Si alcanzaste max level, limpiar exp restante
+		if player_stats["job_level"] >= max_jl:
 			player_stats["job_exp"] = 0
 		
 		job_exp_gained.emit(player_stats["job_exp"], req_exp)
@@ -296,6 +303,16 @@ func get_skill_level(skill_id: String) -> int:
 		return player_stats["learned_skills"][skill_id]
 	return 0
 
+func get_current_job_data() -> JobData:
+	if current_job_data:
+		return current_job_data
+	
+	# Fallback/Lazy load
+	var path = player_stats.get("current_job_path", "res://resources/jobs/Novice.tres")
+	if FileAccess.file_exists(path):
+		current_job_data = load(path)
+	return current_job_data
+
 # La función que realmente gasta el punto
 func level_up_skill(skill: SkillData) -> bool:
 	if can_learn_skill(skill):
@@ -330,7 +347,8 @@ func change_job(new_job_resource: JobData):
 	player_stats["job_name"] = new_job_resource.job_name
 	player_stats["job_level"] = 1
 	player_stats["job_exp"] = 0
-	player_stats["current_job_data"] = new_job_resource
+	player_stats["current_job_path"] = new_job_resource.resource_path
+	current_job_data = new_job_resource
 	
 	# Add to unlocked jobs if not already there
 	if not player_stats["unlocked_jobs"].has(new_job_resource.resource_path):

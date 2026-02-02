@@ -8,6 +8,7 @@
 script = ExtResource("1_gpl7k")
 job_name = "Archer"
 job_icon = null
+max_job_level = 50
 base_skills = Array[Resource("res://scripts/SkillData.gd")]([ExtResource("2_double"), ExtResource("3_shower")])
 str_bonus = 1
 agi_bonus = 3

@@ -102,15 +102,7 @@ func refresh_ui():
 	luk_label.text = str(player_stats.get_total_luk())
 
 	# Display job bonuses
-	var current_job = GameManager.player_stats.get("current_job_data")
-	if not current_job is JobData:
-		var job_name = GameManager.player_stats.get("job_name", "Novice")
-		var job_path = "res://resources/jobs/%s.tres" % job_name
-		if FileAccess.file_exists(job_path):
-			current_job = load(job_path)
-			GameManager.player_stats["current_job_data"] = current_job
-		else:
-			current_job = null
+	var current_job = GameManager.get_current_job_data()
 			
 	if current_job:
 		str_bonus_label.text = "+%d" % current_job.str_bonus if current_job.str_bonus != 0 else ""
@@ -118,6 +110,8 @@ func refresh_ui():
 		int_bonus_label.text = "+%d" % current_job.int_bonus if current_job.int_bonus != 0 else ""
 	else:
 		str_bonus_label.text = ""
+		agi_bonus_label.text = ""
+		int_bonus_label.text = ""
 		agi_bonus_label.text = ""
 		int_bonus_label.text = ""
 

@@ -3,6 +3,7 @@ class_name JobData
 
 @export var job_name: String = "Novice"
 @export var job_icon: Texture2D
+@export var max_job_level: int = 50
 @export var base_skills: Array[SkillData] = [] # Skills que pertenecen a este Job
 
 # Bonos automáticos al elegir el Job

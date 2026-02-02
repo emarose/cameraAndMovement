@@ -10,6 +10,7 @@
 script = ExtResource("1_gpl7k")
 job_name = "Mage"
 job_icon = null
+max_job_level = 50
 base_skills = Array[Resource("res://scripts/SkillData.gd")]([ExtResource("2_fireball"), ExtResource("3_fireblast"), ExtResource("4_iceblast"), ExtResource("5_thunder")])
 str_bonus = -1
 agi_bonus = 1
