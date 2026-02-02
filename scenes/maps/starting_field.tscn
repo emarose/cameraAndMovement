@@ -9,10 +9,10 @@
 [ext_resource type="Script" uid="uid://2hly3rjalyea" path="res://resources/jobs/JobData.gd" id="6_sgx1w"]
 [ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="7_bddx0"]
 [ext_resource type="PackedScene" uid="uid://bjiye15nkrf5y" path="res://scenes/JobChanger.tscn" id="8_jobchanger"]
-[ext_resource type="Resource" path="res://resources/jobs/Swordsman.tres" id="10_swordsman"]
-[ext_resource type="Resource" path="res://resources/jobs/Mage.tres" id="11_mage"]
-[ext_resource type="Resource" path="res://resources/jobs/Archer.tres" id="12_archer"]
-[ext_resource type="Resource" path="res://resources/jobs/Priest.tres" id="13_priest"]
+[ext_resource type="Resource" uid="uid://c06vbdq3xfb2c" path="res://resources/jobs/Swordsman.tres" id="10_swordsman"]
+[ext_resource type="Resource" uid="uid://dxc3o4y2vpu6o" path="res://resources/jobs/Mage.tres" id="11_mage"]
+[ext_resource type="Resource" uid="uid://bvhh6lp4tuj3n" path="res://resources/jobs/Archer.tres" id="12_archer"]
+[ext_resource type="Resource" uid="uid://bl2v8d5j8xfpn" path="res://resources/jobs/Priest.tres" id="13_priest"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ici1b"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -46,7 +46,7 @@ script = ExtResource("1_28kaw")
 [node name="HUD" parent="." unique_id=157647800 instance=ExtResource("2_28kaw")]
 
 [node name="Player" parent="." unique_id=1179624594 instance=ExtResource("2_ici1b")]
-transform = Transform3D(0.07405631, 0, 0.9972541, 0, 1, 0, -0.9972541, 0, 0.07405631, 9.380917, 0.99112606, -0.46658134)
+transform = Transform3D(0.07405631, 0, 0.9972541, 0, 1, 0, -0.9972541, 0, 0.07405631, 9.381, 1, -0.467)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1789178224]
 environment = SubResource("Environment_w5gqo")
@@ -70,7 +70,7 @@ shape = SubResource("WorldBoundaryShape3D_f7ls3")
 [node name="SpawnPoints" type="Node" parent="." unique_id=1834783217]
 
 [node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=1442950470]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.437561, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.438, 1, 0)
 
 [node name="FromCity" type="Marker3D" parent="SpawnPoints" unique_id=1396455640]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.759727, 0, 0)
@@ -89,7 +89,7 @@ target_map_path = "uid://cb6k7k3xysq84"
 target_spawn_id = "FromField"
 
 [node name="Enemy" parent="." unique_id=1282349523 instance=ExtResource("6_hh4ub")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.364694, 0.7213302, 7.653618)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.365, 1, 7.654)
 data = ExtResource("7_bddx0")
 
 [node name="Enemy2" parent="." unique_id=1340775201 instance=ExtResource("6_hh4ub")]

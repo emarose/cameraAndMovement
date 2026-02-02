@@ -41,7 +41,7 @@ script = ExtResource("1_mxm8b")
 [node name="HUD" parent="." unique_id=157647800 instance=ExtResource("1_ll35h")]
 
 [node name="Player" parent="." unique_id=1179624594 instance=ExtResource("2_d23ae")]
-transform = Transform3D(0.037899435, 0, 0.99928164, 0, 1, 0, -0.99928164, 0, 0.037899435, 10.666683, 0.99112606, -0.09869194)
+transform = Transform3D(0.037899435, 0, 0.99928164, 0, 1, 0, -0.99928164, 0, 0.037899435, 10.667, 1, -0.099)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1075299080]
 environment = SubResource("Environment_ll35h")
@@ -68,7 +68,7 @@ shape = SubResource("WorldBoundaryShape3D_db6y7")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.845758, 0, 0)
 
 [node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=563012788]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.016617, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.017, 1, 0)
 
 [node name="Enemy" parent="SpawnPoints" unique_id=2141093219 instance=ExtResource("5_47fml")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0350628, 0.7126661, 5.035455)
@@ -77,7 +77,7 @@ data = ExtResource("6_47fml")
 [node name="NPCs" type="Node" parent="." unique_id=1746226566]
 
 [node name="NPC_Merchant" parent="NPCs" unique_id=753893127 instance=ExtResource("4_d23ae")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.889069, 1.1700063, -6.117123)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.889, 1, -6.117)
 
 [node name="Portals" type="Node" parent="." unique_id=1005359231]
 

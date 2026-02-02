@@ -46,6 +46,12 @@ func _ready():
 		player.global_position = GameManager.player_stats["saved_position"]
 		# Borramos la posición para que si cruza un portal normal, no se use esto
 		GameManager.player_stats.erase("saved_position")
+	
+	# 5. Refrescar el cursor al entrar al mapa
+	if player.has_method("update_cursor"):
+		# Forzar reset del cursor state para evitar que persista el cursor anterior
+		player._last_cursor_state = ""
+		player.update_cursor()
 
 func _setup_click_indicator():
 	# Instanciar la escena del ClickIndicator

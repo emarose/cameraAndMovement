@@ -8,6 +8,7 @@ extends CharacterBody3D
 @export var cursor_attack: Texture2D
 @export var cursor_skill: Texture2D
 @export var cursor_talk: Texture2D
+@export var cursor_door: Texture2D
 
 @export_group("Hotbar Inicial")
 # Usamos un Array exportado para configurar las skills iniciales desde el editor
@@ -279,6 +280,7 @@ func update_cursor():
 	var result = get_mouse_world_interaction()
 	var hovering_enemy = false
 	var hovering_npc = false 
+	var hovering_portal = false
 	var within_skill_range = false
 
 	if result and result.has("collider"):
@@ -297,7 +299,11 @@ func update_cursor():
 					if global_position.distance_to(col.global_position) <= cast_range:
 						within_skill_range = true
 			
-			# 2. Detectar NPCs (NUEVO)
+			# 2. Detectar Portales (NUEVO)
+			elif col.is_in_group("portal"):
+				hovering_portal = true
+			
+			# 3. Detectar NPCs
 			elif col.has_method("interact"):
 				hovering_npc = true
 
@@ -309,6 +315,10 @@ func update_cursor():
 
 	if hovering_enemy:
 		_set_cursor(cursor_attack, "attack", Vector2(16,16))
+		return
+	
+	if hovering_portal:
+		_set_cursor(cursor_door, "door", Vector2(16,16))
 		return
 		
 	if hovering_npc: # <--- NUEVO ESTADO

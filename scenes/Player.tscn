@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bqulpcolhat05" path="res://effects/LevelUpEffect.tscn" id="5_6eyey"]
 [ext_resource type="PackedScene" uid="uid://765vokj83tna" path="res://scenes/GameOverUI.tscn" id="5_qu4a1"]
 [ext_resource type="Texture2D" uid="uid://c25ftshpwa0jg" path="res://assets/icons/message_dots_square.png" id="5_viqgg"]
+[ext_resource type="Texture2D" uid="uid://b1syjwa46sik" path="res://assets/icons/cursor_door.png" id="6_b8lor"]
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="8_khinc"]
 [ext_resource type="Resource" uid="uid://cr7luqw1pv8n" path="res://resources/items/AntiFormlessAxe.tres" id="9_b8lor"]
 [ext_resource type="Resource" uid="uid://n2amivuv4ep7" path="res://resources/items/FireSword.tres" id="10_6e537"]
@@ -30,7 +31,7 @@ material = SubResource("StandardMaterial3D_aqk2v")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_gv3ic"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_6e537"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6dkly"]
@@ -58,6 +59,7 @@ cursor_default = ExtResource("2_lkdrv")
 cursor_attack = ExtResource("3_p7iby")
 cursor_skill = ExtResource("4_p07f3")
 cursor_talk = ExtResource("5_viqgg")
+cursor_door = ExtResource("6_b8lor")
 initial_inventory = Array[Resource]([ExtResource("9_b8lor"), ExtResource("10_6e537"), ExtResource("11_p07f3")])
 floating_text_scene = ExtResource("4_bruh7")
 level_up_effect_scene = ExtResource("5_6eyey")
@@ -86,7 +88,7 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6195009, 0)
-texture = SubResource("ViewportTexture_gv3ic")
+texture = SubResource("ViewportTexture_6e537")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")
