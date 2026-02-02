@@ -57,6 +57,11 @@ func _initialize_grid():
 func _on_slot_clicked(index: int, button: int):
 	# Si es click derecho (MOUSE_BUTTON_RIGHT), usamos el ítem
 	if button == MOUSE_BUTTON_RIGHT:
+		# Bloquear si la tienda está abierta
+		var shop_ui = get_tree().get_first_node_in_group("shop_ui")
+		if shop_ui and shop_ui.visible:
+			return
+		
 		var player = get_tree().get_first_node_in_group("player")
 		player_inventory.use_item_at_index(index, player)
 		

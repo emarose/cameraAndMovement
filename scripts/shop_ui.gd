@@ -29,6 +29,7 @@ func _unhandled_input(event: InputEvent):
 				get_viewport().set_input_as_handled()
 				return
 
+
 func open_shop(inventory: InventoryComponent, shop_items: Array[ItemData]):
 	self.visible = true
 	player_inventory = inventory
@@ -49,7 +50,6 @@ func refresh_buy_list():
 	# 2. Llenar con la lista que nos pasó el NPC
 	for item in current_shop_items:
 		if item == null: continue
-		
 		var ui_slot = shop_slot_prefab.instantiate()
 		buy_list_container.add_child(ui_slot)
 		
@@ -80,18 +80,30 @@ func _on_item_buy_pressed(item: ItemData):
 func close_shop():
 	self.visible = false
 	player_inventory = null
-	# Opcional: Cerrar inventario al cerrar tienda
 	get_tree().call_group("hud", "close_inventory_window")
 
 func refresh_sell_list():
 	for child in sell_list_container.get_children():
 		child.queue_free()
 	
+	# Obtener EquipmentComponent para chequear items equipados
+	var equipment_component = player_inventory.get_parent().get_node_or_null("EquipmentComponent") if player_inventory else null
+	
 	for i in range(player_inventory.slots.size()):
 		var slot_data = player_inventory.slots[i] # Ojo con el nombre para no confundir con la UI
 		if slot_data == null: continue
 		
 		var item = slot_data.item_data
+		
+		# Filtrar items equipados
+		var is_equipped = false
+		if equipment_component and item is EquipmentItem:
+			for slot in equipment_component.equipped_items.values():
+				if slot == item:
+					is_equipped = true
+					break
+		if is_equipped: continue
+		
 		if item.sell_price <= 0: continue
 		
 		# USANDO EL PREFAB
