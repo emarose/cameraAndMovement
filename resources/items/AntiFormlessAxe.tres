@@ -11,6 +11,5 @@ icon = ExtResource("1_emeqq")
 description = "Axe to damage formless"
 item_type = 1
 stackable = false
-race_bonus = 2
-race_bonus_value = 0.5
+race_bonus_value = 0.8
 metadata/_custom_type_script = "uid://7bv08dur57x"

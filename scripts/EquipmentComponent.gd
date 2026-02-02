@@ -41,15 +41,8 @@ func equip_item(item: EquipmentItem) -> bool:
 	# Si había un item viejo, lo devolvemos al inventario
 	if old_item and inventory_component:
 		inventory_component.add_item(old_item, 1)
-		
-	# Agregar elemento
-	stats_component.weapon_element = item.weapon_element
 	
-	# Bonus por raza
-	if item.race_bonus_value > 0:
-		stats_component.race_dmg_boosts[item.race_bonus] = item.race_bonus_value
-		
-	# Recalculamos stats
+	# Recalculamos stats (incluyendo limpiar bonos previos y aplicar nuevos)
 	_recalculate_equipment_bonuses()
 	equipment_changed.emit()
 	
@@ -69,11 +62,7 @@ func unequip_slot(slot_type: EquipmentItem.EquipmentSlot) -> bool:
 	# Remover del slot
 	equipped_items[slot_type] = null
 	
-	# Limpiar bonos de elemento si era un arma
-	if slot_type == EquipmentItem.EquipmentSlot.WEAPON:
-		stats_component.weapon_element = StatsComponent.Element.NEUTRAL
-	
-	# Recalcular stats
+	# Recalcular stats (esto limpiará todos los bonos y los recalculará)
 	_recalculate_equipment_bonuses()
 	equipment_changed.emit()
 	
@@ -88,11 +77,14 @@ func _recalculate_equipment_bonuses():
 	if not stats_component:
 		return
 	
-	# Resetear bonos de equipo (asumiendo que tendremos variables para esto en StatsComponent)
+	# Resetear bonos de equipo (diccionarios)
 	var total_atk_bonus = 0
 	var total_def_bonus = 0
 	var total_str_bonus = 0
 	var total_vit_bonus = 0
+	
+	# También limpiar los bonos de raza/elemento antes de recalcular
+	stats_component.clear_equipment_bonuses()
 	
 	# Sumar bonos de cada item equipado
 	for slot_type in equipped_items:
@@ -102,9 +94,20 @@ func _recalculate_equipment_bonuses():
 			total_def_bonus += item.def_bonus
 			total_str_bonus += item.str_bonus
 			total_vit_bonus += item.vit_bonus
+			
+			# Aplicar bono de raza si existe
+			if item.race_bonus_value > 0:
+				stats_component.apply_equipment_race_bonus(item.race_bonus, item.race_bonus_value)
+			
+			# Aplicar bono de elemento si existe
+			if item.element_bonus_value > 0:
+				stats_component.apply_equipment_element_bonus(item.element_bonus, item.element_bonus_value)
+			
+			# Aplicar elemento del arma (último arma equipada)
+			if slot_type == EquipmentItem.EquipmentSlot.WEAPON:
+				stats_component.weapon_element = item.weapon_element
 	
-	# Aplicar los bonos al StatsComponent
-	# NOTA: Necesitaremos agregar estas variables en StatsComponent
+	# Aplicar los bonos de stats al StatsComponent
 	if stats_component.has_method("set_equipment_bonuses"):
 		var bonuses = {
 		"atk": total_atk_bonus,

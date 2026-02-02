@@ -284,11 +284,15 @@ func _play_attack_anim():
 	tween.tween_property(mesh, "position:z", 0.2, 0.1).as_relative()
 
 func _on_take_damage(new_health):
+
 	if health_bar:
 		health_bar.update_bar(new_health, health_comp.max_health)
 	if stats_comp:
 		stats_comp.is_stunned = true
 	velocity = Vector3.ZERO
+	
+	# Activar aggro al recibir daño (ataque del jugador desde distancia)
+	is_aggroed = true
 	
 	if mesh: # Solo crear el tween SI tenemos el mesh listo
 		var tween = create_tween()

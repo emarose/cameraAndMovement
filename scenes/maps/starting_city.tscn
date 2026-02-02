@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://s5vvlnu0pvns" path="res://textures/texture_08.png" id="3_mxm8b"]
 [ext_resource type="PackedScene" uid="uid://cxmfbmm1ex652" path="res://scenes/NPC_Merchant.tscn" id="4_d23ae"]
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="4_db6y7"]
+[ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="5_47fml"]
+[ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="6_47fml"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_stf4j"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -67,6 +69,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.845758, 0, 0)
 
 [node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=563012788]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.016617, 0, 0)
+
+[node name="Enemy" parent="SpawnPoints" unique_id=2141093219 instance=ExtResource("5_47fml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0350628, 0.7126661, 5.035455)
+data = ExtResource("6_47fml")
 
 [node name="NPCs" type="Node" parent="." unique_id=1746226566]
 

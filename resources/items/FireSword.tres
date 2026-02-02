@@ -12,4 +12,5 @@ description = "A fire sword that should do more damage to earth type monsters, i
 item_type = 1
 stackable = false
 weapon_element = 3
+race_bonus = 2
 metadata/_custom_type_script = "uid://7bv08dur57x"

@@ -57,11 +57,14 @@ func calculate_final_damage(base_dmg: int, atk_stats: StatsComponent, target_sta
 	var multiplier = get_element_modifier(final_atk_elem, target_stats.element)
 	
 	# 3. Aplicar Bonos Pasivos (Cards/Equipamiento)
-	# Bono contra Raza
+	# Bono contra Raza (suma al multiplicador)
 	multiplier += atk_stats.get_race_modifier(target_stats.race)
 	
 	# Bono contra Elemento del enemigo (Ej: +20% daño a enemigos de Agua)
 	multiplier += atk_stats.get_element_modifier_bonus(target_stats.element)
 	
 	# 4. Cálculo final
-	return int(base_dmg * multiplier)
+	# El multiplicador ya contiene el factor elemental + bonos pasivos
+	# Aplicamos el multiplicador al daño base
+	var final_damage = int(base_dmg * multiplier)
+	return max(1, final_damage)
