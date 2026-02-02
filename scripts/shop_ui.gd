@@ -15,19 +15,15 @@ func _ready():
 	if close_button:
 		close_button.pressed.connect(close_shop)
 	self.visible = false
-
-func _unhandled_input(event: InputEvent):
-	# Si la tienda está visible, consumir eventos de scroll para evitar zoom de cámara
-	if not self.visible:
-		return
 	
-	# Detectar scroll del mouse
+	# Asegurar que la UI bloquee eventos del mouse
+	mouse_filter = Control.MOUSE_FILTER_STOP
+
+func _gui_input(event: InputEvent):
+	# Consumir eventos de scroll cuando el mouse está sobre la UI
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			# Verificar si el mouse está sobre la tienda
-			if get_global_rect().has_point(get_global_mouse_position()):
-				get_viewport().set_input_as_handled()
-				return
+			accept_event()  # Consumir el evento aquí para que no llegue a la cámara
 
 
 func open_shop(inventory: InventoryComponent, shop_items: Array[ItemData]):

@@ -189,12 +189,9 @@ func _process_continuous_interaction():
 	var result = get_mouse_world_interaction()
 	if not result: return
 	
-	# ¿El objeto golpeado es un NPC/Area3D con el método interact?
+	# Nota: No interactuar con NPCs durante click sostenido.
+	# La interacción se maneja solo en el click directo (pressed).
 	if result.collider.has_method("interact"):
-		# Stop movement when interacting with NPC
-		_stop_movement()
-		result.collider.interact(self) # Le pasamos 'self' (el jugador) al NPC
-		is_clicking = false # Stop clicking to prevent continuous movement
 		return
 	
 	if result.collider.is_in_group("enemy"):
@@ -228,8 +225,11 @@ func handle_click_interaction():
 		
 		# Check if clicking on NPC
 		if collider.has_method("interact"):
-			# Don't spawn effect or set movement for NPCs
+			# Interactuar solo con click directo
 			current_target_enemy = null
+			_stop_movement()
+			collider.interact(self)
+			is_clicking = false
 			return
 		
 		var is_attack_click = collider.is_in_group("enemy")
@@ -416,7 +416,7 @@ func _on_player_damaged(damage_amount: int):
 	tween.tween_property(self, "position:y", position.y + 0.05, 0.05)
 	tween.chain().tween_property(self, "position:y", position.y, 0.1)
 
-	await get_tree().create_timer(0.2).timeout # Tiempo de flinch
+	await get_tree().create_timer(0.1).timeout # Tiempo de flinch
 	if stats:
 		stats.is_stunned = false
 
