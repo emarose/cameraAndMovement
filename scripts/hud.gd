@@ -159,7 +159,7 @@ func setup_hud(stats: StatsComponent, health: HealthComponent, sp: SPComponent,i
 	# Levels are now managed by GameManager, so we read from there
 	level_label.text = "Base Lvl: " + str(GameManager.player_stats["level"])
 	job_level_label.text = "Job Lvl: " + str(GameManager.player_stats["job_level"])
-	job_name_label.text = "(" + GameManager.player_stats["job_name"] + ")"
+	job_name_label.text =  GameManager.player_stats["job_name"]
 	
 	# Update exp bars with current GameManager values
 	var base_req = GameManager.get_required_exp(GameManager.player_stats["level"], false)

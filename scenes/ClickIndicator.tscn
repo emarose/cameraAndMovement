@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://c8jy5qn7xwpdo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_click"]
+transparency = 1
+albedo_color = Color(0.74050033, 0.6085594, 0.26434618, 1)
+emission_enabled = true
+
+[sub_resource type="TorusMesh" id="TorusMesh_click"]
+material = SubResource("StandardMaterial3D_click")
+inner_radius = 0.854
+outer_radius = 0.934
+
+[node name="ClickIndicator" type="MeshInstance3D"]
+visible = false
+mesh = SubResource("TorusMesh_click")

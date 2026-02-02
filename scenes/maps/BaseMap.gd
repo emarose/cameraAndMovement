@@ -3,6 +3,9 @@ extends Node3D
 @onready var player = $Player
 
 func _ready():
+	# 0. Crear y configurar el click indicator
+	_setup_click_indicator()
+	
 	# 1. Posicionar jugador en spawn point
 	var spawn_id = GameManager.target_spawn_id
 	if spawn_id == "":
@@ -43,3 +46,17 @@ func _ready():
 		player.global_position = GameManager.player_stats["saved_position"]
 		# Borramos la posición para que si cruza un portal normal, no se use esto
 		GameManager.player_stats.erase("saved_position")
+
+func _setup_click_indicator():
+	# Instanciar la escena del ClickIndicator
+	var click_indicator_scene = preload("res://scenes/ClickIndicator.tscn")
+	var click_indicator = click_indicator_scene.instantiate()
+	
+	# Añadir al mapa
+	add_child(click_indicator)
+	
+	# Asignar automáticamente al player
+	if player:
+		player.click_indicator_path = click_indicator.get_path()
+		# Refrescar la referencia del player al click_indicator
+		player.click_indicator = click_indicator

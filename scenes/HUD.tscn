@@ -669,18 +669,19 @@ theme_override_font_sizes/font_size = 16
 text = "Job lvl"
 vertical_alignment = 1
 
-[node name="JobNameLabel" type="Label" parent="Level" unique_id=2140614231]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "(Novice)"
-vertical_alignment = 1
-
 [node name="JobExpBar" type="ProgressBar" parent="Level" unique_id=2024236940]
 custom_minimum_size = Vector2(150, 10)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_k4w17")
 theme_override_styles/fill = SubResource("StyleBoxFlat_twldb")
 show_percentage = false
+
+[node name="JobNameLabel" type="Label" parent="Level" unique_id=2140614231]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "(Novice)"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]
