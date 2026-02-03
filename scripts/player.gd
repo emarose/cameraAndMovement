@@ -77,6 +77,9 @@ func _ready():
 	if sp_component:
 		sp_component.setup(stats) 
 	
+	# Recalcular bonos pasivos al iniciar (importante después de cargar partida)
+	GameManager.recalculate_all_passive_bonuses()
+	
 	inventory.inventory_changed.connect(_on_inventory_changed)
 	
 	# 3. Configurar HUD pasando los 3 componentes

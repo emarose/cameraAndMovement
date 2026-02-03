@@ -27,3 +27,12 @@ enum SkillType { TARGET, POINT, SELF }
 @export var max_level: int = 5 # Nivel máximo de la skill
 @export var required_job_level: int = 1 # Job Level requerido para aprender
 @export var required_skills: Array[SkillData] = [] # Skills previas requeridas
+
+@export_group("Pasivas")
+@export var is_passive: bool = false # Si es true, no necesita armarse ni ejecutarse
+@export var passive_stat_bonuses: Dictionary = {} # Ej: {"str": 2, "agi": 1, "atk": 5} por nivel
+@export var passive_hp_regen: int = 0 # HP regenerado por nivel cada tick
+@export var passive_sp_regen: int = 0 # SP regenerado por nivel cada tick
+@export var passive_hp_regen_percent: float = 0.0 # Modificador % (0.1 = +10% por nivel)
+@export var passive_sp_regen_percent: float = 0.0 # Modificador % (0.1 = +10% por nivel)
+@export var passive_speed_bonus: float = 0.0 # Velocidad % (0.05 = +5% por nivel)

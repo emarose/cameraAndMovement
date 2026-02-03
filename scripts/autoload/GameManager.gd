@@ -212,8 +212,11 @@ func load_game_from_disk():
 		# 3. Leer los datos y sobreescribir player_stats
 		player_stats = file.get_var()
 		has_saved_data = true
+		
+		# 4. Recalcular bonos pasivos después de cargar (se hace después de cambiar de mapa)
+		# Se llamará en _ready del player
 				
-		# 4. Cambiar al mapa donde se guardó
+		# 5. Cambiar al mapa donde se guardó
 		var map_path = player_stats.get("current_map", "res://scenes/maps/southern_fields.tscn")
 		var spawn_id = player_stats.get("spawn_id", "InitialSpawn")
 		
@@ -321,9 +324,76 @@ func level_up_skill(skill: SkillData) -> bool:
 		var new_level = get_skill_level(skill.id) + 1
 		player_stats["learned_skills"][skill.id] = new_level
 		
+		# Si es una skill pasiva, aplicar sus bonos inmediatamente
+		if skill.is_passive:
+			_apply_passive_skill_bonuses(skill, 1) # +1 nivel
+		
 		return true # Éxito
 	
 	return false # Fallo
+
+# Aplicar los bonos de una skill pasiva
+func _apply_passive_skill_bonuses(skill: SkillData, levels_gained: int):
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.has_node("StatsComponent"):
+		return
+	
+	var stats = player.get_node("StatsComponent") as StatsComponent
+	
+	# Aplicar bonos de stats (multiplicados por el nivel ganado)
+	for stat_name in skill.passive_stat_bonuses:
+		var bonus_per_level = skill.passive_stat_bonuses[stat_name]
+		stats.apply_passive_skill_bonus(stat_name, bonus_per_level * levels_gained)
+	
+	# Aplicar bonos de regeneración
+	if skill.passive_hp_regen > 0:
+		stats.hp_regen_flat_bonus += skill.passive_hp_regen * levels_gained
+	if skill.passive_sp_regen > 0:
+		stats.sp_regen_flat_bonus += skill.passive_sp_regen * levels_gained
+	if skill.passive_hp_regen_percent > 0:
+		stats.hp_regen_percent_mod += skill.passive_hp_regen_percent * levels_gained
+	if skill.passive_sp_regen_percent > 0:
+		stats.sp_regen_percent_mod += skill.passive_sp_regen_percent * levels_gained
+	
+	# Aplicar bono de velocidad si existe
+	if skill.passive_speed_bonus > 0:
+		stats.apply_passive_skill_bonus("speed_percent", skill.passive_speed_bonus * levels_gained)
+
+# Recalcular TODOS los bonos pasivos desde cero (útil al cargar partida o cambiar job)
+func recalculate_all_passive_bonuses():
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.has_node("StatsComponent"):
+		return
+	
+	var stats = player.get_node("StatsComponent") as StatsComponent
+	
+	# Limpiar todos los bonos pasivos actuales
+	stats.clear_passive_skill_bonuses()
+	stats.hp_regen_flat_bonus = 0
+	stats.sp_regen_flat_bonus = 0
+	stats.hp_regen_percent_mod = 1.0
+	stats.sp_regen_percent_mod = 1.0
+	
+	# Recorrer todas las skills aprendidas y aplicar sus bonos pasivos
+	for skill_id in player_stats["learned_skills"]:
+		var skill_level = player_stats["learned_skills"][skill_id]
+		
+		# Encontrar la SkillData correspondiente en todos los trabajos desbloqueados
+		var skill_data = _find_skill_data_by_id(skill_id)
+		if skill_data and skill_data.is_passive:
+			_apply_passive_skill_bonuses(skill_data, skill_level)
+
+# Buscar una SkillData por su ID en todos los trabajos desbloqueados
+func _find_skill_data_by_id(skill_id: String) -> SkillData:
+	for job_path in player_stats.get("unlocked_jobs", []):
+		var job_res = load(job_path) as JobData
+		if not job_res: continue
+		
+		for skill in job_res.base_skills:
+			if skill and skill.id == skill_id:
+				return skill
+	
+	return null
 
 func change_job(new_job_resource: JobData):
 	# Check if player can transcend (reached job level 40, unless first job change from Novice)
@@ -353,6 +423,9 @@ func change_job(new_job_resource: JobData):
 	# Add to unlocked jobs if not already there
 	if not player_stats["unlocked_jobs"].has(new_job_resource.resource_path):
 		player_stats["unlocked_jobs"].append(new_job_resource.resource_path)
+	
+	# Recalcular bonos pasivos (por si cambiamos de job, mantenemos las skills pasivas)
+	recalculate_all_passive_bonuses()
 	
 	# Emitir señal para actualizar UI
 	job_level_up.emit(player_stats["job_level"])

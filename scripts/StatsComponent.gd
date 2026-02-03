@@ -43,6 +43,15 @@ var status_bonuses = {
 	# Porcentuales
 	"speed_percent": 0.0 # 0.0 es base, 0.1 es +10%
 }
+var passive_skill_bonuses = {
+	# Base Stats
+	"str": 0, "agi": 0, "vit": 0, "int": 0, "dex": 0, "luk": 0,
+	# Sub Stats (Directos)
+	"atk": 0, "matk": 0, "def": 0, "mdef": 0, 
+	"hit": 0, "flee": 0, "aspd_fixed": 0,
+	# Porcentuales
+	"speed_percent": 0.0
+}
 
 # --- Elemento del Ataque Físico ---
 var weapon_element: Element = Element.NEUTRAL
@@ -82,40 +91,40 @@ var status_speed_percent_mod: float = 1.0
 var is_stunned: bool = false
 
 # --- Getters de Totales (SIEMPRE usar estos en los cálculos) ---
-func get_total_str() -> int: return str_stat + equipment_bonuses.str + status_bonuses.str
-func get_total_agi() -> int: return agi + equipment_bonuses.agi + status_bonuses.agi
-func get_total_vit() -> int: return vit + equipment_bonuses.vit + status_bonuses.vit
-func get_total_int() -> int: return int_stat + equipment_bonuses.int + status_bonuses.int
-func get_total_dex() -> int: return dex + equipment_bonuses.dex + status_bonuses.dex
-func get_total_luk() -> int: return luk + equipment_bonuses.luk + status_bonuses.luk
+func get_total_str() -> int: return str_stat + equipment_bonuses.str + status_bonuses.str + passive_skill_bonuses.str
+func get_total_agi() -> int: return agi + equipment_bonuses.agi + status_bonuses.agi + passive_skill_bonuses.agi
+func get_total_vit() -> int: return vit + equipment_bonuses.vit + status_bonuses.vit + passive_skill_bonuses.vit
+func get_total_int() -> int: return int_stat + equipment_bonuses.int + status_bonuses.int + passive_skill_bonuses.int
+func get_total_dex() -> int: return dex + equipment_bonuses.dex + status_bonuses.dex + passive_skill_bonuses.dex
+func get_total_luk() -> int: return luk + equipment_bonuses.luk + status_bonuses.luk + passive_skill_bonuses.luk
 
 # --- Atributos Derivados (Fórmulas estilo RO) ---
 func get_atk() -> int:
 	var t_str = get_total_str()
 	# Fórmula: Base (STR) + Equipo + Buffs directos de ATK (Andre Card, Impositio Manus)
 	var base = t_str + int(pow(t_str / 10.0, 2))
-	return base + equipment_bonuses.atk + status_bonuses.atk
+	return base + equipment_bonuses.atk + status_bonuses.atk + passive_skill_bonuses.atk
 
 func get_matk() -> int:
 	var t_int = get_total_int()
 	var base = t_int + int(pow(t_int / 8.0, 2))
 	# Ahora sumamos buffs de MATK directos si existen
-	return base + status_bonuses.matk
+	return base + status_bonuses.matk + passive_skill_bonuses.matk
 
 func get_move_speed_modifier() -> float:
 	if is_stunned: return 0.0
 	# 1.0 (base) + bonos (ej: 0.25 para Peco Peco Ride). Valores negativos ralentizan.
 	# Clamp para evitar velocidades demasiado bajas.
-	return max(0.2, 1.0 + status_bonuses.speed_percent)
+	return max(0.2, 1.0 + status_bonuses.speed_percent + passive_skill_bonuses.speed_percent)
 	
 func get_def() -> int:
-	return get_total_vit() + int(float(current_level) / 2.0) + equipment_bonuses.def + status_bonuses.def
+	return get_total_vit() + int(float(current_level) / 2.0) + equipment_bonuses.def + status_bonuses.def + passive_skill_bonuses.def
 
 func get_hit() -> int:
-	return current_level + get_total_dex() + status_bonuses.hit
+	return current_level + get_total_dex() + status_bonuses.hit + passive_skill_bonuses.hit
 
 func get_flee() -> int:
-	return current_level + get_total_agi() + status_bonuses.flee
+	return current_level + get_total_agi() + status_bonuses.flee + passive_skill_bonuses.flee
 
 func get_max_sp() -> int:
 	return (get_total_int() * 10) + (current_level * 2)
@@ -124,7 +133,7 @@ func get_max_hp_bonus() -> int:
 	return get_total_vit() * 15
 
 func get_attack_speed() -> float:
-	return max(0.2, 1.0 - (get_total_agi() * 0.01) - (get_total_dex() * 0.005) - status_bonuses.aspd_fixed)
+	return max(0.2, 1.0 - (get_total_agi() * 0.01) - (get_total_dex() * 0.005) - status_bonuses.aspd_fixed - passive_skill_bonuses.aspd_fixed)
 
 func get_aspd() -> int:
 	return int(200 - (get_attack_speed() * 50))
@@ -144,6 +153,20 @@ func apply_status_bonus(stat_name: String, amount): # amount sin tipo fijo (int/
 		stats_changed.emit()
 	else:
 		push_warning("Intentando aplicar buff a stat desconocido: " + stat_name)
+
+# --- Passive Skill Bonuses ---
+func apply_passive_skill_bonus(stat_name: String, amount):
+	if passive_skill_bonuses.has(stat_name):
+		passive_skill_bonuses[stat_name] += amount
+		stats_changed.emit()
+	else:
+		push_warning("Intentando aplicar bonus pasivo a stat desconocido: " + stat_name)
+
+func clear_passive_skill_bonuses():
+	# Resetea todos los bonos de skills pasivas (útil al cambiar de job)
+	for key in passive_skill_bonuses:
+		passive_skill_bonuses[key] = 0
+	stats_changed.emit()
 # --- Progression ---
 
 func add_xp(amount: int):

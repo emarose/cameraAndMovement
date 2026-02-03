@@ -1,6 +1,11 @@
 [gd_scene format=3 uid="uid://bjiye15nkrf5y"]
 
 [ext_resource type="Script" uid="uid://b3ak2ahrmo31s" path="res://scripts/JobChanger.gd" id="1_ijkl3"]
+[ext_resource type="Script" uid="uid://2hly3rjalyea" path="res://resources/jobs/JobData.gd" id="2_t6qfn"]
+[ext_resource type="Resource" uid="uid://bvhh6lp4tuj3n" path="res://resources/jobs/Archer.tres" id="3_f4f2e"]
+[ext_resource type="Resource" uid="uid://dxc3o4y2vpu6o" path="res://resources/jobs/Mage.tres" id="4_ntg06"]
+[ext_resource type="Resource" uid="uid://bl2v8d5j8xfpn" path="res://resources/jobs/Priest.tres" id="5_hdriw"]
+[ext_resource type="Resource" uid="uid://c06vbdq3xfb2c" path="res://resources/jobs/Swordsman.tres" id="6_kuhjn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h5y4y"]
 
@@ -12,6 +17,7 @@ material = SubResource("StandardMaterial3D_h5y4y")
 
 [node name="JobChanger" type="StaticBody3D" unique_id=2086174041]
 script = ExtResource("1_ijkl3")
+available_jobs = Array[ExtResource("2_t6qfn")]([ExtResource("3_f4f2e"), ExtResource("4_ntg06"), ExtResource("5_hdriw"), ExtResource("6_kuhjn")])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2059721456]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2833823, 0)

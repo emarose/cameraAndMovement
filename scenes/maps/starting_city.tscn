@@ -84,6 +84,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.99, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0350628, 0.7126661, 5.035455)
 data = ExtResource("6_47fml")
 
+[node name="Enemy2" parent="SpawnPoints" unique_id=63854262 instance=ExtResource("5_47fml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0350628, 0.7126661, 5.035455)
+data = ExtResource("6_47fml")
+
+[node name="Enemy3" parent="SpawnPoints" unique_id=2091150326 instance=ExtResource("5_47fml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.748974, 0.7166057, -2.278851)
+data = ExtResource("6_47fml")
+
+[node name="Enemy4" parent="SpawnPoints" unique_id=655526034 instance=ExtResource("5_47fml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.240348, 0.7166057, 3.1279082)
+data = ExtResource("6_47fml")
+
 [node name="NPCs" type="Node" parent="." unique_id=1746226566]
 
 [node name="NPC_Merchant" parent="NPCs" unique_id=753893127 instance=ExtResource("4_d23ae")]
@@ -107,7 +119,7 @@ target_map_path = "uid://bbeawwmqb6oao"
 target_spawn_id = "FromCity"
 
 [node name="Label3D" type="Label3D" parent="Portals/PortalToNorthField" unique_id=540500764]
-transform = Transform3D(-0.99085414, 0, -0.13493747, 0, 1, 0, 0.13493747, 0, -0.99085414, -0.00035190582, 1.5156066, -2.501007)
+transform = Transform3D(0.98611516, 0, -0.16606319, 0, 1, 0, 0.16606319, 0, 0.98611516, -0.00035190582, 1.5156066, -2.501007)
 text = " north"
 font_size = 50
 

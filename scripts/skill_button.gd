@@ -13,7 +13,9 @@ func update_ui():
 	var current_level = GameManager.get_skill_level(skill_data.id)
 	var can_learn = GameManager.can_learn_skill(skill_data)
 	
-	text = "%s [%d/%d]" % [skill_data.skill_name, current_level, skill_data.max_level]
+	# Añadir indicador (PASSIVE) para skills pasivas
+	var passive_tag = " (PASSIVE)" if skill_data.is_passive else ""
+	text = "%s [%d/%d]%s" % [skill_data.skill_name, current_level, skill_data.max_level, passive_tag]
 	if skill_data.icon:
 		icon = skill_data.icon
 		expand_icon = true
@@ -37,6 +39,10 @@ func _on_pressed():
 # --- DRAG AND DROP PARA SKILLS ---
 func _get_drag_data(_at_position):
 	if skill_data == null:
+		return null
+	
+	# Las skills pasivas no pueden arrastrarse
+	if skill_data.is_passive:
 		return null
 	
 	var current_level = GameManager.get_skill_level(skill_data.id)

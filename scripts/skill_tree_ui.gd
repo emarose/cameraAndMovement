@@ -89,11 +89,11 @@ func _create_job_section(job_res: JobData):
 
 func update_tree_ui():
 	# 1. Actualizar el texto de puntos disponibles
-	points_label.text = "Skill Points: %d" % GameManager.player_stats["skill_points"]
+	if points_label:
+		points_label.text = "Skill Points: %d" % GameManager.player_stats["skill_points"]
 	
 	# 2. Recorrer todos los SkillButtons y pedirles que se refresquen
 	# Esto sirve para que si desbloqueaste una skill, la siguiente se ponga "en color"
-	# Safety check: only update if we're in the tree
 	if not is_inside_tree():
 		return
 		
