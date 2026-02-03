@@ -214,7 +214,7 @@ func load_game_from_disk():
 		has_saved_data = true
 				
 		# 4. Cambiar al mapa donde se guardó
-		var map_path = player_stats.get("current_map", "res://scenes/maps/starting_field.tscn")
+		var map_path = player_stats.get("current_map", "res://scenes/maps/southern_fields.tscn")
 		var spawn_id = player_stats.get("spawn_id", "InitialSpawn")
 		
 		# Usamos tu función existente para cambiar de mapa

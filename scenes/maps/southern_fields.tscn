@@ -40,7 +40,7 @@ size = Vector2(50, 50)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_f7ls3"]
 
-[node name="StartingField" type="Node3D" unique_id=1874073899]
+[node name="SouthernFields" type="Node3D" unique_id=1874073899]
 script = ExtResource("1_28kaw")
 
 [node name="HUD" parent="." unique_id=157647800 instance=ExtResource("2_28kaw")]
@@ -86,7 +86,7 @@ available_jobs = Array[ExtResource("6_sgx1w")]([ExtResource("12_archer"), ExtRes
 [node name="Portal" parent="Portals" unique_id=2093780239 instance=ExtResource("4_28kaw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.034922, 0.016118431, -0.11616039)
 target_map_path = "uid://cb6k7k3xysq84"
-target_spawn_id = "FromField"
+target_spawn_id = "FromSouth"
 
 [node name="Enemy" parent="." unique_id=1282349523 instance=ExtResource("6_hh4ub")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.365, 1, 7.654)

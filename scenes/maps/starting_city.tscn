@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="4_db6y7"]
 [ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="5_47fml"]
 [ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="6_47fml"]
+[ext_resource type="PackedScene" uid="uid://bjiye15nkrf5y" path="res://scenes/JobChanger.tscn" id="9_lbta2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_stf4j"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -51,7 +52,7 @@ transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545
 shadow_enabled = true
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=51434764]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.017453194, -0.0175457, -0.024853706)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0004339218, -0.0136060715, -0.009827971)
 navigation_mesh = SubResource("NavigationMesh_d23ae")
 
 [node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1452075551]
@@ -64,11 +65,20 @@ shape = SubResource("WorldBoundaryShape3D_db6y7")
 
 [node name="SpawnPoints" type="Node" parent="." unique_id=616821737]
 
-[node name="FromField" type="Marker3D" parent="SpawnPoints" unique_id=684994209]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.845758, 0, 0)
+[node name="FromSouth" type="Marker3D" parent="SpawnPoints" unique_id=684994209]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13920593, 0.99, 17.262104)
 
 [node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=563012788]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.017, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.017, 0.99, 0)
+
+[node name="FromNorth" type="Marker3D" parent="SpawnPoints" unique_id=1087232567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99, -15)
+
+[node name="FromEast" type="Marker3D" parent="SpawnPoints" unique_id=1387713469]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.99, 0)
+
+[node name="FromWest" type="Marker3D" parent="SpawnPoints" unique_id=1762174553]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.99, 0)
 
 [node name="Enemy" parent="SpawnPoints" unique_id=2141093219 instance=ExtResource("5_47fml")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0350628, 0.7126661, 5.035455)
@@ -77,11 +87,39 @@ data = ExtResource("6_47fml")
 [node name="NPCs" type="Node" parent="." unique_id=1746226566]
 
 [node name="NPC_Merchant" parent="NPCs" unique_id=753893127 instance=ExtResource("4_d23ae")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.889, 1, -6.117)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.721455, 1, -6.117)
 
 [node name="Portals" type="Node" parent="." unique_id=1005359231]
 
-[node name="Portal" parent="Portals" unique_id=2093780239 instance=ExtResource("4_db6y7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.68052, 0.016118431, -0.11616039)
+[node name="PortalToSouthField" parent="Portals" unique_id=2093780239 instance=ExtResource("4_db6y7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00035190582, 0.016118431, 21.66797)
 target_map_path = "uid://fe2tshx87c7v"
 target_spawn_id = "FromCity"
+
+[node name="Label3D" type="Label3D" parent="Portals/PortalToSouthField" unique_id=277406982]
+transform = Transform3D(-0.99085414, 0, -0.13493747, 0, 1, 0, 0.13493747, 0, -0.99085414, -0.00035190582, 1.5156066, -2.501007)
+text = "south"
+font_size = 50
+
+[node name="PortalToNorthField" parent="Portals" unique_id=877044739 instance=ExtResource("4_db6y7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.016118431, -21)
+target_map_path = "uid://bbeawwmqb6oao"
+target_spawn_id = "FromCity"
+
+[node name="Label3D" type="Label3D" parent="Portals/PortalToNorthField" unique_id=540500764]
+transform = Transform3D(-0.99085414, 0, -0.13493747, 0, 1, 0, 0.13493747, 0, -0.99085414, -0.00035190582, 1.5156066, -2.501007)
+text = " north"
+font_size = 50
+
+[node name="PortalToEastField" parent="Portals" unique_id=1311227856 instance=ExtResource("4_db6y7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0.016118431, 0)
+target_map_path = "uid://8delfhl6qr4o"
+target_spawn_id = "FromCity"
+
+[node name="PortalToWestField" parent="Portals" unique_id=813049737 instance=ExtResource("4_db6y7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0.016118431, 0)
+target_map_path = "uid://dc5c12pqb8oaq"
+target_spawn_id = "FromCity"
+
+[node name="JobChanger" parent="Portals" unique_id=2086174041 instance=ExtResource("9_lbta2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.357431, -0.41466534, -10.259722)

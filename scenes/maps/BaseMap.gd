@@ -19,14 +19,18 @@ func _ready():
 
 	# 2. Esperar a que el jugador y todos los hijos terminen su inicialización
 	await get_tree().process_frame
-	await get_tree().process_frame
 	
 	# 3. Cargar datos ANTES de configurar la cámara
 	# Esto asegura que los datos persistentes de GameManager se sincronizan con el nuevo Player
 	GameManager.load_player_data(player)
 	
 	# 4. Configurar cámara
-	var camera = get_viewport().get_camera_3d()
+	var viewport = get_viewport()
+	if not viewport:
+		push_error("BaseMap: No viewport found!")
+		return
+		
+	var camera = viewport.get_camera_3d()
 	
 	if camera:
 		# Si la cámara tiene una propiedad "target", se la asignamos

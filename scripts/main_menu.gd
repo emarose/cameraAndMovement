@@ -15,7 +15,7 @@ func _on_btn_new_game_pressed():
 		"inventory_slots": [], "equipped_items": {}, "hotbar_content": []
 	}
 	# Cargar primer nivel
-	GameManager.change_map("res://scenes/maps/starting_field.tscn", "InitialSpawn")
+	GameManager.change_map("res://scenes/maps/southern_fields.tscn", "InitialSpawn")
 
 func _on_btn_load_game_pressed():
 	var success = GameManager.load_game_from_disk()

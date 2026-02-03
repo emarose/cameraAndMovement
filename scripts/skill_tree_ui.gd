@@ -93,6 +93,10 @@ func update_tree_ui():
 	
 	# 2. Recorrer todos los SkillButtons y pedirles que se refresquen
 	# Esto sirve para que si desbloqueaste una skill, la siguiente se ponga "en color"
+	# Safety check: only update if we're in the tree
+	if not is_inside_tree():
+		return
+		
 	for button in get_tree().get_nodes_in_group("skill_buttons"):
 		if button.has_method("update_ui"):
 			button.update_ui()

@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://dc5c12pqb8oaq"]
+
+[ext_resource type="Script" uid="uid://ckccqew73gy66" path="res://scenes/maps/BaseMap.gd" id="1_map"]
+[ext_resource type="PackedScene" uid="uid://b3mj4b8fx2imj" path="res://scenes/HUD.tscn" id="2_hud"]
+[ext_resource type="Texture2D" uid="uid://s5vvlnu0pvns" path="res://textures/texture_08.png" id="3_tex"]
+[ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="4_player"]
+[ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="5_portal"]
+[ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="6_enemy"]
+[ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="7_poring"]
+[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="8_spider"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 2
+sky = SubResource("Sky_1")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_1"]
+vertices = PackedVector3Array(-24.5, 0.5, -24.5, -24.5, 0.5, 24.5, 24.5, 0.5, 24.5, 24.5, 0.5, -24.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_texture = ExtResource("3_tex")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1"]
+material = SubResource("StandardMaterial3D_1")
+size = Vector2(50, 50)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_1"]
+
+[node name="WesternFields" type="Node3D" unique_id=180658434]
+script = ExtResource("1_map")
+
+[node name="HUD" parent="." unique_id=157647800 instance=ExtResource("2_hud")]
+
+[node name="Player" parent="." unique_id=1179624594 instance=ExtResource("4_player")]
+transform = Transform3D(0.07405631, 0, 0.9972541, 0, 1, 0, -0.9972541, 0, 0.07405631, 0, 1, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=472105921]
+environment = SubResource("Environment_1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1250940417]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 2.3548467, 0)
+shadow_enabled = true
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=500023004]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011876106, -0.008881569, 0.00404644)
+navigation_mesh = SubResource("NavigationMesh_1")
+
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1546189896]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ground" unique_id=1224251030]
+mesh = SubResource("PlaneMesh_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=1249848048]
+shape = SubResource("WorldBoundaryShape3D_1")
+
+[node name="SpawnPoints" type="Node" parent="." unique_id=1041090668]
+
+[node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=1124377652]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99, 0)
+
+[node name="FromCity" type="Marker3D" parent="SpawnPoints" unique_id=2141641806]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.99, 0)
+
+[node name="Portals" type="Node" parent="." unique_id=1361637068]
+
+[node name="PortalToCity" parent="Portals" unique_id=475664429 instance=ExtResource("5_portal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.54543, 0.016118431, 0)
+target_map_path = "uid://cb6k7k3xysq84"
+target_spawn_id = "FromWest"
+
+[node name="Enemies" type="Node" parent="." unique_id=50068847]
+
+[node name="Enemy1" parent="Enemies" unique_id=288070228 instance=ExtResource("6_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.7213302, -8)
+data = ExtResource("7_poring")
+
+[node name="Enemy2" parent="Enemies" unique_id=695304285 instance=ExtResource("6_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.7213302, 8)
+data = ExtResource("8_spider")
+
+[node name="Enemy3" parent="Enemies" unique_id=34870067 instance=ExtResource("6_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.7213302, 0)
+data = ExtResource("7_poring")
