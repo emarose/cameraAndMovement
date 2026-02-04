@@ -1,6 +1,8 @@
-extends Button
+extends TextureButton
 
 @export var skill_data: SkillData # Arrastra aquí el recurso Bash.tres o similar
+
+@onready var label = $Label
 
 func _ready():
 	add_to_group("skill_buttons")
@@ -15,10 +17,9 @@ func update_ui():
 	
 	# Añadir indicador (PASSIVE) para skills pasivas
 	var passive_tag = " (PASSIVE)" if skill_data.is_passive else ""
-	text = "%s [%d/%d]%s" % [skill_data.skill_name, current_level, skill_data.max_level, passive_tag]
+	label.text = "%s [%d/%d]%s" % [skill_data.skill_name, current_level, skill_data.max_level, passive_tag]
 	if skill_data.icon:
-		icon = skill_data.icon
-		expand_icon = true
+		texture_normal = skill_data.icon
 	
 	# NO USAR disabled = true, ya que bloquea el Drag & Drop.
 	# En su lugar, modulamos el color y controlamos el clic manualmente.
