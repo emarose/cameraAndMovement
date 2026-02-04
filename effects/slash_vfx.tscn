@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bfvjdf7myu7ux"]
+
+[ext_resource type="Script" uid="uid://cdfhy75e6xriy" path="res://effects/slash_vfx.gd" id="1_cplxx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cplxx"]
+transparency = 1
+shading_mode = 0
+
+[sub_resource type="TorusMesh" id="TorusMesh_qyujv"]
+material = SubResource("StandardMaterial3D_cplxx")
+inner_radius = 1.5
+rings = 32
+ring_segments = 12
+
+[node name="slash_vfx" type="MeshInstance3D" unique_id=1980306459]
+mesh = SubResource("TorusMesh_qyujv")
+script = ExtResource("1_cplxx")
