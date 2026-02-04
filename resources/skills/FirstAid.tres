@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://c8n2p3q5r1s2t"]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://c8n2p3q5r1s2t"]
 
+[ext_resource type="Texture2D" uid="uid://bpounttw37yhw" path="res://resources/skills/FirstAid.png" id="1_rx5qt"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
 
 [resource]
@@ -9,7 +10,6 @@ skill_name = "First Aid"
 type = 2
 sp_cost = 5
 damage_multiplier = 0.0
-cooldown = 1.0
+icon = ExtResource("1_rx5qt")
 max_level = 10
-required_job_level = 1
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

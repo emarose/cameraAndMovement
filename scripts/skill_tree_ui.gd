@@ -100,3 +100,7 @@ func update_tree_ui():
 	for button in get_tree().get_nodes_in_group("skill_buttons"):
 		if button.has_method("update_ui"):
 			button.update_ui()
+
+
+func _on_btn_close_pressed() -> void:
+	toggle()

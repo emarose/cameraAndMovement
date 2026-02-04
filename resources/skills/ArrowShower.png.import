@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1kp41w816j0i"
-path="res://.godot/imported/fc840.png-4e7e9f2c86eddd0c0ff5418a3821a02b.ctex"
+uid="uid://c7o46re0nwreo"
+path="res://.godot/imported/ArrowShower.png-1c676880a0d69caabbe0bb9a719b134d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/fc840.png"
-dest_files=["res://.godot/imported/fc840.png-4e7e9f2c86eddd0c0ff5418a3821a02b.ctex"]
+source_file="res://resources/skills/ArrowShower.png"
+dest_files=["res://.godot/imported/ArrowShower.png-1c676880a0d69caabbe0bb9a719b134d.ctex"]
 
 [params]
 

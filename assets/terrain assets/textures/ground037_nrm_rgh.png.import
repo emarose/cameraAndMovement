@@ -2,28 +2,29 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dq4mp4g4io5x1"
-path="res://.godot/imported/fc841.png-290430744c4d0336ab1e8d2fa37d52d1.ctex"
+uid="uid://c1ots7w6i0i1q"
+path.bptc="res://.godot/imported/ground037_nrm_rgh.png-5854c11bbcf4585dc9272499e874d7d9.bptc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
-source_file="res://assets/icons/fc841.png"
-dest_files=["res://.godot/imported/fc841.png-290430744c4d0336ab1e8d2fa37d52d1.ctex"]
+source_file="res://assets/terrain assets/textures/ground037_nrm_rgh.png"
+dest_files=["res://.godot/imported/ground037_nrm_rgh.png-5854c11bbcf4585dc9272499e874d7d9.bptc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=2
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

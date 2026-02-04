@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=3 format=3 uid="uid://cfinqd7ctbmlv"]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://cfinqd7ctbmlv"]
 
-[ext_resource type="Texture2D" uid="uid://cd6fxwcpqmfps" path="res://assets/icons/fc790.png" id="1_2im5q"]
+[ext_resource type="Texture2D" uid="uid://c7nhb445y6srl" path="res://resources/skills/IceBlast.png" id="1_2im5q"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="2_qy2y2"]
 
 [resource]

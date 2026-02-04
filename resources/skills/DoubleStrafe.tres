@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://d9v1a2s3d4f5g"]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://fh5o0vtswkeo"]
 
+[ext_resource type="Texture2D" uid="uid://b111qh7gy7rqx" path="res://resources/skills/DoubleStrafe.png" id="1_hmg58"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
 
 [resource]
 script = ExtResource("1_ucktl")
 id = "double_strafe"
 skill_name = "Double Strafe"
-type = 0
 sp_cost = 12
 damage_multiplier = 3.5
 cooldown = 0.5
+icon = ExtResource("1_hmg58")
 max_level = 10
-required_job_level = 1
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

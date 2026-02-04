@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://cudaytyrcelie"]
 
-[ext_resource type="Texture2D" uid="uid://wqshs34yat4f" path="res://assets/icons/fc811.png" id="1_as8wx"]
 [ext_resource type="PackedScene" uid="uid://5gpv8gjhcclf" path="res://effects/vfx_hit.tscn" id="1_qjb4x"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
+[ext_resource type="Texture2D" uid="uid://b4tpn2m3enyqh" path="res://resources/skills/Bash.png" id="2_qjb4x"]
 
 [resource]
 script = ExtResource("1_ucktl")
@@ -11,7 +11,7 @@ skill_name = "Bash"
 sp_cost = 2
 damage_multiplier = 200.0
 cooldown = 3.0
-icon = ExtResource("1_as8wx")
+icon = ExtResource("2_qjb4x")
 aoe_radius = 1.0
 effect_scene = ExtResource("1_qjb4x")
 max_level = 10

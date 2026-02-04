@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://dvg5q02mfqa8l"]
 
 [ext_resource type="Script" uid="uid://ckxuqek4eeca6" path="res://scripts/skill_button.gd" id="1_bxu38"]
-[ext_resource type="Texture2D" uid="uid://wqshs34yat4f" path="res://assets/icons/fc811.png" id="2_y61q1"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="3_2eslj"]
 
 [node name="SkillButton" type="Button" unique_id=1413863955]

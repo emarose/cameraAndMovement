@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://f2r3t4y5u6i7o"]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://b7d7822wbyngw"]
 
+[ext_resource type="Texture2D" uid="uid://dp0m805qkjwfk" path="res://resources/skills/Heal.png" id="1_1ucer"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
 
 [resource]
@@ -9,7 +10,6 @@ skill_name = "Heal"
 type = 2
 sp_cost = 15
 damage_multiplier = 0.0
-cooldown = 1.0
+icon = ExtResource("1_1ucer")
 max_level = 10
-required_job_level = 1
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

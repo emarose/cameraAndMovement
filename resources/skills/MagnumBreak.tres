@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://bk1ypdbbuvqcj"]
 
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_4h8em"]
-[ext_resource type="Texture2D" uid="uid://dq4mp4g4io5x1" path="res://assets/icons/fc841.png" id="1_50351"]
 [ext_resource type="PackedScene" uid="uid://bfvjdf7myu7ux" path="res://effects/slash_vfx.tscn" id="1_icvuv"]
+[ext_resource type="Texture2D" uid="uid://bxomhmvd534ub" path="res://resources/skills/MagnumBreak.png" id="2_icvuv"]
 
 [resource]
 script = ExtResource("1_4h8em")
@@ -12,7 +12,7 @@ type = 2
 sp_cost = 1
 cast_range = 2.0
 damage_multiplier = 5.0
-icon = ExtResource("1_50351")
+icon = ExtResource("2_icvuv")
 aoe_radius = 4.0
 effect_scene = ExtResource("1_icvuv")
 is_interruptible = false

@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://g3r4t5y6u7i8o"]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://c8d8832xb0nhw"]
 
+[ext_resource type="Texture2D" uid="uid://dpuarxr6q0vlj" path="res://resources/skills/Blessing.png" id="1_6ie5a"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
 
 [resource]
@@ -10,6 +11,7 @@ type = 2
 sp_cost = 20
 damage_multiplier = 0.0
 cooldown = 3.0
+icon = ExtResource("1_6ie5a")
 max_level = 10
 required_job_level = 5
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

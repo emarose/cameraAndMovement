@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wqshs34yat4f"
-path="res://.godot/imported/fc811.png-bf8192018d56629fae5d042f24f9a805.ctex"
+uid="uid://f52wfxbxaa06"
+path="res://.godot/imported/CombatMastery.png-d1e0ef8db95ba3c655708f9db607ea67.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/fc811.png"
-dest_files=["res://.godot/imported/fc811.png-bf8192018d56629fae5d042f24f9a805.ctex"]
+source_file="res://resources/skills/CombatMastery.png"
+dest_files=["res://.godot/imported/CombatMastery.png-d1e0ef8db95ba3c655708f9db607ea67.ctex"]
 
 [params]
 

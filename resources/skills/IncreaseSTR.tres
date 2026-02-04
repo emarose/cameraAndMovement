@@ -1,32 +1,21 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3 uid="uid://example_str_passive"]
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://byibqta43fq56"]
 
+[ext_resource type="Texture2D" uid="uid://bi7lxu2km8tsx" path="res://resources/skills/IncreaseSTR.png" id="1_elsb0"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_main"]
 
 [resource]
 script = ExtResource("1_main")
 id = "increase_str"
 skill_name = "Increase STR"
-type = 0
 sp_cost = 0
 cast_range = 0.0
 damage_multiplier = 0.0
 cooldown = 0.0
-icon = null
-element = 0
+icon = ExtResource("1_elsb0")
 aoe_radius = 0.0
-effect_scene = null
-cast_time = 0.0
-is_interruptible = true
 cast_animation_name = ""
 max_level = 10
-required_job_level = 1
-required_skills = Array[Resource("res://scripts/SkillData.gd")]([])
 is_passive = true
 passive_stat_bonuses = {
 "str": 1
 }
-passive_hp_regen = 0
-passive_sp_regen = 0
-passive_hp_regen_percent = 0.0
-passive_sp_regen_percent = 0.0
-passive_speed_bonus = 0.0

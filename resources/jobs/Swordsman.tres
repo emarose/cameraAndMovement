@@ -4,14 +4,13 @@
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_uf4ql"]
 [ext_resource type="Resource" uid="uid://cudaytyrcelie" path="res://resources/skills/Bash.tres" id="2_bash"]
 [ext_resource type="Resource" uid="uid://bk1ypdbbuvqcj" path="res://resources/skills/MagnumBreak.tres" id="3_magnum"]
-[ext_resource type="Resource" uid="uid://bfygn35qqurh5" path="res://resources/skills/Endure.tres" id="4_endure"]
-[ext_resource type="Resource" path="res://resources/skills/CombatMastery.tres" id="5_gjfxy"]
-[ext_resource type="Resource" path="res://resources/skills/IncreaseSTR.tres" id="6_edt6j"]
+[ext_resource type="Resource" path="res://resources/skills/HPRecovery.tres" id="5_4hb2o"]
+[ext_resource type="Resource" uid="uid://bncuatv44ymtq" path="res://resources/skills/CombatMastery.tres" id="5_gjfxy"]
 
 [resource]
 script = ExtResource("1_gpl7k")
 job_name = "Swordsman"
-base_skills = Array[ExtResource("1_uf4ql")]([ExtResource("2_bash"), ExtResource("3_magnum"), ExtResource("4_endure"), ExtResource("5_gjfxy"), ExtResource("6_edt6j")])
+base_skills = Array[ExtResource("1_uf4ql")]([ExtResource("2_bash"), ExtResource("5_gjfxy"), ExtResource("3_magnum"), ExtResource("5_4hb2o")])
 str_bonus = 2
 agi_bonus = 1
 job_level_bonuses = {
