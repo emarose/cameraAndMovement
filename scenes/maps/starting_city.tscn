@@ -42,7 +42,7 @@ script = ExtResource("1_mxm8b")
 [node name="HUD" parent="." unique_id=157647800 instance=ExtResource("1_ll35h")]
 
 [node name="Player" parent="." unique_id=1179624594 instance=ExtResource("2_d23ae")]
-transform = Transform3D(0.037899435, 0, 0.99928164, 0, 1, 0, -0.99928164, 0, 0.037899435, 10.667, 1, -0.099)
+transform = Transform3D(0.037899435, 0, 0.99928164, 0, 1, 0, -0.99928164, 0, 0.037899435, 10.667, 0, -0.099)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1075299080]
 environment = SubResource("Environment_ll35h")
@@ -66,19 +66,19 @@ shape = SubResource("WorldBoundaryShape3D_db6y7")
 [node name="SpawnPoints" type="Node" parent="." unique_id=616821737]
 
 [node name="FromSouth" type="Marker3D" parent="SpawnPoints" unique_id=684994209]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13920593, 0.99, 17.262104)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.139, 0, 17.262)
 
 [node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=563012788]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.017, 0.99, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.017, 0, 0)
 
 [node name="FromNorth" type="Marker3D" parent="SpawnPoints" unique_id=1087232567]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99, -15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
 
 [node name="FromEast" type="Marker3D" parent="SpawnPoints" unique_id=1387713469]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.99, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 0)
 
 [node name="FromWest" type="Marker3D" parent="SpawnPoints" unique_id=1762174553]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.99, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 0)
 
 [node name="Enemy" parent="SpawnPoints" unique_id=2141093219 instance=ExtResource("5_47fml")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0350628, 0.7126661, 5.035455)
