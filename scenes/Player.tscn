@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://765vokj83tna" path="res://scenes/GameOverUI.tscn" id="5_qu4a1"]
 [ext_resource type="Texture2D" uid="uid://c25ftshpwa0jg" path="res://assets/icons/message_dots_square.png" id="5_viqgg"]
 [ext_resource type="Texture2D" uid="uid://b1syjwa46sik" path="res://assets/icons/cursor_door.png" id="6_b8lor"]
+[ext_resource type="PackedScene" uid="uid://2h7d5skhop8m" path="res://scenes/SPBar3D.tscn" id="7_spbar"]
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="8_khinc"]
 [ext_resource type="Resource" uid="uid://cr7luqw1pv8n" path="res://resources/items/AntiFormlessAxe.tres" id="9_b8lor"]
 [ext_resource type="Resource" uid="uid://n2amivuv4ep7" path="res://resources/items/FireSword.tres" id="10_6e537"]
@@ -31,7 +32,10 @@ material = SubResource("StandardMaterial3D_aqk2v")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_b8lor"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_6e537"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_p07f3"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6dkly"]
@@ -67,10 +71,12 @@ level_up_effect_scene = ExtResource("5_6eyey")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=167663048]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=461812279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8072171, 0)
 mesh = SubResource("CapsuleMesh_dqkch")
 skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=732221772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9159521, 0)
 shape = SubResource("CapsuleShape3D_qlg0r")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=764086905]
@@ -87,8 +93,12 @@ current = true
 fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6195009, 0)
-texture = SubResource("ViewportTexture_b8lor")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.032414615, 0)
+texture = SubResource("ViewportTexture_6e537")
+
+[node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("7_spbar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.110826455, 0)
+texture = SubResource("ViewportTexture_p07f3")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")
@@ -122,11 +132,11 @@ script = ExtResource("20_gv3ic")
 [node name="GameOverUI" parent="." unique_id=1480085280 instance=ExtResource("5_qu4a1")]
 
 [node name="eye" type="MeshInstance3D" parent="." unique_id=712278464]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.049024224, 0.5524795, -0.4945358)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.049024224, 1.2367133, -0.4945358)
 mesh = SubResource("SphereMesh_6eyey")
 
 [node name="eye2" type="MeshInstance3D" parent="." unique_id=2045127416]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1563986, 0.5524795, -0.4945358)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1563986, 1.2367133, -0.4945358)
 mesh = SubResource("SphereMesh_6eyey")
 
 [node name="AOEIndicator" type="MeshInstance3D" parent="." unique_id=288806777]

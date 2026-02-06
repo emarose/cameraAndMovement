@@ -75,7 +75,10 @@ func _ready():
 	skill_component.setup(self, stats, sp_component)
 	
 	if sp_component:
-		sp_component.setup(stats) 
+		sp_component.setup(stats)
+		if not sp_component.on_sp_changed.is_connected(_on_sp_changed):
+			sp_component.on_sp_changed.connect(_on_sp_changed)
+		_on_sp_changed(sp_component.current_sp, sp_component.max_sp)
 	
 	# Recalcular bonos pasivos al iniciar (importante después de cargar partida)
 	GameManager.recalculate_all_passive_bonuses()
@@ -409,6 +412,10 @@ func _on_player_hit(new_health):
 		var max_hp = health_component.max_health
 		$HealthBar3D.update_bar(new_health, max_hp)
 
+func _on_sp_changed(current_sp, max_sp):
+	if has_node("SPBar3D"):
+		$SPBar3D.update_bar(current_sp, max_sp)
+
 func _on_player_damaged(damage_amount: int):
 	# 1. Mostrar floating text de daño (rojo para el jugador)
 	spawn_floating_text_player_damage(global_position, damage_amount)
@@ -429,7 +436,7 @@ func _on_player_damaged(damage_amount: int):
 	tween.tween_property(self, "position:y", position.y + 0.05, 0.05)
 	tween.chain().tween_property(self, "position:y", position.y, 0.1)
 
-	await get_tree().create_timer(0.1).timeout # Tiempo de flinch
+	await get_tree().create_timer(0.2).timeout # Tiempo de flinch
 	if stats:
 		stats.is_stunned = false
 
