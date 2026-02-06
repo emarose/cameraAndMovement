@@ -1,144 +1,34 @@
 [gd_scene format=3 uid="uid://2h7d5skhop8m"]
 
-[ext_resource type="Script" uid="uid://cjm61wm3wga5a" path="res://scripts/player.gd" id="1_6g1ik"]
-[ext_resource type="Texture2D" uid="uid://biubb72lqc4a3" path="res://assets/icons/cursor_default.png" id="2_epbsc"]
-[ext_resource type="Texture2D" uid="uid://v23ye4xitolj" path="res://assets/icons/cursor_attack.png" id="3_2p1dp"]
-[ext_resource type="Texture2D" uid="uid://dfvukw2s583tt" path="res://assets/icons/cursor_skill.png" id="4_1vo4c"]
-[ext_resource type="Texture2D" uid="uid://c25ftshpwa0jg" path="res://assets/icons/message_dots_square.png" id="5_l8xp1"]
-[ext_resource type="Texture2D" uid="uid://b1syjwa46sik" path="res://assets/icons/cursor_door.png" id="6_hatyd"]
-[ext_resource type="Resource" uid="uid://cr7luqw1pv8n" path="res://resources/items/AntiFormlessAxe.tres" id="7_4hay4"]
-[ext_resource type="Resource" uid="uid://n2amivuv4ep7" path="res://resources/items/FireSword.tres" id="8_p8j4d"]
-[ext_resource type="Resource" uid="uid://cqun87ymamf71" path="res://resources/items/Knife.tres" id="9_0xo4t"]
-[ext_resource type="PackedScene" uid="uid://cjkj6s57v61vn" path="res://scenes/FloatingText.tscn" id="10_fj0a2"]
-[ext_resource type="PackedScene" uid="uid://bqulpcolhat05" path="res://effects/LevelUpEffect.tscn" id="11_qiwgn"]
-[ext_resource type="Script" uid="uid://kpxdh62ijq65" path="res://scripts/camera_rig.gd" id="12_684xm"]
-[ext_resource type="PackedScene" uid="uid://ce1embig558rd" path="res://scenes/HealthBar3D.tscn" id="13_8h8wm"]
-[ext_resource type="Script" uid="uid://d32apxuk1vawh" path="res://scripts/healthComponent.gd" id="14_r4hhv"]
-[ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="15_jyt0i"]
-[ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="16_owadp"]
-[ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="17_gp54d"]
-[ext_resource type="Script" uid="uid://b1hf11y1cgjtr" path="res://scripts/InventoryComponent.gd" id="18_6qqbu"]
-[ext_resource type="Script" uid="uid://bb5m4qisg7fb8" path="res://scripts/RegenerationComponent.gd" id="19_fbi4u"]
-[ext_resource type="Script" uid="uid://gvc84ejulk4" path="res://scripts/EquipmentComponent.gd" id="20_8532j"]
-[ext_resource type="Script" uid="uid://dc22adx2f2fi3" path="res://scripts/StatusEffectManager.gd" id="21_r4vpt"]
-[ext_resource type="PackedScene" uid="uid://765vokj83tna" path="res://scenes/GameOverUI.tscn" id="22_vepyy"]
-[ext_resource type="PackedScene" uid="uid://2h7d5skhop8m" path="res://scenes/SPBar3D.tscn" id="23_5w1n2"]
+[ext_resource type="Script" uid="uid://bijbchd4om0bp" path="res://scripts/sp_bar_3d.gd" id="1_spbar"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqk2v"]
-albedo_color = Color(0.19338313, 0.65526867, 0.66791755, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_dqkch"]
-material = SubResource("StandardMaterial3D_aqk2v")
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_6e537"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_spbar"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_p07f3"]
-viewport_path = NodePath("SubViewport")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spbar_bg"]
+bg_color = Color(0.01, 0.02, 0.06, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6dkly"]
-albedo_color = Color(0.056243494, 0.007778925, 0.03827338, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spbar_fill"]
+bg_color = Color(0.2, 0.55, 1, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_6eyey"]
-material = SubResource("StandardMaterial3D_6dkly")
-radius = 0.05
-height = 0.1
+[node name="SPBar3D" type="Sprite3D" unique_id=940352563]
+billboard = 1
+no_depth_test = true
+texture_filter = 0
+texture = SubResource("ViewportTexture_spbar")
+script = ExtResource("1_spbar")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
-transparency = 1
-albedo_color = Color(0.45882353, 0.18431373, 0.21176471, 0.7490196)
+[node name="SubViewport" type="SubViewport" parent="." unique_id=446309276]
+transparent_bg = true
+size = Vector2i(128, 8)
+render_target_update_mode = 4
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_0rnld"]
-material = SubResource("StandardMaterial3D_p7iby")
-top_radius = 1.0
-bottom_radius = 1.0
-height = 0.01
-
-[node name="Player" type="CharacterBody3D" unique_id=1179624594 groups=["player"]]
-script = ExtResource("1_6g1ik")
-speed = 8.0
-cursor_default = ExtResource("2_epbsc")
-cursor_attack = ExtResource("3_2p1dp")
-cursor_skill = ExtResource("4_1vo4c")
-cursor_talk = ExtResource("5_l8xp1")
-cursor_door = ExtResource("6_hatyd")
-initial_inventory = Array[Resource]([ExtResource("7_4hay4"), ExtResource("8_p8j4d"), ExtResource("9_0xo4t")])
-floating_text_scene = ExtResource("10_fj0a2")
-level_up_effect_scene = ExtResource("11_qiwgn")
-
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=167663048]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=461812279]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8072171, 0)
-mesh = SubResource("CapsuleMesh_dqkch")
-skeleton = NodePath("")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=732221772]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9159521, 0)
-shape = SubResource("CapsuleShape3D_qlg0r")
-
-[node name="CameraPivot" type="Node3D" parent="." unique_id=764086905]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1.8, 0)
-top_level = true
-script = ExtResource("12_684xm")
-zoom_speed = 2.0
-
-[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot" unique_id=795005348]
-spring_length = 8.0
-
-[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=1839852354]
-current = true
-fov = 84.6
-
-[node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("13_8h8wm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.032414615, 0)
-texture = SubResource("ViewportTexture_6e537")
-
-[node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("23_5w1n2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.110826455, 0)
-texture = SubResource("ViewportTexture_p07f3")
-
-[node name="HealthComponent" type="Node" parent="." unique_id=347607018]
-script = ExtResource("14_r4hhv")
-max_health = 1
-
-[node name="SPComponent" type="Node" parent="." unique_id=810258990]
-script = ExtResource("15_jyt0i")
-
-[node name="StatsComponent" type="Node" parent="." unique_id=1372930636]
-script = ExtResource("16_owadp")
-str_stat = 9
-dex = 9
-current_level = 5
-race = 7
-
-[node name="SkillComponent" type="Node" parent="." unique_id=1172722662]
-script = ExtResource("17_gp54d")
-
-[node name="InventoryComponent" type="Node" parent="." unique_id=1940651935]
-script = ExtResource("18_6qqbu")
-
-[node name="RegenerationComponent" type="Node" parent="." unique_id=838240900]
-script = ExtResource("19_fbi4u")
-
-[node name="EquipmentComponent" type="Node" parent="." unique_id=1701170461]
-script = ExtResource("20_8532j")
-
-[node name="StatusEffectManagerComponent" type="Node" parent="." unique_id=203511814]
-script = ExtResource("21_r4vpt")
-
-[node name="GameOverUI" parent="." unique_id=1480085280 instance=ExtResource("22_vepyy")]
-
-[node name="eye" type="MeshInstance3D" parent="." unique_id=712278464]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.049024224, 1.2367133, -0.4945358)
-mesh = SubResource("SphereMesh_6eyey")
-
-[node name="eye2" type="MeshInstance3D" parent="." unique_id=2045127416]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1563986, 1.2367133, -0.4945358)
-mesh = SubResource("SphereMesh_6eyey")
-
-[node name="AOEIndicator" type="MeshInstance3D" parent="." unique_id=288806777]
-visible = false
-mesh = SubResource("CylinderMesh_0rnld")
+[node name="ProgressBar" type="ProgressBar" parent="SubViewport" unique_id=1225369886]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_spbar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_spbar_fill")
+show_percentage = false
