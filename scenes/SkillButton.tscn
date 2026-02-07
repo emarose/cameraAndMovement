@@ -1,18 +1,58 @@
 [gd_scene format=3 uid="uid://dvg5q02mfqa8l"]
 
 [ext_resource type="Script" uid="uid://ckxuqek4eeca6" path="res://scripts/skill_button.gd" id="1_bxu38"]
+[ext_resource type="Shader" uid="uid://css5g7y7way5h" path="res://assets/shaders/skill_icon.gdshader" id="1_m854j"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y61q1"]
+resource_local_to_scene = true
+shader = ExtResource("1_m854j")
+shader_parameter/is_passive = false
+shader_parameter/is_learned = false
+shader_parameter/border_width = 0.04
+shader_parameter/learned_color = Color(1, 0.85, 0.1, 1)
+shader_parameter/unlearned_color = Color(0.3, 0.3, 0.3, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bxu38"]
+bg_color = Color(0.09239706, 0.09239707, 0.092397, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 16.0
+expand_margin_top = 8.0
+expand_margin_right = 16.0
+expand_margin_bottom = 8.0
 
 [node name="SkillButton" type="TextureButton" unique_id=544254306]
+material = SubResource("ShaderMaterial_y61q1")
+custom_minimum_size = Vector2(70, 70)
 offset_right = 8.0
 offset_bottom = 8.0
 script = ExtResource("1_bxu38")
 
-[node name="Label" type="Label" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=639818708]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bxu38")
+
+[node name="SkillLevel" type="Label" parent="Panel" unique_id=157261553]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -9.5
+offset_right = 0.5
+offset_bottom = 9.5
 grow_horizontal = 2
 grow_vertical = 2
-vertical_alignment = 1
-horizontal_alignment = 1

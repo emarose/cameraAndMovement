@@ -1,11 +1,13 @@
 extends TextureButton
 
 @export var skill_data: SkillData # Arrastra aquí el recurso Bash.tres o similar
-
-@onready var label = $Label
+@onready var skill_level_label: Label = $Panel/SkillLevel
 
 func _ready():
 	add_to_group("skill_buttons")
+	# Forzamos que el material sea único al iniciar
+	if material:
+		material = material.duplicate()
 	update_ui()
 	pressed.connect(_on_pressed)
 
@@ -15,27 +17,32 @@ func update_ui():
 	var current_level = GameManager.get_skill_level(skill_data.id)
 	var can_learn = GameManager.can_learn_skill(skill_data)
 	
-	# Añadir indicador (PASSIVE) para skills pasivas
-	var passive_tag = " (PASSIVE)" if skill_data.is_passive else ""
-	label.text = "%s [%d/%d]%s" % [skill_data.skill_name, current_level, skill_data.max_level, passive_tag]
+	# 1. Actualizar el icono
 	if skill_data.icon:
 		texture_normal = skill_data.icon
 	
-	# NO USAR disabled = true, ya que bloquea el Drag & Drop.
-	# En su lugar, modulamos el color y controlamos el clic manualmente.
+	# 2. Actualizar el Label de Nivel (Estilo 0/5)
+	if skill_level_label:
+		skill_level_label.text = "%d/%d" % [current_level, skill_data.max_level]
+	
+	# 3. Aplicar Shader (Outline y Redondeado)
+	if material is ShaderMaterial:
+		material.set_shader_parameter("is_passive", skill_data.is_passive)
+		material.set_shader_parameter("is_learned", current_level > 0)
+
+	# 4. Feedback visual de disponibilidad
 	if current_level == 0 and not can_learn:
-		modulate = Color(0.3, 0.3, 0.3) # Muy oscuro (Bloqueada y no aprendida)
-	elif not can_learn:
-		modulate = Color(0.7, 0.7, 0.7) # Grisáceo (Aprendida pero no subible)
+		modulate = Color(0.2, 0.2, 0.2) # Bloqueada (Muy oscuro)
+	elif current_level == 0 and can_learn:
+		modulate = Color(0.5, 0.5, 0.5) # Disponible pero no comprada (Gris)
 	else:
-		modulate = Color(1, 1, 1) # Normal (Disponible para subir)
+		modulate = Color(1, 1, 1) # Aprendida (Full color)
 
 func _on_pressed():
-	# El control de "si puedo subirla" lo hacemos aquí ahora que el botón no está disabled
 	if GameManager.can_learn_skill(skill_data):
 		if GameManager.level_up_skill(skill_data):
-			var tree_ui = get_tree().get_first_node_in_group("skill_tree_ui")
-			if tree_ui: tree_ui.update_tree_ui()
+			# Usamos call_group para avisar a la UI que refresque todo
+			get_tree().call_group("skill_tree_ui", "update_tree_ui")
 
 # --- DRAG AND DROP PARA SKILLS ---
 func _get_drag_data(_at_position):

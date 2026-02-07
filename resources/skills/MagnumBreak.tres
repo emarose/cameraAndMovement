@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_4h8em"]
 [ext_resource type="PackedScene" uid="uid://bfvjdf7myu7ux" path="res://effects/slash_vfx.tscn" id="1_icvuv"]
 [ext_resource type="Texture2D" uid="uid://bxomhmvd534ub" path="res://resources/skills/MagnumBreak.png" id="2_icvuv"]
+[ext_resource type="Resource" uid="uid://cudaytyrcelie" path="res://resources/skills/Bash.tres" id="4_70bm5"]
+[ext_resource type="Resource" uid="uid://c8n2p3q5r1s2t" path="res://resources/skills/FirstAid.tres" id="5_8vftt"]
 
 [resource]
 script = ExtResource("1_4h8em")
@@ -17,4 +19,5 @@ aoe_radius = 4.0
 effect_scene = ExtResource("1_icvuv")
 is_interruptible = false
 required_job_level = 5
+required_skills = Array[ExtResource("1_4h8em")]([ExtResource("4_70bm5"), ExtResource("5_8vftt")])
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"
