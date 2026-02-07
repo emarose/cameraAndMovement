@@ -80,20 +80,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 0)
 [node name="FromWest" type="Marker3D" parent="SpawnPoints" unique_id=1762174553]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 0)
 
-[node name="Enemy" parent="SpawnPoints" unique_id=2141093219 instance=ExtResource("5_47fml")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0350628, 0.7126661, 5.035455)
-data = ExtResource("6_47fml")
-
 [node name="Enemy2" parent="SpawnPoints" unique_id=63854262 instance=ExtResource("5_47fml")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0350628, 0.7126661, 5.035455)
-data = ExtResource("6_47fml")
-
-[node name="Enemy3" parent="SpawnPoints" unique_id=2091150326 instance=ExtResource("5_47fml")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.748974, 0.7166057, -2.278851)
-data = ExtResource("6_47fml")
-
-[node name="Enemy4" parent="SpawnPoints" unique_id=655526034 instance=ExtResource("5_47fml")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.240348, 0.7166057, 3.1279082)
 data = ExtResource("6_47fml")
 
 [node name="NPCs" type="Node" parent="." unique_id=1746226566]
@@ -135,3 +123,7 @@ target_spawn_id = "FromCity"
 
 [node name="JobChanger" parent="Portals" unique_id=2086174041 instance=ExtResource("9_lbta2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.357431, -0.41466534, -10.259722)
+
+[node name="Enemy" parent="." unique_id=137946859 instance=ExtResource("5_47fml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.681318, 0.7166057, 5.6922374)
+data = ExtResource("6_47fml")

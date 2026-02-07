@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bteikfcwt50w6"]
+[gd_scene format=3 uid="uid://bteikfcwt50w6"]
 
 [ext_resource type="Script" uid="uid://by7cbpuh1k7ld" path="res://scripts/enemy.gd" id="1_55jtl"]
 [ext_resource type="PackedScene" uid="uid://ce1embig558rd" path="res://scenes/HealthBar3D.tscn" id="2_ft8do"]
@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="5_1vja8"]
 [ext_resource type="Script" uid="uid://dc22adx2f2fi3" path="res://scripts/StatusEffectManager.gd" id="5_5wwv6"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_mpr68"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_1vja8"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2qkhh"]
@@ -18,12 +18,12 @@ albedo_color = Color(0.43137255, 0.07058824, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_55jtl"]
 material = SubResource("StandardMaterial3D_3gvst")
-size = Vector3(0.9, 0.9, 0.9)
+size = Vector3(0.3, 0.3, 0.3)
 
-[node name="Enemy" type="CharacterBody3D" groups=["enemy"]]
+[node name="Enemy" type="CharacterBody3D" unique_id=137946859 groups=["enemy"]]
 script = ExtResource("1_55jtl")
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=577986372]
 path_desired_distance = 1.5
 target_desired_distance = 1.4
 path_max_distance = 3.01
@@ -32,34 +32,34 @@ neighbor_distance = 10.0
 time_horizon_agents = 0.5
 max_speed = 15.0
 
-[node name="Label3D" type="Label3D" parent="."]
+[node name="Label3D" type="Label3D" parent="." unique_id=499131153]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7542914, 0)
 billboard = 1
 text = "mob_name"
 font_size = 64
 outline_size = 24
 
-[node name="HealthBar3D" parent="." instance=ExtResource("2_ft8do")]
+[node name="HealthBar3D" parent="." unique_id=776687452 instance=ExtResource("2_ft8do")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7302118, 0)
-no_depth_test = true
-texture = SubResource("ViewportTexture_mpr68")
+texture = SubResource("ViewportTexture_1vja8")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=529849094]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.107910156, 0)
 shape = SubResource("BoxShape3D_2qkhh")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1960796069]
+visible = false
 mesh = SubResource("BoxMesh_55jtl")
 
-[node name="HealthComponent" type="Node" parent="."]
+[node name="HealthComponent" type="Node" parent="." unique_id=1624565924]
 script = ExtResource("2_mpr68")
 max_health = 1
 
-[node name="StatsComponent" type="Node" parent="."]
+[node name="StatsComponent" type="Node" parent="." unique_id=932019368]
 script = ExtResource("4_ft8do")
 
-[node name="SkillComponent" type="Node" parent="."]
+[node name="SkillComponent" type="Node" parent="." unique_id=1601425566]
 script = ExtResource("5_1vja8")
 
-[node name="StatusEffectManagerComponent" type="Node" parent="."]
+[node name="StatusEffectManagerComponent" type="Node" parent="." unique_id=1012831347]
 script = ExtResource("5_5wwv6")

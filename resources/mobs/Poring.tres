@@ -4,17 +4,38 @@
 [ext_resource type="PackedScene" uid="uid://d1nm1abc21fsy" path="res://assets/models/poring-placeholder-model.tscn" id="1_k4j7c"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_yrkqf"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="2_46yos"]
+[ext_resource type="Resource" uid="uid://c8gw20ha2d6o0" path="res://resources/items/BlessingScroll.tres" id="3_d447p"]
+[ext_resource type="Resource" uid="uid://ih33gmx7n4ag" path="res://resources/items/SilverRing.tres" id="4_o8ls0"]
+[ext_resource type="Resource" uid="uid://bq6j45wyyofjk" path="res://resources/items/smallRedPotion.tres" id="5_hky16"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="10_7oa06"]
+
+[sub_resource type="Resource" id="Resource_7oa06"]
+script = ExtResource("2_46yos")
+item_data = ExtResource("3_d447p")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_av116"]
+script = ExtResource("2_46yos")
+item_data = ExtResource("4_o8ls0")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_lm5im"]
+script = ExtResource("2_46yos")
+item_data = ExtResource("5_hky16")
+drop_chance = 0.9
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1_yrkqf")
 monster_name = "Poring"
-level = 3
+level = 2
 element = 2
 base_exp = 300
-job_exp = 100
+job_exp = 180
 agi = 3
 dex = 3
+max_hp = 30
 def = 1
 move_spd = 2.0
 aggro_range = 10.0
@@ -25,4 +46,5 @@ jump_frequency = 0.6
 wander_radius = 25.0
 idle_time_max = 3.0
 movement_speed_factor = 1.0
+drop_table = Array[ExtResource("2_46yos")]([SubResource("Resource_7oa06"), SubResource("Resource_av116"), SubResource("Resource_lm5im")])
 metadata/_custom_type_script = "uid://e53aoxyegbf"

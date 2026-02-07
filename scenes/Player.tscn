@@ -93,11 +93,11 @@ current = true
 fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.10361916, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12061417, 0)
 texture = SubResource("ViewportTexture_6e537")
 
 [node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("7_spbar")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18758582, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.20458083, 0)
 texture = SubResource("ViewportTexture_p07f3")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
