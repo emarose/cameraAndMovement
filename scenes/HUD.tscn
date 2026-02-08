@@ -72,6 +72,12 @@ bg_color = Color(0.124082975, 0.124082975, 0.1240829, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_twldb"]
 bg_color = Color(0.6, 0.3019608, 0.6, 1)
 
+[sub_resource type="InputEventKey" id="InputEventKey_twldb"]
+keycode = 83
+
+[sub_resource type="Shortcut" id="Shortcut_8cuoo"]
+events = [SubResource("InputEventKey_twldb")]
+
 [node name="HUD" type="CanvasLayer" unique_id=157647800 groups=["hud"]]
 script = ExtResource("1_qpvh6")
 
@@ -616,7 +622,6 @@ Element: NEUTRAL
 Type: SLIDE"
 
 [node name="HotbarTooltip" type="PanelContainer" parent="." unique_id=2052810523]
-visible = false
 offset_left = 16.0
 offset_top = 304.0
 offset_right = 216.0
@@ -683,9 +688,60 @@ text = "(Novice)"
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=567272456]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -621.0
+offset_top = -90.0
+offset_right = -22.0
+offset_bottom = -19.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 16
+
+[node name="SkillsButton" type="Button" parent="HBoxContainer" unique_id=697687627]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+shortcut = SubResource("Shortcut_8cuoo")
+text = "Skills"
+
+[node name="EquipmentButton" type="Button" parent="HBoxContainer" unique_id=571905983]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+shortcut = SubResource("Shortcut_8cuoo")
+text = "Equipment"
+
+[node name="InventoryButton" type="Button" parent="HBoxContainer" unique_id=1934584175]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+shortcut = SubResource("Shortcut_8cuoo")
+text = "Inventory"
+
+[node name="StatsButton" type="Button" parent="HBoxContainer" unique_id=1980102400]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+shortcut = SubResource("Shortcut_8cuoo")
+text = "Stats"
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=853524941]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "F5 = SAVE
+F6 = LOAD"
+
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/VitRow/AddButton" to="." method="_on_add_vit_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/IntRow/AddButton" to="." method="_on_add_int_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/DexRow/AddButton" to="." method="_on_add_dex_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/LukRow/AddButton" to="." method="_on_add_luk_pressed"]
+[connection signal="pressed" from="HBoxContainer/SkillsButton" to="." method="_on_skills_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/EquipmentButton" to="." method="_on_equipment_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/InventoryButton" to="." method="_on_inventory_button_pressed"]

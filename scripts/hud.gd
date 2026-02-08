@@ -26,6 +26,7 @@ extends CanvasLayer
 @onready var hotbar_tooltip_name: Label = $HotbarTooltip/VBox/NameLabel
 @onready var hotbar_tooltip_desc: Label = $HotbarTooltip/VBox/DescLabel
 @onready var inventory_window: Control = $InventoryUI
+@onready var skill_tree_ui: Control = $SkillTreeUI
 
 # --- Referencias a los Valores de Stats ---
 @onready var str_label = $StatsPanel/VBoxContainer_Base/StrRow/Value
@@ -600,3 +601,12 @@ func _update_job_bar(current, total):
 	job_exp_bar.max_value = total
 	job_exp_bar.value = current
 	# Opcional: actualizar texto "Job Lv. 10"
+
+func _on_skills_button_pressed() -> void:
+	skill_tree_ui.visible = !skill_tree_ui.visible
+
+func _on_equipment_button_pressed() -> void:
+	equipment_ui.visible = !equipment_ui.visible
+	
+func _on_inventory_button_pressed() -> void:
+	inventory_window.visible = !inventory_window.visible

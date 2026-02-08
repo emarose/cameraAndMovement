@@ -43,7 +43,7 @@ func save_player_data(player):
 	player_stats["current_sp"] = player.sp_component.current_sp
 	player_stats["max_sp"] = player.sp_component.max_sp
 	player_stats["zeny"] = player.inventory_component.zeny
-	player_stats["level"] = player.stats.current_level
+	# Base level is tracked in GameManager; avoid overwriting with stale StatsComponent data.
 	
 	# Limpiar y guardar inventario
 	player_stats["inventory_slots"] = []
@@ -84,14 +84,14 @@ func save_player_data(player):
 
 func load_player_data(player):
 	# Load player data from GameManager (always, not just when manually saved)
-	# 1. NIVEL Y ZENY (Básico)
+	# 1. NIVEL, ZENY Y PROGRESIÓN (Básico)
 	player.stats.current_level = player_stats["level"]
 	player.stats.current_job_level = player_stats.get("job_level", 1)
 	player.inventory_component.zeny = player_stats["zeny"]
 	
 	# Restaurar progresión (exp y stat points)
-	# Nota: base_exp, job_exp, stat_points_available ya están en GameManager.player_stats
-	# Solo necesitamos emitir las señales para actualizar la UI
+	# player_stats ya contiene: base_exp, job_exp, stat_points_available
+	# Esta información persiste a través de cambios de mapa y cambios de job
 
 	# 2. EQUIPAMIENTO (Prioridad Alta)
 	# Cargamos el equipo antes que la vida para que los bonos de vitalidad/HP se apliquen primero
@@ -277,6 +277,10 @@ func gain_experience(amount: int, is_job: bool = false):
 			player_stats["stat_points_available"] += 1 # Ganamos un punto por nivel
 			base_level_up.emit(player_stats["level"])
 			req_exp = get_required_exp(player_stats["level"], false)
+			# Keep the player's StatsComponent in sync with GameManager's base level.
+			var player = get_tree().get_first_node_in_group("player")
+			if player and player.has_node("StatsComponent"):
+				player.get_node("StatsComponent").current_level = player_stats["level"]
 		
 		base_exp_gained.emit(player_stats["base_exp"], req_exp)
 func can_learn_skill(skill: SkillData) -> bool:
@@ -396,6 +400,11 @@ func _find_skill_data_by_id(skill_id: String) -> SkillData:
 	return null
 
 func change_job(new_job_resource: JobData):
+	# PRESERVE BASE LEVEL AND PROGRESSION
+	var preserved_base_level = player_stats["level"]
+	var preserved_base_exp = player_stats.get("base_exp", 0)
+	var preserved_stat_points = player_stats.get("stat_points_available", 0)
+	
 	# Check if player can transcend (reached job level 40, unless first job change from Novice)
 	if player_stats["job_name"] == "Novice":
 		# First job change requires job level 5
@@ -412,17 +421,33 @@ func change_job(new_job_resource: JobData):
 	
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
+		# Even if player is not found, preserve the base level
+		player_stats["level"] = preserved_base_level
+		player_stats["base_exp"] = preserved_base_exp
+		player_stats["stat_points_available"] = preserved_stat_points
 		return
 	
+	# Update job-related fields only (NEVER reset base level progression)
 	player_stats["job_name"] = new_job_resource.job_name
 	player_stats["job_level"] = 1
 	player_stats["job_exp"] = 0
 	player_stats["current_job_path"] = new_job_resource.resource_path
+	
+	# ENSURE BASE PROGRESSION IS PRESERVED
+	player_stats["level"] = preserved_base_level
+	player_stats["base_exp"] = preserved_base_exp
+	player_stats["stat_points_available"] = preserved_stat_points
+	
 	current_job_data = new_job_resource
 	
 	# Add to unlocked jobs if not already there
 	if not player_stats["unlocked_jobs"].has(new_job_resource.resource_path):
 		player_stats["unlocked_jobs"].append(new_job_resource.resource_path)
+	
+	# Update player's stats component to match GameManager state
+	if player.has_node("StatsComponent"):
+		var stats_comp = player.get_node("StatsComponent")
+		stats_comp.current_level = preserved_base_level
 	
 	# Recalcular bonos pasivos (por si cambiamos de job, mantenemos las skills pasivas)
 	recalculate_all_passive_bonuses()
