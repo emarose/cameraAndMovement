@@ -59,6 +59,7 @@ height = 0.01
 [node name="Player" type="CharacterBody3D" unique_id=1179624594 groups=["player"]]
 script = ExtResource("1_g2els")
 speed = 8.0
+attack_range = 3.0
 cursor_default = ExtResource("2_lkdrv")
 cursor_attack = ExtResource("3_p7iby")
 cursor_skill = ExtResource("4_p07f3")

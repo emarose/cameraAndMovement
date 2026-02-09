@@ -179,7 +179,12 @@ func level_up():
 	current_level += 1
 	current_xp -= xp_to_next_level
 	xp_to_next_level = int(xp_to_next_level * 1.5)
-	stat_points_available += 5
+	
+	# En RO, los puntos ganados también escalan con el nivel
+	# Fórmula sugerida: (Nivel / 5) + 3
+	var points_to_add = int(current_level / 5.0) + 3
+	stat_points_available += points_to_add
+	
 	on_level_up.emit(current_level)
 	stats_changed.emit()
 
@@ -210,3 +215,53 @@ func initialize_from_resource(data: EnemyData):
 	element = data.element
 	race = data.race
 	size = data.type
+
+# Devuelve cuánto cuesta subir el stat al siguiente nivel
+func get_stat_upgrade_cost(current_base_value: int) -> int:
+	# REGLA: Cada 10 puntos el costo sube en 1.
+	# Si quieres tu regla específica (<20 cuesta 1, >=20 cuesta 2):
+	if current_base_value < 20:
+		return 1
+	elif current_base_value < 40:
+		return 2
+	elif current_base_value < 60:
+		return 3
+	else:
+		return 4
+	
+	# OPCIONAL: Fórmula matemática estilo RO original:
+	# return int(floor((current_base_value - 1) / 10.0)) + 2
+
+# Intenta subir un stat consumiendo puntos
+func request_stat_increase(stat_name: String) -> bool:
+	# 1. Obtener el valor base actual
+	var current_val = 0
+	match stat_name:
+		"str": current_val = str_stat
+		"agi": current_val = agi
+		"vit": current_val = vit
+		"int": current_val = int_stat
+		"dex": current_val = dex
+		"luk": current_val = luk
+		_: return false # Stat no válido
+	
+	# 2. Calcular costo
+	var cost = get_stat_upgrade_cost(current_val)
+	
+	# 3. Verificar si hay puntos suficientes
+	if stat_points_available >= cost:
+		stat_points_available -= cost
+		
+		# 4. Aplicar el incremento
+		match stat_name:
+			"str": str_stat += 1
+			"agi": agi += 1
+			"vit": vit += 1
+			"int": int_stat += 1
+			"dex": dex += 1
+			"luk": luk += 1
+		
+		stats_changed.emit()
+		return true # Éxito
+		
+	return false # No hay suficientes puntos

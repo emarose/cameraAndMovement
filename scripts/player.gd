@@ -192,32 +192,29 @@ func _physics_process(_delta):
 	move_and_slide()
 	
 func _process_continuous_interaction():
-	
-	var result = get_mouse_world_interaction()
-	if not result: return
-	
-	# Nota: No interactuar con NPCs durante click sostenido.
-	# La interacción se maneja solo en el click directo (pressed).
-	if result.collider.has_method("interact"):
-		return
-	
-	if result.collider.is_in_group("enemy"):
-		# CASO A: Estamos clickeando un enemigo
-		var enemy = result.collider
-		current_target_enemy = enemy
-		var dist = global_position.distance_to(enemy.global_position)
+	# Si tenemos un enemigo targetado (por click inicial), continuar atacándolo mientras se sostiene el click
+	if current_target_enemy and is_instance_valid(current_target_enemy):
+		var dist = global_position.distance_to(current_target_enemy.global_position)
 		
 		if dist <= attack_range:
 			# Si estamos en rango, nos detenemos y atacamos
 			nav_agent.target_position = global_position
-			execute_attack(enemy)
+			execute_attack(current_target_enemy)
 		else:
 			# Si estamos lejos, lo perseguimos
-			nav_agent.target_position = enemy.global_position
-			
-	else:
-		# CASO B: Estamos clickeando el suelo
-		current_target_enemy = null
+			nav_agent.target_position = current_target_enemy.global_position
+		return
+	
+	# Si no hay enemigo targetado, manejar movimiento al suelo
+	var result = get_mouse_world_interaction()
+	if not result: return
+	
+	# Nota: No interactuar con NPCs durante click sostenido.
+	if result.collider.has_method("interact"):
+		return
+	
+	# No retargetear enemigos durante click sostenido - solo mover al suelo
+	if not result.collider.is_in_group("enemy"):
 		nav_agent.target_position = result.position
 
 # --- FUNCIONES AUXILIARES DE MOVIMIENTO ---
@@ -245,6 +242,10 @@ func handle_click_interaction():
 		
 		if is_attack_click:
 			current_target_enemy = collider
+			# Attack immediately on click if in range, otherwise move towards enemy
+			var dist = global_position.distance_to(collider.global_position)
+			if dist <= attack_range:
+				execute_attack(collider)
 		else:
 			current_target_enemy = null # Si clicamos suelo, cancelamos ataque
 
@@ -436,7 +437,7 @@ func _on_player_damaged(damage_amount: int):
 	tween.tween_property(self, "position:y", position.y + 0.05, 0.05)
 	tween.chain().tween_property(self, "position:y", position.y, 0.1)
 
-	await get_tree().create_timer(0.2).timeout # Tiempo de flinch
+	await get_tree().create_timer(0.1).timeout # Tiempo de flinch
 	if stats:
 		stats.is_stunned = false
 
