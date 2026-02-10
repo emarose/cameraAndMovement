@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dlfs3i72excfk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvdfg"]
+albedo_color = Color(0.27450982, 0.47058824, 0.14117648, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ba4nw"]
+material = SubResource("StandardMaterial3D_fvdfg")
+
+[node name="WarriorPlaceholder" type="MeshInstance3D" unique_id=761293512]
+mesh = SubResource("CapsuleMesh_ba4nw")

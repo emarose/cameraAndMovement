@@ -1,39 +1,33 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://k6cg4r3cht2q"]
 
-[ext_resource type="Script" path="res://scripts/EnemyData.gd" id="1"]
-[ext_resource type="Resource" path="res://resources/statusEffects/stun_shot.tres" id="2"]
-[ext_resource type="Resource" path="res://resources/skills/Bash.tres" id="3"]
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_k6h7c"]
+[ext_resource type="Resource" uid="uid://dspqpvxe1m36" path="res://resources/statusEffects/Stun.tres" id="2_stun"]
+[ext_resource type="Resource" uid="uid://cudaytyrcelie" path="res://resources/skills/Bash.tres" id="3"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3_61wf4"]
+[ext_resource type="PackedScene" uid="uid://dlfs3i72excfk" path="res://assets/models/warrior-placeholder-model.tscn" id="4_61wf4"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5_xrorg"]
 
 [resource]
 script = ExtResource("1")
 monster_name = "Orc Warrior"
 level = 12
-type = "Monster"
-race = "Brute"
-element = "Earth"
 base_exp = 200
 job_exp = 150
-str_stat = 12
 agi = 6
 vit = 8
 int_stat = 3
-dex = 7
 luk = 4
-max_hp = 450
+max_hp = 10000
 flee = 6
 def = 8
 move_spd = 2.5
 aggro_range = 10.0
 attack_range = 2.0
 lose_aggro_range = 18.0
-return_speed = 4
-movement_type = 0
+model_scene = ExtResource("4_61wf4")
 wander_radius = 20.0
-idle_time_min = 2.0
 idle_time_max = 5.0
-movement_speed_factor = 0.5
-drop_table = []
-attack_status_effects = [ExtResource("2")]
-status_effect_chance = 0.1
-skills = [ExtResource("3")]
-skill_use_chance = 0.2
+attack_status_effects = Array[ExtResource("1_k6h7c")]([ExtResource("2_stun")])
+skills = Array[ExtResource("5_xrorg")]([ExtResource("3")])
+skill_use_chance = 0.8

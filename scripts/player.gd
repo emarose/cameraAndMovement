@@ -431,15 +431,11 @@ func _on_player_damaged(damage_amount: int):
 	velocity = Vector3.ZERO
 	nav_agent.target_position = global_position # Cancelar ruta actual
 	
-	# 4. Feedback Visual
+	# 4. Feedback Visual (flinch animation only - don't control is_stunned)
 	var tween = create_tween()
 	
 	tween.tween_property(self, "position:y", position.y + 0.05, 0.05)
 	tween.chain().tween_property(self, "position:y", position.y, 0.1)
-
-	await get_tree().create_timer(0.1).timeout # Tiempo de flinch
-	if stats:
-		stats.is_stunned = false
 
 func _on_player_death():
 	if is_dead: return # Evitar que se ejecute dos veces

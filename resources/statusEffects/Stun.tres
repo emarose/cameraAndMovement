@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="StatusEffectData" format=3 uid="uid://enx68pi80x8m"]
+[gd_resource type="Resource" script_class="StatusEffectData" format=3 uid="uid://dspqpvxe1m36"]
 
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_oyxem"]
 
 [resource]
 script = ExtResource("1_oyxem")
-effect_name = "Stun Shot"
+effect_name = "Stun"
 type = 2
 duration = 5.0
-value = 1
 modifiers = {}
 metadata/_custom_type_script = "uid://y6wkl8vhgid"

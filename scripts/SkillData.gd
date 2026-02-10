@@ -18,6 +18,10 @@ enum SkillType { TARGET, POINT, SELF }
 @export var aoe_radius: float = 3.0 # Radio de la explosión
 @export var effect_scene: PackedScene # El prefab visual (fuego, hielo, etc)
 
+@export_group("Efectos de Estado")
+@export var status_effects: Array[StatusEffectData] = [] # Status effects a aplicar
+@export var status_effect_chance: float = 1.0 # Chance de aplicar (0.0 - 1.0)
+
 @export_group("Casteo")
 @export var cast_time: float = 0.0 # 0.0 = Instantáneo
 @export var is_interruptible: bool = true # Si es true, moverse o recibir daño cancela

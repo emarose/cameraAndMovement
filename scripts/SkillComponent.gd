@@ -189,6 +189,9 @@ func _finalize_skill_execution(skill: SkillData, target_data):
 func _apply_damage(target: Node3D, skill: SkillData):
 	if not is_instance_valid(target): return
 	
+	# Prevent self-targeting
+	if target == actor: return
+	
 	if target.has_node("HealthComponent") and target.has_node("StatsComponent"):
 		var target_stats = target.get_node("StatsComponent") as StatsComponent
 		
@@ -209,6 +212,10 @@ func _apply_damage(target: Node3D, skill: SkillData):
 		if actor.has_method("spawn_floating_text"):
 			# Podemos pasar un color diferente si el daño fue elementalmente fuerte (opcional)
 			actor.spawn_floating_text(target.global_position, final_damage, false)
+		
+		# 4. Aplicar status effects
+		if skill.status_effects.size() > 0 and randf() < skill.status_effect_chance:
+			_apply_skill_status_effects(target, skill)
 
 
 func _apply_aoe_damage(center_pos: Vector3, skill: SkillData):
@@ -220,6 +227,9 @@ func _apply_aoe_damage(center_pos: Vector3, skill: SkillData):
 	
 	for enemy in enemies:
 		if not is_instance_valid(enemy): continue
+		
+		# Exclude the actor (caster) from AOE damage
+		if enemy == actor: continue
 		
 		if enemy.global_position.distance_to(center_pos) <= skill.aoe_radius:
 			if enemy.has_node("HealthComponent") and enemy.has_node("StatsComponent"):
@@ -238,9 +248,24 @@ func _apply_aoe_damage(center_pos: Vector3, skill: SkillData):
 				if actor.has_method("spawn_floating_text"):
 					actor.spawn_floating_text(enemy.global_position, final_damage, false)
 				
+				# Aplicar status effects
+				if skill.status_effects.size() > 0 and randf() < skill.status_effect_chance:
+					_apply_skill_status_effects(enemy, skill)
+				
 				hit_count += 1
 	
 	if hit_count > 0:
 		get_tree().call_group("hud", "add_log_message", 
 			"%s golpeó a %d enemigos" % [skill.skill_name, hit_count], 
 			Color.YELLOW)
+
+func _apply_skill_status_effects(target: Node3D, skill: SkillData):
+	if not is_instance_valid(target): return
+	
+	if target.has_node("StatusEffectManagerComponent"):
+		var status_manager = target.get_node("StatusEffectManagerComponent")
+		var effect = skill.status_effects[randi() % skill.status_effects.size()]
+		status_manager.add_effect(effect)
+		get_tree().call_group("hud", "add_log_message", 
+			"%s infligió %s" % [skill.skill_name, effect.effect_name], 
+			Color.ORANGE)

@@ -287,21 +287,17 @@ func _on_take_damage(new_health):
 
 	if health_bar:
 		health_bar.update_bar(new_health, health_comp.max_health)
-	if stats_comp:
-		stats_comp.is_stunned = true
+	
 	velocity = Vector3.ZERO
 	
 	# Activar aggro al recibir daño (ataque del jugador desde distancia)
 	is_aggroed = true
 	
+	# Visual flinch effect (no longer controls is_stunned - let status effects handle that)
 	if mesh: # Solo crear el tween SI tenemos el mesh listo
 		var tween = create_tween()
 		tween.tween_property(mesh, "scale", Vector3(1.3, 0.7, 1.3), 0.1)
 		tween.tween_property(mesh, "scale", Vector3(1, 1, 1), 0.1)
-	
-	await get_tree().create_timer(0.2).timeout
-	if stats_comp:
-		stats_comp.is_stunned = false
 
 func _on_death():
 	if is_dead: return # Si ya está muriendo, ignorar

@@ -3,16 +3,20 @@
 [ext_resource type="PackedScene" uid="uid://5gpv8gjhcclf" path="res://effects/vfx_hit.tscn" id="1_qjb4x"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
 [ext_resource type="Texture2D" uid="uid://b4tpn2m3enyqh" path="res://resources/skills/Bash.png" id="2_qjb4x"]
+[ext_resource type="Resource" uid="uid://dspqpvxe1m36" path="res://resources/statusEffects/Stun.tres" id="3_stun"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="4_bxve2"]
 
 [resource]
 script = ExtResource("1_ucktl")
 id = "bash"
 skill_name = "Bash"
 sp_cost = 2
-damage_multiplier = 200.0
+damage_multiplier = 10.0
 cooldown = 3.0
 icon = ExtResource("2_qjb4x")
 aoe_radius = 1.0
 effect_scene = ExtResource("1_qjb4x")
+status_effects = Array[ExtResource("4_bxve2")]([ExtResource("3_stun")])
+status_effect_chance = 0.9
 max_level = 10
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"
