@@ -258,23 +258,42 @@ func update_armed_skill_info(skill_name: String):
 		armed_skill_label.modulate = Color.CYAN
 
 func _modify_stat(stat_name: String):
-	# Ahora player_stats ya no será Nil
-	if GameManager.player_stats["stat_points_available"] > 0:
-		# 1. Aumentar el stat
-		var current_val = player_stats.get(stat_name)
+	var current_val = player_stats.get(stat_name)
+	
+	# 1. Calcular el costo según tu regla (progresivo)
+	var cost = _get_upgrade_cost(current_val)
+	
+	# 2. Verificar si tiene puntos suficientes para ese costo específico
+	if GameManager.player_stats["stat_points_available"] >= cost:
+		# Aumentar el stat
 		player_stats.set(stat_name, current_val + 1)
 		
-		# 2. Restar punto disponible
-		GameManager.player_stats["stat_points_available"] -= 1
+		# Restar los puntos según el costo calculado
+		GameManager.player_stats["stat_points_available"] -= cost
 		
-		# 3. Lógica especial para VIT (Actualizar vida máxima)
+		# 3. Lógica especial para VIT
 		if stat_name == "vit":
 			_update_player_max_hp()
 			
-		# 4. Refrescar la UI
+		# 4. Refrescar la UI y Log
 		refresh_ui()
-		add_log_message("Aumentaste %s a %d" % [stat_name.to_upper(), current_val + 1], Color.AQUA)
+		add_log_message("Aumentaste %s a %d (Costo: %d pts)" % [stat_name.to_upper(), current_val + 1, cost], Color.AQUA)
+	else:
+		# Opcional: Avisar que no tiene suficientes puntos
+		add_log_message("Puntos insuficientes. Necesitas %d para subir %s" % [cost, stat_name.to_upper()], Color.ORANGE_RED)
 
+# --- Función auxiliar de costo (Punto 2 de tu lista) ---
+func _get_upgrade_cost(current_value: int) -> int:
+	# Aquí aplicamos tu regla: < 20 cuesta 1, >= 20 cuesta 2, etc.
+	if current_value < 20:
+		return 1
+	elif current_value < 40:
+		return 2
+	elif current_value < 60:
+		return 3
+	else:
+		return 4 # Puedes seguir escalando según desees
+	
 func _update_player_max_hp():
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
@@ -300,12 +319,20 @@ func _input(event):
 				if player:
 					equipment_ui.set_player(player)
 			equipment_ui.visible = !equipment_ui.visible
+	
+	# Toggle Skills window
+	if event.is_action_pressed("toggle_skills"):
+		if skill_tree_ui and skill_tree_ui.is_inside_tree():
+			skill_tree_ui.visible = !skill_tree_ui.visible
+		get_viewport().set_input_as_handled()
 		
-	# Abrir/Cerrar menú con la tecla C (debes configurarla en Input Map)
+
 	if event.is_action_pressed("toggle_stats"):
-		stats_panel.visible = !stats_panel.visible
-		if stats_panel.visible:
-			refresh_ui()
+		if stats_panel and stats_panel.is_inside_tree():
+			stats_panel.visible = !stats_panel.visible
+			if stats_panel.visible:
+				refresh_ui()
+		get_viewport().set_input_as_handled()
 
 func add_log_message(text: String, color: Color = Color.WHITE):
 	if log_label:
@@ -421,6 +448,7 @@ func on_item_dropped_to_hotbar(target_slot_index: int, item: ItemData):
 func reject_non_consumable_item(_item: ItemData):
 	add_log_message("Solo se pueden asignar items consumibles", Color.ORANGE)
 
+
 # Callback para hacer swap entre slots del hotbar
 func on_hotbar_slot_swap(origin_slot_index: int, target_slot_index: int):
 	var player = get_tree().get_first_node_in_group("player")
@@ -439,6 +467,7 @@ func on_hotbar_slot_swap(origin_slot_index: int, target_slot_index: int):
 	add_log_message("Slots intercambiados", Color.LIGHT_BLUE)
 
 # Callback para asignar una skill al hotbar
+
 func on_skill_dropped_to_hotbar(target_slot_index: int, skill: SkillData):
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
@@ -501,7 +530,7 @@ func _on_status_effect_refreshed(status_data: StatusEffectData, new_duration: fl
 			indicator.refresh_timer(new_duration)
 			add_log_message("Efecto refrescado: %s" % status_data.effect_name, Color.YELLOW)
 
-# --- Cast Bar Handlers ---
+
 
 func _on_cast_started(skill_name: String, duration: float) -> void:
 	if not cast_bar or not cast_label:
@@ -522,8 +551,6 @@ func _on_cast_ended() -> void:
 		return
 	
 	cast_bar.visible = false
-
-# --- Enemy Debug Panel ---
 
 func update_enemy_debug_panel(enemy: Node3D) -> void:
 	if not enemy_debug_panel:
@@ -565,7 +592,6 @@ func hide_enemy_debug_panel() -> void:
 	if cast_label:
 		cast_label.text = ""
 
-# --- Hotbar Tooltip Handlers ---
 
 func _on_hotbar_slot_hover(resource: Resource) -> void:
 	if not hotbar_tooltip or not resource:
@@ -610,3 +636,6 @@ func _on_equipment_button_pressed() -> void:
 	
 func _on_inventory_button_pressed() -> void:
 	inventory_window.visible = !inventory_window.visible
+
+func _on_stats_button_pressed() -> void:
+	stats_panel.visible = !stats_panel.visible

@@ -42,10 +42,10 @@ func toggle():
 		update_tree_ui()
 		
 func _input(event):
-	if event.is_action_pressed("ui_skills"): 
-		toggle()
+	# Let the HUD handle toggle_skills input
 	if event.is_action_pressed("ui_cancel") and visible:
 		visible = false
+		get_viewport().set_input_as_handled()
 		
 func rebuild_skill_tree():
 	for child in tree_canvas.get_children():

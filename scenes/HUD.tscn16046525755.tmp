@@ -745,4 +745,3 @@ F6 = LOAD"
 [connection signal="pressed" from="HBoxContainer/SkillsButton" to="." method="_on_skills_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/EquipmentButton" to="." method="_on_equipment_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/InventoryButton" to="." method="_on_inventory_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/StatsButton" to="." method="_on_stats_button_pressed"]
