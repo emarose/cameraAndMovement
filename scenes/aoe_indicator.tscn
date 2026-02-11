@@ -1,12 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdc52pcharxuw"]
+[gd_scene format=3 uid="uid://bdc52pcharxuw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u6h0k"]
-albedo_color = Color(0.078431375, 0.44705883, 0.6509804, 1)
+transparency = 1
+albedo_color = Color(0.7176471, 0.42745098, 0, 0.40392157)
 
-[sub_resource type="TorusMesh" id="TorusMesh_684ch"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_684ch"]
 material = SubResource("StandardMaterial3D_u6h0k")
-inner_radius = 1.7
-outer_radius = 1.845
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.05
 
-[node name="AoeIndicator" type="MeshInstance3D"]
-mesh = SubResource("TorusMesh_684ch")
+[node name="AoeIndicator" type="MeshInstance3D" unique_id=627371500]
+mesh = SubResource("CylinderMesh_684ch")

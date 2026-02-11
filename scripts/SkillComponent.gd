@@ -35,7 +35,9 @@ func can_use_skill(skill: SkillData) -> bool:
 		if current_time < cooldown_end:
 			var remaining = (cooldown_end - current_time) / 1000.0
 			print("  can_use_skill %s: Still on cooldown (%.1fs remaining)" % [skill.skill_name, remaining])
-			get_tree().call_group("hud", "add_log_message", "Habilidad en cooldown", Color.ORANGE)
+			# Only show message for player
+			if actor.is_in_group("player"):
+				get_tree().call_group("hud", "add_log_message", "Habilidad en cooldown", Color.ORANGE)
 			return false
 		else:
 			# Remove expired cooldown
@@ -45,7 +47,9 @@ func can_use_skill(skill: SkillData) -> bool:
 	# Enemies use skills freely without SP cost
 	if sp_comp and sp_comp.current_sp < skill.sp_cost:
 		print("  can_use_skill %s: Insufficient SP" % skill.skill_name)
-		get_tree().call_group("hud", "add_log_message", "SP insuficiente", Color.RED)
+		# Only show message for player
+		if actor.is_in_group("player"):
+			get_tree().call_group("hud", "add_log_message", "SP insuficiente", Color.RED)
 		return false
 	
 	print("  can_use_skill %s: OK" % skill.skill_name)
@@ -85,7 +89,9 @@ func cancel_cast():
 		armed_skill = null
 		skill_state_changed.emit()
 	
-	get_tree().call_group("hud", "add_log_message", "Cancelado.", Color.GRAY)
+	# Only show message for player
+	if actor.is_in_group("player"):
+		get_tree().call_group("hud", "add_log_message", "Cancelado.", Color.GRAY)
 
 	# 2. Si estaba activamente casteando (barra de progreso)
 	if is_casting:
@@ -125,7 +131,9 @@ func _start_casting_process(skill: SkillData, target, time: float):
 	
 	# Emitir señal para que aparezca la barra sobre la cabeza
 	cast_started.emit(skill.skill_name, time)
-	get_tree().call_group("hud", "add_log_message", "Casteando %s..." % skill.skill_name, Color.CYAN)
+	# Only show message for player
+	if actor.is_in_group("player"):
+		get_tree().call_group("hud", "add_log_message", "Casteando %s..." % skill.skill_name, Color.CYAN)
 	
 	# Crear un Tween que funcione como Timer
 	if current_cast_tween: current_cast_tween.kill()
@@ -161,7 +169,9 @@ func _interrupt_casting(force: bool = false):
 		current_cast_tween.kill()
 	
 	cast_interrupted.emit()
-	get_tree().call_group("hud", "add_log_message", "¡Casteo interrumpido!", Color.RED)
+	# Only show message for player
+	if actor.is_in_group("player"):
+		get_tree().call_group("hud", "add_log_message", "¡Casteo interrumpido!", Color.RED)
 	
 	pending_skill = null
 	pending_target = null
@@ -177,7 +187,9 @@ func _finalize_skill_execution(skill: SkillData, target_data):
 	# Validar SP y Cooldown justo antes de disparar (por si el SP bajó durante el cast)
 	# Only for players - enemies don't need SP
 	if sp_comp and sp_comp.current_sp < skill.sp_cost:
-		get_tree().call_group("hud", "add_log_message", "SP insuficiente al terminar cast", Color.RED)
+		# Only show message for player
+		if actor.is_in_group("player"):
+			get_tree().call_group("hud", "add_log_message", "SP insuficiente al terminar cast", Color.RED)
 		return
 
 	# Only consume SP for players (enemies use skills for free)
@@ -319,10 +331,9 @@ func _apply_aoe_damage(center_pos: Vector3, skill: SkillData):
 					_apply_skill_status_effects(player, skill)
 				
 				hit_count += 1
-				
-				hit_count += 1
 	
-	if hit_count > 0:
+	# Only show message for player
+	if hit_count > 0 and actor.is_in_group("player"):
 		get_tree().call_group("hud", "add_log_message", 
 			"%s golpeó a %d enemigos" % [skill.skill_name, hit_count], 
 			Color.YELLOW)
@@ -346,8 +357,10 @@ func _apply_skill_status_effects(target: Node3D, skill: SkillData):
 		
 		print("_apply_skill_status_effects: Applying %s to %s" % [effect.effect_name, target.name])
 		status_manager.add_effect(effect)
-		get_tree().call_group("hud", "add_log_message", 
-			"%s infligió %s" % [skill.skill_name, effect.effect_name], 
-			Color.ORANGE)
+		# Only show message for player
+		if actor.is_in_group("player"):
+			get_tree().call_group("hud", "add_log_message", 
+				"%s infligió %s" % [skill.skill_name, effect.effect_name], 
+				Color.ORANGE)
 	else:
 		print("_apply_skill_status_effects: Target %s has no StatusEffectManagerComponent" % target.name)
