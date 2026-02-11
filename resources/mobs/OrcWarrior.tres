@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_k6h7c"]
-[ext_resource type="Resource" uid="uid://dspqpvxe1m36" path="res://resources/statusEffects/Stun.tres" id="2_stun"]
 [ext_resource type="Resource" uid="uid://cudaytyrcelie" path="res://resources/skills/Bash.tres" id="3"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3_61wf4"]
 [ext_resource type="PackedScene" uid="uid://dlfs3i72excfk" path="res://assets/models/warrior-placeholder-model.tscn" id="4_61wf4"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5_xrorg"]
+[ext_resource type="Resource" uid="uid://c8n2p3q5r1s2t" path="res://resources/skills/FirstAid.tres" id="7_61wf4"]
 
 [resource]
 script = ExtResource("1")
@@ -28,6 +28,5 @@ lose_aggro_range = 18.0
 model_scene = ExtResource("4_61wf4")
 wander_radius = 20.0
 idle_time_max = 5.0
-attack_status_effects = Array[ExtResource("1_k6h7c")]([ExtResource("2_stun")])
-skills = Array[ExtResource("5_xrorg")]([ExtResource("3")])
-skill_use_chance = 0.8
+skills = Array[ExtResource("5_xrorg")]([ExtResource("3"), ExtResource("7_61wf4")])
+skill_use_chance = 0.0

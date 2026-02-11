@@ -30,20 +30,34 @@ func can_use_skill(skill: SkillData) -> bool:
 	if not skill: return false
 	
 	if cooldown_timers.has(skill.skill_name):
-		if Time.get_ticks_msec() < cooldown_timers[skill.skill_name]:
+		var cooldown_end = cooldown_timers[skill.skill_name]
+		var current_time = Time.get_ticks_msec()
+		if current_time < cooldown_end:
+			var remaining = (cooldown_end - current_time) / 1000.0
+			print("  can_use_skill %s: Still on cooldown (%.1fs remaining)" % [skill.skill_name, remaining])
 			get_tree().call_group("hud", "add_log_message", "Habilidad en cooldown", Color.ORANGE)
 			return false
-			
+		else:
+			# Remove expired cooldown
+			cooldown_timers.erase(skill.skill_name)
+	
+	# Only check SP if this is a player (has sp_comp with actual SP system)
+	# Enemies use skills freely without SP cost
 	if sp_comp and sp_comp.current_sp < skill.sp_cost:
+		print("  can_use_skill %s: Insufficient SP" % skill.skill_name)
 		get_tree().call_group("hud", "add_log_message", "SP insuficiente", Color.RED)
 		return false
-		
+	
+	print("  can_use_skill %s: OK" % skill.skill_name)
 	return true
 
 func cast_immediate(skill: SkillData):
 	if not can_use_skill(skill): return
 
-	sp_comp.use_sp(skill.sp_cost)
+	# Only consume SP for players (enemies use skills for free)
+	if sp_comp:
+		sp_comp.use_sp(skill.sp_cost)
+	
 	_start_cooldown(skill)
 	
 	# SOLUCIÓN ERROR LÍNEA 44: Ahora la función acepta el parámetro skill
@@ -78,9 +92,12 @@ func cancel_cast():
 		_interrupt_casting()
 
 func execute_armed_skill(target_data) -> void:
-	if not armed_skill: return
+	if not armed_skill: 
+		print("execute_armed_skill: No armed skill!")
+		return
 	
 	var skill_to_use = armed_skill
+	print("execute_armed_skill: Using skill %s with target_data: %s" % [skill_to_use.skill_name, target_data])
 	
 	# 1. Calculamos el tiempo real basado en DEX
 	var final_cast_time = stats.get_cast_time_reduction(skill_to_use.cast_time)
@@ -153,10 +170,12 @@ func _interrupt_casting(force: bool = false):
 
 func _finalize_skill_execution(skill: SkillData, target_data):
 	# Validar SP y Cooldown justo antes de disparar (por si el SP bajó durante el cast)
+	# Only for players - enemies don't need SP
 	if sp_comp and sp_comp.current_sp < skill.sp_cost:
 		get_tree().call_group("hud", "add_log_message", "SP insuficiente al terminar cast", Color.RED)
 		return
 
+	# Only consume SP for players (enemies use skills for free)
 	if sp_comp:
 		sp_comp.use_sp(skill.sp_cost)
 	
@@ -262,10 +281,24 @@ func _apply_aoe_damage(center_pos: Vector3, skill: SkillData):
 func _apply_skill_status_effects(target: Node3D, skill: SkillData):
 	if not is_instance_valid(target): return
 	
+	# Validate status effects exist
+	if skill.status_effects.is_empty():
+		print("_apply_skill_status_effects: No status effects configured for %s" % skill.skill_name)
+		return
+	
 	if target.has_node("StatusEffectManagerComponent"):
 		var status_manager = target.get_node("StatusEffectManagerComponent")
 		var effect = skill.status_effects[randi() % skill.status_effects.size()]
+		
+		# Validate effect resource is not nil
+		if effect == null:
+			print("_apply_skill_status_effects: Effect resource is null for %s" % skill.skill_name)
+			return
+		
+		print("_apply_skill_status_effects: Applying %s to %s" % [effect.effect_name, target.name])
 		status_manager.add_effect(effect)
 		get_tree().call_group("hud", "add_log_message", 
 			"%s infligió %s" % [skill.skill_name, effect.effect_name], 
 			Color.ORANGE)
+	else:
+		print("_apply_skill_status_effects: Target %s has no StatusEffectManagerComponent" % target.name)

@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="5_1vja8"]
 [ext_resource type="Script" uid="uid://dc22adx2f2fi3" path="res://scripts/StatusEffectManager.gd" id="5_5wwv6"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_1vja8"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_1i2q2"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2qkhh"]
@@ -41,7 +41,7 @@ outline_size = 24
 
 [node name="HealthBar3D" parent="." unique_id=776687452 instance=ExtResource("2_ft8do")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7302118, 0)
-texture = SubResource("ViewportTexture_1vja8")
+texture = SubResource("ViewportTexture_1i2q2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=529849094]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.107910156, 0)

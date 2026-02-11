@@ -22,6 +22,10 @@ var can_attack: bool = true
 var is_stunned: bool = false
 var is_aggroed: bool = false
 
+# Timer for skill usage attempts
+var skill_attempt_timer: float = 0.0
+var skill_attempt_interval: float = 1.0 # seconds between skill attempts
+
 # Variables nuevas para el control de tiempo
 var move_timer: float = 0.0
 var is_jumping: bool = false
@@ -82,7 +86,6 @@ func _physics_process(delta):
 
 	if player and !player.is_dead:
 		var dist_to_player = global_position.distance_to(player.global_position)
-		
 		# Sincronización de Aggro
 		if dist_to_player <= data.aggro_range:
 			is_aggroed = true
@@ -90,10 +93,13 @@ func _physics_process(delta):
 			is_aggroed = false
 
 		if is_aggroed:
-			# Chance de usar skill si está disponible
-			if data.skills.size() > 0 and randf() < data.skill_use_chance:
-				_try_use_skill()
-			
+			# Try to use skills only every skill_attempt_interval seconds
+			skill_attempt_timer -= delta
+			if skill_attempt_timer <= 0.0:
+				skill_attempt_timer = skill_attempt_interval
+				if data.skills.size() > 0:
+					_try_use_skill()
+
 			if dist_to_player <= data.attack_range:
 				# Detenerse para atacar
 				_stop_movement()
@@ -379,28 +385,51 @@ func _create_item_drop(item_data: ItemData, quantity: int, spawn_position: Vecto
 	item_drop.setup(item_data, quantity)
 
 func _try_use_skill() -> void:
-	if not skill_comp or not player:
+	if not skill_comp or not player or not data:
+		print("_try_use_skill: Missing component - skill_comp: %s, player: %s, data: %s" % [skill_comp != null, player != null, data != null])
 		return
 	
-	# Elegir skill aleatoria
-	var available_skills = data.skills.filter(func(s): return skill_comp.can_use_skill(s))
-	if available_skills.is_empty():
+	var dist_to_player = global_position.distance_to(player.global_position)
+	print("_try_use_skill: Checking %d skills, distance to player: %.1f" % [data.skills.size(), dist_to_player])
+	
+	# Find usable skills within range that pass their individual use chance
+	var usable_skills = []
+	
+	for skill in data.skills:
+		# Check range
+		if dist_to_player > skill.cast_range:
+			print("  Skill %s: Out of range (distance: %.1f, range: %.1f)" % [skill.skill_name, dist_to_player, skill.cast_range])
+			continue
+		
+		# Check if can use (cooldown, etc)
+		if not skill_comp.can_use_skill(skill):
+			print("  Skill %s: Cannot use (cooldown or other issue)" % skill.skill_name)
+			continue
+		
+		# Check individual skill chance
+		if randf() < skill.ai_use_chance:
+			print("  Skill %s: PASSED chance check (%.0f%%)" % [skill.skill_name, skill.ai_use_chance * 100])
+			usable_skills.append(skill)
+		else:
+			print("  Skill %s: Failed chance check (%.0f%%)" % [skill.skill_name, skill.ai_use_chance * 100])
+	
+	if usable_skills.is_empty():
+		print("_try_use_skill: No usable skills found")
 		return
 	
-	var skill = available_skills[randi() % available_skills.size()]
+	var skill = usable_skills[randi() % usable_skills.size()]
+	print("_try_use_skill: USING SKILL %s (type=%d)" % [skill.skill_name, skill.type])
 	
-	# Usar según tipo de skill
+	# Execute based on skill type
 	match skill.type:
 		SkillData.SkillType.SELF:
 			skill_comp.cast_immediate(skill)
 		SkillData.SkillType.TARGET:
-			if skill_comp.can_use_skill(skill):
-				skill_comp.execute_armed_skill(player)
+			skill_comp.armed_skill = skill
+			skill_comp.execute_armed_skill(player)
 		SkillData.SkillType.POINT:
-			# Usar en posición del jugador
-			if skill_comp.can_use_skill(skill):
-				skill_comp.armed_skill = skill
-				skill_comp.execute_armed_skill(player.global_position)
+			skill_comp.armed_skill = skill
+			skill_comp.execute_armed_skill(player.global_position)
 
 func _apply_random_status_effect(target: Node) -> void:
 	if data.attack_status_effects.is_empty():

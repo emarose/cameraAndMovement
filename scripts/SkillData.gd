@@ -27,6 +27,9 @@ enum SkillType { TARGET, POINT, SELF }
 @export var is_interruptible: bool = true # Si es true, moverse o recibir daño cancela
 @export var cast_animation_name: String = "cast" # Nombre de la animación a reproducir
 
+@export_group("IA Enemiga")
+@export var ai_use_chance: float = 1.0 # Probabilidad que un enemigo use esta skill (0.0 - 1.0)
+
 @export_group("Árbol de Habilidades")
 @export var max_level: int = 5 # Nivel máximo de la skill
 @export var required_job_level: int = 1 # Job Level requerido para aprender
