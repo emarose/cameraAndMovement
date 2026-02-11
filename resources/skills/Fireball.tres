@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://d376231e8sady" path="res://resources/skills/Fireball.png" id="1_hffen"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_len4x"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="3_1vslj"]
 
 [resource]
 script = ExtResource("1_len4x")
@@ -12,8 +13,10 @@ cast_range = 8.0
 damage_multiplier = 1.5
 cooldown = 2.0
 icon = ExtResource("1_hffen")
-aoe_radius = 4.0
+element = 3
+aoe_radius = 2.0
 cast_time = 1.0
 is_interruptible = null
 cast_animation_name = null
+ai_use_chance = 0.3
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"

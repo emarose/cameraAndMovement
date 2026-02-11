@@ -6,9 +6,14 @@
 [ext_resource type="Texture2D" uid="uid://s5vvlnu0pvns" path="res://textures/texture_08.png" id="3_mxm8b"]
 [ext_resource type="PackedScene" uid="uid://cxmfbmm1ex652" path="res://scenes/NPC_Merchant.tscn" id="4_d23ae"]
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="4_db6y7"]
+[ext_resource type="Resource" uid="uid://cudaytyrcelie" path="res://resources/skills/Bash.tres" id="4_ok4k7"]
+[ext_resource type="Resource" uid="uid://c8d8832xb0nhw" path="res://resources/skills/Blessing.tres" id="5_7inio"]
 [ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="5_47fml"]
-[ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="6_47fml"]
+[ext_resource type="Resource" uid="uid://cloo1cx1g1rok" path="res://resources/skills/Fireball.tres" id="6_jqytk"]
+[ext_resource type="Resource" uid="uid://cj3jo6gvfvaxn" path="res://resources/skills/FireBlast.tres" id="7_ajpuq"]
+[ext_resource type="Resource" uid="uid://c8n2p3q5r1s2t" path="res://resources/skills/FirstAid.tres" id="8_hagb8"]
 [ext_resource type="PackedScene" uid="uid://bjiye15nkrf5y" path="res://scenes/JobChanger.tscn" id="9_lbta2"]
+[ext_resource type="Resource" uid="uid://b7d7822wbyngw" path="res://resources/skills/Heal.tres" id="9_mbwv1"]
 [ext_resource type="Resource" uid="uid://k6cg4r3cht2q" path="res://resources/mobs/OrcWarrior.tres" id="10_brdfk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_stf4j"]
@@ -44,6 +49,7 @@ script = ExtResource("1_mxm8b")
 
 [node name="Player" parent="." unique_id=1179624594 instance=ExtResource("2_d23ae")]
 transform = Transform3D(0.037899435, 0, 0.99928164, 0, 1, 0, -0.99928164, 0, 0.037899435, 10.667, 0, -0.099)
+initial_hotbar = Array[Resource]([ExtResource("4_ok4k7"), ExtResource("5_7inio"), ExtResource("6_jqytk"), ExtResource("7_ajpuq"), ExtResource("8_hagb8"), ExtResource("9_mbwv1")])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1075299080]
 environment = SubResource("Environment_ll35h")
@@ -80,10 +86,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 0)
 
 [node name="FromWest" type="Marker3D" parent="SpawnPoints" unique_id=1762174553]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 0)
-
-[node name="Enemy2" parent="SpawnPoints" unique_id=63854262 instance=ExtResource("5_47fml")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0350628, 0.7126661, 5.035455)
-data = ExtResource("6_47fml")
 
 [node name="NPCs" type="Node" parent="." unique_id=1746226566]
 
@@ -124,10 +126,6 @@ target_spawn_id = "FromCity"
 
 [node name="JobChanger" parent="Portals" unique_id=2086174041 instance=ExtResource("9_lbta2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.357431, -0.41466534, -10.259722)
-
-[node name="Enemy" parent="." unique_id=137946859 instance=ExtResource("5_47fml")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.681318, 0.7166057, 5.6922374)
-data = ExtResource("6_47fml")
 
 [node name="Enemy2" parent="." unique_id=1174117122 instance=ExtResource("5_47fml")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5479078, 0.7166057, -7.3925653)

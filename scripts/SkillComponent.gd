@@ -168,6 +168,11 @@ func _interrupt_casting(force: bool = false):
 
 # --- EJECUCIÓN FINAL (Lo que antes hacía execute_armed_skill) ---
 
+## Public method for enemies to finalize skill execution after their own casting
+func finalize_skill_execution(skill: SkillData, target_data) -> void:
+	print("finalize_skill_execution called with skill: %s, target_data: %s, type: %d" % [skill.skill_name, target_data, skill.type])
+	_finalize_skill_execution(skill, target_data)
+
 func _finalize_skill_execution(skill: SkillData, target_data):
 	# Validar SP y Cooldown justo antes de disparar (por si el SP bajó durante el cast)
 	# Only for players - enemies don't need SP
@@ -184,12 +189,15 @@ func _finalize_skill_execution(skill: SkillData, target_data):
 	# Lógica de Efectos (Tu código existente)
 	match skill.type:
 		SkillData.SkillType.TARGET:
+			print("_finalize_skill_execution: TARGET type, target_data is Node3D: %s, is_valid: %s" % [target_data is Node3D, is_instance_valid(target_data) if target_data is Node3D else false])
 			if target_data is Node3D and is_instance_valid(target_data):
 				_apply_damage(target_data, skill)
 		SkillData.SkillType.POINT:
+			print("_finalize_skill_execution: POINT type, target_data is Vector3: %s, position: %s" % [target_data is Vector3, target_data])
 			if target_data is Vector3:
 				_apply_aoe_damage(target_data, skill)
 		SkillData.SkillType.SELF:
+			print("_finalize_skill_execution: SELF type, applying at actor position: %s" % actor.global_position)
 			_apply_aoe_damage(actor.global_position, skill)
 
 	# Visuals
@@ -239,11 +247,22 @@ func _apply_damage(target: Node3D, skill: SkillData):
 
 func _apply_aoe_damage(center_pos: Vector3, skill: SkillData):
 	var enemies = get_tree().get_nodes_in_group("enemy")
+	var player = get_tree().get_first_node_in_group("player")
 	var hit_count = 0
 	
 	# Daño base antes de los multiplicadores por enemigo
 	var base_damage = int(stats.get_atk() * skill.damage_multiplier)
 	
+	print("_apply_aoe_damage: actor=%s, atk=%d, multiplier=%.2f, base_damage=%d, center_pos=%s, radius=%.1f" % [
+		stats.actor_name if stats.has_meta("actor_name") else "unknown",
+		stats.get_atk(),
+		skill.damage_multiplier,
+		base_damage,
+		center_pos,
+		skill.aoe_radius
+	])
+	
+	# First, damage enemies
 	for enemy in enemies:
 		if not is_instance_valid(enemy): continue
 		
@@ -270,6 +289,36 @@ func _apply_aoe_damage(center_pos: Vector3, skill: SkillData):
 				# Aplicar status effects
 				if skill.status_effects.size() > 0 and randf() < skill.status_effect_chance:
 					_apply_skill_status_effects(enemy, skill)
+	
+	# Also damage player if actor is an enemy and player is in range
+	if player and is_instance_valid(player) and actor != player:
+		if player.global_position.distance_to(center_pos) <= skill.aoe_radius:
+			if player.has_node("HealthComponent") and player.has_node("StatsComponent"):
+				var player_stats = player.get_node("StatsComponent") as StatsComponent
+				print("_apply_aoe_damage -> Player hit! distance=%.1f, skill_radius=%.1f, player_def=%d" % [
+					player.global_position.distance_to(center_pos),
+					skill.aoe_radius,
+					player_stats.get_def()
+				])
+				var final_damage = CombatMath.calculate_skill_damage(
+					base_damage,
+					skill.element,
+					player_stats
+				)
+				
+				print("  Before DEF: base=%d, after element calc: %d" % [base_damage, final_damage])
+				
+				player.get_node("HealthComponent").take_damage(final_damage)
+				print("  FINAL damage to player: %d" % final_damage)
+				
+				if actor.has_method("spawn_floating_text"):
+					actor.spawn_floating_text(player.global_position, final_damage, false)
+				
+				# Aplicar status effects
+				if skill.status_effects.size() > 0 and randf() < skill.status_effect_chance:
+					_apply_skill_status_effects(player, skill)
+				
+				hit_count += 1
 				
 				hit_count += 1
 	

@@ -26,6 +26,13 @@ var is_aggroed: bool = false
 var skill_attempt_timer: float = 0.0
 var skill_attempt_interval: float = 1.0 # seconds between skill attempts
 
+# Casting state variables
+var is_casting: bool = false
+var pending_skill: SkillData = null
+var pending_target = null
+var casting_tween: Tween = null
+var casting_indicator: Node = null # Store indicator reference separately
+
 # Variables nuevas para el control de tiempo
 var move_timer: float = 0.0
 var is_jumping: bool = false
@@ -385,6 +392,11 @@ func _create_item_drop(item_data: ItemData, quantity: int, spawn_position: Vecto
 	item_drop.setup(item_data, quantity)
 
 func _try_use_skill() -> void:
+	# Skip if already casting
+	if is_casting:
+		print("_try_use_skill: Enemy is still casting, skipping")
+		return
+	
 	if not skill_comp or not player or not data:
 		print("_try_use_skill: Missing component - skill_comp: %s, player: %s, data: %s" % [skill_comp != null, player != null, data != null])
 		return
@@ -418,18 +430,16 @@ func _try_use_skill() -> void:
 		return
 	
 	var skill = usable_skills[randi() % usable_skills.size()]
-	print("_try_use_skill: USING SKILL %s (type=%d)" % [skill.skill_name, skill.type])
+	print("_try_use_skill: USING SKILL %s (type=%d, cast_time=%.2f)" % [skill.skill_name, skill.type, skill.cast_time])
 	
-	# Execute based on skill type
+	# Execute using the new method that handles casting
 	match skill.type:
 		SkillData.SkillType.SELF:
-			skill_comp.cast_immediate(skill)
+			execute_skill(skill, null)
 		SkillData.SkillType.TARGET:
-			skill_comp.armed_skill = skill
-			skill_comp.execute_armed_skill(player)
+			execute_skill(skill, player)
 		SkillData.SkillType.POINT:
-			skill_comp.armed_skill = skill
-			skill_comp.execute_armed_skill(player.global_position)
+			execute_skill(skill, player.global_position)
 
 func _apply_random_status_effect(target: Node) -> void:
 	if data.attack_status_effects.is_empty():
@@ -449,3 +459,119 @@ func _play_aggro_effect():
 		var tween = create_tween()
 		tween.tween_property(mesh, "position:y", 0.5, 0.1).as_relative()
 		tween.chain().tween_property(mesh, "position:y", -0.5, 0.1).as_relative()
+
+## Execute a skill with casting if needed, or immediate if no cast time
+func execute_skill(skill: SkillData, target) -> void:
+	if not skill or not skill_comp:
+		return
+	
+	print("Enemy executing skill: %s (cast_time: %.2f)" % [skill.skill_name, skill.cast_time])
+	
+	# For immediate skills (cast_time <= 0.05)
+	if skill.cast_time <= 0.05:
+		match skill.type:
+			SkillData.SkillType.SELF:
+				skill_comp.cast_immediate(skill)
+			SkillData.SkillType.TARGET:
+				skill_comp.armed_skill = skill
+				skill_comp.execute_armed_skill(target)
+			SkillData.SkillType.POINT:
+				skill_comp.armed_skill = skill
+				skill_comp.execute_armed_skill(target if target is Vector3 else target.global_position)
+	else:
+		# For cast skills: start the casting process
+		_start_casting_process(skill, target)
+
+## Start the casting process (with indicator, no progress bar for enemy)
+func _start_casting_process(skill: SkillData, target) -> void:
+	if is_casting:
+		print("Enemy already casting, ignoring new skill cast attempt")
+		return
+	
+	is_casting = true
+	pending_skill = skill
+	pending_target = target
+	
+	var cast_time = skill.cast_time
+	print("Enemy %s starting cast of %s (duration: %.2f)" % [data.monster_name, skill.skill_name, cast_time])
+	
+	# Show casting indicator (if available - positioned at enemy)
+	_show_casting_indicator()
+	
+	# Create tween for casting
+	if casting_tween:
+		casting_tween.kill()
+	casting_tween = create_tween()
+	casting_tween.tween_interval(cast_time)
+	casting_tween.tween_callback(_on_cast_finished)
+
+## Called when cast finishes
+func _on_cast_finished() -> void:
+	if not is_casting:
+		return
+	
+	print("Enemy %s finished casting %s" % [data.monster_name, pending_skill.skill_name])
+	
+	is_casting = false
+	
+	# Execute the skill directly without re-casting
+	if pending_skill and skill_comp:
+		match pending_skill.type:
+			SkillData.SkillType.SELF:
+				skill_comp.finalize_skill_execution(pending_skill, global_position)
+			SkillData.SkillType.TARGET:
+				if pending_target and is_instance_valid(pending_target):
+					skill_comp.finalize_skill_execution(pending_skill, pending_target)
+			SkillData.SkillType.POINT:
+				var target_pos = pending_target if pending_target is Vector3 else (pending_target.global_position if is_instance_valid(pending_target) else null)
+				if target_pos:
+					skill_comp.finalize_skill_execution(pending_skill, target_pos)
+	
+	# Hide casting indicator
+	_hide_casting_indicator()
+	
+	# Clean up
+	pending_skill = null
+	pending_target = null
+
+## Show a visual indicator where the skill will be cast (similar to player's AOE indicator)
+func _show_casting_indicator() -> void:
+	if not pending_skill:
+		return
+	
+	# Get or create an indicator scene at this enemy's position
+	var indicator_scene = load("res://scenes/aoe_indicator.tscn")
+	if not indicator_scene:
+		print("Warning: aoe_indicator.tscn not found")
+		return
+	
+	var indicator = indicator_scene.instantiate()
+	get_tree().current_scene.add_child(indicator)
+	
+	# Position indicator based on skill type
+	match pending_skill.type:
+		SkillData.SkillType.SELF:
+			indicator.global_position = global_position
+		SkillData.SkillType.TARGET:
+			# If targeting player, position at player
+			if pending_target and is_instance_valid(pending_target):
+				indicator.global_position = pending_target.global_position
+		SkillData.SkillType.POINT:
+			# If targeting position, use that position
+			if pending_target is Vector3:
+				indicator.global_position = pending_target
+			elif pending_target and is_instance_valid(pending_target):
+				indicator.global_position = pending_target.global_position
+	
+	# Scale indicator by AOE radius
+	var scale_factor = pending_skill.aoe_radius / 1.0  # Assuming default radius is 1.0
+	indicator.scale = Vector3.ONE * scale_factor
+	
+	# Store indicator reference separately (don't overwrite pending_target!)
+	casting_indicator = indicator
+
+## Hide the casting indicator
+func _hide_casting_indicator() -> void:
+	if casting_indicator and is_instance_valid(casting_indicator):
+		casting_indicator.queue_free()
+		casting_indicator = null
