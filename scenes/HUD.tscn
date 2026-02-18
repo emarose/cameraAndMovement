@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://culrpsios6lin" path="res://scenes/ShopUI.tscn" id="6_f6qnu"]
 [ext_resource type="PackedScene" uid="uid://c5by8a6qdojnt" path="res://scenes/skill_tree_ui.tscn" id="7_k4w17"]
 [ext_resource type="PackedScene" uid="uid://dmqe4j5xn3k2p" path="res://scenes/JobChangerUI.tscn" id="8_jobchangerui"]
+[ext_resource type="PackedScene" uid="uid://ck647t64wrgq6" path="res://scenes/Minimap.tscn" id="9_8cuoo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpvh6"]
 bg_color = Color(0.008578151, 0.0038568254, 0.09549191, 1)
@@ -735,6 +736,8 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "F5 = SAVE
 F6 = LOAD"
+
+[node name="Minimap" parent="." unique_id=2002377091 instance=ExtResource("9_8cuoo")]
 
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/StrRow/AddButton" to="." method="_on_add_str_pressed"]
 [connection signal="pressed" from="StatsPanel/VBoxContainer_Base/AgiRow/AddButton" to="." method="_on_add_agi_pressed"]

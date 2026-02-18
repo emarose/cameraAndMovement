@@ -56,6 +56,12 @@ top_radius = 1.0
 bottom_radius = 1.0
 height = 0.01
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_viqgg"]
+albedo_color = Color(0.6117647, 0.23921569, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_fgkxt"]
+material = SubResource("StandardMaterial3D_viqgg")
+
 [node name="Player" type="CharacterBody3D" unique_id=1179624594 groups=["player"]]
 script = ExtResource("1_g2els")
 speed = 8.0
@@ -90,6 +96,7 @@ zoom_speed = 2.0
 spring_length = 8.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=1839852354]
+cull_mask = 1048573
 current = true
 fov = 84.6
 
@@ -143,3 +150,8 @@ mesh = SubResource("SphereMesh_6eyey")
 [node name="AOEIndicator" type="MeshInstance3D" parent="." unique_id=288806777]
 visible = false
 mesh = SubResource("CylinderMesh_0rnld")
+
+[node name="MinimapMarker" type="MeshInstance3D" parent="." unique_id=1443922835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.936373, 0)
+layers = 2
+mesh = SubResource("SphereMesh_fgkxt")

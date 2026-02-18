@@ -3,7 +3,10 @@ extends Node3D
 @onready var player = $Player
 
 func _ready():
-	# 0. Crear y configurar el click indicator
+	# 0. Setup minimap visibility layers for terrain
+	_setup_minimap_layers()
+	
+	# 0b. Crear y configurar el click indicator
 	_setup_click_indicator()
 	
 	# 1. Posicionar jugador en spawn point
@@ -48,6 +51,21 @@ func _ready():
 	# SI venimos de un "Load Game" y tenemos posición guardada
 	if GameManager.player_stats.has("saved_position"):
 		player.global_position = GameManager.player_stats["saved_position"]
+
+# Configure all terrain to be visible on layers 1 and 2 (for minimap)
+func _setup_minimap_layers():
+	var terrain_node = find_child("a")  # The main terrain node from glb import
+	if terrain_node:
+		_set_layers_recursive(terrain_node, 3)  # Layers 1 (1) + 2 (2) = 3
+
+# Recursively set visibility layers for all child nodes
+
+func _set_layers_recursive(node: Node, layers: int) -> void:
+	# Only set layers for nodes that have the property (VisualInstance3D or CanvasItem)
+	if node is VisualInstance3D or node is CanvasItem:
+		node.layers = layers
+	for child in node.get_children():
+		_set_layers_recursive(child, layers)
 		# Borramos la posición para que si cruza un portal normal, no se use esto
 		GameManager.player_stats.erase("saved_position")
 	
