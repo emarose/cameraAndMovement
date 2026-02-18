@@ -44,10 +44,10 @@ shadow_enabled = true
 [node name="SpawnPoints" type="Node" parent="." unique_id=1729444078]
 
 [node name="InitialSpawn" type="Marker3D" parent="SpawnPoints" unique_id=539740123]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.422)
 
 [node name="FromCity" type="Marker3D" parent="SpawnPoints" unique_id=507348386]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5481424, 0.99, -11.812324)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.548, 0, -11.812)
 
 [node name="Portals" type="Node" parent="." unique_id=1084802426]
 
@@ -63,7 +63,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.694923, 0.7213302, -6.489
 data = ExtResource("7_poring")
 
 [node name="Enemy2" parent="Enemies" unique_id=123460773 instance=ExtResource("6_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.7213302, -7.237955)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8659906, 0.7213302, -9.230414)
 data = ExtResource("8_fabre")
 
 [node name="Enemy3" parent="Enemies" unique_id=894809385 instance=ExtResource("6_enemy")]

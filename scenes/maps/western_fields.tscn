@@ -5,8 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="4_player"]
 [ext_resource type="PackedScene" uid="uid://uxr4m2ppuips" path="res://assets/terrain/western_fields_chunk.glb" id="4_tvjkr"]
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="5_portal"]
+[ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="6_d8uil"]
 [ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="6_enemy"]
 [ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="7_poring"]
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="8_ikpp8"]
 [ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="8_spider"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
@@ -62,16 +64,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6975613, 0.016118431, 0)
 target_map_path = "uid://cb6k7k3xysq84"
 target_spawn_id = "FromWest"
 
-[node name="Enemies" type="Node" parent="." unique_id=50068847]
-
-[node name="Enemy1" parent="Enemies" unique_id=288070228 instance=ExtResource("6_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.048141, 0.7213302, -8)
-data = ExtResource("7_poring")
-
-[node name="Enemy2" parent="Enemies" unique_id=695304285 instance=ExtResource("6_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.7213302, 8)
-data = ExtResource("8_spider")
-
-[node name="Enemy3" parent="Enemies" unique_id=34870067 instance=ExtResource("6_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.521347, 0.7213302, 0)
-data = ExtResource("7_poring")
+[node name="MobSpawner" parent="." unique_id=401095038 instance=ExtResource("6_d8uil")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.838, 0, 0)
+enemy_scene = ExtResource("6_enemy")
+mob_pool = Array[ExtResource("8_ikpp8")]([ExtResource("7_poring"), ExtResource("8_spider")])
