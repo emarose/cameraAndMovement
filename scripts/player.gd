@@ -9,6 +9,7 @@ extends CharacterBody3D
 @export var cursor_skill: Texture2D
 @export var cursor_talk: Texture2D
 @export var cursor_door: Texture2D
+@export var flinch_duration: float = 0.2
 
 @export_group("Hotbar Inicial")
 # Usamos un Array exportado para configurar las skills iniciales desde el editor
@@ -41,6 +42,8 @@ var HOTBAR_SIZE = 9
 @onready var status_effect_manager: StatusEffectManager = $StatusEffectManagerComponent
 @onready var player: CharacterBody3D = $"."
 @onready var hud: CanvasLayer = $"../HUD"
+@onready var state_machine: StateMachine = $StateMachine
+@onready var animation_tree: AnimationTree = $Mannequin_Medium/AnimationTree
 
 # --- Variables de Ataque y Control ---
 var last_attack_time: int = 0
@@ -53,6 +56,9 @@ var current_target_enemy = null
 var can_attack_player: bool = true
 var is_attacking: bool = false
 var hovered_enemy = null
+var is_casting: bool = false
+var is_flinching: bool = false
+var flinch_timer: float = 0.0
 
 func _ready():
 	hotbar_content.resize(HOTBAR_SIZE)
@@ -104,6 +110,10 @@ func _ready():
 	regen_component.hp_regenerated.connect(_on_hp_regenerated)
 	regen_component.sp_regenerated.connect(_on_sp_regenerated)
 	skill_component.skill_cooldown_started.connect(_on_cooldown_started)
+	
+	# Initialize state machine for animations
+	if state_machine and animation_tree:
+		state_machine.setup(self, animation_tree)
 
 func _unhandled_input(event):
 	if is_dead: return
@@ -144,7 +154,19 @@ func _unhandled_input(event):
 		update_cursor()
 
 func _physics_process(_delta):
-	if is_dead or (stats and stats.is_stunned): return
+	if is_dead:
+		return
+
+	# Keep a local casting flag so animation state can read it
+	is_casting = skill_component.is_casting if skill_component else false
+
+	if is_flinching:
+		flinch_timer -= _delta
+		if flinch_timer <= 0.0:
+			is_flinching = false
+
+	if stats and stats.is_stunned:
+		return
 	_update_aoe_indicator()
 	
 	# 1. Bloqueo por animación de ataque (prioridad máxima)
@@ -155,7 +177,7 @@ func _physics_process(_delta):
 		move_and_slide()
 		return
 		
-	if skill_component.is_casting:
+	if is_casting:
 		velocity = Vector3.ZERO
 		# Aquí podrías forzar la animación de "casteo"
 		# animation_player.play("cast")
@@ -430,6 +452,10 @@ func _on_player_damaged(damage_amount: int):
 		skill_component.cancel_cast()
 	velocity = Vector3.ZERO
 	nav_agent.target_position = global_position # Cancelar ruta actual
+
+	# Trigger flinch animation state
+	is_flinching = true
+	flinch_timer = flinch_duration
 	
 	# 4. Feedback Visual (flinch animation only - don't control is_stunned)
 	var tween = create_tween()

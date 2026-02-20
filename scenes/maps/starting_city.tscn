@@ -80,10 +80,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 0)
 [node name="NPCs" type="Node" parent="." unique_id=1746226566]
 
 [node name="JobChanger" parent="NPCs" unique_id=2086174041 instance=ExtResource("9_lbta2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.110575, 1, -3.7054522)
+transform = Transform3D(0.3200839, 0, 0.9473892, 0, 1, 0, -0.9473892, 0, 0.3200839, -12.694716, 0, -2.580357)
 
 [node name="NPC_Merchant" parent="NPCs" unique_id=753893127 instance=ExtResource("4_d23ae")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.708, 1, -11.155)
+transform = Transform3D(0.9779913, 0, -0.20864572, 0, 1, 0, 0.20864572, 0, 0.9779913, 6.708, 0, -11.155)
 
 [node name="Portals" type="Node" parent="." unique_id=1005359231]
 

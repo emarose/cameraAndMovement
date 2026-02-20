@@ -6,6 +6,12 @@
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="4_ft8do"]
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="5_1vja8"]
 [ext_resource type="Script" uid="uid://dc22adx2f2fi3" path="res://scripts/StatusEffectManager.gd" id="5_5wwv6"]
+[ext_resource type="Script" path="res://scripts/StateMachine.gd" id="6_statemachine"]
+[ext_resource type="Script" path="res://scripts/IdleState.gd" id="7_idlestate"]
+[ext_resource type="Script" path="res://scripts/MoveState.gd" id="8_movestate"]
+[ext_resource type="Script" path="res://scripts/AttackState.gd" id="9_attackstate"]
+[ext_resource type="Script" path="res://scripts/CastState.gd" id="10_caststate"]
+[ext_resource type="Script" path="res://scripts/FlinchState.gd" id="11_flinchstate"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_1i2q2"]
 viewport_path = NodePath("SubViewport")
@@ -63,3 +69,21 @@ script = ExtResource("5_1vja8")
 
 [node name="StatusEffectManagerComponent" type="Node" parent="." unique_id=1012831347]
 script = ExtResource("5_5wwv6")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("6_statemachine")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("7_idlestate")
+
+[node name="Move" type="Node" parent="StateMachine"]
+script = ExtResource("8_movestate")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("9_attackstate")
+
+[node name="Cast" type="Node" parent="StateMachine"]
+script = ExtResource("10_caststate")
+
+[node name="Flinch" type="Node" parent="StateMachine"]
+script = ExtResource("11_flinchstate")

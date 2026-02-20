@@ -1,0 +1,99 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://bm573y7oqiqwp"
+path="res://.godot/imported/Rig_Medium_CombatRanged.glb-8b5ffde7f07d4a415a592c36a766fac8.scn"
+
+[deps]
+
+source_file="res://assets/characters/animations/source/Rig_Medium_CombatRanged.glb"
+dest_files=["res://.godot/imported/Rig_Medium_CombatRanged.glb-8b5ffde7f07d4a415a592c36a766fac8.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"meshes": {
+"Rig_Medium_CombatRanged_Mannequin_ArmLeft": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/characters/animations/Rig_Medium_CombatRanged_Mannequin_ArmLeft.res",
+"save_to_file/path": "uid://c4vlopgy16sr1"
+},
+"Rig_Medium_CombatRanged_Mannequin_ArmRight": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/characters/animations/Rig_Medium_CombatRanged_Mannequin_ArmRight.res",
+"save_to_file/path": "uid://bxdv2w4gv0swl"
+},
+"Rig_Medium_CombatRanged_Mannequin_Body": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/characters/animations/Rig_Medium_CombatRanged_Mannequin_Body.res",
+"save_to_file/path": "uid://ctm6amei0khbd"
+},
+"Rig_Medium_CombatRanged_Mannequin_Head": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/characters/animations/Rig_Medium_CombatRanged_Mannequin_Head.res",
+"save_to_file/path": "uid://drl5wot6ouw4s"
+},
+"Rig_Medium_CombatRanged_Mannequin_LegLeft": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/characters/animations/Rig_Medium_CombatRanged_Mannequin_LegLeft.res",
+"save_to_file/path": "uid://cy34rnsmq7aoc"
+},
+"Rig_Medium_CombatRanged_Mannequin_LegRight": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/characters/animations/Rig_Medium_CombatRanged_Mannequin_LegRight.res",
+"save_to_file/path": "uid://ooe0528wlh5n"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=1

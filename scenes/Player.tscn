@@ -19,10 +19,17 @@
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="10_d3wef"]
 [ext_resource type="Resource" uid="uid://cqun87ymamf71" path="res://resources/items/Knife.tres" id="11_p07f3"]
 [ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="12_o4126"]
+[ext_resource type="PackedScene" uid="uid://bktyhgvk5hews" path="res://assets/characters/mannequin_medium.tscn" id="12_p07f3"]
 [ext_resource type="Script" uid="uid://bb5m4qisg7fb8" path="res://scripts/RegenerationComponent.gd" id="15_0rnld"]
 [ext_resource type="Script" uid="uid://b1hf11y1cgjtr" path="res://scripts/InventoryComponent.gd" id="19_ebwui"]
 [ext_resource type="Script" uid="uid://gvc84ejulk4" path="res://scripts/EquipmentComponent.gd" id="19_sfy4j"]
 [ext_resource type="Script" uid="uid://dc22adx2f2fi3" path="res://scripts/StatusEffectManager.gd" id="20_gv3ic"]
+[ext_resource type="Script" path="res://scripts/StateMachine.gd" id="21_statemachine"]
+[ext_resource type="Script" path="res://scripts/IdleState.gd" id="22_idlestate"]
+[ext_resource type="Script" path="res://scripts/MoveState.gd" id="23_movestate"]
+[ext_resource type="Script" path="res://scripts/AttackState.gd" id="24_attackstate"]
+[ext_resource type="Script" path="res://scripts/CastState.gd" id="25_caststate"]
+[ext_resource type="Script" path="res://scripts/FlinchState.gd" id="26_flinchstate"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqk2v"]
 albedo_color = Color(0.43321982, 0.62398577, 0.602917, 1)
@@ -37,14 +44,6 @@ viewport_path = NodePath("SubViewport")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_p07f3"]
 viewport_path = NodePath("SubViewport")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6dkly"]
-albedo_color = Color(0.056243494, 0.007778925, 0.03827338, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_6eyey"]
-material = SubResource("StandardMaterial3D_6dkly")
-radius = 0.05
-height = 0.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
 transparency = 1
@@ -73,15 +72,19 @@ level_up_effect_scene = ExtResource("5_6eyey")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=461812279]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8072171, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_dqkch")
 skeleton = NodePath("")
+
+[node name="Mannequin_Medium" parent="." unique_id=898058791 instance=ExtResource("12_p07f3")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=732221772]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9159521, 0)
 shape = SubResource("CapsuleShape3D_qlg0r")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=764086905]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1.8, 0)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 1.8, 0)
 top_level = true
 script = ExtResource("2_qhqgy")
 zoom_speed = 2.0
@@ -131,15 +134,25 @@ script = ExtResource("19_sfy4j")
 [node name="StatusEffectManagerComponent" type="Node" parent="." unique_id=203511814]
 script = ExtResource("20_gv3ic")
 
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("21_statemachine")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("22_idlestate")
+
+[node name="Move" type="Node" parent="StateMachine"]
+script = ExtResource("23_movestate")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("24_attackstate")
+
+[node name="Cast" type="Node" parent="StateMachine"]
+script = ExtResource("25_caststate")
+
+[node name="Flinch" type="Node" parent="StateMachine"]
+script = ExtResource("26_flinchstate")
+
 [node name="GameOverUI" parent="." unique_id=1480085280 instance=ExtResource("5_qu4a1")]
-
-[node name="eye" type="MeshInstance3D" parent="." unique_id=712278464]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.049024224, 1.2367133, -0.4945358)
-mesh = SubResource("SphereMesh_6eyey")
-
-[node name="eye2" type="MeshInstance3D" parent="." unique_id=2045127416]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1563986, 1.2367133, -0.4945358)
-mesh = SubResource("SphereMesh_6eyey")
 
 [node name="AOEIndicator" type="MeshInstance3D" parent="." unique_id=288806777]
 visible = false

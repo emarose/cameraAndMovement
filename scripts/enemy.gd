@@ -1,6 +1,8 @@
 extends CharacterBody3D
 
 @export var data: EnemyData 
+@export var flinch_duration: float = 0.1
+@export var attack_anim_duration: float = 0.3
 
 @onready var nav_agent = $NavigationAgent3D
 @onready var health_comp = $HealthComponent
@@ -8,19 +10,25 @@ extends CharacterBody3D
 @onready var mob_name: Label3D = $Label3D
 @onready var stats_comp: StatsComponent = $StatsComponent
 @onready var skill_comp: SkillComponent = $SkillComponent
+@onready var state_machine: StateMachine = $StateMachine
 
 enum State { IDLE, WANDERING, CHASING, ATTACKING }
 
 var current_state = State.IDLE
 var player = null
 var mesh = null
+var animation_tree: AnimationTree = null
 var is_dead: bool = false
+var is_attacking: bool = false
 var wander_target: Vector3
 var wander_timer: float = 0.0
 var home_position: Vector3 = Vector3.ZERO
 var can_attack: bool = true
 var is_stunned: bool = false
 var is_aggroed: bool = false
+var is_flinching: bool = false
+var flinch_timer: float = 0.0
+var attack_timer: float = 0.0
 
 # Timer for skill usage attempts
 var skill_attempt_timer: float = 0.0
@@ -48,6 +56,9 @@ func _ready():
 		var model_instance = data.model_scene.instantiate()
 		add_child(model_instance)
 		mesh = model_instance
+		
+		# Find AnimationTree in the model for state machine
+		animation_tree = model_instance.get_node_or_null("AnimationTree")
 
 	if stats_comp:
 		stats_comp.initialize_from_resource(data)
@@ -85,9 +96,23 @@ func _ready():
 	
 	if data.type == StatsComponent.Size.LARGE:
 		scale = Vector3(2.0, 2.0, 2.0)
+	
+	# Initialize state machine for animations
+	if state_machine and animation_tree:
+		state_machine.setup(self, animation_tree)
 
 func _physics_process(delta):
-	if (stats_comp and stats_comp.is_stunned) or is_dead or not data: return
+	if is_attacking:
+		attack_timer -= delta
+		if attack_timer <= 0.0:
+			is_attacking = false
+	if is_flinching:
+		flinch_timer -= delta
+		if flinch_timer <= 0.0:
+			is_flinching = false
+
+	if (stats_comp and stats_comp.is_stunned) or is_dead or not data:
+		return
 	if not navigation_ready:
 		return
 
@@ -250,6 +275,7 @@ func attack_player():
 	
 	if can_attack:
 		can_attack = false
+		_trigger_attack_state()
 		
 		# Obtener componentes del jugador para cálculos
 		var p_stats = player.get_node_or_null("StatsComponent")
@@ -289,6 +315,10 @@ func attack_player():
 		await get_tree().create_timer(stats_comp.get_attack_speed()).timeout
 		can_attack = true
 
+func _trigger_attack_state():
+	is_attacking = true
+	attack_timer = attack_anim_duration
+
 func _play_attack_anim():
 	if not mesh: return
 	var tween = create_tween()
@@ -311,6 +341,10 @@ func _on_take_damage(new_health):
 		var tween = create_tween()
 		tween.tween_property(mesh, "scale", Vector3(1.3, 0.7, 1.3), 0.1)
 		tween.tween_property(mesh, "scale", Vector3(1, 1, 1), 0.1)
+
+	# Trigger flinch animation state
+	is_flinching = true
+	flinch_timer = flinch_duration
 
 func _on_death():
 	if is_dead: return # Si ya está muriendo, ignorar

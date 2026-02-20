@@ -4,25 +4,17 @@
 [ext_resource type="Script" uid="uid://2hly3rjalyea" path="res://resources/jobs/JobData.gd" id="2_t6qfn"]
 [ext_resource type="Resource" uid="uid://bvhh6lp4tuj3n" path="res://resources/jobs/Archer.tres" id="3_f4f2e"]
 [ext_resource type="Resource" uid="uid://dxc3o4y2vpu6o" path="res://resources/jobs/Mage.tres" id="4_ntg06"]
-[ext_resource type="Resource" uid="uid://bl2v8d5j8xfpn" path="res://resources/jobs/Priest.tres" id="5_hdriw"]
 [ext_resource type="Resource" uid="uid://c06vbdq3xfb2c" path="res://resources/jobs/Swordsman.tres" id="6_kuhjn"]
+[ext_resource type="PackedScene" uid="uid://bktyhgvk5hews" path="res://assets/characters/mannequin_medium.tscn" id="6_t6qfn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h5y4y"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h5y4y"]
-albedo_color = Color(0.67331433, 0.6171171, 0.34920895, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_2sihs"]
-material = SubResource("StandardMaterial3D_h5y4y")
-
 [node name="JobChanger" type="StaticBody3D" unique_id=2086174041]
 script = ExtResource("1_ijkl3")
-available_jobs = Array[ExtResource("2_t6qfn")]([ExtResource("3_f4f2e"), ExtResource("4_ntg06"), ExtResource("5_hdriw"), ExtResource("6_kuhjn")])
+available_jobs = Array[ExtResource("2_t6qfn")]([ExtResource("3_f4f2e"), ExtResource("4_ntg06"), ExtResource("6_kuhjn")])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2059721456]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2833823, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_h5y4y")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1279203586]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
-mesh = SubResource("CapsuleMesh_2sihs")
+[node name="Mannequin_Medium" parent="." unique_id=898058791 instance=ExtResource("6_t6qfn")]

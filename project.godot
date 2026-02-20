@@ -30,6 +30,7 @@ window/size/viewport_height=1080
 window/size/mode=2
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image="uid://biubb72lqc4a3"
+display_server/layer_4=""
 
 [gui]
 
@@ -118,3 +119,4 @@ toggle_skills={
 3d_render/layer_1="Player"
 3d_render/layer_2="Enemy"
 3d_render/layer_3="Items"
+3d_render/layer_4="Terrain"
