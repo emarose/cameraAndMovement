@@ -14,3 +14,6 @@ class_name JobData
 # Tabla de bonos por nivel (Nivel : {Stat: Cantidad})
 # Ejemplo: { 10: {"str": 1}, 15: {"agi": 1} }
 @export var job_level_bonuses: Dictionary = {}
+
+# Character model for this job (PackedScene of the character model)
+@export var character_model: PackedScene

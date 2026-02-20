@@ -115,6 +115,60 @@ func _ready():
 	if state_machine and animation_tree:
 		state_machine.setup(self, animation_tree)
 
+func change_character_model(new_model_scene: PackedScene):
+	"""
+	Change the player's character model to a new one.
+	The new model should have the same skeleton and animation structure.
+	"""
+	if not new_model_scene:
+		print("Warning: No model scene provided to change_character_model")
+		return
+	
+	# Find the current model node (assuming it's named with "Mannequin" or is the first child that's a model)
+	var current_model = get_node_or_null("Mannequin_Medium")
+	if not current_model:
+		# Try to find any child that looks like a character model
+		for child in get_children():
+			if child is Node3D and child.has_node("AnimationTree"):
+				current_model = child
+				break
+	
+	if not current_model:
+		print("Warning: Could not find current character model to replace")
+		return
+	
+	# Store the current transform and animation tree state
+	var current_transform = current_model.transform
+	var anim_tree_was_active = false
+	var anim_tree: AnimationTree = null
+	
+	if current_model.has_node("AnimationTree"):
+		anim_tree = current_model.get_node("AnimationTree")
+		anim_tree_was_active = anim_tree.active
+	
+	# Instantiate the new model
+	var new_model = new_model_scene.instantiate()
+	
+	# Remove the old model
+	var old_model_name = current_model.name
+	current_model.queue_free()
+	
+	# Add the new model with the same parent and transform
+	add_child(new_model)
+	new_model.transform = current_transform
+	new_model.name = old_model_name
+	
+	# Update the animation_tree reference if the new model has one
+	if new_model.has_node("AnimationTree"):
+		animation_tree = new_model.get_node("AnimationTree")
+		animation_tree.active = anim_tree_was_active
+		
+		# Reconnect the state machine to the new animation tree
+		if state_machine:
+			state_machine.setup(self, animation_tree)
+	
+	print("Character model changed successfully to: ", new_model_scene.resource_path)
+
 func _unhandled_input(event):
 	if is_dead: return
 	# LÓGICA DE HOTBAR DINÁMICA

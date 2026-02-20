@@ -172,6 +172,10 @@ func load_player_data(player):
 	if current_job_data and not player_stats["unlocked_jobs"].has(current_job_data.resource_path):
 		player_stats["unlocked_jobs"].append(current_job_data.resource_path)
 
+	# Load the character model for the current job if it exists
+	if current_job_data and current_job_data.character_model and player.has_method("change_character_model"):
+		player.change_character_model(current_job_data.character_model)
+
 	# Emit job changed signal to ensure UI components (like SkillTree) refresh
 	job_changed.emit(player_stats["job_name"])
 
@@ -448,6 +452,10 @@ func change_job(new_job_resource: JobData):
 	if player.has_node("StatsComponent"):
 		var stats_comp = player.get_node("StatsComponent")
 		stats_comp.current_level = preserved_base_level
+	
+	# Change the player's character model if the new job has one
+	if new_job_resource.character_model and player.has_method("change_character_model"):
+		player.change_character_model(new_job_resource.character_model)
 	
 	# Recalcular bonos pasivos (por si cambiamos de job, mantenemos las skills pasivas)
 	recalculate_all_passive_bonuses()

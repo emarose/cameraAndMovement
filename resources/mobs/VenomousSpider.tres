@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=6 format=3 uid="uid://drfusfqmignrn"]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://drfusfqmignrn"]
 
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_ip2de"]
 [ext_resource type="Resource" uid="uid://dxvgj38ylbxal" path="res://resources/statusEffects/poison.tres" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="4_b40yg"]
+[ext_resource type="PackedScene" uid="uid://bsf562lga2b72" path="res://assets/models/spider-model.tscn" id="4_ip2de"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="6_0xt7n"]
 
 [resource]
@@ -25,6 +26,7 @@ move_spd = 3.0
 aggro_range = 8.0
 attack_range = 1.8
 lose_aggro_range = 20.0
+model_scene = ExtResource("4_ip2de")
 wander_radius = 15.0
 idle_time_min = 1.5
 idle_time_max = 4.0

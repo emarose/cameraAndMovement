@@ -24,12 +24,12 @@
 [ext_resource type="Script" uid="uid://b1hf11y1cgjtr" path="res://scripts/InventoryComponent.gd" id="19_ebwui"]
 [ext_resource type="Script" uid="uid://gvc84ejulk4" path="res://scripts/EquipmentComponent.gd" id="19_sfy4j"]
 [ext_resource type="Script" uid="uid://dc22adx2f2fi3" path="res://scripts/StatusEffectManager.gd" id="20_gv3ic"]
-[ext_resource type="Script" path="res://scripts/StateMachine.gd" id="21_statemachine"]
-[ext_resource type="Script" path="res://scripts/IdleState.gd" id="22_idlestate"]
-[ext_resource type="Script" path="res://scripts/MoveState.gd" id="23_movestate"]
-[ext_resource type="Script" path="res://scripts/AttackState.gd" id="24_attackstate"]
-[ext_resource type="Script" path="res://scripts/CastState.gd" id="25_caststate"]
-[ext_resource type="Script" path="res://scripts/FlinchState.gd" id="26_flinchstate"]
+[ext_resource type="Script" uid="uid://cirh2a74sb343" path="res://scripts/StateMachine.gd" id="21_statemachine"]
+[ext_resource type="Script" uid="uid://v87mpt8747bk" path="res://scripts/IdleState.gd" id="22_idlestate"]
+[ext_resource type="Script" uid="uid://bggcrnm0ql2j0" path="res://scripts/MoveState.gd" id="23_movestate"]
+[ext_resource type="Script" uid="uid://bbs2j7s34hksd" path="res://scripts/AttackState.gd" id="24_attackstate"]
+[ext_resource type="Script" uid="uid://vymhci21drmc" path="res://scripts/CastState.gd" id="25_caststate"]
+[ext_resource type="Script" uid="uid://bft8xssn57qw2" path="res://scripts/FlinchState.gd" id="26_flinchstate"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqk2v"]
 albedo_color = Color(0.43321982, 0.62398577, 0.602917, 1)
@@ -39,10 +39,10 @@ material = SubResource("StandardMaterial3D_aqk2v")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_6e537"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_axnmu"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_p07f3"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_fvsjc"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
@@ -99,11 +99,11 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12061417, 0)
-texture = SubResource("ViewportTexture_6e537")
+texture = SubResource("ViewportTexture_axnmu")
 
 [node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("7_spbar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.20458083, 0)
-texture = SubResource("ViewportTexture_p07f3")
+texture = SubResource("ViewportTexture_fvsjc")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")
@@ -134,22 +134,22 @@ script = ExtResource("19_sfy4j")
 [node name="StatusEffectManagerComponent" type="Node" parent="." unique_id=203511814]
 script = ExtResource("20_gv3ic")
 
-[node name="StateMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node" parent="." unique_id=1948867796]
 script = ExtResource("21_statemachine")
 
-[node name="Idle" type="Node" parent="StateMachine"]
+[node name="Idle" type="Node" parent="StateMachine" unique_id=2021856038]
 script = ExtResource("22_idlestate")
 
-[node name="Move" type="Node" parent="StateMachine"]
+[node name="Move" type="Node" parent="StateMachine" unique_id=1413395279]
 script = ExtResource("23_movestate")
 
-[node name="Attack" type="Node" parent="StateMachine"]
+[node name="Attack" type="Node" parent="StateMachine" unique_id=1525930687]
 script = ExtResource("24_attackstate")
 
-[node name="Cast" type="Node" parent="StateMachine"]
+[node name="Cast" type="Node" parent="StateMachine" unique_id=608538174]
 script = ExtResource("25_caststate")
 
-[node name="Flinch" type="Node" parent="StateMachine"]
+[node name="Flinch" type="Node" parent="StateMachine" unique_id=2135397980]
 script = ExtResource("26_flinchstate")
 
 [node name="GameOverUI" parent="." unique_id=1480085280 instance=ExtResource("5_qu4a1")]

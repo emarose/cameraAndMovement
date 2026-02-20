@@ -4,8 +4,9 @@
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_uf4ql"]
 [ext_resource type="Resource" uid="uid://cudaytyrcelie" path="res://resources/skills/Bash.tres" id="2_bash"]
 [ext_resource type="Resource" uid="uid://bk1ypdbbuvqcj" path="res://resources/skills/MagnumBreak.tres" id="3_magnum"]
-[ext_resource type="Resource" path="res://resources/skills/HPRecovery.tres" id="5_4hb2o"]
+[ext_resource type="Resource" uid="uid://5bh4ahl5yl1k" path="res://resources/skills/HPRecovery.tres" id="5_4hb2o"]
 [ext_resource type="Resource" uid="uid://bncuatv44ymtq" path="res://resources/skills/CombatMastery.tres" id="5_gjfxy"]
+[ext_resource type="PackedScene" uid="uid://80ntpdnaq0t8" path="res://assets/characters/swordman.tscn" id="6_uf4ql"]
 
 [resource]
 script = ExtResource("1_gpl7k")
@@ -28,3 +29,4 @@ job_level_bonuses = {
 "str": 1
 }
 }
+character_model = ExtResource("6_uf4ql")
