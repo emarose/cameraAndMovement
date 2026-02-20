@@ -1,6 +1,5 @@
 extends Node
 class_name EquipmentComponent
-@export var right_hand_path: NodePath
 
 ## Gestiona los slots de equipamiento del jugador/personaje
 ## y calcula los bonos totales aplicados por el equipo
@@ -15,16 +14,21 @@ var equipped_items: Dictionary = {
 	EquipmentItem.EquipmentSlot.ACCESSORY: null
 }
 
+# Diccionario de referencias a los attachment points del esqueleto
+var bone_attachments: Dictionary = {}
+
 # Referencias a otros componentes del jugador
 var stats_component: StatsComponent = null
 var inventory_component: InventoryComponent = null
+var parent_entity: Node3D = null
 
 func _ready():
 	# Buscamos los componentes hermanos
-	var parent = get_parent()
-	if parent:
-		stats_component = parent.get_node_or_null("StatsComponent")
-		inventory_component = parent.get_node_or_null("InventoryComponent")
+	parent_entity = get_parent()
+	if parent_entity:
+		stats_component = parent_entity.get_node_or_null("StatsComponent")
+		inventory_component = parent_entity.get_node_or_null("InventoryComponent")
+		_initialize_bone_attachments()
 
 ## Equipar un ítem desde el inventario
 func equip_item(item: EquipmentItem) -> bool:
@@ -47,14 +51,8 @@ func equip_item(item: EquipmentItem) -> bool:
 	_recalculate_equipment_bonuses()
 	equipment_changed.emit()
 	
-	var model_scene = item.model
-	if model_scene:
-		var weapon_instance = model_scene.instantiate()
-		var hand_attachment = get_parent().right_hand_attachment
-		# Limpia lo que hubiera antes
-		for child in hand_attachment.get_children():
-			child.queue_free()
-		hand_attachment.add_child(weapon_instance)
+	# Actualizar el modelo visual del equipo
+	_update_equipment_visuals(item, slot_type)
 
 	return true
 
@@ -71,6 +69,9 @@ func unequip_slot(slot_type: EquipmentItem.EquipmentSlot) -> bool:
 	
 	# Remover del slot
 	equipped_items[slot_type] = null
+	
+	# Limpiar el modelo visual del equipo
+	_clear_equipment_visuals(slot_type)
 	
 	# Recalcular stats (esto limpiará todos los bonos y los recalculará)
 	_recalculate_equipment_bonuses()
@@ -145,3 +146,80 @@ func get_total_equipment_stats() -> Dictionary:
 			totals["vit"] += item.vit_bonus
 	
 	return totals
+
+## Inicializa referencias a los attachment points del esqueleto
+func _initialize_bone_attachments():
+	# Buscar el modelo del personaje (primera opción: Mannequin_Medium)
+	var model = parent_entity.get_node_or_null("Mannequin_Medium")
+	if not model:
+		# Intentar encontrar cualquier modelo con AnimationTree
+		for child in parent_entity.get_children():
+			if child is Node3D and child.has_node("AnimationTree"):
+				model = child
+				break
+	
+	if not model:
+		push_error("EquipmentComponent: Cannot find character model")
+		return
+	
+	# Buscar el skeleton con los attachment points
+	var skeleton_path: String = "Rig_Medium/Skeleton3D"
+	var skeleton = model.get_node_or_null(skeleton_path)
+	
+	if not skeleton:
+		push_error("EquipmentComponent: Cannot find skeleton at path: ", skeleton_path)
+		return
+	
+	# Mapear los attachment points disponibles
+	var attachment_names = ["RightHand", "LeftHand", "LeftArm", "Head"]
+	for attachment_name in attachment_names:
+		var attachment = skeleton.get_node_or_null(attachment_name)
+		if attachment:
+			var position_node = attachment.get_node_or_null("position")
+			bone_attachments[attachment_name] = position_node if position_node else attachment
+
+func _update_equipment_visuals(item: EquipmentItem, slot_type: EquipmentItem.EquipmentSlot) -> void:
+	"""Instancia y posiciona el modelo visual del equipo"""
+	var model_scene = item.model
+	if not model_scene:
+		return
+	
+	# Determinar el attachment point según el slot
+	var attachment_key: String = _get_attachment_for_slot(slot_type)
+	if not attachment_key or not bone_attachments.has(attachment_key):
+		push_warning("EquipmentComponent: No attachment found for slot ", slot_type)
+		return
+	
+	var attachment = bone_attachments[attachment_key]
+	
+	# Limpiar modelos anteriores
+	for child in attachment.get_children():
+		child.queue_free()
+	
+	# Instanciar y añadir el nuevo modelo
+	var model_instance = model_scene.instantiate()
+	attachment.add_child(model_instance)
+
+func _clear_equipment_visuals(slot_type: EquipmentItem.EquipmentSlot) -> void:
+	"""Remueve el modelo visual del equipo"""
+	var attachment_key: String = _get_attachment_for_slot(slot_type)
+	if not attachment_key or not bone_attachments.has(attachment_key):
+		return
+	
+	var attachment = bone_attachments[attachment_key]
+	for child in attachment.get_children():
+		child.queue_free()
+
+func _get_attachment_for_slot(slot_type: EquipmentItem.EquipmentSlot) -> String:
+	"""Retorna el nombre del attachment point para un slot de equipo"""
+	match slot_type:
+		EquipmentItem.EquipmentSlot.WEAPON:
+			return "RightHand"
+		EquipmentItem.EquipmentSlot.HEAD:
+			return "Head"
+		EquipmentItem.EquipmentSlot.BODY:
+			return "Skeleton3D" # Body is handled differently
+		EquipmentItem.EquipmentSlot.ACCESSORY:
+			return "LeftHand" # Or a custom attachment
+		_:
+			return ""

@@ -46,7 +46,14 @@ var HOTBAR_SIZE = 9
 @onready var hud: CanvasLayer = $"../HUD"
 @onready var state_machine: StateMachine = $StateMachine
 @onready var animation_tree: AnimationTree = $Mannequin_Medium/AnimationTree
-@onready var right_hand_attachment: BoneAttachment3D = $Mannequin_Medium/Rig_Medium/Skeleton3D/RightHand
+
+# Bone attachments for equipment and visual elements
+var bone_attachments: Dictionary = {
+	"RIGHT_HAND": null,
+	"LEFT_HAND": null,
+	"LEFT_ARM": null,
+	"HEAD": null
+}
 
 # --- Variables de Ataque y Control ---
 var last_attack_time: int = 0
@@ -64,6 +71,9 @@ var is_flinching: bool = false
 var flinch_timer: float = 0.0
 
 func _ready():
+	# Initialize bone attachments early
+	_initialize_bone_attachments()
+	
 	hotbar_content.resize(HOTBAR_SIZE)
 	# Cargar configuración inicial de hotbar
 	for i in range(HOTBAR_SIZE):
@@ -834,3 +844,36 @@ func _assign_item_to_hotbar(slot_index: int, item: ItemData):
 	if slot_index >= 0 and slot_index < HOTBAR_SIZE:
 		hotbar_content[slot_index] = item
 		refresh_hotbar_to_hud()
+
+## Inicializa referencias a los attachment points del esqueleto
+func _initialize_bone_attachments() -> void:
+	var model = get_node_or_null("Mannequin_Medium")
+	if not model:
+		push_error("Player: Cannot find character model (Mannequin_Medium)")
+		return
+	
+	var skeleton_path: String = "Rig_Medium/Skeleton3D"
+	var skeleton = model.get_node_or_null(skeleton_path)
+	
+	if not skeleton:
+		push_error("Player: Cannot find skeleton at path: ", skeleton_path)
+		return
+	
+	# Mapear los attachment points disponibles
+	var attachment_keys = ["RIGHT_HAND", "LEFT_HAND", "LEFT_ARM", "HEAD"]
+	var attachment_node_names = ["RightHand", "LeftHand", "LeftArm", "Head"]
+	
+	for i in range(attachment_keys.size()):
+		var key = attachment_keys[i]
+		var node_name = attachment_node_names[i]
+		var attachment = skeleton.get_node_or_null(node_name)
+		if attachment:
+			bone_attachments[key] = attachment
+		else:
+			push_warning("Player: Cannot find attachment point: ", node_name)
+
+## Obtiene un attachment point por su clave
+func get_bone_attachment(attachment_key: String) -> Node3D:
+	if bone_attachments.has(attachment_key):
+		return bone_attachments[attachment_key]
+	return null
