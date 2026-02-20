@@ -22,6 +22,7 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 
 CombatMath="*res://scripts/CombatMath.gd"
 GameManager="*uid://bhkmp36f0twct"
+IconGenerator="*res://scripts/autoload/IconGenerator.gd"
 
 [display]
 

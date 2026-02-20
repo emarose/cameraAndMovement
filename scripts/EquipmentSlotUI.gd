@@ -8,6 +8,16 @@ var current_item: EquipmentItem = null
 var parent_equipment_ui = null
 var slot_index: int = -1 # Índice en el diccionario de equipamiento
 
+func _ready():
+	# Escuchar cuando se generen íconos 3D
+	if not IconGenerator.icon_generated.is_connected(_on_icon_generated):
+		IconGenerator.icon_generated.connect(_on_icon_generated)
+
+func _on_icon_generated(item_data: ItemData, texture: Texture2D):
+	# Si este slot muestra ese item, actualizar el ícono
+	if current_item == item_data:
+		icon.texture = texture
+
 func set_slot_type(new_type: EquipmentItem.EquipmentSlot):
 	slot_type = new_type
 	slot_index = new_type # Usamos el enum como índice
@@ -16,7 +26,7 @@ func set_item(item: EquipmentItem) -> void:
 	# Solo acepta equipo y que coincida con el slot
 	if item and item.item_type == ItemData.ItemType.EQUIPMENT and item.slot == slot_type:
 		current_item = item
-		icon.texture = item.icon
+		icon.texture = IconGenerator.get_icon(item)
 		icon.modulate = Color.WHITE
 	else:
 		current_item = null
@@ -32,7 +42,7 @@ func _get_drag_data(_pos):
 	
 	# Crear la vista previa (icono fantasma)
 	var preview_texture = TextureRect.new()
-	preview_texture.texture = current_item.icon
+	preview_texture.texture = IconGenerator.get_icon(current_item)
 	preview_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	preview_texture.custom_minimum_size = Vector2(40, 40)
 	

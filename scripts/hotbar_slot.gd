@@ -20,6 +20,10 @@ var _double_click_threshold: float = 0.3 # Tiempo máximo entre clicks para dobl
 func _ready():
 	mouse_entered.connect(_on_mouse_enter)
 	mouse_exited.connect(_on_mouse_exit)
+	
+	# Escuchar cuando se generen íconos 3D
+	if not IconGenerator.icon_generated.is_connected(_on_icon_generated):
+		IconGenerator.icon_generated.connect(_on_icon_generated)
 
 func setup(index: int, key_text: String):
 	slot_index = index
@@ -32,6 +36,11 @@ func _on_mouse_enter():
 
 func _on_mouse_exit():
 	slot_exit.emit()
+	
+func _on_icon_generated(item_data: ItemData, texture: Texture2D):
+	# Si este slot muestra ese item, actualizar el ícono
+	if current_content == item_data:
+		icon_rect.texture = texture
 	
 func update_slot(resource, amount: int = 0):
 	if resource == null:
@@ -56,9 +65,9 @@ func update_slot(resource, amount: int = 0):
 	# Handle ItemData	
 	elif resource is ItemData:
 		current_skill_name = resource.item_name
-
-		if resource.icon:
-			icon_rect.texture = resource.icon
+		var item_icon = IconGenerator.get_icon(resource)
+		if item_icon:
+			icon_rect.texture = item_icon
 			icon_rect.self_modulate = Color.WHITE
 		else:
 			icon_rect.texture = null

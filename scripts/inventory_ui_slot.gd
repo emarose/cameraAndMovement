@@ -14,6 +14,10 @@ var parent_inventory_ui = null
 func _ready():
 	mouse_entered.connect(_on_mouse_enter)
 	mouse_exited.connect(_on_mouse_exit)
+	
+	# Escuchar cuando se generen íconos 3D
+	if not IconGenerator.icon_generated.is_connected(_on_icon_generated):
+		IconGenerator.icon_generated.connect(_on_icon_generated)
 
 func _on_mouse_enter():
 	if my_slot_data and my_slot_data.item_data:
@@ -26,6 +30,11 @@ func _gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
 		# Detectamos click izquierdo o derecho
 		slot_clicked.emit(get_index(), event.button_index)
+
+func _on_icon_generated(item_data: ItemData, texture: Texture2D):
+	# Si este slot muestra ese item, actualizar el ícono
+	if my_slot_data and my_slot_data.item_data == item_data:
+		icon_rect.texture = texture
 
 func update_slot(slot_data: InventorySlot):
 	my_slot_data = slot_data
@@ -40,7 +49,7 @@ func update_slot(slot_data: InventorySlot):
 	
 	# Slot ocupado
 	icon_rect.modulate.a = 1.0 # Restaurar opacidad
-	icon_rect.texture = slot_data.item_data.icon
+	icon_rect.texture = IconGenerator.get_icon(slot_data.item_data)
 	
 	# Manejo de cantidad
 	if slot_data.quantity > 1:
@@ -58,7 +67,7 @@ func _get_drag_data(_at_position):
 	
 	# A. Crear la vista previa (el icono fantasma que sigue al mouse)
 	var preview_texture = TextureRect.new()
-	preview_texture.texture = my_slot_data.item_data.icon
+	preview_texture.texture = IconGenerator.get_icon(my_slot_data.item_data)
 	preview_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	preview_texture.custom_minimum_size = Vector2(40, 40) # Tamaño del fantasma
 	

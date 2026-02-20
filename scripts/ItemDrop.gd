@@ -99,8 +99,9 @@ func setup(p_item_data: ItemData, p_quantity: int, custom_delay: float = 0.0):
 	initial_position = global_position
 
 	# Asignar el icono del item al Sprite3D
-	if icon_sprite and item_data.icon:
-		icon_sprite.texture = item_data.icon
+	var item_icon = IconGenerator.get_icon(item_data)
+	if icon_sprite and item_icon:
+		icon_sprite.texture = item_icon
 
 	# Buscar el modelo 3D si existe (ignora icon_sprite y collision_shape)
 	var model_node: Node3D = null
