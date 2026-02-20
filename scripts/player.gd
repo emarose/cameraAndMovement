@@ -10,6 +10,8 @@ extends CharacterBody3D
 @export var cursor_talk: Texture2D
 @export var cursor_door: Texture2D
 @export var flinch_duration: float = 0.2
+@export var attack_hit_delay: float = 0.3  # Time until damage is dealt in attack animation
+@export var attack_animation_duration: float = 0.5  # Total duration of attack animation
 
 @export_group("Hotbar Inicial")
 # Usamos un Array exportado para configurar las skills iniciales desde el editor
@@ -44,6 +46,7 @@ var HOTBAR_SIZE = 9
 @onready var hud: CanvasLayer = $"../HUD"
 @onready var state_machine: StateMachine = $StateMachine
 @onready var animation_tree: AnimationTree = $Mannequin_Medium/AnimationTree
+@onready var right_hand_attachment: BoneAttachment3D = $Mannequin_Medium/Rig_Medium/Skeleton3D/RightHand
 
 # --- Variables de Ataque y Control ---
 var last_attack_time: int = 0
@@ -437,6 +440,9 @@ func execute_attack(enemy) -> void:
 	if not enemy or not is_instance_valid(enemy):
 		return
 
+	# IMMEDIATELY lock attacks to prevent re-entry
+	can_attack_player = false
+	
 	# Marcar el estado de ataque para bloquear input/movimiento durante la animación
 	is_attacking = true
 	_face_target(enemy)
@@ -449,7 +455,14 @@ func execute_attack(enemy) -> void:
 	var enemy_data = enemy.data
 
 	if enemy_health and enemy_data and stats:
-		can_attack_player = false
+		# WAIT for animation to reach hit frame before dealing damage
+		await get_tree().create_timer(attack_hit_delay).timeout
+
+		# Verificar que el enemigo sigue válido después del delay
+		if not is_instance_valid(enemy) or not is_instance_valid(enemy_health):
+			can_attack_player = true
+			is_attacking = false
+			return
 
 		# Cálculo de hit
 		var hit_chance_percent = (stats.get_hit() - enemy_data.flee) + 80
@@ -479,12 +492,24 @@ func execute_attack(enemy) -> void:
 			enemy_health.take_damage(final_damage)
 			spawn_floating_text(enemy.global_position, final_damage, false)
 
-		# Esperar el tiempo de ataque (ASPD) antes de liberar can_attack_player
-		await get_tree().create_timer(stats.get_attack_speed()).timeout
-		can_attack_player = true
+		# Wait for animation to finish (separate from attack cooldown)
+		var remaining_anim_time = attack_animation_duration - attack_hit_delay
+		if remaining_anim_time > 0:
+			await get_tree().create_timer(remaining_anim_time).timeout
+		
+		# Animation finished - release attacking state
+		is_attacking = false
 
-	# Liberar estado de ataque al finalizar el ciclo (permite atacar en hold)
-	is_attacking = false
+		# Now wait for the rest of the attack cooldown (ASPD)
+		var cooldown_time = stats.get_attack_speed() - attack_animation_duration
+		if cooldown_time > 0:
+			await get_tree().create_timer(cooldown_time).timeout
+		
+		can_attack_player = true
+	else:
+		# If no valid target, just end the attack state
+		is_attacking = false
+		can_attack_player = true
 
 func _face_target(target: Node3D) -> void:
 	if not target or not is_instance_valid(target):

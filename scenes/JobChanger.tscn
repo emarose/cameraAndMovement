@@ -11,7 +11,7 @@
 
 [node name="JobChanger" type="StaticBody3D" unique_id=2086174041]
 script = ExtResource("1_ijkl3")
-available_jobs = Array[ExtResource("2_t6qfn")]([ExtResource("3_f4f2e"), ExtResource("4_ntg06"), ExtResource("6_kuhjn")])
+available_jobs = Array[ExtResource("2_t6qfn")]([ExtResource("4_ntg06"), ExtResource("6_kuhjn"), ExtResource("3_f4f2e")])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2059721456]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

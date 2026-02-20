@@ -2,7 +2,8 @@ extends CharacterBody3D
 
 @export var data: EnemyData 
 @export var flinch_duration: float = 0.1
-@export var attack_anim_duration: float = 0.3
+@export var attack_anim_duration: float = 0.4  # Total duration of attack animation
+@export var attack_hit_delay: float = 0.2  # Time until damage is dealt in attack animation
 
 @onready var nav_agent = $NavigationAgent3D
 @onready var health_comp = $HealthComponent
@@ -277,6 +278,16 @@ func attack_player():
 		can_attack = false
 		_trigger_attack_state()
 		
+		# WAIT for animation to reach hit frame before dealing damage
+		await get_tree().create_timer(attack_hit_delay).timeout
+		
+		# Verify player is still valid after delay
+		if not is_instance_valid(player) or player.is_dead:
+			can_attack = true
+			is_attacking = false
+			attack_timer = 0.0
+			return
+		
 		# Obtener componentes del jugador para cálculos
 		var p_stats = player.get_node_or_null("StatsComponent")
 		var health_node = player.get_node_or_null("HealthComponent")
@@ -311,8 +322,12 @@ func attack_player():
 				if player.has_method("_on_player_miss"): # Por si quieres mostrar un texto de "MISS"
 					player._on_player_miss()
 		
-		# El cooldown ahora depende de la Agilidad y Destreza del enemigo
-		await get_tree().create_timer(stats_comp.get_attack_speed()).timeout
+		# Wait for animation to finish (is_attacking is handled by timer in _physics_process)
+		# Then wait for the rest of the attack cooldown (ASPD)
+		var cooldown_time = stats_comp.get_attack_speed() - attack_anim_duration
+		if cooldown_time > 0:
+			await get_tree().create_timer(cooldown_time).timeout
+		
 		can_attack = true
 
 func _trigger_attack_state():

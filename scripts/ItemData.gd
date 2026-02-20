@@ -6,6 +6,7 @@ enum ItemType { CONSUMABLE, EQUIPMENT, MISC, QUEST }
 @export_group("Datos Generales")
 @export var item_name: String = "Item"
 @export var icon: Texture2D
+@export var model: PackedScene
 @export var description: String = ""
 @export var item_type: ItemType = ItemType.MISC
 @export var stackable: bool = true

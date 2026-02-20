@@ -1,5 +1,6 @@
 extends Node
 class_name EquipmentComponent
+@export var right_hand_path: NodePath
 
 ## Gestiona los slots de equipamiento del jugador/personaje
 ## y calcula los bonos totales aplicados por el equipo
@@ -46,6 +47,15 @@ func equip_item(item: EquipmentItem) -> bool:
 	_recalculate_equipment_bonuses()
 	equipment_changed.emit()
 	
+	var model_scene = item.model
+	if model_scene:
+		var weapon_instance = model_scene.instantiate()
+		var hand_attachment = get_parent().right_hand_attachment
+		# Limpia lo que hubiera antes
+		for child in hand_attachment.get_children():
+			child.queue_free()
+		hand_attachment.add_child(weapon_instance)
+
 	return true
 
 ## Desequipar un ítem de un slot específico
