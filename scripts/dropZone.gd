@@ -27,7 +27,7 @@ func _drop_data(_pos, data):
 	var quantity = 1
 	if slot and slot.item_data == item_data:
 		quantity = slot.quantity
-	
+	print(slot.item_data)
 	# Remover del inventario
 	inventory.slots[slot_index] = null
 	inventory.inventory_changed.emit()
@@ -49,5 +49,16 @@ func _drop_item_to_ground(item_data: ItemData, quantity: int, pos: Vector3):
 	var drop_instance = item_drop_scene.instantiate()
 	get_tree().current_scene.add_child(drop_instance)
 	drop_instance.global_position = pos
-	# Pasar delay de 1.5 segundos para items descartados (vs 0.2s para drops de enemigos)
+
+	var has_model = false
+	# Instanciar el modelo 3D del ítem
+	if item_data.model:
+		var model_instance = item_data.model.instantiate()
+		drop_instance.add_child(model_instance)
+		has_model = true
+
+	# Si hay modelo, ocultar el Sprite3D (icono)
+	if has_model and drop_instance.has_node("Sprite3D"):
+		drop_instance.get_node("Sprite3D").visible = false
+
 	drop_instance.setup(item_data, quantity, 1.5)
