@@ -68,30 +68,34 @@ nodes/StateMachine/position = Vector2(30, 80)
 node_connections = [&"output", 0, &"StateMachine"]
 
 [node name="maxdamage_scab-low-poly" unique_id=1608131801 instance=ExtResource("1_7veiu")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 0, 0)
 
-[node name="Skeleton3D" parent="ScabArmature" parent_id_path=PackedInt32Array(768666711) index="0" unique_id=1185086637]
-bones/1/rotation = Quaternion(-0.67842185, 0.11418709, -0.50055724, 0.52549744)
+[node name="Skeleton3D" parent="ScabArmature" parent_id_path=PackedInt32Array(822066415) index="0" unique_id=1010482594]
+bones/1/rotation = Quaternion(-0.67622054, 0.122796066, -0.53229827, 0.49427262)
 bones/2/rotation = Quaternion(0.57124674, -0.6984764, 0.30901718, -0.3005268)
 bones/3/position = Vector3(0.0031019577, 0.399978, -0.53069204)
-bones/4/position = Vector3(0.569624, 0.29164198, -0.53930056)
+bones/4/position = Vector3(0.56859493, 0.24216592, -0.52524906)
 bones/5/rotation = Quaternion(0.38685647, 0.80332786, 0.28576866, 0.35120186)
 bones/6/rotation = Quaternion(0.6150422, 0.65665966, -0.33270854, -0.2825354)
 bones/7/position = Vector3(0.0031018844, 0.85212547, 0.4112008)
 bones/8/position = Vector3(0.39309326, 0.8774724, 0.5709255)
-bones/9/position = Vector3(0.10840421, 0.71907306, -0.24823703)
-bones/10/position = Vector3(0.21299051, 0.8675186, 0.19332932)
-bones/11/position = Vector3(0.095648654, 0.5617033, 6.9611517e-09)
-bones/11/rotation = Quaternion(0.3153497, 0.42596424, -0.5772259, 0.621224)
-bones/12/rotation = Quaternion(-0.8993851, -0.029242132, 1.0564814e-06, 0.43617818)
-bones/13/rotation = Quaternion(0.06394168, -0.21666783, -0.43525657, 0.87150353)
-bones/14/rotation = Quaternion(-0.7033866, 0.41703707, -0.55559444, 0.15047379)
-bones/15/rotation = Quaternion(0.22285397, 0.09349366, 0.73355734, 0.63520753)
-bones/16/rotation = Quaternion(0.691056, 0.4456755, -0.5458535, -0.1608074)
-bones/17/position = Vector3(0.071888894, 0.17213552, -0.11716291)
-bones/18/position = Vector3(-0.11068241, 0.18245357, -0.08991339)
+bones/9/position = Vector3(0.108571604, 0.7019583, -0.25990373)
+bones/10/position = Vector3(0.23020716, 0.8245757, 0.2861589)
+bones/11/position = Vector3(0.1442285, 0.5616326, 1.0868896e-08)
+bones/11/rotation = Quaternion(0.44685736, 0.54130316, -0.45414665, 0.54868954)
+bones/12/rotation = Quaternion(-0.9121786, -0.035136413, -0.0017328243, 0.40828028)
+bones/13/rotation = Quaternion(0.079670325, 0.13624176, -0.5825894, 0.7972957)
+bones/14/rotation = Quaternion(-0.6521674, 0.52314544, -0.5151373, 0.1887594)
+bones/15/rotation = Quaternion(0.13064265, 0.13276437, 0.6522526, 0.7347603)
+bones/16/rotation = Quaternion(0.51888394, 0.70565474, -0.40985766, -0.25461245)
+bones/17/position = Vector3(0.06632191, 0.21536224, -0.10885355)
+bones/18/position = Vector3(-0.16735671, 0.19914475, -0.093290105)
 bones/18/rotation = Quaternion(-0.0032929436, 0.9842914, 0.17555283, -0.018463876)
-bones/19/rotation = Quaternion(0.60512674, 0.0052496293, 0.02247556, 0.7957946)
-bones/19/scale = Vector3(1.1956486, 1.1956484, 1.1956488)
+bones/19/rotation = Quaternion(0.6045448, 0.005304256, 0.022576414, 0.79623353)
+bones/19/scale = Vector3(1.0868013, 1.0868014, 1.0868015)
+
+[node name="Scab" parent="ScabArmature/Skeleton3D" index="0" unique_id=1136286660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.16746765, 0)
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="2" unique_id=452181991]
 tree_root = SubResource("AnimationNodeBlendTree_7veiu")

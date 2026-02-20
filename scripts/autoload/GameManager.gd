@@ -103,6 +103,12 @@ func load_player_data(player):
 				var item = load(item_path)
 				equipment_comp.equipped_items[slot_type] = item if item else null
 		
+		# Actualizar los modelos visuales del equipo
+		for slot_type in equipment_comp.equipped_items.keys():
+			var item = equipment_comp.equipped_items[slot_type]
+			if item:
+				equipment_comp._update_equipment_visuals(item, slot_type)
+		
 		# Forzamos el recalculo de los stats máximos (Max HP/SP) basados en el equipo
 		equipment_comp._recalculate_equipment_bonuses()
 		equipment_comp.equipment_changed.emit()
