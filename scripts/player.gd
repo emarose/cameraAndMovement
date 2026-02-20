@@ -275,6 +275,7 @@ func _process_continuous_interaction():
 		if dist <= attack_range:
 			# Si estamos en rango, nos detenemos y atacamos
 			nav_agent.target_position = global_position
+			_face_target(current_target_enemy)
 			execute_attack(current_target_enemy)
 		else:
 			# Si estamos lejos, lo perseguimos
@@ -438,6 +439,7 @@ func execute_attack(enemy) -> void:
 
 	# Marcar el estado de ataque para bloquear input/movimiento durante la animación
 	is_attacking = true
+	_face_target(enemy)
 
 	# Bloqueo de movimiento mientras atacamos
 	nav_agent.target_position = global_position
@@ -483,6 +485,12 @@ func execute_attack(enemy) -> void:
 
 	# Liberar estado de ataque al finalizar el ciclo (permite atacar en hold)
 	is_attacking = false
+
+func _face_target(target: Node3D) -> void:
+	if not target or not is_instance_valid(target):
+		return
+	var target_pos = target.global_position
+	look_at(Vector3(target_pos.x, global_position.y, target_pos.z), Vector3.UP)
 
 func _on_player_hit(new_health):
 	if has_node("HealthBar3D") and has_node("HealthComponent"):
