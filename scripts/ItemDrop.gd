@@ -144,7 +144,6 @@ func _animate_drop():
 
 	var target_node = model_node if model_node else icon_sprite
 	if target_node:
-		var start_pos = target_node.position
 		target_node.position.y = 0.0
 		tween.tween_property(target_node, "position:y", DROP_HEIGHT, DROP_DURATION * 0.5)
 		tween.tween_property(target_node, "position:y", 0.0, DROP_DURATION * 0.5).set_delay(DROP_DURATION * 0.5)

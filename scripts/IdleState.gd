@@ -11,7 +11,7 @@ func enter():
 	# Animation will be handled by the StateMachine through AnimationTree
 	pass
 
-func update(delta: float):
+func update(_delta: float):
 	"""Check if we should transition to Move state"""
 	if not entity:
 		return

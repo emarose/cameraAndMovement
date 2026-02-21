@@ -11,7 +11,7 @@ func enter():
 	# Animation handled by StateMachine through AnimationTree
 	pass
 
-func update(delta: float):
+func update(_delta: float):
 	if not entity:
 		return
 	

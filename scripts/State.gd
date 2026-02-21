@@ -22,6 +22,6 @@ func exit():
 	"""Called when exiting this state"""
 	pass
 
-func update(delta: float):
+func update(_delta: float):
 	"""Called every physics frame while in this state"""
 	pass
