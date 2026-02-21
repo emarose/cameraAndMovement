@@ -46,6 +46,7 @@ func _setup_viewport():
 	_camera = _viewport.get_node("Camera3D")
 	_pivot = _viewport.get_node("Pivot")
 	_camera.fov = 50.0
+	_camera.position = Vector3(0, 0, CAMERA_DISTANCE)
 
 	# Configurar look_at ahora que está en el árbol
 	_camera.look_at(Vector3.ZERO, Vector3.UP)

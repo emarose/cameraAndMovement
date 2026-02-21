@@ -53,7 +53,12 @@ func change_state(new_state_name: String):
 		push_warning("State %s not found in StateMachine" % new_state_name)
 		return
 	
-	var old_state_name = current_state.name if current_state else "none"
+	var old_state_name: String
+	if current_state:
+		old_state_name = str(current_state.name)
+	else:
+		old_state_name = "none"
+
 	
 	# Exit current state
 	if current_state:
@@ -72,4 +77,4 @@ func change_state(new_state_name: String):
 
 func get_current_state_name() -> String:
 	"""Returns the name of the current state"""
-	return current_state.name if current_state else ""
+	return str(current_state.name) if current_state else ""

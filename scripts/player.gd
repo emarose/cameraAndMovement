@@ -29,6 +29,7 @@ var HOTBAR_SIZE = 9
 @export_group("Prefabs")
 @export var floating_text_scene: PackedScene
 @export var level_up_effect_scene: PackedScene
+@export var unarmed_attack_animation_resource: Animation = null
 
 @onready var inventory_component: InventoryComponent = $InventoryComponent
 @onready var equipment_component: EquipmentComponent = $EquipmentComponent
@@ -544,21 +545,24 @@ func execute_attack(enemy) -> void:
 		if anim_tree_was_active:
 			animation_tree.active = false
 	
-	# Play weapon-specific attack start animation using AnimationPlayer
-	if animation_player:
-		var anim_to_play = ""
-		
-		# Try to use the loaded weapon animation
-		if current_weapon_attack_start_anim != "" and animation_player.has_animation(current_weapon_attack_start_anim):
-			anim_to_play = current_weapon_attack_start_anim
-		elif animation_player.has_animation("attack_1"):
-			# Fallback to default melee attack
-			anim_to_play = "attack_1"
-		
-		if anim_to_play != "":
-			animation_player.play(anim_to_play)
-		else:
-			push_warning("Player: No attack start animation found")
+	# Play weapon-specific attack start animation using AnimationPlayer or fallback to AnimationTree
+	var played_attack_anim = false
+	if animation_player and current_weapon_attack_start_anim != "" and animation_player.has_animation(current_weapon_attack_start_anim):
+		animation_player.play(current_weapon_attack_start_anim)
+		played_attack_anim = true
+	elif animation_player and animation_player.has_animation("attack_1"):
+		animation_player.play("attack_1")
+		played_attack_anim = true
+
+	# If no AnimationPlayer anim played, use AnimationTree state machine for melee/no-weapon
+	if not played_attack_anim and animation_tree:
+		var state_machine_playback = animation_tree.get("parameters/playback")
+		if state_machine_playback:
+			state_machine_playback.travel("Attack")
+			played_attack_anim = true
+
+	if not played_attack_anim:
+		push_warning("Player: No attack start animation found")
 
 	if enemy_health and enemy_data and stats:
 		# WAIT for animation to reach hit frame before dealing damage
@@ -1004,13 +1008,9 @@ func get_bone_attachment(attachment_key: String) -> Node3D:
 		return bone_attachments[attachment_key]
 	return null
 
-## Carga las animaciones de un arma equipada en el AnimationPlayer
+## Carga las animaciones de un arma equipada en el AnimationPlayer, o la animación unarmed si no hay arma
 func load_weapon_animations(weapon: EquipmentItem) -> void:
-	if not animation_player or not weapon:
-		# Reset to default if no weapon
-		current_weapon_idle_anim = &""
-		current_weapon_attack_start_anim = &""
-		current_weapon_attack_release_anim = &""
+	if not animation_player:
 		return
 	
 	# Get the animation library (default library)
@@ -1022,34 +1022,47 @@ func load_weapon_animations(weapon: EquipmentItem) -> void:
 		anim_library = AnimationLibrary.new()
 		animation_player.add_animation_library("", anim_library)
 	
-	# Load idle animation
-	if weapon.idle_animation_resource:
-		var anim_name = "weapon_idle"
-		if anim_library.has_animation(anim_name):
-			anim_library.remove_animation(anim_name)
-		anim_library.add_animation(anim_name, weapon.idle_animation_resource)
-		current_weapon_idle_anim = anim_name
+	if weapon:
+		# Load idle animation
+		if weapon.idle_animation_resource:
+			var anim_name = "weapon_idle"
+			if anim_library.has_animation(anim_name):
+				anim_library.remove_animation(anim_name)
+			anim_library.add_animation(anim_name, weapon.idle_animation_resource)
+			current_weapon_idle_anim = anim_name
+		else:
+			current_weapon_idle_anim = &""
+		
+		# Load attack start animation
+		if weapon.attack_start_animation_resource:
+			var anim_name = "weapon_attack_start"
+			if anim_library.has_animation(anim_name):
+				anim_library.remove_animation(anim_name)
+			anim_library.add_animation(anim_name, weapon.attack_start_animation_resource)
+			current_weapon_attack_start_anim = anim_name
+		else:
+			current_weapon_attack_start_anim = &""
+		
+		# Load attack release animation
+		if weapon.attack_release_animation_resource:
+			var anim_name = "weapon_attack_release"
+			if anim_library.has_animation(anim_name):
+				anim_library.remove_animation(anim_name)
+			anim_library.add_animation(anim_name, weapon.attack_release_animation_resource)
+			current_weapon_attack_release_anim = anim_name
+		else:
+			current_weapon_attack_release_anim = &""
 	else:
+		# No weapon equipped: use unarmed attack animation
+		if unarmed_attack_animation_resource:
+			var anim_name = "weapon_attack_start"
+			if anim_library.has_animation(anim_name):
+				anim_library.remove_animation(anim_name)
+			anim_library.add_animation(anim_name, unarmed_attack_animation_resource)
+			current_weapon_attack_start_anim = anim_name
+		else:
+			current_weapon_attack_start_anim = &""
 		current_weapon_idle_anim = &""
-	
-	# Load attack start animation
-	if weapon.attack_start_animation_resource:
-		var anim_name = "weapon_attack_start"
-		if anim_library.has_animation(anim_name):
-			anim_library.remove_animation(anim_name)
-		anim_library.add_animation(anim_name, weapon.attack_start_animation_resource)
-		current_weapon_attack_start_anim = anim_name
-	else:
-		current_weapon_attack_start_anim = &""
-	
-	# Load attack release animation
-	if weapon.attack_release_animation_resource:
-		var anim_name = "weapon_attack_release"
-		if anim_library.has_animation(anim_name):
-			anim_library.remove_animation(anim_name)
-		anim_library.add_animation(anim_name, weapon.attack_release_animation_resource)
-		current_weapon_attack_release_anim = anim_name
-	else:
 		current_weapon_attack_release_anim = &""
 	
 	print("Player: Loaded weapon animations - idle: %s, attack_start: %s, attack_release: %s" % [

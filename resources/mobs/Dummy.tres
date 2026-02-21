@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://lvxrtv6cw06m"]
+
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_lidsq"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="2_u1d8f"]
+[ext_resource type="PackedScene" uid="uid://dlfs3i72excfk" path="res://assets/models/warrior-placeholder-model.tscn" id="3_lidsq"]
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="4_vcypc"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5_76a60"]
+
+[resource]
+script = ExtResource("4_vcypc")
+monster_name = "Dummy"
+max_hp = 10000
+move_spd = 0.0
+attack_range = 0.0
+model_scene = ExtResource("3_lidsq")
+jump_frequency = 0.0
+wander_radius = 0.0
+metadata/_custom_type_script = "uid://e53aoxyegbf"

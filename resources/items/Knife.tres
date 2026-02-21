@@ -1,12 +1,14 @@
 [gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://cqun87ymamf71"]
 
 [ext_resource type="Texture2D" uid="uid://lvtv1uqe5h5a" path="res://resources/items/fc671.png" id="1_4ru3r"]
+[ext_resource type="Animation" uid="uid://dvbc77aav6742" path="res://assets/characters/animations/Melee_1H_Attack_Chop.res" id="1_g5ioe"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="1_knife"]
 [ext_resource type="PackedScene" uid="uid://bratjlekqmtrv" path="res://assets/weapon models/dagger_B.gltf" id="2_hou8t"]
 
 [resource]
 script = ExtResource("1_knife")
 atk_bonus = 15
+attack_start_animation_resource = ExtResource("1_g5ioe")
 item_name = "Knife"
 icon = ExtResource("1_4ru3r")
 model = ExtResource("2_hou8t")

@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="8_khinc"]
 [ext_resource type="Resource" uid="uid://cfg2urlh7pla8" path="res://resources/items/HunterBow.tres" id="8_pfeki"]
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="10_d3wef"]
+[ext_resource type="Animation" uid="uid://bfn0hgp0jnakb" path="res://assets/characters/animations/Melee_Unarmed_Attack_Punch_A.res" id="11_axnmu"]
 [ext_resource type="Resource" uid="uid://cqun87ymamf71" path="res://resources/items/Knife.tres" id="11_p07f3"]
 [ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="12_o4126"]
 [ext_resource type="PackedScene" uid="uid://bktyhgvk5hews" path="res://assets/characters/mannequin_medium.tscn" id="12_p07f3"]
@@ -38,10 +39,10 @@ material = SubResource("StandardMaterial3D_aqk2v")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_pfeki"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_fvsjc"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_axnmu"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_hxdpb"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
@@ -65,10 +66,11 @@ cursor_talk = ExtResource("5_viqgg")
 cursor_door = ExtResource("6_b8lor")
 flinch_duration = 0.1
 attack_hit_delay = 1.0
-attack_animation_duration = 0.6
+attack_animation_duration = 0.8
 initial_inventory = Array[Resource]([ExtResource("11_p07f3"), ExtResource("8_pfeki")])
 floating_text_scene = ExtResource("4_bruh7")
 level_up_effect_scene = ExtResource("5_6eyey")
+unarmed_attack_animation_resource = ExtResource("11_axnmu")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=167663048]
 
@@ -100,11 +102,11 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12061417, 0)
-texture = SubResource("ViewportTexture_pfeki")
+texture = SubResource("ViewportTexture_fvsjc")
 
 [node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("7_spbar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.20458083, 0)
-texture = SubResource("ViewportTexture_axnmu")
+texture = SubResource("ViewportTexture_hxdpb")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")
