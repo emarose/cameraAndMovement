@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="1"]
 [ext_resource type="Animation" uid="uid://uaa1jjexpx4i" path="res://assets/characters/animations/Ranged_Bow_Release.res" id="1_2ggvq"]
-[ext_resource type="PackedScene" uid="uid://bhcp016dxnayn" path="res://assets/weapon models/bow_A.gltf" id="1_gls0s"]
+[ext_resource type="PackedScene" uid="uid://bhcp016dxnayn" path="res://assets/weapon_models/bow_A.gltf" id="1_gls0s"]
 [ext_resource type="PackedScene" uid="uid://bvqk8ym5u3p5h" path="res://scenes/Arrow.tscn" id="2"]
 [ext_resource type="Animation" uid="uid://d4mswsi82418t" path="res://assets/characters/animations/Ranged_Bow_Draw.res" id="2_sq3sf"]
 [ext_resource type="Animation" uid="uid://db55tsbcmt40v" path="res://assets/characters/animations/Ranged_Bow_Idle.res" id="3_hidk5"]

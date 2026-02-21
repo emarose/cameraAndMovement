@@ -1,0 +1,136 @@
+[gd_scene format=3 uid="uid://7xb0ggxr1ab1"]
+
+[ext_resource type="Script" uid="uid://dgbs5gs6jx8mp" path="res://scripts/IconPreviewTool.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bmqv3h8xkc7pd" path="res://scenes/IconRenderViewport.tscn" id="2"]
+
+[node name="IconPreviewTool" type="Control" unique_id=1535179279]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1427800832]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -300.0
+offset_right = 250.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 19
+
+[node name="Title" type="Label" parent="VBoxContainer" unique_id=211524094]
+layout_mode = 2
+text = "Icon Preview Tool"
+horizontal_alignment = 1
+
+[node name="PathContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1646015146]
+layout_mode = 2
+
+[node name="ItemPath" type="LineEdit" parent="VBoxContainer/PathContainer" unique_id=1885292982]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Item path..."
+
+[node name="BrowseButton" type="Button" parent="VBoxContainer/PathContainer" unique_id=330745863]
+layout_mode = 2
+text = "Browse"
+
+[node name="LoadButton" type="Button" parent="VBoxContainer" unique_id=1199827087]
+layout_mode = 2
+text = "Load Item"
+
+[node name="PreviewRect" type="SubViewportContainer" parent="VBoxContainer" unique_id=638893352]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" parent="VBoxContainer/PreviewRect" unique_id=1598133379 instance=ExtResource("2")]
+handle_input_locally = false
+size = Vector2i(500, 310)
+
+[node name="RotationX" type="HBoxContainer" parent="VBoxContainer" unique_id=1222649235]
+layout_mode = 2
+
+[node name="LabelX" type="Label" parent="VBoxContainer/RotationX" unique_id=300647854]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Rotation X:"
+
+[node name="SliderX" type="HSlider" parent="VBoxContainer/RotationX" unique_id=1530619983]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -180.0
+max_value = 180.0
+
+[node name="ValueX" type="Label" parent="VBoxContainer/RotationX" unique_id=44812824]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0.0"
+
+[node name="RotationY" type="HBoxContainer" parent="VBoxContainer" unique_id=1637677169]
+layout_mode = 2
+
+[node name="LabelY" type="Label" parent="VBoxContainer/RotationY" unique_id=805940864]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Rotation Y:"
+
+[node name="SliderY" type="HSlider" parent="VBoxContainer/RotationY" unique_id=801024214]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -180.0
+max_value = 180.0
+
+[node name="ValueY" type="Label" parent="VBoxContainer/RotationY" unique_id=1916490615]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0.0"
+
+[node name="RotationZ" type="HBoxContainer" parent="VBoxContainer" unique_id=72601907]
+layout_mode = 2
+
+[node name="LabelZ" type="Label" parent="VBoxContainer/RotationZ" unique_id=356027152]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Rotation Z:"
+
+[node name="SliderZ" type="HSlider" parent="VBoxContainer/RotationZ" unique_id=856742278]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -180.0
+max_value = 180.0
+
+[node name="ValueZ" type="Label" parent="VBoxContainer/RotationZ" unique_id=2118970710]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0.0"
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=931819190]
+layout_mode = 2
+
+[node name="CopyButton" type="Button" parent="VBoxContainer/ButtonsContainer" unique_id=1223792421]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Copy Vector3"
+
+[node name="SaveButton" type="Button" parent="VBoxContainer/ButtonsContainer" unique_id=325313063]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save to Resource"
+
+[node name="FileDialog" type="FileDialog" parent="VBoxContainer" unique_id=999575554]
+title = "Open a File"
+size = Vector2i(800, 600)
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.tres")

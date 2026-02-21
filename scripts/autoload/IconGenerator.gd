@@ -28,6 +28,13 @@ var _icon_cache: Dictionary = {}
 # Items en proceso de generación
 var _generating: Dictionary = {}
 
+# Track current model instance to avoid overlaps
+var _current_model_instance: Node3D = null
+
+# Queue para serializar las operaciones de renderizado
+var _render_queue: Array = []
+var _is_rendering: bool = false
+
 # Viewport para renderizado
 var _viewport: SubViewport
 var _camera: Camera3D
@@ -82,25 +89,57 @@ func get_icon(item_data: ItemData) -> Texture2D:
 
 ## Genera el ícono de manera asíncrona
 func _generate_icon_async(item_data: ItemData, cache_key: String):
-	var generated_icon = await _generate_icon_from_model(item_data.model)
+	# Queue the render operation
+	_render_queue.append({"item_data": item_data, "cache_key": cache_key})
 	
-	_generating.erase(cache_key)
+	# Process queue if not already rendering
+	if not _is_rendering:
+		_process_render_queue()
+
+## Procesa la cola de renderizado de manera serial
+func _process_render_queue():
+	while not _render_queue.is_empty():
+		_is_rendering = true
+		var task = _render_queue.pop_front()
+		var item_data = task["item_data"]
+		var cache_key = task["cache_key"]
+		
+		var generated_icon = await _generate_icon_from_model(item_data.model, item_data.icon_rotation)
+		
+		_generating.erase(cache_key)
+		
+		if generated_icon:
+			_icon_cache[cache_key] = generated_icon
+			icon_generated.emit(item_data, generated_icon)
 	
-	if generated_icon:
-		_icon_cache[cache_key] = generated_icon
-		icon_generated.emit(item_data, generated_icon)
+	_is_rendering = false
 
 ## Genera una textura desde un modelo 3D
-func _generate_icon_from_model(model_scene: PackedScene) -> ImageTexture:
+func _generate_icon_from_model(model_scene: PackedScene, rotation: Vector3 = Vector3.ZERO) -> ImageTexture:
 	if not model_scene or not _viewport:
 		return null
 	
-	# Instanciar el modelo
+	# Limpiar el modelo anterior si existe
+	if _current_model_instance and is_instance_valid(_current_model_instance):
+		if _current_model_instance.is_inside_tree():
+			_pivot.remove_child(_current_model_instance)
+		_current_model_instance.queue_free()
+		_current_model_instance = null
+	
+	# Instanciar el nuevo modelo
 	var model_instance = model_scene.instantiate()
 	_pivot.add_child(model_instance)
+	_current_model_instance = model_instance
+	
+	# Aplicar rotación personalizada del item
+	model_instance.rotation_degrees = rotation
 	
 	# Esperar un frame para que el modelo se configure
 	await get_tree().process_frame
+	
+	# Verificar que el modelo sigue siendo válido antes de calcular AABB
+	if not is_instance_valid(model_instance):
+		return null
 	
 	# Calcular el tamaño del modelo para ajustar la cámara
 	var aabb = _calculate_model_aabb(model_instance)
@@ -127,10 +166,8 @@ func _generate_icon_from_model(model_scene: PackedScene) -> ImageTexture:
 	
 	var texture = ImageTexture.create_from_image(img)
 	
-	# Limpiar modelo (pero no resetear pivot, ya que no lo usamos para rotación)
-	model_instance.queue_free()
-	
-	# Resetear viewport
+	# Model will be cleaned up when the next icon is generated
+	# Just reset the viewport for now
 	_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	
 	return texture

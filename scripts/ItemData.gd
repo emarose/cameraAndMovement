@@ -7,6 +7,7 @@ enum ItemType { CONSUMABLE, EQUIPMENT, MISC, QUEST }
 @export var item_name: String = "Item"
 @export var icon: Texture2D
 @export var model: PackedScene
+@export var icon_rotation: Vector3 = Vector3.ZERO  # Rotation for icon rendering
 @export var description: String = ""
 @export var item_type: ItemType = ItemType.MISC
 @export var stackable: bool = true
