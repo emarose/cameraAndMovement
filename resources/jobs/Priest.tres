@@ -1,21 +1,28 @@
-[gd_resource type="Resource" script_class="JobData" load_steps=5 format=3 uid="uid://bl2v8d5j8xfpn"]
+[gd_resource type="Resource" script_class="JobData" format=3 uid="uid://bl2v8d5j8xfpn"]
 
 [ext_resource type="Script" uid="uid://2hly3rjalyea" path="res://resources/jobs/JobData.gd" id="1_gpl7k"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_y8jsk"]
-[ext_resource type="Resource" uid="uid://f2r3t4y5u6i7o" path="res://resources/skills/Heal.tres" id="2_heal"]
-[ext_resource type="Resource" uid="uid://g3r4t5y6u7i8o" path="res://resources/skills/Blessing.tres" id="3_bless"]
+[ext_resource type="Resource" uid="uid://b7d7822wbyngw" path="res://resources/skills/Heal.tres" id="2_heal"]
+[ext_resource type="Resource" uid="uid://c8d8832xb0nhw" path="res://resources/skills/Blessing.tres" id="3_bless"]
 
 [resource]
 script = ExtResource("1_gpl7k")
 job_name = "Priest"
-max_job_level = 50
-base_skills = Array[Resource("res://scripts/SkillData.gd")]([ExtResource("2_heal"), ExtResource("3_bless")])
+base_skills = Array[ExtResource("1_y8jsk")]([ExtResource("2_heal"), ExtResource("3_bless")])
 str_bonus = 1
-agi_bonus = 0
 int_bonus = 2
 job_level_bonuses = {
-2: {"int": 1},
-3: {"agi": 1},
-4: {"int": 1},
-5: {"agi": 1, "int": 1}
+2: {
+"int": 1
+},
+3: {
+"agi": 1
+},
+4: {
+"int": 1
+},
+5: {
+"agi": 1,
+"int": 1
+}
 }

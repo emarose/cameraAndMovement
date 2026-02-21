@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=5 format=3 uid="uid://cc5e4cdm8rgrp"]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://cc5e4cdm8rgrp"]
 
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_p6ed6"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_rks1e"]
@@ -9,7 +9,6 @@
 script = ExtResource("1_rks1e")
 monster_name = "Baphomet"
 level = 12
-type = "Boss"
 base_exp = 190
 job_exp = 120
 agi = 326

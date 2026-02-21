@@ -1,16 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqd3ossx4ruqj"]
+[gd_scene format=3 uid="uid://cqd3ossx4ruqj"]
 
 [ext_resource type="Script" uid="uid://xq6bpglviphk" path="res://scripts/hotbar_slot.gd" id="1_ea3t7"]
 [ext_resource type="Texture2D" uid="uid://50aplan2p5pu" path="res://textures/white-square1.png" id="2_sheke"]
 
-[node name="HotbarSlot" type="Panel"]
+[node name="HotbarSlot" type="Panel" unique_id=59960567]
 custom_minimum_size = Vector2(42, 42)
 offset_right = 64.0
 offset_bottom = 64.0
 size_flags_vertical = 4
 script = ExtResource("1_ea3t7")
 
-[node name="AmountLabel" type="Label" parent="."]
+[node name="AmountLabel" type="Label" parent="." unique_id=1644333432]
 z_index = 99
 layout_mode = 1
 anchors_preset = 3
@@ -23,12 +23,11 @@ offset_top = -20.0
 offset_right = -4.0
 grow_horizontal = 0
 grow_vertical = 0
-mouse_filter = 2
 theme_override_font_sizes/font_size = 12
 text = "99"
 horizontal_alignment = 2
 
-[node name="Icon" type="TextureRect" parent="."]
+[node name="Icon" type="TextureRect" parent="." unique_id=1097644097]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 1
 anchors_preset = 15
@@ -40,7 +39,7 @@ mouse_filter = 2
 expand_mode = 2
 stretch_mode = 5
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=541893029]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -53,12 +52,11 @@ nine_patch_stretch = true
 texture_progress = ExtResource("2_sheke")
 tint_progress = Color(0.9137255, 0.89411765, 0.8745098, 0.627451)
 
-[node name="ShortcutLabel" type="Label" parent="."]
+[node name="ShortcutLabel" type="Label" parent="." unique_id=1733005233]
 layout_mode = 1
 offset_left = 2.0
 offset_right = 42.0
 offset_bottom = 23.0
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.66245234, 0.66245234, 0.6624523, 1)
 theme_override_font_sizes/font_size = 13
 text = "1"

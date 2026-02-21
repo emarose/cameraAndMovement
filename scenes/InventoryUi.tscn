@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://5ob0ybkuqcxh"]
+[gd_scene format=3 uid="uid://5ob0ybkuqcxh"]
 
 [ext_resource type="Script" uid="uid://dgobn6ketrmq" path="res://scripts/inventory_ui.gd" id="1_jyxab"]
 [ext_resource type="PackedScene" uid="uid://decl8dyiwfmpl" path="res://scenes/InventorySlot.tscn" id="2_l2m6g"]
@@ -26,7 +26,7 @@ font_color = Color(1, 0.9, 0.3, 1)
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 
-[node name="InventoryUI" type="Control"]
+[node name="InventoryUI" type="Control" unique_id=1120304476]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -42,7 +42,7 @@ grow_vertical = 2
 script = ExtResource("1_jyxab")
 slot_scene = ExtResource("2_l2m6g")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1581683130]
 custom_minimum_size = Vector2(320, 320)
 layout_mode = 0
 offset_top = 34.0
@@ -50,7 +50,7 @@ offset_right = 320.0
 offset_bottom = 354.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_l2m6g")
 
-[node name="TitleBar" type="ColorRect" parent="Panel"]
+[node name="TitleBar" type="ColorRect" parent="Panel" unique_id=1327064140]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -58,7 +58,7 @@ offset_bottom = 36.0
 grow_horizontal = 2
 color = Color(0.2, 0.2, 0.2, 0.9)
 
-[node name="Title" type="Label" parent="Panel/TitleBar"]
+[node name="Title" type="Label" parent="Panel/TitleBar" unique_id=350591173]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -77,7 +77,7 @@ text = "Inventory"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CloseButton" type="Button" parent="Panel/TitleBar"]
+[node name="CloseButton" type="Button" parent="Panel/TitleBar" unique_id=94367229]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 1
 anchors_preset = 1
@@ -90,7 +90,7 @@ offset_bottom = 33.0
 grow_horizontal = 0
 text = "X"
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=379876122]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 44.0
@@ -101,11 +101,11 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="GridContainer" type="GridContainer" parent="Panel/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="Panel/MarginContainer" unique_id=669571409]
 layout_mode = 2
 columns = 5
 
-[node name="Tooltip" type="PanelContainer" parent="."]
+[node name="Tooltip" type="PanelContainer" parent="." unique_id=60199801]
 visible = false
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 0
@@ -114,15 +114,15 @@ offset_bottom = 80.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_tooltip")
 
-[node name="VBox" type="VBoxContainer" parent="Tooltip"]
+[node name="VBox" type="VBoxContainer" parent="Tooltip" unique_id=572403226]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="Tooltip/VBox"]
+[node name="NameLabel" type="Label" parent="Tooltip/VBox" unique_id=1211838337]
 layout_mode = 2
 text = "Item Name"
 label_settings = SubResource("LabelSettings_name")
 
-[node name="DescLabel" type="Label" parent="Tooltip/VBox"]
+[node name="DescLabel" type="Label" parent="Tooltip/VBox" unique_id=70556041]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
 theme_override_font_sizes/font_size = 12

@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://bcqc6sx1ah56r"]
+[gd_scene format=3 uid="uid://bcqc6sx1ah56r"]
 
 [ext_resource type="Script" uid="uid://dfaufddwwsiil" path="res://scripts/mob_spawner.gd" id="1_ex0yn"]
 
-[node name="MobSpawner" type="Node3D"]
+[node name="MobSpawner" type="Node3D" unique_id=1312273434]
 script = ExtResource("1_ex0yn")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=717149271]
 wait_time = 2.0
 autostart = true

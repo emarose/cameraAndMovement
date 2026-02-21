@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://c7nhb445y6srl" path="res://resources/skills/IceBlast.png" id="1_2im5q"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="2_qy2y2"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="3_qy2y2"]
 
 [resource]
 script = ExtResource("2_qy2y2")

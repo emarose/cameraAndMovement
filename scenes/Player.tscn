@@ -38,10 +38,10 @@ material = SubResource("StandardMaterial3D_aqk2v")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_1jpwa"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_pfeki"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_pfeki"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_axnmu"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
@@ -76,7 +76,6 @@ level_up_effect_scene = ExtResource("5_6eyey")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8072171, 0)
 visible = false
 mesh = SubResource("CapsuleMesh_dqkch")
-skeleton = NodePath("")
 
 [node name="Mannequin_Medium" parent="." unique_id=898058791 instance=ExtResource("12_p07f3")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
@@ -101,11 +100,11 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12061417, 0)
-texture = SubResource("ViewportTexture_1jpwa")
+texture = SubResource("ViewportTexture_pfeki")
 
 [node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("7_spbar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.20458083, 0)
-texture = SubResource("ViewportTexture_pfeki")
+texture = SubResource("ViewportTexture_axnmu")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")

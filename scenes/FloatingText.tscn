@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://cjkj6s57v61vn"]
+[gd_scene format=3 uid="uid://cjkj6s57v61vn"]
 
 [ext_resource type="Script" uid="uid://dmietpyk2ody7" path="res://scripts/floating_text.gd" id="1_iwtc3"]
 
-[node name="FloatingTextRoot" type="Node3D"]
+[node name="FloatingTextRoot" type="Node3D" unique_id=2014221213]
 script = ExtResource("1_iwtc3")
 
-[node name="Label3D" type="Label3D" parent="."]
+[node name="Label3D" type="Label3D" parent="." unique_id=1158097615]
 pixel_size = 0.015
 billboard = 1
 no_depth_test = true

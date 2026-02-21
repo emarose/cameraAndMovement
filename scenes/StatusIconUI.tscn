@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://ctkcy4vcqrtu6"]
+[gd_scene format=3 uid="uid://ctkcy4vcqrtu6"]
 
 [sub_resource type="GDScript" id="GDScript_xlu4n"]
 script/source = "extends TextureRect
@@ -29,12 +29,12 @@ func _process(delta):
 		modulate.a = 0.5 if Engine.get_frames_drawn() % 10 < 5 else 1.0
 "
 
-[node name="StatusIconUI" type="TextureRect"]
+[node name="StatusIconUI" type="TextureRect" unique_id=1808831581]
 offset_right = 24.0
 offset_bottom = 24.0
 script = SubResource("GDScript_xlu4n")
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1663487861]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

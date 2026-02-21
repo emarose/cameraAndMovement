@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="StatusEffectData" load_steps=3 format=3 uid="uid://dqmpnpux0u6em"]
+[gd_resource type="Resource" script_class="StatusEffectData" format=3 uid="uid://dqmpnpux0u6em"]
 
 [ext_resource type="Texture2D" uid="uid://cyhk0uqe0vrnn" path="res://resources/items/fc657.png" id="1_kqstt"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_oyxem"]

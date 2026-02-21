@@ -1,16 +1,13 @@
-[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="StatusEffectData" format=3 uid="uid://c5exofhn2xs5v"]
 
-[ext_resource type="Script" path="res://scripts/StatusEffectData.gd" id="1_oyxem"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_oyxem"]
 
 [resource]
 script = ExtResource("1_oyxem")
-metadata/_custom_type_script = "uid://y6wkl8vhgid"
 effect_name = "Weakness"
-type = 0
 duration = 18.0
-tick_rate = 1.0
-value = 0
 modifiers = {
-"str": -4,
-"atk": -12
+"atk": -12,
+"str": -4
 }
+metadata/_custom_type_script = "uid://y6wkl8vhgid"

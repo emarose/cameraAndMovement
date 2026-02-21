@@ -94,10 +94,8 @@ node_connections = [&"output", 0, &"StateMachine"]
 
 [node name="Knight" unique_id=1783197151 instance=ExtResource("1_0pqnw")]
 
-[node name="Skeleton3D" parent="Rig_Medium" parent_id_path=PackedInt32Array(1224452654) index="0" unique_id=189838647]
+[node name="Skeleton3D" parent="Rig_Medium" parent_id_path=PackedInt32Array(866683235) index="0" unique_id=805938943]
 bones/1/position = Vector3(0, 0, 0)
-bones/1/rotation = Quaternion(-1.11122625e-10, 0.043157753, 2.5724098e-09, 0.9990683)
-bones/1/scale = Vector3(0.99999994, 1, 0.99999994)
 bones/2/rotation = Quaternion(-6.938893e-18, 7.1054274e-15, 4.93038e-32, 1)
 bones/2/scale = Vector3(1.0000001, 1, 1.0000001)
 bones/3/rotation = Quaternion(0.005009666, 7.4377144e-09, 0.00043362548, 0.99998736)

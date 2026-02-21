@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EquipmentItem" load_steps=3 format=3 uid="uid://cekll1bd772jt"]
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://cekll1bd772jt"]
 
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://ca5880un3u67r" path="res://resources/items/fc1981.png" id="1_367y3"]

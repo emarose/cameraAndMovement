@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://decl8dyiwfmpl"]
+[gd_scene format=3 uid="uid://decl8dyiwfmpl"]
 
 [ext_resource type="Script" uid="uid://be57oqcuw5lq3" path="res://scripts/inventory_ui_slot.gd" id="1_14any"]
 
@@ -14,19 +14,19 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[node name="InventoryUISlot" type="Control"]
+[node name="InventoryUISlot" type="Control" unique_id=2121365335]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_14any")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1664207409]
 layout_mode = 0
 offset_right = 48.0
 offset_bottom = 48.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_SlotPanel")
 
-[node name="Icon" type="TextureRect" parent="."]
+[node name="Icon" type="TextureRect" parent="." unique_id=1318196380]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,7 +36,7 @@ grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AmountLabel" type="Label" parent="."]
+[node name="AmountLabel" type="Label" parent="." unique_id=1288505142]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

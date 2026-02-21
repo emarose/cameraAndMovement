@@ -1,15 +1,10 @@
-[gd_resource type="Resource" script_class="JobData" load_steps=3 format=3 uid="uid://dk86qxhjclpla"]
+[gd_resource type="Resource" script_class="JobData" format=3 uid="uid://dk86qxhjclpla"]
 
-[ext_resource type="Script" path="res://resources/jobs/JobData.gd" id="1_gpl7k"]
+[ext_resource type="Script" uid="uid://2hly3rjalyea" path="res://resources/jobs/JobData.gd" id="1_gpl7k"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ngiol"]
 [ext_resource type="Resource" uid="uid://c8n2p3q5r1s2t" path="res://resources/skills/FirstAid.tres" id="2_skill"]
 
 [resource]
 script = ExtResource("1_gpl7k")
-job_name = "Novice"
-job_icon = null
 max_job_level = 5
-base_skills = Array[Resource("res://scripts/SkillData.gd")]([ExtResource("2_skill")])
-str_bonus = 0
-agi_bonus = 0
-int_bonus = 0
-job_level_bonuses = {}
+base_skills = Array[ExtResource("1_ngiol")]([ExtResource("2_skill")])

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_main"]
 [ext_resource type="Texture2D" uid="uid://f52wfxbxaa06" path="res://resources/skills/CombatMastery.png" id="1_sf1tf"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="3_jagen"]
 
 [resource]
 script = ExtResource("1_main")

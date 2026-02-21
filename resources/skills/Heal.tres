@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dp0m805qkjwfk" path="res://resources/skills/Heal.png" id="1_1ucer"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_ucktl"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="3_ve00h"]
 
 [resource]
 script = ExtResource("1_ucktl")

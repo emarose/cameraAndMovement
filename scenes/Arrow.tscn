@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bvqk8ym5u3p5h"]
 
-[ext_resource type="Script" path="res://scripts/Projectile.gd" id="1_arrow"]
+[ext_resource type="Script" uid="uid://b3fr0d4p6pe3x" path="res://scripts/Projectile.gd" id="1_arrow"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_arrow"]
 top_radius = 0.05
@@ -10,17 +10,17 @@ height = 0.5
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_arrow"]
 albedo_color = Color(0.6, 0.4, 0.2, 1)
 
-[node name="Arrow" type="Node3D"]
+[node name="Arrow" type="Node3D" unique_id=598483427]
 script = ExtResource("1_arrow")
 speed = 20.0
 max_lifetime = 3.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2019153464]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 mesh = SubResource("CylinderMesh_arrow")
 surface_material_override/0 = SubResource("StandardMaterial3D_arrow")
 
-[node name="ArrowHead" type="MeshInstance3D" parent="."]
+[node name="ArrowHead" type="MeshInstance3D" parent="." unique_id=2003869584]
 transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0, 0, 0.3)
 mesh = SubResource("CylinderMesh_arrow")
 surface_material_override/0 = SubResource("StandardMaterial3D_arrow")

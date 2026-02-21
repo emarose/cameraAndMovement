@@ -11,7 +11,7 @@ data = PackedVector3Array(13.5369, 0.125, -11.3227, 14.0636, 0.305, -12.5075, 15
 
 [node name="TerrenoPrototipo" unique_id=2023672240 instance=ExtResource("1_p84jh")]
 
-[node name="Plane" parent="." index="0" unique_id=1024855635]
+[node name="Plane" parent="." index="0" unique_id=1155170865]
 surface_material_override/0 = SubResource("StandardMaterial3D_ax6d3")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Plane" index="0" unique_id=1006058641]

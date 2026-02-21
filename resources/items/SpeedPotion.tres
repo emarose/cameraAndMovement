@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ConsumableItem" load_steps=3 format=3 uid="uid://olrtslcbifoc"]
+[gd_resource type="Resource" script_class="ConsumableItem" format=3 uid="uid://olrtslcbifoc"]
 
 [ext_resource type="Script" uid="uid://stic2b3p5t05" path="res://scripts/ConsumableItem.gd" id="1"]
 [ext_resource type="Resource" uid="uid://clc3d08pxdbri" path="res://resources/statusEffects/swift_step.tres" id="2"]

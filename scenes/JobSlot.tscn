@@ -1,12 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3f5p3x2p3g8n"]
+[gd_scene format=3 uid="uid://d3f5p3x2p3g8n"]
 
-[ext_resource type="Script" path="res://scripts/JobSlot.gd" id="1_abcd1"]
+[ext_resource type="Script" uid="uid://776bfeyosgsj" path="res://scripts/JobSlot.gd" id="1_abcd1"]
 
-[node name="JobSlot" type="Button"]
+[node name="JobSlot" type="Button" unique_id=1460162864]
 custom_minimum_size = Vector2(300, 80)
 script = ExtResource("1_abcd1")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=473778261]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,22 +15,22 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=318481948]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 expand_mode = 2
 stretch_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1714952465]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="JobNameLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="JobNameLabel" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=236585201]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Job Name"
 
-[node name="BonusLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="BonusLabel" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1760646640]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Bonuses"

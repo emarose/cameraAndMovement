@@ -41,7 +41,7 @@ _subresources={
 "animations": {
 "Cheering": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/characters/animations/source/Cheering.res",
+"save_to_file/fallback_path": "res://assets/characters/animations/Cheering.res",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://nc4wfgpnemo1",
 "settings/loop_mode": 0,
@@ -2097,7 +2097,7 @@ _subresources={
 },
 "Lie_Down": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/characters/animations/source/Lie_Down.res",
+"save_to_file/fallback_path": "res://assets/characters/animations/Lie_Down.res",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://ddbx5707hyjpm",
 "settings/loop_mode": 0,
@@ -4153,7 +4153,7 @@ _subresources={
 },
 "Lie_Idle": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/characters/animations/source/Lie_Idle.res",
+"save_to_file/fallback_path": "res://assets/characters/animations/Lie_Idle.res",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://uqojcno0ugyk",
 "settings/loop_mode": 0,
@@ -6209,7 +6209,7 @@ _subresources={
 },
 "Lie_StandUp": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/characters/animations/source/Lie_StandUp.res",
+"save_to_file/fallback_path": "res://assets/characters/animations/Lie_StandUp.res",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://bhu2kol2uagmp",
 "settings/loop_mode": 0,
@@ -8265,7 +8265,7 @@ _subresources={
 },
 "Push_Ups": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/characters/animations/source/Push_Ups.res",
+"save_to_file/fallback_path": "res://assets/characters/animations/Push_Ups.res",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://d3s2r1wvebob1",
 "settings/loop_mode": 0,
