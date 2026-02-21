@@ -9,6 +9,9 @@ enum EquipmentSlot { WEAPON, HEAD, BODY, ACCESSORY }
 @export var def_bonus: int = 0
 @export var str_bonus: int = 0
 @export var vit_bonus: int = 0
+@export var is_ranged: bool = false
+@export var attack_range: float = 1.5
+@export var projectile_scene: PackedScene
 
 func _init():
 	item_type = ItemType.EQUIPMENT

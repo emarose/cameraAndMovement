@@ -31,6 +31,7 @@ var HOTBAR_SIZE = 9
 @export var level_up_effect_scene: PackedScene
 
 @onready var inventory_component: InventoryComponent = $InventoryComponent
+@onready var equipment_component: EquipmentComponent = $EquipmentComponent
 @onready var aoe_indicator: MeshInstance3D = $AOEIndicator
 @onready var skill_component = $SkillComponent
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
@@ -284,8 +285,9 @@ func _process_continuous_interaction():
 	# Si tenemos un enemigo targetado (por click inicial), continuar atacándolo mientras se sostiene el click
 	if current_target_enemy and is_instance_valid(current_target_enemy):
 		var dist = global_position.distance_to(current_target_enemy.global_position)
+		var effective_range = get_effective_attack_range()
 		
-		if dist <= attack_range:
+		if dist <= effective_range:
 			# Si estamos en rango, nos detenemos y atacamos
 			nav_agent.target_position = global_position
 			_face_target(current_target_enemy)
@@ -334,7 +336,8 @@ func handle_click_interaction():
 			current_target_enemy = collider
 			# Attack immediately on click if in range, otherwise move towards enemy
 			var dist = global_position.distance_to(collider.global_position)
-			if dist <= attack_range:
+			var effective_range = get_effective_attack_range()
+			if dist <= effective_range:
 				execute_attack(collider)
 		else:
 			current_target_enemy = null # Si clicamos suelo, cancelamos ataque
@@ -431,15 +434,51 @@ func _set_cursor(texture, state_name, offset):
 		Input.set_custom_mouse_cursor(texture, Input.CURSOR_ARROW, offset)
 		_last_cursor_state = state_name
 
+# --- HELPER FUNCTIONS FOR COMBAT ---
+
+## Get the effective attack range based on equipped weapon
+func get_effective_attack_range() -> float:
+	if equipment_component:
+		var weapon = equipment_component.get_equipped_item(EquipmentItem.EquipmentSlot.WEAPON)
+		if weapon:
+			return weapon.attack_range
+	return attack_range  # Fallback to base attack range
+
 # --- FUNCIONES AUXILIARES DE ATAQUE ---
 
 func try_attack_enemy(enemy):
 	var dist = global_position.distance_to(enemy.global_position)
-	if dist <= attack_range - 0.2:
+	var effective_range = get_effective_attack_range()
+	if dist <= effective_range - 0.2:
 		if enemy.has_node("HealthComponent"):
 			enemy.get_node("HealthComponent").take_damage(attack_damage)
 	else:
 		nav_agent.target_position = enemy.global_position
+
+## Shoot a projectile at the target enemy
+func _shoot_projectile(target: Node3D, projectile_scene: PackedScene) -> void:
+	if not projectile_scene or not is_instance_valid(target):
+		return
+	
+	# Spawn the projectile
+	var projectile = projectile_scene.instantiate()
+	get_tree().root.add_child(projectile)
+	
+	# Position it at the player's position (or weapon attach point if available)
+	var spawn_position = global_position + Vector3(0, 1.5, 0)  # Slightly above player
+	if bone_attachments.has("RIGHT_HAND") and bone_attachments["RIGHT_HAND"]:
+		spawn_position = bone_attachments["RIGHT_HAND"].global_position
+	
+	projectile.global_position = spawn_position
+	
+	# Configure the projectile if it has the expected methods/properties
+	if projectile.has_method("setup"):
+		var damage = attack_damage
+		if stats:
+			damage = stats.get_atk()
+		projectile.setup(target, damage, self)
+	elif projectile.has_method("set_target"):
+		projectile.set_target(target)
 
 func execute_attack(enemy) -> void:
 	# Retorna cuando el ataque y su cooldown (ASPD) finalizan
@@ -463,6 +502,14 @@ func execute_attack(enemy) -> void:
 
 	var enemy_health = enemy.get_node_or_null("HealthComponent")
 	var enemy_data = enemy.data
+	
+	# Check if we're using a ranged weapon
+	var weapon = null
+	var is_ranged_attack = false
+	if equipment_component:
+		weapon = equipment_component.get_equipped_item(EquipmentItem.EquipmentSlot.WEAPON)
+		if weapon and weapon.is_ranged:
+			is_ranged_attack = true
 
 	if enemy_health and enemy_data and stats:
 		# WAIT for animation to reach hit frame before dealing damage
@@ -474,33 +521,41 @@ func execute_attack(enemy) -> void:
 			is_attacking = false
 			return
 
-		# Cálculo de hit
-		var hit_chance_percent = (stats.get_hit() - enemy_data.flee) + 80
-		hit_chance_percent = clamp(hit_chance_percent, 5, 95)
-		var is_hit = (randi() % 100) < hit_chance_percent
-
-		if not is_hit:
-			get_tree().call_group("hud", "add_log_message", "Fallaste contra " + enemy_data.monster_name, Color.SKY_BLUE)
-			spawn_floating_text(enemy.global_position, 0, true)
+		# For ranged attacks, shoot projectile instead of direct damage
+		if is_ranged_attack and weapon.projectile_scene:
+			_shoot_projectile(enemy, weapon.projectile_scene)
+			# Projectile will handle damage, so skip direct damage calculation
+			# But still show "attack" message
+			get_tree().call_group("hud", "add_log_message", "Disparaste a " + enemy_data.monster_name, Color.WHITE)
 		else:
-			# Obtener stats del enemigo
-			var enemy_stats = enemy.get_node_or_null("StatsComponent")
-			var base_atk = stats.get_atk()
-			
-			# Usar CombatMath para aplicar elemento del arma y bonos vs raza/elemento
-			var final_damage = CombatMath.calculate_final_damage(
-				base_atk, 
-				stats, 
-				enemy_stats,
-				-1  # -1 significa usar weapon_element, no un elemento de skill específico
-			)
-			
-			# Aplicar defensa del enemigo
-			final_damage = max(1, final_damage - enemy_data.def)
-			
-			get_tree().call_group("hud", "add_log_message", "Golpeaste a %s por %d" % [enemy_data.monster_name, final_damage], Color.WHITE)
-			enemy_health.take_damage(final_damage)
-			spawn_floating_text(enemy.global_position, final_damage, false)
+			# Melee attack - calculate and apply damage directly
+			# Cálculo de hit
+			var hit_chance_percent = (stats.get_hit() - enemy_data.flee) + 80
+			hit_chance_percent = clamp(hit_chance_percent, 5, 95)
+			var is_hit = (randi() % 100) < hit_chance_percent
+
+			if not is_hit:
+				get_tree().call_group("hud", "add_log_message", "Fallaste contra " + enemy_data.monster_name, Color.SKY_BLUE)
+				spawn_floating_text(enemy.global_position, 0, true)
+			else:
+				# Obtener stats del enemigo
+				var enemy_stats = enemy.get_node_or_null("StatsComponent")
+				var base_atk = stats.get_atk()
+				
+				# Usar CombatMath para aplicar elemento del arma y bonos vs raza/elemento
+				var final_damage = CombatMath.calculate_final_damage(
+					base_atk, 
+					stats, 
+					enemy_stats,
+					-1  # -1 significa usar weapon_element, no un elemento de skill específico
+				)
+				
+				# Aplicar defensa del enemigo
+				final_damage = max(1, final_damage - enemy_data.def)
+				
+				get_tree().call_group("hud", "add_log_message", "Golpeaste a %s por %d" % [enemy_data.monster_name, final_damage], Color.WHITE)
+				enemy_health.take_damage(final_damage)
+				spawn_floating_text(enemy.global_position, final_damage, false)
 
 		# Wait for animation to finish (separate from attack cooldown)
 		var remaining_anim_time = attack_animation_duration - attack_hit_delay

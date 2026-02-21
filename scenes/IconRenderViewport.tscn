@@ -19,7 +19,6 @@ render_target_update_mode = 4
 environment = SubResource("Environment_icon")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1044984146]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 attributes = SubResource("CameraAttributesPractical_icon")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1229170939]

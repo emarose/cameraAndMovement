@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://cfg2urlh7pla8"]
+
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bhcp016dxnayn" path="res://assets/weapon models/bow_A.gltf" id="1_gls0s"]
+[ext_resource type="PackedScene" path="res://scenes/Arrow.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+atk_bonus = 20
+is_ranged = true
+attack_range = 8.0
+projectile_scene = ExtResource("2")
+item_name = "Hunter's Bow"
+model = ExtResource("1_gls0s")
+description = "A longbow for ranged combat. +20 ATK, 8.0 range"
+item_type = 1
+stackable = false
+max_stack_size = 1
+sell_price = 200
