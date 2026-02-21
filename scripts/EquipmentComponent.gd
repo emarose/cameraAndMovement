@@ -39,6 +39,10 @@ func equip_item(item: EquipmentItem) -> bool:
 	
 	# Si ya hay algo equipado en ese slot, lo guardamos para intercambio
 	var old_item = equipped_items[slot_type]
+
+	# Limpiar el modelo visual anterior (puede estar en otro attachment)
+	if old_item:
+		_clear_equipment_visuals(slot_type, old_item)
 	
 	# Equipamos el nuevo item
 	equipped_items[slot_type] = item
@@ -71,7 +75,7 @@ func unequip_slot(slot_type: EquipmentItem.EquipmentSlot) -> bool:
 	equipped_items[slot_type] = null
 	
 	# Limpiar el modelo visual del equipo
-	_clear_equipment_visuals(slot_type)
+	_clear_equipment_visuals(slot_type, item)
 	
 	# Recalcular stats (esto limpiará todos los bonos y los recalculará)
 	_recalculate_equipment_bonuses()
@@ -184,8 +188,8 @@ func _update_equipment_visuals(item: EquipmentItem, slot_type: EquipmentItem.Equ
 	if not model_scene:
 		return
 	
-	# Determinar el attachment point según el slot
-	var attachment_key: String = _get_attachment_for_slot(slot_type)
+	# Determinar el attachment point según el slot y el item
+	var attachment_key: String = _get_attachment_for_slot(slot_type, item)
 	if not attachment_key or not bone_attachments.has(attachment_key):
 		push_warning("EquipmentComponent: No attachment found for slot ", slot_type)
 		return
@@ -200,9 +204,9 @@ func _update_equipment_visuals(item: EquipmentItem, slot_type: EquipmentItem.Equ
 	var model_instance = model_scene.instantiate()
 	attachment.add_child(model_instance)
 
-func _clear_equipment_visuals(slot_type: EquipmentItem.EquipmentSlot) -> void:
+func _clear_equipment_visuals(slot_type: EquipmentItem.EquipmentSlot, item: EquipmentItem = null) -> void:
 	"""Remueve el modelo visual del equipo"""
-	var attachment_key: String = _get_attachment_for_slot(slot_type)
+	var attachment_key: String = _get_attachment_for_slot(slot_type, item)
 	if not attachment_key or not bone_attachments.has(attachment_key):
 		return
 	
@@ -210,10 +214,20 @@ func _clear_equipment_visuals(slot_type: EquipmentItem.EquipmentSlot) -> void:
 	for child in attachment.get_children():
 		child.queue_free()
 
-func _get_attachment_for_slot(slot_type: EquipmentItem.EquipmentSlot) -> String:
+func _get_attachment_for_slot(slot_type: EquipmentItem.EquipmentSlot, item: EquipmentItem = null) -> String:
 	"""Retorna el nombre del attachment point para un slot de equipo"""
 	match slot_type:
 		EquipmentItem.EquipmentSlot.WEAPON:
+			if item:
+				match item.weapon_attachment:
+					EquipmentItem.WeaponAttachment.LEFT_HAND:
+						return "LeftHand"
+					EquipmentItem.WeaponAttachment.LEFT_ARM:
+						return "LeftArm"
+					EquipmentItem.WeaponAttachment.HEAD:
+						return "Head"
+					_:
+						return "RightHand"
 			return "RightHand"
 		EquipmentItem.EquipmentSlot.HEAD:
 			return "Head"

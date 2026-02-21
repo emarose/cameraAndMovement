@@ -47,6 +47,7 @@ var HOTBAR_SIZE = 9
 @onready var hud: CanvasLayer = $"../HUD"
 @onready var state_machine: StateMachine = $StateMachine
 @onready var animation_tree: AnimationTree = $Mannequin_Medium/AnimationTree
+@onready var animation_player: AnimationPlayer = $Mannequin_Medium/AnimationPlayer
 
 # Bone attachments for equipment and visual elements
 var bone_attachments: Dictionary = {
@@ -70,6 +71,11 @@ var hovered_enemy = null
 var is_casting: bool = false
 var is_flinching: bool = false
 var flinch_timer: float = 0.0
+
+# Current weapon animation names (loaded from equipped weapon)
+var current_weapon_idle_anim: StringName = &""
+var current_weapon_attack_start_anim: StringName = &""
+var current_weapon_attack_release_anim: StringName = &""
 
 func _ready():
 	# Initialize bone attachments early
@@ -125,9 +131,16 @@ func _ready():
 	regen_component.sp_regenerated.connect(_on_sp_regenerated)
 	skill_component.skill_cooldown_started.connect(_on_cooldown_started)
 	
+	# Connect equipment changes to update animations
+	if equipment_component:
+		equipment_component.equipment_changed.connect(_on_equipment_changed)
+	
 	# Initialize state machine for animations
 	if state_machine and animation_tree:
 		state_machine.setup(self, animation_tree)
+	
+	# Set initial idle animation based on equipped weapon
+	_update_idle_animation()
 
 func change_character_model(new_model_scene: PackedScene):
 	"""
@@ -466,8 +479,21 @@ func _shoot_projectile(target: Node3D, projectile_scene: PackedScene) -> void:
 	
 	# Position it at the player's position (or weapon attach point if available)
 	var spawn_position = global_position + Vector3(0, 1.5, 0)  # Slightly above player
-	if bone_attachments.has("RIGHT_HAND") and bone_attachments["RIGHT_HAND"]:
-		spawn_position = bone_attachments["RIGHT_HAND"].global_position
+	var attachment_key = "RIGHT_HAND"
+	if equipment_component:
+		var weapon = equipment_component.get_equipped_item(EquipmentItem.EquipmentSlot.WEAPON)
+		if weapon:
+			match weapon.weapon_attachment:
+				EquipmentItem.WeaponAttachment.LEFT_HAND:
+					attachment_key = "LEFT_HAND"
+				EquipmentItem.WeaponAttachment.LEFT_ARM:
+					attachment_key = "LEFT_ARM"
+				EquipmentItem.WeaponAttachment.HEAD:
+					attachment_key = "HEAD"
+				_:
+					attachment_key = "RIGHT_HAND"
+	if bone_attachments.has(attachment_key) and bone_attachments[attachment_key]:
+		spawn_position = bone_attachments[attachment_key].global_position
 	
 	projectile.global_position = spawn_position
 	
@@ -511,24 +537,63 @@ func execute_attack(enemy) -> void:
 		if weapon and weapon.is_ranged:
 			is_ranged_attack = true
 
+	# Temporarily disable AnimationTree so AnimationPlayer can play weapon animations
+	var anim_tree_was_active = false
+	if animation_tree:
+		anim_tree_was_active = animation_tree.active
+		if anim_tree_was_active:
+			animation_tree.active = false
+	
+	# Play weapon-specific attack start animation using AnimationPlayer
+	if animation_player:
+		var anim_to_play = ""
+		
+		# Try to use the loaded weapon animation
+		if current_weapon_attack_start_anim != "" and animation_player.has_animation(current_weapon_attack_start_anim):
+			anim_to_play = current_weapon_attack_start_anim
+		elif animation_player.has_animation("attack_1"):
+			# Fallback to default melee attack
+			anim_to_play = "attack_1"
+		
+		if anim_to_play != "":
+			animation_player.play(anim_to_play)
+		else:
+			push_warning("Player: No attack start animation found")
+
 	if enemy_health and enemy_data and stats:
 		# WAIT for animation to reach hit frame before dealing damage
 		await get_tree().create_timer(attack_hit_delay).timeout
 
 		# Verificar que el enemigo sigue válido después del delay
 		if not is_instance_valid(enemy) or not is_instance_valid(enemy_health):
+			if animation_tree and anim_tree_was_active:
+				animation_tree.active = true
 			can_attack_player = true
 			is_attacking = false
 			return
 
 		# For ranged attacks, shoot projectile instead of direct damage
 		if is_ranged_attack and weapon.projectile_scene:
+			# Play release animation for ranged weapons
+			if animation_player:
+				if current_weapon_attack_release_anim != "" and animation_player.has_animation(current_weapon_attack_release_anim):
+					animation_player.play(current_weapon_attack_release_anim)
+				elif animation_player.has_animation("attack_1"):
+					animation_player.play("attack_1")
+			
 			_shoot_projectile(enemy, weapon.projectile_scene)
 			# Projectile will handle damage, so skip direct damage calculation
 			# But still show "attack" message
 			get_tree().call_group("hud", "add_log_message", "Disparaste a " + enemy_data.monster_name, Color.WHITE)
 		else:
 			# Melee attack - calculate and apply damage directly
+			# Play release animation for melee weapons
+			if animation_player:
+				if current_weapon_attack_release_anim != "" and animation_player.has_animation(current_weapon_attack_release_anim):
+					animation_player.play(current_weapon_attack_release_anim)
+				elif animation_player.has_animation("attack_1"):
+					animation_player.play("attack_1")
+			
 			# Cálculo de hit
 			var hit_chance_percent = (stats.get_hit() - enemy_data.flee) + 80
 			hit_chance_percent = clamp(hit_chance_percent, 5, 95)
@@ -561,6 +626,10 @@ func execute_attack(enemy) -> void:
 		var remaining_anim_time = attack_animation_duration - attack_hit_delay
 		if remaining_anim_time > 0:
 			await get_tree().create_timer(remaining_anim_time).timeout
+
+		# Restore AnimationTree after attack animation completes
+		if animation_tree and anim_tree_was_active:
+			animation_tree.active = true
 		
 		# Animation finished - release attacking state
 		is_attacking = false
@@ -573,6 +642,8 @@ func execute_attack(enemy) -> void:
 		can_attack_player = true
 	else:
 		# If no valid target, just end the attack state
+		if animation_tree and anim_tree_was_active:
+			animation_tree.active = true
 		is_attacking = false
 		can_attack_player = true
 
@@ -932,3 +1003,83 @@ func get_bone_attachment(attachment_key: String) -> Node3D:
 	if bone_attachments.has(attachment_key):
 		return bone_attachments[attachment_key]
 	return null
+
+## Carga las animaciones de un arma equipada en el AnimationPlayer
+func load_weapon_animations(weapon: EquipmentItem) -> void:
+	if not animation_player or not weapon:
+		# Reset to default if no weapon
+		current_weapon_idle_anim = &""
+		current_weapon_attack_start_anim = &""
+		current_weapon_attack_release_anim = &""
+		return
+	
+	# Get the animation library (default library)
+	var anim_library: AnimationLibrary = null
+	if animation_player.has_animation_library(""):
+		anim_library = animation_player.get_animation_library("")
+	else:
+		# Create a new library if it doesn't exist
+		anim_library = AnimationLibrary.new()
+		animation_player.add_animation_library("", anim_library)
+	
+	# Load idle animation
+	if weapon.idle_animation_resource:
+		var anim_name = "weapon_idle"
+		if anim_library.has_animation(anim_name):
+			anim_library.remove_animation(anim_name)
+		anim_library.add_animation(anim_name, weapon.idle_animation_resource)
+		current_weapon_idle_anim = anim_name
+	else:
+		current_weapon_idle_anim = &""
+	
+	# Load attack start animation
+	if weapon.attack_start_animation_resource:
+		var anim_name = "weapon_attack_start"
+		if anim_library.has_animation(anim_name):
+			anim_library.remove_animation(anim_name)
+		anim_library.add_animation(anim_name, weapon.attack_start_animation_resource)
+		current_weapon_attack_start_anim = anim_name
+	else:
+		current_weapon_attack_start_anim = &""
+	
+	# Load attack release animation
+	if weapon.attack_release_animation_resource:
+		var anim_name = "weapon_attack_release"
+		if anim_library.has_animation(anim_name):
+			anim_library.remove_animation(anim_name)
+		anim_library.add_animation(anim_name, weapon.attack_release_animation_resource)
+		current_weapon_attack_release_anim = anim_name
+	else:
+		current_weapon_attack_release_anim = &""
+	
+	print("Player: Loaded weapon animations - idle: %s, attack_start: %s, attack_release: %s" % [
+		current_weapon_idle_anim, 
+		current_weapon_attack_start_anim, 
+		current_weapon_attack_release_anim
+	])
+
+## Actualiza la animación idle basada en el arma equipada
+func _update_idle_animation() -> void:
+	if not equipment_component or not animation_player:
+		return
+	
+	var weapon = equipment_component.get_equipped_item(EquipmentItem.EquipmentSlot.WEAPON)
+	
+	# Si hay un arma con animación idle específica, usarla
+	if weapon and current_weapon_idle_anim != &"":
+		if animation_player.has_animation(current_weapon_idle_anim):
+			# No reproducir directamente idle, dejar que el state machine lo maneje
+			# Pero podríamos guardar esta info para que IdleState la use
+			pass
+	else:
+		# Usar animación idle por defecto
+		pass
+
+## Callback cuando el equipo cambia
+func _on_equipment_changed() -> void:
+	# Load weapon animations when equipment changes
+	if equipment_component:
+		var weapon = equipment_component.get_equipped_item(EquipmentItem.EquipmentSlot.WEAPON)
+		load_weapon_animations(weapon)
+	
+	_update_idle_animation()
