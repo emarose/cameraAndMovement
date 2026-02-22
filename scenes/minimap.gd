@@ -28,3 +28,5 @@ func _process(_delta):
 		
 		# 2. Maintain fixed height for top-down view
 		global_position.y = height
+		# 3. Fix minimap rotation to -90 degrees (so east is up)
+		rotation = Vector3(-PI/2, 0, 0)
