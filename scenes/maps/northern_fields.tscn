@@ -5,6 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="4_player"]
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="5_portal"]
 [ext_resource type="PackedScene" uid="uid://be2bg3yc2k5s6" path="res://assets/terrain/northern_fields_chunk2.glb" id="5_pqk0h"]
+[ext_resource type="PackedScene" uid="uid://bwn8pyun0i1gp" path="res://assets/decoration/nature/trees_A_large.gltf" id="6_v3jrl"]
+[ext_resource type="PackedScene" uid="uid://dcmr8qt1njsto" path="res://assets/decoration/nature/trees_A_small.gltf" id="7_ituga"]
+[ext_resource type="PackedScene" uid="uid://c23hosnklvko5" path="res://assets/decoration/nature/rock_single_B.gltf" id="8_5wxko"]
+[ext_resource type="PackedScene" uid="uid://c0yu4l4oi1k52" path="res://assets/decoration/nature/rock_single_A.gltf" id="9_j81wi"]
+[ext_resource type="PackedScene" uid="uid://b4625tjiaekl7" path="res://assets/decoration/nature/rock_single_E.gltf" id="10_bri4a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -57,3 +62,41 @@ navigation_mesh = SubResource("NavigationMesh_cs5ao")
 
 [node name="a" parent="NavigationRegion3D" unique_id=804058659 instance=ExtResource("5_pqk0h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 47.537632)
+
+[node name="Props" type="Node" parent="." unique_id=1129372543]
+
+[node name="trees_A_large2" parent="Props" unique_id=2140541216 instance=ExtResource("6_v3jrl")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -35.596344, 0.013255596, -32.59119)
+
+[node name="trees_A_large3" parent="Props" unique_id=61205979 instance=ExtResource("6_v3jrl")]
+transform = Transform3D(-2.7362976, 0, 8.573953, 0, 9, 0, -8.573953, 0, -2.7362976, -35.596344, 0.013255596, -59.069843)
+
+[node name="trees_A_large4" parent="Props" unique_id=1857544356 instance=ExtResource("6_v3jrl")]
+transform = Transform3D(-2.7362976, 0, 8.573953, 0, 9, 0, -8.573953, 0, -2.7362976, 41.11892, 5.934633, -47.05679)
+
+[node name="trees_A_small2" parent="Props" unique_id=727342728 instance=ExtResource("7_ituga")]
+transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, -24.478329, 0.02048923, -46.326824)
+
+[node name="trees_A_small3" parent="Props" unique_id=1151266603 instance=ExtResource("7_ituga")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, -3.0738926, 0.02048923, -33.548172)
+
+[node name="trees_A_small6" parent="Props" unique_id=1982908124 instance=ExtResource("7_ituga")]
+transform = Transform3D(4.4589877, 0, 2.2621737, 0, 5, 0, -2.2621737, 0, 4.4589877, -3.0738926, 0.02048923, -44.010475)
+
+[node name="trees_A_small4" parent="Props" unique_id=215037581 instance=ExtResource("7_ituga")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 39.81818, 5.391591, -33.548172)
+
+[node name="trees_A_small5" parent="Props" unique_id=1499182114 instance=ExtResource("7_ituga")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 22.593433, 5.391591, -50.808064)
+
+[node name="rock_single_B2" parent="Props" unique_id=955571249 instance=ExtResource("8_5wxko")]
+transform = Transform3D(10.067452, 0, -3.3759775, 0, 13.593912, 0, 1.7384079, 0, 19.550926, 13.912537, 6.108077, -74.44625)
+
+[node name="rock_single_A2" parent="Props" unique_id=1567666468 instance=ExtResource("9_j81wi")]
+transform = Transform3D(10, 0, 0, 0, 17.18456, 0, 0, 0, 10, 14.3931465, 5.80088, -69.160446)
+
+[node name="rock_single_E2" parent="Props" unique_id=1194427347 instance=ExtResource("10_bri4a")]
+transform = Transform3D(20.5208, 0, -1.4816604, 0, 15.139712, 0, 2.389946, 0, 12.721987, 21.70959, 5.9930735, -78.24301)
+
+[node name="rock_single_A3" parent="Props" unique_id=413896474 instance=ExtResource("9_j81wi")]
+transform = Transform3D(6.6064854, 0, 2.3139467, 0, 7, 0, -2.3139467, 0, 6.6064854, 21.642145, 5.99973, -73.05127)

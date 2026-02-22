@@ -4,19 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cjm7w4gbf7dry" path="res://assets/models/fabre-placeholder-model.tscn" id="1_fi3od"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1_t0rr6"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="2_qyyyq"]
-[ext_resource type="Resource" uid="uid://olrtslcbifoc" path="res://resources/items/SpeedPotion.tres" id="3_yig24"]
-[ext_resource type="Resource" uid="uid://v01uhi7vf7p2" path="res://resources/items/BerserkPill.tres" id="4_p7rhg"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="7_idgaq"]
-
-[sub_resource type="Resource" id="Resource_qijm8"]
-script = ExtResource("2_qyyyq")
-item_data = ExtResource("3_yig24")
-metadata/_custom_type_script = "uid://bj2c0xe6whkco"
-
-[sub_resource type="Resource" id="Resource_tj1e2"]
-script = ExtResource("2_qyyyq")
-item_data = ExtResource("4_p7rhg")
-metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1_t0rr6")
@@ -24,17 +12,17 @@ monster_name = "Fabre"
 level = 3
 race = 4
 element = 2
-base_exp = 50
-agi = 23
+base_exp = 100
+job_exp = 80
+agi = 12
 vit = 3
 int_stat = 4
-dex = 13
 luk = 10
 max_hp = 80
+def = 3
 move_spd = 2.0
 attack_range = 1.4
 model_scene = ExtResource("1_fi3od")
 idle_time_max = 4.0
 movement_speed_factor = 1.0
-drop_table = Array[ExtResource("2_qyyyq")]([SubResource("Resource_qijm8"), SubResource("Resource_tj1e2")])
 metadata/_custom_type_script = "uid://e53aoxyegbf"

@@ -9,7 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="6_enemy"]
 [ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="7_poring"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="8_ikpp8"]
-[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="8_spider"]
+[ext_resource type="Resource" uid="uid://b5sbonaifogvd" path="res://resources/mobs/Fabre.tres" id="10_w8mh3"]
+[ext_resource type="PackedScene" uid="uid://cvnnxwb3qe8d3" path="res://assets/decoration/nature/trees_B_large.gltf" id="11_w8mh3"]
+[ext_resource type="PackedScene" uid="uid://c6l00fdgvkin8" path="res://assets/decoration/nature/trees_B_small.gltf" id="12_1oh16"]
+[ext_resource type="PackedScene" uid="uid://jwkd6igyli3v" path="res://assets/decoration/nature/trees_B_medium.gltf" id="13_vtups"]
+[ext_resource type="PackedScene" uid="uid://bvrdt4n2ufuwp" path="res://assets/decoration/nature/rock_single_C.gltf" id="14_rt3ju"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -64,6 +68,29 @@ target_map_path = "uid://cb6k7k3xysq84"
 target_spawn_id = "FromWest"
 
 [node name="MobSpawner" parent="." unique_id=401095038 instance=ExtResource("6_d8uil")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.838, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.250553, 0, 8.755711)
 enemy_scene = ExtResource("6_enemy")
-mob_pool = Array[ExtResource("8_ikpp8")]([ExtResource("7_poring"), ExtResource("8_spider")])
+mob_pool = Array[ExtResource("8_ikpp8")]([ExtResource("7_poring"), ExtResource("10_w8mh3")])
+
+[node name="Props" type="Node" parent="." unique_id=2012851410]
+
+[node name="trees_B_large2" parent="Props" unique_id=383589963 instance=ExtResource("11_w8mh3")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -30.706963, 0.01300312, -17.37532)
+
+[node name="trees_B_small2" parent="Props" unique_id=620503701 instance=ExtResource("12_1oh16")]
+transform = Transform3D(4.2475533, 0, -5.5640173, 0, 7, 0, 5.5640173, 0, 4.2475533, -41.566246, -0.0025061513, -13.059095)
+
+[node name="trees_B_large3" parent="Props" unique_id=154252421 instance=ExtResource("11_w8mh3")]
+transform = Transform3D(8.607018, 0, -2.6304443, 0, 9, 0, 2.6304443, 0, 8.607018, -72.076645, 0.0129993055, -30.842928)
+
+[node name="trees_B_large4" parent="Props" unique_id=409972924 instance=ExtResource("11_w8mh3")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -73.698685, 0.0129993055, -13.600584)
+
+[node name="trees_B_medium2" parent="Props" unique_id=1174210796 instance=ExtResource("13_vtups")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, -62.82403, 0.012492869, -3.3283393)
+
+[node name="trees_B_medium3" parent="Props" unique_id=739772969 instance=ExtResource("13_vtups")]
+transform = Transform3D(7.144164, 0, 2.2827415, 0, 7.4999995, 0, -2.2827415, 0, 7.144164, -48.05197, 0.012492869, 13.566212)
+
+[node name="rock_single_C2" parent="Props" unique_id=192189668 instance=ExtResource("14_rt3ju")]
+transform = Transform3D(14.02416, 0, 0, 0, 11.483121, 0, 0, 0, 13.447114, -22.743568, -0.00890612, -3.926962)

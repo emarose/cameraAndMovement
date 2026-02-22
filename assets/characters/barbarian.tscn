@@ -1,0 +1,176 @@
+[gd_scene format=3 uid="uid://bddndogbwgjk4"]
+
+[ext_resource type="PackedScene" uid="uid://bsqtdkutbyeqg" path="res://assets/characters/models/Barbarian.glb" id="1_j6q2b"]
+[ext_resource type="AnimationLibrary" uid="uid://ruelgqyqj7re" path="res://assets/characters/animations/Player.res" id="2_2rdds"]
+
+[sub_resource type="Animation" id="Animation_jycnx"]
+length = 0.001
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rig_Medium/Skeleton3D:hips")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bvou4"]
+_data = {
+&"RESET": SubResource("Animation_jycnx")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qsuma"]
+animation = &"Player/Melee_1H_Attack_Chop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jycnx"]
+animation = &"Player/Ranged_Magic_Summon"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6eh03"]
+animation = &"Player/Hit_A"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5d3jq"]
+animation = &"Player/Idle_A"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_u2yj3"]
+animation = &"Player/Running_B"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wynl5"]
+animation = &"Player/Ranged_Bow_Draw"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3lpjr"]
+animation = &"Player/Ranged_Bow_Release"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_aui4j"]
+animation = &"Player/Ranged_Bow_Idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wynl5"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3lpjr"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_aui4j"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5d3jq"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u2yj3"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_negsq"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gr3v8"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_l6bre"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gycpr"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cx1kw"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lmovb"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rj24g"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5s71d"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_trf1e"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_28n8r"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jycnx"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_negsq"]
+states/Attack/node = SubResource("AnimationNodeAnimation_qsuma")
+states/Attack/position = Vector2(245.0625, 203.5)
+states/Cast/node = SubResource("AnimationNodeAnimation_jycnx")
+states/Cast/position = Vector2(314.29724, -51.137787)
+states/Flinch/node = SubResource("AnimationNodeAnimation_6eh03")
+states/Flinch/position = Vector2(499.625, -51.10334)
+states/Idle/node = SubResource("AnimationNodeAnimation_5d3jq")
+states/Idle/position = Vector2(368.5, 99.875)
+states/Move/node = SubResource("AnimationNodeAnimation_u2yj3")
+states/Move/position = Vector2(549.5, 100.1875)
+states/Start/position = Vector2(169, 100.09375)
+states/bow_draw/node = SubResource("AnimationNodeAnimation_wynl5")
+states/bow_draw/position = Vector2(548.19934, 218.70862)
+states/bow_release/node = SubResource("AnimationNodeAnimation_3lpjr")
+states/bow_release/position = Vector2(731.29724, 220.83472)
+states/idle_bow/node = SubResource("AnimationNodeAnimation_aui4j")
+states/idle_bow/position = Vector2(379.39862, 219.77167)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_wynl5"), "Idle", "Move", SubResource("AnimationNodeStateMachineTransition_3lpjr"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_aui4j"), "Idle", "Attack", SubResource("AnimationNodeStateMachineTransition_5d3jq"), "Attack", "Idle", SubResource("AnimationNodeStateMachineTransition_u2yj3"), "Idle", "Cast", SubResource("AnimationNodeStateMachineTransition_negsq"), "Cast", "Idle", SubResource("AnimationNodeStateMachineTransition_gr3v8"), "Idle", "Flinch", SubResource("AnimationNodeStateMachineTransition_l6bre"), "Flinch", "Idle", SubResource("AnimationNodeStateMachineTransition_gycpr"), "Move", "Flinch", SubResource("AnimationNodeStateMachineTransition_cx1kw"), "Flinch", "Move", SubResource("AnimationNodeStateMachineTransition_lmovb"), "Cast", "Flinch", SubResource("AnimationNodeStateMachineTransition_rj24g"), "Flinch", "Cast", SubResource("AnimationNodeStateMachineTransition_5s71d"), "bow_draw", "bow_release", SubResource("AnimationNodeStateMachineTransition_trf1e"), "idle_bow", "bow_draw", SubResource("AnimationNodeStateMachineTransition_28n8r"), "Idle", "bow_draw", SubResource("AnimationNodeStateMachineTransition_jycnx")]
+graph_offset = Vector2(90.21057, -6.9187927)
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_fq7ld"]
+graph_offset = Vector2(-195.5924, -1.0947037)
+nodes/StateMachine/node = SubResource("AnimationNodeStateMachine_negsq")
+nodes/StateMachine/position = Vector2(-130, 110)
+node_connections = [&"output", 0, &"StateMachine"]
+
+[node name="Barbarian" unique_id=1528736684 instance=ExtResource("1_j6q2b")]
+
+[node name="Skeleton3D" parent="Rig_Medium" parent_id_path=PackedInt32Array(303261650) index="0" unique_id=1202434413]
+bones/1/position = Vector3(0, 0, 0)
+bones/1/rotation = Quaternion(0.001982824, 0.04315767, 8.565708e-05, 0.99906635)
+bones/1/scale = Vector3(0.99999994, 1, 0.99999994)
+bones/2/rotation = Quaternion(0.0054817386, 1.8486399e-09, 0.00047448694, 0.99998486)
+bones/2/scale = Vector3(1.0000001, 1, 1.0000001)
+bones/3/rotation = Quaternion(0.0001739029, 5.6855294e-09, 1.5052608e-05, 1)
+bones/3/scale = Vector3(1, 0.9999999, 1)
+bones/4/position = Vector3(0.21200737, 0.13413215, 8.216504e-08)
+bones/4/rotation = Quaternion(-0.53622156, -0.110527836, -0.76797783, 0.33235553)
+bones/4/scale = Vector3(0.9999993, 0.99999905, 0.9999998)
+bones/5/rotation = Quaternion(1.2698877e-08, -7.146473e-08, -0.36749452, 0.9300257)
+bones/5/scale = Vector3(1.0000004, 0.9999998, 1)
+bones/6/rotation = Quaternion(1.514567e-08, -7.3584383e-09, 0.0266581, 0.99964464)
+bones/6/scale = Vector3(1.0000001, 1, 1)
+bones/7/rotation = Quaternion(-0.22125979, -0.3447262, 0.18195787, 0.8939236)
+bones/7/scale = Vector3(0.99999976, 1.0000001, 1.0000004)
+bones/8/position = Vector3(5.138494e-10, 0.096125126, -0.057500005)
+bones/8/rotation = Quaternion(0.001084649, 0.0010846698, -0.7031137, 0.7110759)
+bones/8/scale = Vector3(1, 1, 1)
+bones/9/rotation = Quaternion(-0.01384839, -0.03133873, -0.0007623727, 0.99941266)
+bones/9/scale = Vector3(0.99999994, 1, 1)
+bones/10/position = Vector3(-0.21200736, 0.13413227, 8.62731e-08)
+bones/10/rotation = Quaternion(-0.5629835, 0.04062644, 0.73288685, 0.3798367)
+bones/10/scale = Vector3(0.9999992, 0.9999988, 0.9999998)
+bones/11/rotation = Quaternion(2.948871e-08, 4.4315932e-08, 0.3829748, 0.92375886)
+bones/11/scale = Vector3(1.0000004, 0.99999976, 1.0000001)
+bones/12/rotation = Quaternion(2.249753e-10, 6.8246844e-09, -0.026658092, 0.99964464)
+bones/12/scale = Vector3(0.99999994, 0.99999994, 1)
+bones/13/rotation = Quaternion(-0.21160689, 0.382105, -0.13644786, 0.8891572)
+bones/13/scale = Vector3(0.9999995, 0.99999994, 1.0000005)
+bones/14/position = Vector3(-1.5415026e-08, 0.096125185, -0.057500005)
+bones/14/rotation = Quaternion(0.0010846542, -0.0010846645, 0.7031137, 0.7110759)
+bones/14/scale = Vector3(1, 1.0000001, 1.0000001)
+bones/15/position = Vector3(0.17094508, 0.1135872, 1.5994095e-08)
+bones/15/rotation = Quaternion(0.9910877, 0.05785415, 0.07089873, 0.09680637)
+bones/15/scale = Vector3(0.9999999, 0.9999997, 1.0000008)
+bones/16/rotation = Quaternion(0.29437843, 6.3132426e-08, -1.9767994e-07, 0.955689)
+bones/16/scale = Vector3(1.0000004, 0.99999994, 1.0000001)
+bones/17/rotation = Quaternion(-0.54745275, -0.11343941, 0.044759717, 0.82790315)
+bones/17/scale = Vector3(1.0000004, 1.0000007, 0.9999993)
+bones/18/rotation = Quaternion(1.7471697e-06, 0.920239, -0.39135706, -3.0493192e-07)
+bones/18/scale = Vector3(1.0000001, 0.9999975, 1.0000027)
+bones/19/position = Vector3(-0.17094508, 0.11358732, 1.557549e-08)
+bones/19/rotation = Quaternion(0.996422, -0.030189965, 0.03128, 0.07248056)
+bones/19/scale = Vector3(0.9999999, 0.99999976, 1.0000008)
+bones/20/rotation = Quaternion(0.30511972, -6.156449e-08, 2.1249132e-07, 0.9523141)
+bones/20/scale = Vector3(0.99999994, 0.99999976, 0.99999994)
+bones/21/rotation = Quaternion(-0.5760865, 0.114284724, -0.011291398, 0.8092811)
+bones/21/scale = Vector3(0.99999976, 1.0000006, 0.9999992)
+bones/22/rotation = Quaternion(-8.934892e-05, 0.9202217, -0.3913977, 2.0290998e-05)
+bones/22/scale = Vector3(1.0000002, 0.9999979, 1.0000024)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1" unique_id=616065338]
+libraries/ = SubResource("AnimationLibrary_bvou4")
+libraries/Player = ExtResource("2_2rdds")
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2" unique_id=2032678821]
+tree_root = SubResource("AnimationNodeBlendTree_fq7ld")
+anim_player = NodePath("../AnimationPlayer")

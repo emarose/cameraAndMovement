@@ -4,9 +4,11 @@
 [ext_resource type="PackedScene" uid="uid://b3mj4b8fx2imj" path="res://scenes/HUD.tscn" id="2_hud"]
 [ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="4_player"]
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="5_portal"]
-[ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="6_enemy"]
 [ext_resource type="PackedScene" uid="uid://im6bpq6ueojd" path="res://assets/terrain/eastern_fields_chunk.glb" id="7_0qg5g"]
-[ext_resource type="Resource" uid="uid://b5sbonaifogvd" path="res://resources/mobs/Fabre.tres" id="7_fabre"]
+[ext_resource type="PackedScene" uid="uid://bwn8pyun0i1gp" path="res://assets/decoration/nature/trees_A_large.gltf" id="8_3rou7"]
+[ext_resource type="PackedScene" uid="uid://beq8m3o5m3jtd" path="res://assets/decoration/nature/trees_A_medium.gltf" id="9_g6rdi"]
+[ext_resource type="PackedScene" uid="uid://ke7jdy57jwd4" path="res://assets/decoration/nature/trees_A_cut.gltf" id="10_37kw0"]
+[ext_resource type="PackedScene" uid="uid://cahkpaehl1yti" path="res://assets/decoration/nature/tree_single_A.gltf" id="11_hpdg8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -58,20 +60,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7316284, 0.016118431, 2.955
 target_map_path = "uid://cb6k7k3xysq84"
 target_spawn_id = "FromEast"
 
-[node name="Enemies" type="Node" parent="." unique_id=2064998176]
-
-[node name="Enemy1" parent="Enemies" unique_id=625210871 instance=ExtResource("6_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.403557, 0.7213302, 24.068764)
-data = ExtResource("7_fabre")
-
-[node name="Enemy3" parent="Enemies" unique_id=1459969661 instance=ExtResource("6_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.995308, 0.7213302, 5.9046307)
-data = ExtResource("7_fabre")
-
-[node name="Props" type="Node" parent="." unique_id=568770280]
-
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1707255525]
 navigation_mesh = SubResource("NavigationMesh_d6dt2")
 
 [node name="a" parent="NavigationRegion3D" unique_id=954933454 instance=ExtResource("7_0qg5g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.575, 0, 0)
+
+[node name="Props" type="Node" parent="." unique_id=568770280]
+
+[node name="trees_A_large2" parent="Props" unique_id=2140541216 instance=ExtResource("8_3rou7")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 50.987026, 0.013254166, 11.988494)
+
+[node name="trees_A_medium2" parent="Props" unique_id=2060248020 instance=ExtResource("9_g6rdi")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 79.1931, 0.020496845, -14.816087)
+
+[node name="trees_A_medium3" parent="Props" unique_id=700725170 instance=ExtResource("9_g6rdi")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 77.23901, 0.020496845, 25.269516)
+
+[node name="trees_A_cut2" parent="Props" unique_id=1799670617 instance=ExtResource("10_37kw0")]
+transform = Transform3D(6.8288226, 0, -1.5385659, 0, 7, 0, 1.5385659, 0, 6.8288226, 76.174164, 0.0132546425, -11.427965)
+
+[node name="trees_A_large3" parent="Props" unique_id=2139839911 instance=ExtResource("8_3rou7")]
+transform = Transform3D(8.922573, 0, -1.178006, 0, 9, 0, 1.178006, 0, 8.922573, 66.95401, 0.013250828, 15.306272)
+
+[node name="trees_A_medium4" parent="Props" unique_id=1632780231 instance=ExtResource("9_g6rdi")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 43.485535, 12.247608, -34.62561)
+
+[node name="trees_A_large5" parent="Props" unique_id=1993198725 instance=ExtResource("8_3rou7")]
+transform = Transform3D(10.905367, 0, -1.4397852, 0, 11, 0, 1.4397852, 0, 10.905367, 29.757465, 12.138826, -21.527678)
+
+[node name="tree_single_A2" parent="Props" unique_id=1595007741 instance=ExtResource("11_hpdg8")]
+transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, 61.381905, 5.957812, 43.86306)
+
+[node name="tree_single_A4" parent="Props" unique_id=593788282 instance=ExtResource("11_hpdg8")]
+transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, 59.311264, 5.957812, 39.744186)
+
+[node name="tree_single_A3" parent="Props" unique_id=1869789719 instance=ExtResource("11_hpdg8")]
+transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, 73.32847, 0.9622216, 43.86306)
