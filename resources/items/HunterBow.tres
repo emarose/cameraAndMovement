@@ -1,24 +1,25 @@
-[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://cfg2urlh7pla8"]
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://bclpmtq2ng6om"]
 
-[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="1"]
-[ext_resource type="Animation" uid="uid://uaa1jjexpx4i" path="res://assets/characters/animations/Ranged_Bow_Release.res" id="1_2ggvq"]
-[ext_resource type="PackedScene" uid="uid://bhcp016dxnayn" path="res://assets/weapon_models/bow_A.gltf" id="1_gls0s"]
-[ext_resource type="PackedScene" uid="uid://bvqk8ym5u3p5h" path="res://scenes/Arrow.tscn" id="2"]
-[ext_resource type="Animation" uid="uid://d4mswsi82418t" path="res://assets/characters/animations/Ranged_Bow_Draw.res" id="2_sq3sf"]
-[ext_resource type="Animation" uid="uid://db55tsbcmt40v" path="res://assets/characters/animations/Ranged_Bow_Idle.res" id="3_hidk5"]
+[ext_resource type="Animation" uid="uid://uaa1jjexpx4i" path="res://assets/characters/animations/Ranged_Bow_Release.res" id="1"]
+[ext_resource type="Animation" uid="uid://d4mswsi82418t" path="res://assets/characters/animations/Ranged_Bow_Draw.res" id="2"]
+[ext_resource type="Animation" uid="uid://db55tsbcmt40v" path="res://assets/characters/animations/Ranged_Bow_Idle.res" id="3"]
+[ext_resource type="PackedScene" uid="uid://bhcp016dxnayn" path="res://assets/weapon_models/bow_A.gltf" id="4"]
+[ext_resource type="PackedScene" uid="uid://bvqk8ym5u3p5h" path="res://scenes/Arrow.tscn" id="5"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="6"]
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("6")
 atk_bonus = 20
 is_ranged = true
 attack_range = 8.0
-projectile_scene = ExtResource("2")
+projectile_scene = ExtResource("5")
 weapon_attachment = 1
-idle_animation_resource = ExtResource("3_hidk5")
-attack_start_animation_resource = ExtResource("2_sq3sf")
-attack_release_animation_resource = ExtResource("1_2ggvq")
+idle_animation_resource = ExtResource("3")
+attack_start_animation_resource = ExtResource("2")
+attack_release_animation_resource = ExtResource("1")
 item_name = "Hunter's Bow"
-model = ExtResource("1_gls0s")
+model = ExtResource("4")
+icon_rotation = Vector3(0, 90, 90)
 description = "A longbow for ranged combat. +20 ATK, 8.0 range"
 item_type = 1
 stackable = false

@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://b1syjwa46sik" path="res://assets/icons/cursor_door.png" id="6_b8lor"]
 [ext_resource type="PackedScene" uid="uid://2h7d5skhop8m" path="res://scenes/SPBar3D.tscn" id="7_spbar"]
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="8_khinc"]
-[ext_resource type="Resource" uid="uid://cfg2urlh7pla8" path="res://resources/items/HunterBow.tres" id="8_pfeki"]
+[ext_resource type="Resource" uid="uid://bclpmtq2ng6om" path="res://resources/items/HunterBow.tres" id="8_pfeki"]
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="10_d3wef"]
 [ext_resource type="Animation" uid="uid://bfn0hgp0jnakb" path="res://assets/characters/animations/Melee_Unarmed_Attack_Punch_A.res" id="11_axnmu"]
 [ext_resource type="Resource" uid="uid://cqun87ymamf71" path="res://resources/items/Knife.tres" id="11_p07f3"]
@@ -38,11 +38,12 @@ albedo_color = Color(0.43321982, 0.62398577, 0.602917, 1)
 material = SubResource("StandardMaterial3D_aqk2v")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
+height = 2.3964844
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_fvsjc"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_axnmu"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_hxdpb"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_fvsjc"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
@@ -83,7 +84,7 @@ mesh = SubResource("CapsuleMesh_dqkch")
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=732221772]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9159521, 0)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 1.259705, 0)
 shape = SubResource("CapsuleShape3D_qlg0r")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=764086905]
@@ -102,11 +103,11 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12061417, 0)
-texture = SubResource("ViewportTexture_fvsjc")
+texture = SubResource("ViewportTexture_axnmu")
 
 [node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("7_spbar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.20458083, 0)
-texture = SubResource("ViewportTexture_hxdpb")
+texture = SubResource("ViewportTexture_fvsjc")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")
