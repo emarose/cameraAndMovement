@@ -4,11 +4,15 @@
 [ext_resource type="PackedScene" uid="uid://b3mj4b8fx2imj" path="res://scenes/HUD.tscn" id="2_hud"]
 [ext_resource type="PackedScene" uid="uid://lw4sjl4cws8q" path="res://scenes/Player.tscn" id="4_player"]
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="5_portal"]
+[ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="6_enemy"]
 [ext_resource type="PackedScene" uid="uid://im6bpq6ueojd" path="res://assets/terrain/eastern_fields_chunk.glb" id="7_0qg5g"]
 [ext_resource type="PackedScene" uid="uid://bwn8pyun0i1gp" path="res://assets/decoration/nature/trees_A_large.gltf" id="8_3rou7"]
 [ext_resource type="PackedScene" uid="uid://beq8m3o5m3jtd" path="res://assets/decoration/nature/trees_A_medium.gltf" id="9_g6rdi"]
 [ext_resource type="PackedScene" uid="uid://ke7jdy57jwd4" path="res://assets/decoration/nature/trees_A_cut.gltf" id="10_37kw0"]
+[ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="10_hpdg8"]
 [ext_resource type="PackedScene" uid="uid://cahkpaehl1yti" path="res://assets/decoration/nature/tree_single_A.gltf" id="11_hpdg8"]
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="12_d13bl"]
+[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="13_rdgog"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -97,3 +101,11 @@ transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, 59.311264, 5.957812, 39.74418
 
 [node name="tree_single_A3" parent="Props" unique_id=1869789719 instance=ExtResource("11_hpdg8")]
 transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, 73.32847, 0.9622216, 43.86306)
+
+[node name="MobSpawner" parent="." unique_id=1312273434 instance=ExtResource("10_hpdg8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.93053, 0, 14.207985)
+enemy_scene = ExtResource("6_enemy")
+mob_pool = Array[ExtResource("12_d13bl")]([ExtResource("13_rdgog"), ExtResource("13_rdgog")])
+spawn_radius = 20.0
+max_mobs = 15
+spawn_interval = 9.0

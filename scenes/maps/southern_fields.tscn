@@ -6,7 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://cjti4ahfu47rf" path="res://scenes/portal.tscn" id="4_28kaw"]
 [ext_resource type="PackedScene" uid="uid://tfhj7fa44sip" path="res://assets/terrain/southern_fields_chunk.glb" id="4_u650k"]
 [ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="6_hh4ub"]
+[ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="6_tb7bt"]
 [ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="7_bddx0"]
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="7_gamxu"]
+[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="10_c5puj"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ici1b"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -63,14 +66,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2786808, 0.016118431, 6.745
 target_map_path = "uid://cb6k7k3xysq84"
 target_spawn_id = "FromSouth"
 
-[node name="Enemy" parent="." unique_id=1282349523 instance=ExtResource("6_hh4ub")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.365, 1, 20.104591)
-data = ExtResource("7_bddx0")
+[node name="MobSpawner" parent="." unique_id=1312273434 instance=ExtResource("6_tb7bt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.76354, -0.008881569, 21.17117)
+enemy_scene = ExtResource("6_hh4ub")
+mob_pool = Array[ExtResource("7_gamxu")]([ExtResource("7_bddx0"), ExtResource("7_bddx0")])
+max_mobs = 5
+spawn_interval = 8.0
 
-[node name="Enemy2" parent="." unique_id=1340775201 instance=ExtResource("6_hh4ub")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.364693, 0.7213302, 7.81654)
-data = ExtResource("7_bddx0")
-
-[node name="Enemy3" parent="." unique_id=134449731 instance=ExtResource("6_hh4ub")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.364694, 0.7213302, 25.767681)
-data = ExtResource("7_bddx0")
+[node name="MobSpawner2" parent="." unique_id=1151576195 instance=ExtResource("6_tb7bt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.418068, -0.008881569, 16.439976)
+enemy_scene = ExtResource("6_hh4ub")
+mob_pool = Array[ExtResource("7_gamxu")]([ExtResource("10_c5puj"), ExtResource("7_bddx0")])
+spawn_radius = 20.0
+max_mobs = 6

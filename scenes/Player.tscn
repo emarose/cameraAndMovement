@@ -17,7 +17,7 @@
 [ext_resource type="Resource" uid="uid://bclpmtq2ng6om" path="res://resources/items/HunterBow.tres" id="8_pfeki"]
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="10_d3wef"]
 [ext_resource type="Animation" uid="uid://bfn0hgp0jnakb" path="res://assets/characters/animations/Melee_Unarmed_Attack_Punch_A.res" id="11_axnmu"]
-[ext_resource type="Resource" uid="uid://cqun87ymamf71" path="res://resources/items/Knife.tres" id="11_p07f3"]
+[ext_resource type="Resource" uid="uid://da3odkrocig16" path="res://resources/items/Knife.tres" id="11_p07f3"]
 [ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="12_o4126"]
 [ext_resource type="PackedScene" uid="uid://bktyhgvk5hews" path="res://assets/characters/mannequin_medium.tscn" id="12_p07f3"]
 [ext_resource type="Script" uid="uid://bb5m4qisg7fb8" path="res://scripts/RegenerationComponent.gd" id="15_0rnld"]

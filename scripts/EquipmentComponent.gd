@@ -196,6 +196,15 @@ func _update_equipment_visuals(item: EquipmentItem, slot_type: EquipmentItem.Equ
 	
 	var attachment = bone_attachments[attachment_key]
 	
+	# Validate attachment is still valid (not freed)
+	if not is_instance_valid(attachment):
+		push_warning("EquipmentComponent: Attachment is no longer valid, re-initializing")
+		_initialize_bone_attachments()
+		attachment = bone_attachments.get(attachment_key, null)
+		if not attachment:
+			push_error("EquipmentComponent: Failed to re-initialize attachment")
+			return
+	
 	# Limpiar modelos anteriores
 	for child in attachment.get_children():
 		child.queue_free()
@@ -211,6 +220,11 @@ func _clear_equipment_visuals(slot_type: EquipmentItem.EquipmentSlot, item: Equi
 		return
 	
 	var attachment = bone_attachments[attachment_key]
+	
+	# Validate attachment is still valid
+	if not is_instance_valid(attachment):
+		return
+	
 	for child in attachment.get_children():
 		child.queue_free()
 

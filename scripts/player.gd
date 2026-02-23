@@ -186,6 +186,10 @@ func change_character_model(new_model_scene: PackedScene):
 	new_model.transform = current_transform
 	new_model.name = old_model_name
 	
+	# Update the animation_player reference if the new model has one
+	if new_model.has_node("AnimationPlayer"):
+		animation_player = new_model.get_node("AnimationPlayer")
+
 	# Update the animation_tree reference if the new model has one
 	if new_model.has_node("AnimationTree"):
 		animation_tree = new_model.get_node("AnimationTree")
@@ -194,6 +198,17 @@ func change_character_model(new_model_scene: PackedScene):
 		# Reconnect the state machine to the new animation tree
 		if state_machine:
 			state_machine.setup(self, animation_tree)
+	
+	# Re-initialize bone attachments for equipment after model change
+	if has_node("EquipmentComponent"):
+		var equipment_comp = get_node("EquipmentComponent")
+		equipment_comp._initialize_bone_attachments()
+		# Re-apply equipped items to new model
+		equipment_comp._recalculate_equipment_bonuses()
+		for slot_type in equipment_comp.equipped_items:
+			var item = equipment_comp.equipped_items[slot_type]
+			if item:
+				equipment_comp._update_equipment_visuals(item, slot_type)
 	
 	print("Character model changed successfully to: ", new_model_scene.resource_path)
 
@@ -1008,10 +1023,22 @@ func get_bone_attachment(attachment_key: String) -> Node3D:
 		return bone_attachments[attachment_key]
 	return null
 
+func _pick_first_animation(anim_names: Array) -> StringName:
+	if not animation_player:
+		return &""
+	for anim_name in anim_names:
+		if animation_player.has_animation(anim_name):
+			return anim_name
+	return &""
+
 ## Carga las animaciones de un arma equipada en el AnimationPlayer, o la animación unarmed si no hay arma
 func load_weapon_animations(weapon: EquipmentItem) -> void:
 	if not animation_player:
 		return
+
+	var fallback_idle = _pick_first_animation(["Idle_A", "idle", "Idle"])
+	var fallback_attack = _pick_first_animation(["attack_1", "Attack", "Attack_A"])
+	var fallback_release = _pick_first_animation(["attack_1", "Attack", "Attack_A"])
 	
 	# Get the animation library (default library)
 	var anim_library: AnimationLibrary = null
@@ -1031,7 +1058,7 @@ func load_weapon_animations(weapon: EquipmentItem) -> void:
 			anim_library.add_animation(anim_name, weapon.idle_animation_resource)
 			current_weapon_idle_anim = anim_name
 		else:
-			current_weapon_idle_anim = &""
+			current_weapon_idle_anim = fallback_idle
 		
 		# Load attack start animation
 		if weapon.attack_start_animation_resource:
@@ -1041,7 +1068,7 @@ func load_weapon_animations(weapon: EquipmentItem) -> void:
 			anim_library.add_animation(anim_name, weapon.attack_start_animation_resource)
 			current_weapon_attack_start_anim = anim_name
 		else:
-			current_weapon_attack_start_anim = &""
+			current_weapon_attack_start_anim = fallback_attack
 		
 		# Load attack release animation
 		if weapon.attack_release_animation_resource:
@@ -1051,7 +1078,7 @@ func load_weapon_animations(weapon: EquipmentItem) -> void:
 			anim_library.add_animation(anim_name, weapon.attack_release_animation_resource)
 			current_weapon_attack_release_anim = anim_name
 		else:
-			current_weapon_attack_release_anim = &""
+			current_weapon_attack_release_anim = fallback_release
 	else:
 		# No weapon equipped: use unarmed attack animation
 		if unarmed_attack_animation_resource:
@@ -1061,9 +1088,9 @@ func load_weapon_animations(weapon: EquipmentItem) -> void:
 			anim_library.add_animation(anim_name, unarmed_attack_animation_resource)
 			current_weapon_attack_start_anim = anim_name
 		else:
-			current_weapon_attack_start_anim = &""
-		current_weapon_idle_anim = &""
-		current_weapon_attack_release_anim = &""
+			current_weapon_attack_start_anim = fallback_attack
+		current_weapon_idle_anim = fallback_idle
+		current_weapon_attack_release_anim = fallback_release
 	
 	print("Player: Loaded weapon animations - idle: %s, attack_start: %s, attack_release: %s" % [
 		current_weapon_idle_anim, 
