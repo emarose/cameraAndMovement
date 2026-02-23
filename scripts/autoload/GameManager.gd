@@ -372,6 +372,10 @@ func _apply_passive_skill_bonuses(skill: SkillData, levels_gained: int):
 	# Aplicar bono de velocidad si existe
 	if skill.passive_speed_bonus > 0:
 		stats.apply_passive_skill_bonus("speed_percent", skill.passive_speed_bonus * levels_gained)
+	
+	# Aplicar bono de items de curación (HP Recovery passive)
+	if skill.passive_healing_item_bonus > 0:
+		stats.healing_item_bonus += skill.passive_healing_item_bonus * levels_gained
 
 # Recalcular TODOS los bonos pasivos desde cero (útil al cargar partida o cambiar job)
 func recalculate_all_passive_bonuses():
@@ -387,6 +391,7 @@ func recalculate_all_passive_bonuses():
 	stats.sp_regen_flat_bonus = 0
 	stats.hp_regen_percent_mod = 1.0
 	stats.sp_regen_percent_mod = 1.0
+	stats.healing_item_bonus = 0.0
 	
 	# Recorrer todas las skills aprendidas y aplicar sus bonos pasivos
 	for skill_id in player_stats["learned_skills"]:

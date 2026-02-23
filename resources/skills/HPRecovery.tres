@@ -22,4 +22,5 @@ passive_stat_bonuses = {
 "vit": 1
 }
 passive_hp_regen = 5
-passive_hp_regen_percent = 0.05
+passive_hp_regen_percent = 0.002
+passive_healing_item_bonus = 0.1

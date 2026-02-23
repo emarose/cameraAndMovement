@@ -22,8 +22,15 @@ func use(user: Node, target = null) -> bool:
 	match effect_type:
 		ConsumableType.HEAL_HP:
 			if final_target.has_node("HealthComponent"):
-				final_target.get_node("HealthComponent").heal(amount)
-				_create_feedback(user, "HP +%d" % amount, Color.GREEN)
+				var heal_amount = amount
+				# Apply healing item bonus from passive skills (like HP Recovery)
+				if final_target.has_node("StatsComponent"):
+					var stats = final_target.get_node("StatsComponent") as StatsComponent
+					var bonus = stats.get_healing_item_bonus()
+					heal_amount = int(amount * (1.0 + bonus))
+				
+				final_target.get_node("HealthComponent").heal(heal_amount)
+				_create_feedback(user, "HP +%d" % heal_amount, Color.GREEN)
 				return true # Éxito
 				
 		ConsumableType.HEAL_SP:

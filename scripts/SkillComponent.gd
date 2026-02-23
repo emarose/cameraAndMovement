@@ -21,6 +21,28 @@ var armed_skill: SkillData = null
 
 var cooldown_timers: Dictionary = {} 
 
+# Helper function to get skill level from GameManager
+func _get_skill_level(skill: SkillData) -> int:
+	# For player, get from GameManager. For enemies, default to max level
+	if actor.is_in_group("player"):
+		return GameManager.get_skill_level(skill.id)
+	else:
+		# Enemies use skills at max level
+		return skill.max_level
+
+# Calculate SP cost based on skill level
+func _get_skill_sp_cost(skill: SkillData, skill_level: int) -> int:
+	if skill.sp_cost_base > 0:
+		# Use level-based SP cost
+		return skill.sp_cost_base + (skill.sp_cost_per_level * (skill_level - 1))
+	else:
+		# Use fixed SP cost
+		return skill.sp_cost
+
+# Calculate damage multiplier based on skill level
+func _get_skill_damage_multiplier(skill: SkillData, skill_level: int) -> float:
+	return skill.damage_multiplier + (skill.damage_per_level * (skill_level - 1))
+
 func setup(actor_node: Node3D, stats_node: StatsComponent, sp_node: SPComponent):
 	actor = actor_node
 	stats = stats_node
@@ -45,27 +67,33 @@ func can_use_skill(skill: SkillData) -> bool:
 	
 	# Only check SP if this is a player (has sp_comp with actual SP system)
 	# Enemies use skills freely without SP cost
-	if sp_comp and sp_comp.current_sp < skill.sp_cost:
-		print("  can_use_skill %s: Insufficient SP" % skill.skill_name)
+	var skill_level = _get_skill_level(skill)
+	var sp_cost = _get_skill_sp_cost(skill, skill_level)
+	
+	if sp_comp and sp_comp.current_sp < sp_cost:
+		print("  can_use_skill %s: Insufficient SP (need %d, have %d)" % [skill.skill_name, sp_cost, sp_comp.current_sp])
 		# Only show message for player
 		if actor.is_in_group("player"):
 			get_tree().call_group("hud", "add_log_message", "SP insuficiente", Color.RED)
 		return false
 	
-	print("  can_use_skill %s: OK" % skill.skill_name)
+	print("  can_use_skill %s: OK (level %d, SP cost %d)" % [skill.skill_name, skill_level, sp_cost])
 	return true
 
 func cast_immediate(skill: SkillData):
 	if not can_use_skill(skill): return
 
+	var skill_level = _get_skill_level(skill)
+	var sp_cost = _get_skill_sp_cost(skill, skill_level)
+	
 	# Only consume SP for players (enemies use skills for free)
 	if sp_comp:
-		sp_comp.use_sp(skill.sp_cost)
+		sp_comp.use_sp(sp_cost)
 	
 	_start_cooldown(skill)
 	
 	# SOLUCIÓN ERROR LÍNEA 44: Ahora la función acepta el parámetro skill
-	_apply_aoe_damage(actor.global_position, skill) 
+	_apply_aoe_damage(actor.global_position, skill, skill_level) 
 	
 	if skill.effect_scene:
 		var fx = skill.effect_scene.instantiate()
@@ -184,9 +212,12 @@ func finalize_skill_execution(skill: SkillData, target_data) -> void:
 	_finalize_skill_execution(skill, target_data)
 
 func _finalize_skill_execution(skill: SkillData, target_data):
+	var skill_level = _get_skill_level(skill)
+	var sp_cost = _get_skill_sp_cost(skill, skill_level)
+	
 	# Validar SP y Cooldown justo antes de disparar (por si el SP bajó durante el cast)
 	# Only for players - enemies don't need SP
-	if sp_comp and sp_comp.current_sp < skill.sp_cost:
+	if sp_comp and sp_comp.current_sp < sp_cost:
 		# Only show message for player
 		if actor.is_in_group("player"):
 			get_tree().call_group("hud", "add_log_message", "SP insuficiente al terminar cast", Color.RED)
@@ -194,7 +225,7 @@ func _finalize_skill_execution(skill: SkillData, target_data):
 
 	# Only consume SP for players (enemies use skills for free)
 	if sp_comp:
-		sp_comp.use_sp(skill.sp_cost)
+		sp_comp.use_sp(sp_cost)
 	
 	_start_cooldown(skill)
 
@@ -203,14 +234,14 @@ func _finalize_skill_execution(skill: SkillData, target_data):
 		SkillData.SkillType.TARGET:
 			print("_finalize_skill_execution: TARGET type, target_data is Node3D: %s, is_valid: %s" % [target_data is Node3D, is_instance_valid(target_data) if target_data is Node3D else false])
 			if target_data is Node3D and is_instance_valid(target_data):
-				_apply_damage(target_data, skill)
+				_apply_damage(target_data, skill, skill_level)
 		SkillData.SkillType.POINT:
 			print("_finalize_skill_execution: POINT type, target_data is Vector3: %s, position: %s" % [target_data is Vector3, target_data])
 			if target_data is Vector3:
-				_apply_aoe_damage(target_data, skill)
+				_apply_aoe_damage(target_data, skill, skill_level)
 		SkillData.SkillType.SELF:
 			print("_finalize_skill_execution: SELF type, applying at actor position: %s" % actor.global_position)
-			_apply_aoe_damage(actor.global_position, skill)
+			_apply_aoe_damage(actor.global_position, skill, skill_level)
 
 	# Visuals
 	if skill.effect_scene:
@@ -225,118 +256,154 @@ func _finalize_skill_execution(skill: SkillData, target_data):
 
 # --- FUNCIONES DE DAÑO ACTUALIZADAS CON MATRIZ ELEMENTAL ---
 
-func _apply_damage(target: Node3D, skill: SkillData):
+func _apply_damage(target: Node3D, skill: SkillData, skill_level: int = 1):
 	if not is_instance_valid(target): return
 	
-	# Prevent self-targeting
-	if target == actor: return
+	# Prevent self-targeting for damage skills (allow self-targeting for healing)
+	if target == actor and not skill.heals: return
 	
 	if target.has_node("HealthComponent") and target.has_node("StatsComponent"):
 		var target_stats = target.get_node("StatsComponent") as StatsComponent
+		var target_health = target.get_node("HealthComponent")
 		
-		# 1. Calculamos el daño base (ATK * Multiplicador de Skill)
-		var base_damage = int(stats.get_atk() * skill.damage_multiplier)
+		# Check if this is a healing skill
+		if skill.heals:
+			var heal_amount = _calculate_healing(skill, skill_level, target_stats, target_health)
+			target_health.heal(heal_amount)
+			
+			if actor.has_method("spawn_floating_text"):
+				actor.spawn_floating_text(target.global_position, heal_amount, true)
+			
+			if actor.is_in_group("player"):
+				get_tree().call_group("hud", "add_log_message", 
+					"%s curó %d HP" % [skill.skill_name, heal_amount], 
+					Color.GREEN)
+		else:
+			# Damage skill
+			var damage_multiplier = _get_skill_damage_multiplier(skill, skill_level)
+			var base_damage = int(stats.get_atk() * damage_multiplier)
+			
+			var final_damage = CombatMath.calculate_skill_damage(
+				base_damage, 
+				skill.element, 
+				target_stats
+			)
+			
+			target_health.take_damage(final_damage)
+			
+			if actor.has_method("spawn_floating_text"):
+				actor.spawn_floating_text(target.global_position, final_damage, false)
 		
-		# 2. Obtenemos el daño final pasando por la matriz de CombatMath
-		# Usamos el elemento que viene definido en el recurso de la Skill
-		var final_damage = CombatMath.calculate_skill_damage(
-			base_damage, 
-			skill.element, 
-			target_stats
-		)
-		
-		# 3. Aplicar daño y feedback
-		target.get_node("HealthComponent").take_damage(final_damage)
-		
-		if actor.has_method("spawn_floating_text"):
-			# Podemos pasar un color diferente si el daño fue elementalmente fuerte (opcional)
-			actor.spawn_floating_text(target.global_position, final_damage, false)
-		
-		# 4. Aplicar status effects
+		# Apply status effects or stat buffs
 		if skill.status_effects.size() > 0 and randf() < skill.status_effect_chance:
 			_apply_skill_status_effects(target, skill)
+		
+		if skill.applies_stat_buff:
+			_apply_stat_buffs(target, skill, skill_level)
 
 
-func _apply_aoe_damage(center_pos: Vector3, skill: SkillData):
+func _apply_aoe_damage(center_pos: Vector3, skill: SkillData, skill_level: int = 1):
 	var enemies = get_tree().get_nodes_in_group("enemy")
 	var player = get_tree().get_first_node_in_group("player")
 	var hit_count = 0
 	
-	# Daño base antes de los multiplicadores por enemigo
-	var base_damage = int(stats.get_atk() * skill.damage_multiplier)
+	var damage_multiplier = _get_skill_damage_multiplier(skill, skill_level)
+	var base_damage = int(stats.get_atk() * damage_multiplier)
 	
-	print("_apply_aoe_damage: actor=%s, atk=%d, multiplier=%.2f, base_damage=%d, center_pos=%s, radius=%.1f" % [
+	print("_apply_aoe_damage: actor=%s, atk=%d, multiplier=%.2f, base_damage=%d, center_pos=%s, radius=%.1f, heals=%s" % [
 		stats.actor_name if stats.has_meta("actor_name") else "unknown",
 		stats.get_atk(),
-		skill.damage_multiplier,
+		damage_multiplier,
 		base_damage,
 		center_pos,
-		skill.aoe_radius
+		skill.aoe_radius,
+		skill.heals
 	])
 	
-	# First, damage enemies
-	for enemy in enemies:
-		if not is_instance_valid(enemy): continue
+	# For healing skills, heal allies; for damage skills, damage enemies
+	if skill.heals:
+		# Heal the caster (SELF type healing)
+		if actor.has_node("HealthComponent") and actor.has_node("StatsComponent"):
+			var caster_health = actor.get_node("HealthComponent")
+			var caster_stats = actor.get_node("StatsComponent") as StatsComponent
+			var heal_amount = _calculate_healing(skill, skill_level, caster_stats, caster_health)
+			caster_health.heal(heal_amount)
+			
+			if actor.has_method("spawn_floating_text"):
+				actor.spawn_floating_text(actor.global_position, heal_amount, true)
+			
+			if actor.is_in_group("player"):
+				get_tree().call_group("hud", "add_log_message", 
+					"%s curó %d HP" % [skill.skill_name, heal_amount], 
+					Color.GREEN)
 		
-		# Exclude the actor (caster) from AOE damage
-		if enemy == actor: continue
+		# Apply stat buffs if this is a buff skill
+		if skill.applies_stat_buff:
+			_apply_stat_buffs(actor, skill, skill_level)
+	else:
+		# Damage enemies
+		for enemy in enemies:
+			if not is_instance_valid(enemy): continue
+			
+			# Exclude the actor (caster) from AOE damage
+			if enemy == actor: continue
+			
+			if enemy.global_position.distance_to(center_pos) <= skill.aoe_radius:
+				if enemy.has_node("HealthComponent") and enemy.has_node("StatsComponent"):
+					var target_stats = enemy.get_node("StatsComponent") as StatsComponent
+					
+					var final_damage = CombatMath.calculate_skill_damage(
+						base_damage, 
+						skill.element, 
+						target_stats
+					)
+					
+					enemy.get_node("HealthComponent").take_damage(final_damage)
+					
+					if actor.has_method("spawn_floating_text"):
+						actor.spawn_floating_text(enemy.global_position, final_damage, false)
+					
+					# Aplicar status effects
+					if skill.status_effects.size() > 0 and randf() < skill.status_effect_chance:
+						_apply_skill_status_effects(enemy, skill)
+					
+					hit_count += 1
 		
-		if enemy.global_position.distance_to(center_pos) <= skill.aoe_radius:
-			if enemy.has_node("HealthComponent") and enemy.has_node("StatsComponent"):
-				var target_stats = enemy.get_node("StatsComponent") as StatsComponent
-				
-				# Cada enemigo en el área puede tener un elemento distinto
-				# Calculamos el daño específico para este objetivo
-				var final_damage = CombatMath.calculate_skill_damage(
-					base_damage, 
-					skill.element, 
-					target_stats
-				)
-				
-				enemy.get_node("HealthComponent").take_damage(final_damage)
-				
-				if actor.has_method("spawn_floating_text"):
-					actor.spawn_floating_text(enemy.global_position, final_damage, false)
-				
-				# Aplicar status effects
-				if skill.status_effects.size() > 0 and randf() < skill.status_effect_chance:
-					_apply_skill_status_effects(enemy, skill)
-	
-	# Also damage player if actor is an enemy and player is in range
-	if player and is_instance_valid(player) and actor != player:
-		if player.global_position.distance_to(center_pos) <= skill.aoe_radius:
-			if player.has_node("HealthComponent") and player.has_node("StatsComponent"):
-				var player_stats = player.get_node("StatsComponent") as StatsComponent
-				print("_apply_aoe_damage -> Player hit! distance=%.1f, skill_radius=%.1f, player_def=%d" % [
-					player.global_position.distance_to(center_pos),
-					skill.aoe_radius,
-					player_stats.get_def()
-				])
-				var final_damage = CombatMath.calculate_skill_damage(
-					base_damage,
-					skill.element,
-					player_stats
-				)
-				
-				print("  Before DEF: base=%d, after element calc: %d" % [base_damage, final_damage])
-				
-				player.get_node("HealthComponent").take_damage(final_damage)
-				print("  FINAL damage to player: %d" % final_damage)
-				
-				if actor.has_method("spawn_floating_text"):
-					actor.spawn_floating_text(player.global_position, final_damage, false)
-				
-				# Aplicar status effects
-				if skill.status_effects.size() > 0 and randf() < skill.status_effect_chance:
-					_apply_skill_status_effects(player, skill)
-				
-				hit_count += 1
-	
-	# Only show message for player
-	if hit_count > 0 and actor.is_in_group("player"):
-		get_tree().call_group("hud", "add_log_message", 
-			"%s golpeó a %d enemigos" % [skill.skill_name, hit_count], 
-			Color.YELLOW)
+		# Also damage player if actor is an enemy and player is in range
+		if player and is_instance_valid(player) and actor != player:
+			if player.global_position.distance_to(center_pos) <= skill.aoe_radius:
+				if player.has_node("HealthComponent") and player.has_node("StatsComponent"):
+					var player_stats = player.get_node("StatsComponent") as StatsComponent
+					print("_apply_aoe_damage -> Player hit! distance=%.1f, skill_radius=%.1f, player_def=%d" % [
+						player.global_position.distance_to(center_pos),
+						skill.aoe_radius,
+						player_stats.get_def()
+					])
+					var final_damage = CombatMath.calculate_skill_damage(
+						base_damage,
+						skill.element,
+						player_stats
+					)
+					
+					print("  Before DEF: base=%d, after element calc: %d" % [base_damage, final_damage])
+					
+					player.get_node("HealthComponent").take_damage(final_damage)
+					print("  FINAL damage to player: %d" % final_damage)
+					
+					if actor.has_method("spawn_floating_text"):
+						actor.spawn_floating_text(player.global_position, final_damage, false)
+					
+					# Aplicar status effects
+					if skill.status_effects.size() > 0 and randf() < skill.status_effect_chance:
+						_apply_skill_status_effects(player, skill)
+					
+					hit_count += 1
+		
+		# Only show message for player
+		if hit_count > 0 and actor.is_in_group("player"):
+			get_tree().call_group("hud", "add_log_message", 
+				"%s golpeó a %d enemigos" % [skill.skill_name, hit_count], 
+				Color.YELLOW)
 
 func _apply_skill_status_effects(target: Node3D, skill: SkillData):
 	if not is_instance_valid(target): return
@@ -364,3 +431,75 @@ func _apply_skill_status_effects(target: Node3D, skill: SkillData):
 				Color.ORANGE)
 	else:
 		print("_apply_skill_status_effects: Target %s has no StatusEffectManagerComponent" % target.name)
+
+# Calculate healing amount based on skill data and level
+func _calculate_healing(skill: SkillData, skill_level: int, target_stats: StatsComponent, target_health) -> int:
+	var heal_amount: float = skill.heal_base + (skill.heal_per_level * skill_level)
+	
+	# Add INT scaling: (BaseLV + INT) / 8 * factor
+	if skill.heal_int_scaling > 0:
+		var int_factor = (stats.current_level + stats.get_total_int()) / 8.0
+		heal_amount += int_factor * skill.heal_int_scaling * skill_level
+	
+	# Add base level scaling
+	if skill.heal_base_level_scaling > 0:
+		heal_amount += stats.current_level * skill.heal_base_level_scaling * skill_level
+	
+	# Add percentage of target's max HP
+	if skill.heal_target_max_hp_percent > 0:
+		heal_amount += target_health.max_health * skill.heal_target_max_hp_percent * skill_level
+	
+	# Apply healing item bonus if target has it (from passive skills like HP Recovery)
+	if target_stats.has_method("get_healing_item_bonus"):
+		var bonus_multiplier = target_stats.get_healing_item_bonus()
+		heal_amount *= (1.0 + bonus_multiplier)
+	
+	return int(heal_amount)
+
+# Apply stat buffs through status effects or directly
+func _apply_stat_buffs(target: Node3D, skill: SkillData, skill_level: int):
+	if not is_instance_valid(target): return
+	if not target.has_node("StatsComponent"): return
+	
+	var target_stats = target.get_node("StatsComponent") as StatsComponent
+	
+	# Calculate buff amounts based on skill level
+	var buff_data = {}
+	if skill.buff_str_per_level > 0:
+		buff_data["str"] = skill.buff_str_per_level * skill_level
+	if skill.buff_dex_per_level > 0:
+		buff_data["dex"] = skill.buff_dex_per_level * skill_level
+	if skill.buff_int_per_level > 0:
+		buff_data["int"] = skill.buff_int_per_level * skill_level
+	if skill.buff_agi_per_level > 0:
+		buff_data["agi"] = skill.buff_agi_per_level * skill_level
+	if skill.buff_vit_per_level > 0:
+		buff_data["vit"] = skill.buff_vit_per_level * skill_level
+	if skill.buff_luk_per_level > 0:
+		buff_data["luk"] = skill.buff_luk_per_level * skill_level
+	
+	if buff_data.size() > 0:
+		# If there's a StatusEffectManagerComponent, we could create a buff effect
+		# For now, apply directly to stats (you may want to create a proper StatusEffect for this)
+		if target.has_node("StatusEffectManagerComponent") and skill.buff_duration > 0:
+			# TODO: Create a dynamic status effect for stat buffs with duration
+			# For now, create a status effect on the fly if needed
+			print("_apply_stat_buffs: Applying buffs %s to %s (duration: %.1fs)" % [buff_data, target.name, skill.buff_duration])
+			# This would require a BlessingSE.tres or similar - for now we just apply instantly
+		
+		# Apply buffs directly (or create a temporary status effect)
+		for stat_name in buff_data:
+			var bonus = buff_data[stat_name]
+			if target_stats.has_method("apply_temporary_stat_bonus"):
+				target_stats.apply_temporary_stat_bonus(stat_name, bonus, skill.buff_duration)
+			else:
+				# Fallback: apply as permanent bonus (could be improved)
+				print("  Applying %d %s to %s" % [bonus, stat_name, target.name])
+		
+		if actor.is_in_group("player"):
+			var buff_desc = ""
+			for stat_name in buff_data:
+				buff_desc += "+%d %s " % [buff_data[stat_name], stat_name.to_upper()]
+			get_tree().call_group("hud", "add_log_message", 
+				"%s: %s" % [skill.skill_name, buff_desc], 
+				Color.CYAN)

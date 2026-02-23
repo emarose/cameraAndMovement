@@ -85,6 +85,7 @@ func clear_equipment_bonuses() -> void:
 @export var sp_regen_flat_bonus: int = 0
 @export var hp_regen_percent_mod: float = 1.0 # 1.0 = 100% (normal)
 @export var sp_regen_percent_mod: float = 1.0
+@export var healing_item_bonus: float = 0.0 # Bonus to healing items (0.1 = +10%)
 
 # Otros modificadores
 var status_speed_percent_mod: float = 1.0
@@ -137,6 +138,9 @@ func get_attack_speed() -> float:
 
 func get_aspd() -> int:
 	return int(200 - (get_attack_speed() * 50))
+
+func get_healing_item_bonus() -> float:
+	return healing_item_bonus
 
 # --- Lógica de Aplicación ---
 
