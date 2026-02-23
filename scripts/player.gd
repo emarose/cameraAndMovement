@@ -177,8 +177,10 @@ func change_character_model(new_model_scene: PackedScene):
 	# Instantiate the new model
 	var new_model = new_model_scene.instantiate()
 	
-	# Remove the old model
+	# Remove the old model from the tree before adding the new one
 	var old_model_name = current_model.name
+	if current_model.get_parent() == self:
+		remove_child(current_model)
 	current_model.queue_free()
 	
 	# Add the new model with the same parent and transform
@@ -209,6 +211,9 @@ func change_character_model(new_model_scene: PackedScene):
 			var item = equipment_comp.equipped_items[slot_type]
 			if item:
 				equipment_comp._update_equipment_visuals(item, slot_type)
+		# Reload weapon animations for the new AnimationPlayer
+		var weapon = equipment_comp.get_equipped_item(EquipmentItem.EquipmentSlot.WEAPON)
+		load_weapon_animations(weapon)
 	
 	print("Character model changed successfully to: ", new_model_scene.resource_path)
 

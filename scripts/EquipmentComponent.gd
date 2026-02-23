@@ -153,6 +153,7 @@ func get_total_equipment_stats() -> Dictionary:
 
 ## Inicializa referencias a los attachment points del esqueleto
 func _initialize_bone_attachments():
+	bone_attachments.clear()
 	# Buscar el modelo del personaje (primera opción: Mannequin_Medium)
 	var model = parent_entity.get_node_or_null("Mannequin_Medium")
 	if not model:
