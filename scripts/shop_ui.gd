@@ -82,24 +82,13 @@ func refresh_sell_list():
 	for child in sell_list_container.get_children():
 		child.queue_free()
 	
-	# Obtener EquipmentComponent para chequear items equipados
-	var equipment_component = player_inventory.get_parent().get_node_or_null("EquipmentComponent") if player_inventory else null
-	
 	for i in range(player_inventory.slots.size()):
-		var slot_data = player_inventory.slots[i] # Ojo con el nombre para no confundir con la UI
+		var slot_data = player_inventory.slots[i]
 		if slot_data == null: continue
 		
 		var item = slot_data.item_data
 		
-		# Filtrar items equipados
-		var is_equipped = false
-		if equipment_component and item is EquipmentItem:
-			for slot in equipment_component.equipped_items.values():
-				if slot == item:
-					is_equipped = true
-					break
-		if is_equipped: continue
-		
+		# Skip items with no sell value
 		if item.sell_price <= 0: continue
 		
 		# USANDO EL PREFAB
