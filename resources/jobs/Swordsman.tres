@@ -29,4 +29,8 @@ job_level_bonuses = {
 "str": 1
 }
 }
+base_hp = 50
+hp_growth = 7
+base_sp = 5
+sp_growth = 1
 character_model = ExtResource("6_uf4ql")

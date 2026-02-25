@@ -7,11 +7,17 @@ signal on_damage_taken(amount: int)
 @onready var stats: StatsComponent = $"../StatsComponent"
 
 @export var max_health: int = 100
-var current_health: int
+var current_health: int = 0
 
 func _ready():
 	if _should_initialize_full_health():
 		current_health = max_health
+
+func set_max_health(new_max: int, should_clamp: bool = true) -> void:
+	max_health = new_max
+	if should_clamp:
+		current_health = clamp(current_health, 0, max_health)
+	on_health_changed.emit(current_health)
 
 func _should_initialize_full_health() -> bool:
 	var parent = get_parent()

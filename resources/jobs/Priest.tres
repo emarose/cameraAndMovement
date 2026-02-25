@@ -8,6 +8,12 @@
 [resource]
 script = ExtResource("1_gpl7k")
 job_name = "Priest"
+base_hp = 38
+hp_growth = 4
+vit_hp_factor = 15
+base_sp = 35
+sp_growth = 4
+int_sp_factor = 10
 base_skills = Array[ExtResource("1_y8jsk")]([ExtResource("2_heal"), ExtResource("3_bless")])
 str_bonus = 1
 int_bonus = 2

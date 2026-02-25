@@ -13,7 +13,6 @@
 script = ExtResource("1_gpl7k")
 job_name = "Mage"
 base_skills = Array[ExtResource("1_j6lo5")]([ExtResource("2_fireball"), ExtResource("3_fireblast"), ExtResource("4_iceblast"), ExtResource("5_thunder"), ExtResource("6_fviki")])
-str_bonus = -1
 agi_bonus = 1
 int_bonus = 3
 job_level_bonuses = {
@@ -31,4 +30,8 @@ job_level_bonuses = {
 "int": 1
 }
 }
+base_hp = 30
+hp_growth = 3
+base_sp = 40
+sp_growth = 5
 character_model = ExtResource("6_qk7jv")

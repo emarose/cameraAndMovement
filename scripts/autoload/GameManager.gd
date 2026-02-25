@@ -20,6 +20,13 @@ var player_stats = {
 	"base_exp": 0,
 	"skill_points": 0,
 	"stat_points_available": 0,
+	# NOVO: Individual stat points - CRITICAL for persistence
+	"str": 1,
+	"agi": 1,
+	"vit": 1,
+	"int": 1,
+	"dex": 1,
+	"luk": 1,
 	# NUEVO: Diccionario para skills aprendidas
 	# Formato: { "bash": 5, "magnum_break": 1 }
 	"learned_skills": {}
@@ -38,11 +45,33 @@ var has_saved_data: bool = false
 const SAVE_PATH = "user://savegame.data"
 
 func save_player_data(player):
+	print("\n=== SAVING PLAYER DATA ===")
+	print("Current HP: %d, Current SP: %d" % [player.health_component.current_health, player.sp_component.current_sp])
+	print("Max HP: %d, Max SP: %d" % [player.health_component.max_health, player.sp_component.max_sp])
+	
 	player_stats["current_hp"] = player.health_component.current_health
 	player_stats["max_hp"] = player.health_component.max_health
 	player_stats["current_sp"] = player.sp_component.current_sp
 	player_stats["max_sp"] = player.sp_component.max_sp
 	player_stats["zeny"] = player.inventory_component.zeny
+	
+	# CRITICAL: Save the ACTUAL current level from StatsComponent
+	# This must be saved so it persists across map changes
+	player_stats["level"] = player.stats.current_level
+	
+	# CRITICAL: Save individual stats (str, agi, vit, int, dex, luk)
+	# These must be persisted across map changes
+	player_stats["str"] = player.stats.str_stat
+	player_stats["agi"] = player.stats.agi
+	player_stats["vit"] = player.stats.vit
+	player_stats["int"] = player.stats.int_stat
+	player_stats["dex"] = player.stats.dex
+	player_stats["luk"] = player.stats.luk
+	player_stats["stat_points_available"] = player.stats.stat_points_available
+	
+	print("Saved level: %d, base stats - VIT: %d (equipment bonus: %d)" % [player_stats["level"], player.stats.vit, player.stats.equipment_bonuses.vit])
+	print("=== END SAVE PLAYER DATA ===\n")
+	
 	# Base level is tracked in GameManager; avoid overwriting with stale StatsComponent data.
 	
 	# Limpiar y guardar inventario
@@ -84,17 +113,52 @@ func save_player_data(player):
 
 func load_player_data(player):
 	# Load player data from GameManager (always, not just when manually saved)
-	# 1. NIVEL, ZENY Y PROGRESIÓN (Básico)
+	print("\n=== LOADING PLAYER DATA ===")
+	print("Saved stats - HP: %d, SP: %d" % [player_stats.get("current_hp", 0), player_stats.get("current_sp", 0)])
+	
+	# 0. INDIVIDUAL STATS - LOAD FIRST before any calculations
+	player.stats.str_stat = player_stats.get("str", 1)
+	player.stats.agi = player_stats.get("agi", 1)
+	player.stats.vit = player_stats.get("vit", 1)
+	player.stats.int_stat = player_stats.get("int", 1)
+	player.stats.dex = player_stats.get("dex", 1)
+	player.stats.luk = player_stats.get("luk", 1)
+	player.stats.stat_points_available = player_stats.get("stat_points_available", 0)
+	print("Loaded base stats - VIT: %d" % player.stats.vit)
+	
+	# 1. LEVEL, ZENY AND PROGRESSION FIRST
 	player.stats.current_level = player_stats["level"]
 	player.stats.current_job_level = player_stats.get("job_level", 1)
 	player.inventory_component.zeny = player_stats["zeny"]
-	
-	# Restaurar progresión (exp y stat points)
-	# player_stats ya contiene: base_exp, job_exp, stat_points_available
-	# Esta información persiste a través de cambios de mapa y cambios de job
 
-	# 2. EQUIPAMIENTO (Prioridad Alta)
-	# Cargamos el equipo antes que la vida para que los bonos de vitalidad/HP se apliquen primero
+	# 2. LOAD JOB DATA FIRST - CRITICAL for correct HP/SP calculations
+	# Must be done BEFORE equipment loading so equipment bonuses calculate with correct job
+	var path = player_stats.get("current_job_path", "res://resources/jobs/Novice.tres")
+	if FileAccess.file_exists(path):
+		current_job_data = load(path)
+	else:
+		current_job_data = load("res://resources/jobs/Novice.tres")
+	
+	print("Loaded job: %s" % current_job_data.job_name)
+	print("Job base HP: %d, Growth: %d, VIT factor: %.2f" % [current_job_data.base_hp, current_job_data.hp_growth, current_job_data.vit_hp_factor])
+	
+	# Ensure current job and novice are in unlocked_jobs
+	var novice_path = "res://resources/jobs/Novice.tres"
+	if not player_stats["unlocked_jobs"].has(novice_path):
+		player_stats["unlocked_jobs"].append(novice_path)
+	
+	if current_job_data and not player_stats["unlocked_jobs"].has(current_job_data.resource_path):
+		player_stats["unlocked_jobs"].append(current_job_data.resource_path)
+	
+	# Set the job data on the player's StatsComponent so HP/SP calculations use correct job
+	if player.has_node("StatsComponent"):
+		var stats_comp = player.get_node("StatsComponent")
+		stats_comp.set_current_job(current_job_data)
+		print("Max HP after job load: %d" % stats_comp.get_max_hp())
+		print("Equipment bonuses before equipment load - VIT: %d" % stats_comp.equipment_bonuses.vit)
+
+	# 3. EQUIPAMIENTO - Now load equipment AFTER job is set
+	# Equipment bonuses will be calculated with the correct job data
 	var equipment_comp = player.get_node_or_null("EquipmentComponent")
 	if equipment_comp and player_stats["equipped_items"].size() > 0:
 		for slot_type in player_stats["equipped_items"].keys():
@@ -103,17 +167,29 @@ func load_player_data(player):
 				var item = load(item_path)
 				equipment_comp.equipped_items[slot_type] = item if item else null
 		
-		# Actualizar los modelos visuales del equipo
+		# Update equipment visuals
 		for slot_type in equipment_comp.equipped_items.keys():
 			var item = equipment_comp.equipped_items[slot_type]
 			if item:
 				equipment_comp._update_equipment_visuals(item, slot_type)
 		
-		# Forzamos el recalculo de los stats máximos (Max HP/SP) basados en el equipo
+		# Recalculate equipment bonuses with correct job data now set
 		equipment_comp._recalculate_equipment_bonuses()
+		
+		# DEBUG: Check stats after equipment loading
+		if player.has_node("StatsComponent"):
+			var stats_comp = player.get_node("StatsComponent")
+			print("After equipment load:")
+			print("  Equipment VIT bonus: +%d" % stats_comp.equipment_bonuses.vit)
+			print("  Total VIT: %d" % stats_comp.get_total_vit())
+			print("  Max HP: %d" % stats_comp.get_max_hp())
+			print("  Max SP: %d" % stats_comp.get_max_sp())
+			print("  Health component max_health: %d" % player.health_component.max_health)
+			print("  SP component max_sp: %d" % player.sp_component.max_sp)
+		
 		equipment_comp.equipment_changed.emit()
 
-	# 3. INVENTARIO COMPLETO
+	# 4. INVENTARIO COMPLETO
 	if player_stats["inventory_slots"].size() > 0:
 		player.inventory_component.slots.clear()
 		player.inventory_component.slots.resize(player.inventory_component.max_slots)
@@ -124,7 +200,7 @@ func load_player_data(player):
 				if item:
 					player.inventory_component.slots[i] = InventorySlot.new(item, slot_data["quantity"])
 	
-	# 4. HOTBAR
+	# 5. HOTBAR
 	if player_stats["hotbar_content"].size() > 0:
 		for i in range(min(player_stats["hotbar_content"].size(), player.hotbar_content.size())):
 			var resource_path = player_stats["hotbar_content"][i]
@@ -134,18 +210,7 @@ func load_player_data(player):
 			else:
 				player.hotbar_content[i] = null
 		player.refresh_hotbar_to_hud()
-
-	# 5. SALUD Y SP (Al final para evitar el clamping)
-	if player_stats["max_hp"] > 0:
-		player.health_component.max_health = player_stats["max_hp"]
-		player.health_component.current_health = player_stats["current_hp"]
-		player.health_component.on_health_changed.emit(player.health_component.current_health)
 	
-	if player_stats["max_sp"] > 0:
-		player.sp_component.max_sp = player_stats["max_sp"]
-		player.sp_component.current_sp = player_stats["current_sp"]
-		player.sp_component.on_sp_changed.emit(player.sp_component.current_sp, player.sp_component.max_sp)
-
 	# 6. ACTUALIZAR UI Y SEÑALES
 	player.inventory_component.inventory_changed.emit()
 	player.inventory_component.zeny_changed.emit(player.inventory_component.zeny)
@@ -162,22 +227,6 @@ func load_player_data(player):
 	if player.hud and player.hud.has_method("update_sp"):
 		player.hud.update_sp(player.sp_component.current_sp, player.sp_component.max_sp)
 	
-	# 7. Initialize current_job_data if invalid (e.g. after loading from save)
-	# Now using current_job_path from dictionary to populate runtime reference
-	var path = player_stats.get("current_job_path", "res://resources/jobs/Novice.tres")
-	if FileAccess.file_exists(path):
-		current_job_data = load(path)
-	else:
-		current_job_data = load("res://resources/jobs/Novice.tres")
-	
-	# Ensure current job and novice are in unlocked_jobs
-	var novice_path = "res://resources/jobs/Novice.tres"
-	if not player_stats["unlocked_jobs"].has(novice_path):
-		player_stats["unlocked_jobs"].append(novice_path)
-	
-	if current_job_data and not player_stats["unlocked_jobs"].has(current_job_data.resource_path):
-		player_stats["unlocked_jobs"].append(current_job_data.resource_path)
-
 	# Load the character model for the current job if it exists
 	if current_job_data and current_job_data.character_model and player.has_method("change_character_model"):
 		player.change_character_model(current_job_data.character_model)
@@ -185,9 +234,53 @@ func load_player_data(player):
 	# Emit job changed signal to ensure UI components (like SkillTree) refresh
 	job_changed.emit(player_stats["job_name"])
 
+	# 6. SALUD Y SP - Now restore current HP/SP (AFTER max values are calculated and all UI is updated)
+	# DO NOT use saved max_hp/max_sp as they may be stale
+	# This MUST be done last to ensure the "container" (Max HP) is correctly sized before filling it with "liquid" (Current HP)
+	var saved_current_hp = player_stats.get("current_hp", 0)
+	var saved_current_sp = player_stats.get("current_sp", 0)
+	
+	print("\n=== RESTORING HP/SP ===")
+	print("Saved values - HP: %d, SP: %d" % [saved_current_hp, saved_current_sp])
+	print("Current component values - HP: %d/%d, SP: %d/%d" % [player.health_component.current_health, player.health_component.max_health, player.sp_component.current_sp, player.sp_component.max_sp])
+	
+	# CRITICAL: Update the HUD's progress bar max values BEFORE restoring current HP
+	# This ensures hp_bar.max_value matches the recalculated health_component.max_health
+	if player.hud:
+		var hp_bar = player.hud.get_node_or_null("HealthBar")
+		if hp_bar:
+			hp_bar.max_value = player.health_component.max_health
+			print("HUD HP bar max_value set to: %d" % hp_bar.max_value)
+		var sp_bar = player.hud.get_node_or_null("ManaBar")
+		if sp_bar:
+			sp_bar.max_value = player.sp_component.max_sp
+			print("HUD SP bar max_value set to: %d" % sp_bar.max_value)
+	
+	# Restore current HP/SP values (will be clamped by max_health)
+	if saved_current_hp > 0:
+		player.health_component.current_health = clamp(saved_current_hp, 0, player.health_component.max_health)
+		print("Restored HP to: %d (clamped between 0 and %d)" % [player.health_component.current_health, player.health_component.max_health])
+		player.health_component.on_health_changed.emit(player.health_component.current_health)
+	
+	if saved_current_sp > 0:
+		player.sp_component.current_sp = min(saved_current_sp, player.sp_component.max_sp)
+		print("Restored SP to: %d (clamped to max %d)" % [player.sp_component.current_sp, player.sp_component.max_sp])
+		player.sp_component.on_sp_changed.emit(player.sp_component.current_sp, player.sp_component.max_sp)
+	
+	print("=== END LOAD PLAYER DATA ===\n")
+	
+	# Ensure SP component is properly setup if not done in Player._ready()
+	if player.sp_component:
+		if not player.sp_component.on_sp_changed.is_connected(player._on_sp_changed):
+			player.sp_component.on_sp_changed.connect(player._on_sp_changed)
+
 
 
 func change_map(map_path: String, spawn_id: String):
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		save_player_data(player)
+	
 	target_spawn_id = spawn_id
 	get_tree().change_scene_to_file.call_deferred(map_path)
 
@@ -379,11 +472,15 @@ func _apply_passive_skill_bonuses(skill: SkillData, levels_gained: int):
 
 # Recalcular TODOS los bonos pasivos desde cero (útil al cargar partida o cambiar job)
 func recalculate_all_passive_bonuses():
+	print("\n=== RECALCULATING PASSIVE BONUSES ===")
 	var player = get_tree().get_first_node_in_group("player")
 	if not player or not player.has_node("StatsComponent"):
+		print("Player or StatsComponent not found")
 		return
 	
 	var stats = player.get_node("StatsComponent") as StatsComponent
+	
+	print("Before clear - Passive VIT bonus: %d" % stats.passive_skill_bonuses.vit)
 	
 	# Limpiar todos los bonos pasivos actuales
 	stats.clear_passive_skill_bonuses()
@@ -393,6 +490,8 @@ func recalculate_all_passive_bonuses():
 	stats.sp_regen_percent_mod = 1.0
 	stats.healing_item_bonus = 0.0
 	
+	print("After clear - Passive VIT bonus: %d" % stats.passive_skill_bonuses.vit)
+	
 	# Recorrer todas las skills aprendidas y aplicar sus bonos pasivos
 	for skill_id in player_stats["learned_skills"]:
 		var skill_level = player_stats["learned_skills"][skill_id]
@@ -400,7 +499,11 @@ func recalculate_all_passive_bonuses():
 		# Encontrar la SkillData correspondiente en todos los trabajos desbloqueados
 		var skill_data = _find_skill_data_by_id(skill_id)
 		if skill_data and skill_data.is_passive:
+			print("Applying passive skill: %s (level %d)" % [skill_id, skill_level])
 			_apply_passive_skill_bonuses(skill_data, skill_level)
+	
+	print("After reapply - Max HP: %d" % stats.get_max_hp())
+	print("=== END RECALCULATING PASSIVE BONUSES ===\n")
 
 # Buscar una SkillData por su ID en todos los trabajos desbloqueados
 func _find_skill_data_by_id(skill_id: String) -> SkillData:
@@ -459,10 +562,12 @@ func change_job(new_job_resource: JobData):
 	if not player_stats["unlocked_jobs"].has(new_job_resource.resource_path):
 		player_stats["unlocked_jobs"].append(new_job_resource.resource_path)
 	
-	# Update player's stats component to match GameManager state
+	# CRITICAL: Update player's stats component with new job data
 	if player.has_node("StatsComponent"):
 		var stats_comp = player.get_node("StatsComponent")
 		stats_comp.current_level = preserved_base_level
+		# Set the new job data which will recalculate HP/SP
+		stats_comp.set_current_job(new_job_resource)
 	
 	# Change the player's character model if the new job has one
 	if new_job_resource.character_model and player.has_method("change_character_model"):

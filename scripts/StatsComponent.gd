@@ -6,6 +6,9 @@ signal on_level_up(new_level)
 signal on_xp_changed(current_xp, max_xp)
 signal stats_changed
 
+# Reference to current job data for HP/SP scaling
+var current_job_data: JobData = null
+
 # Definiciones de Tipos (Enums)
 enum Element { NEUTRAL, WATER, EARTH, FIRE, WIND, POISON, HOLY, SHADOW, GHOST, UNDEAD }
 enum Race { FORMLESS, UNDEAD, BRUTE, PLANT, INSECT, FISH, DEMON, DEMI_HUMAN, ANGEL, DRAGON }
@@ -91,6 +94,30 @@ func clear_equipment_bonuses() -> void:
 var status_speed_percent_mod: float = 1.0
 var is_stunned: bool = false
 
+# Helper function to set current job data (called when player changes job)
+func set_current_job(job_data: JobData) -> void:
+	current_job_data = job_data
+	# Trigger HP/SP recalculation in components
+	_update_health_and_sp_components()
+	stats_changed.emit()
+
+# Internal helper to update HealthComponent and SPComponent with new max values
+func _update_health_and_sp_components():
+	var health_comp = get_parent().get_node_or_null("HealthComponent")
+	var sp_comp = get_parent().get_node_or_null("SPComponent")
+	
+	if health_comp:
+		# IMPORTANTE: Usa una función que actualice el máximo pero NO recorte la vida todavía
+		# si estás en medio de una carga de mapa.
+		if health_comp.has_method("set_max_health"):
+			health_comp.set_max_health(get_max_hp(), false) # El 'false' evita el clamp
+		else:
+			health_comp.max_health = get_max_hp()
+	if sp_comp:
+		if sp_comp.has_method("set_max_sp"):
+			sp_comp.set_max_sp(get_max_sp(), false)
+		else:
+			sp_comp.max_sp = get_max_sp()	
 # --- Getters de Totales (SIEMPRE usar estos en los cálculos) ---
 func get_total_str() -> int: return str_stat + equipment_bonuses.str + status_bonuses.str + passive_skill_bonuses.str
 func get_total_agi() -> int: return agi + equipment_bonuses.agi + status_bonuses.agi + passive_skill_bonuses.agi
@@ -127,11 +154,86 @@ func get_hit() -> int:
 func get_flee() -> int:
 	return current_level + get_total_agi() + status_bonuses.flee + passive_skill_bonuses.flee
 
+func get_crit() -> int:
+	# Crítico basado en LUK: LUK / 3
+	return get_total_luk() / 3
+
+# Calculate max HP based on JobData
+# Loads base values from Novice JobData, then adds current job bonuses on top
+func get_max_hp() -> int:
+	# 1. Determinar qué Job usar. Si no hay uno asignado, usamos Novice como fallback.
+	var job = current_job_data
+	if not job:
+		job = load("res://resources/jobs/Novice.tres") as JobData
+	
+	if not job:
+		push_error("No se pudo cargar ningun JobData para el calculo de HP")
+		return 60
+
+	# 2. CALCULO ÚNICO (Sin sumas extra)
+	# Formula: Base + (Crecimiento * Niveles extra) + (VIT * Factor)
+	var hp = job.base_hp + (job.hp_growth * max(0, current_level - 1)) + (get_total_vit() * job.vit_hp_factor)
+	
+	var debug_str = "HP Calc: job=%s base=%d + growth=(%d*%d) + vit=(%d*%.2f) = %d" % [
+		job.job_name,
+		job.base_hp,
+		job.hp_growth,
+		max(0, current_level - 1),
+		get_total_vit(),
+		job.vit_hp_factor,
+		hp
+	]
+	print(debug_str)
+	
+	return hp
+
+# Calculate max SP based on JobData
+# Loads base values from Novice JobData, then adds current job bonuses on top
 func get_max_sp() -> int:
-	return (get_total_int() * 10) + (current_level * 2)
+	# Load Novice JobData as the base (guaranteed to exist)
+	var novice_job = load("res://resources/jobs/Novice.tres") as JobData
+	if not novice_job:
+		push_error("Failed to load Novice.tres for SP calculation")
+		return 22 # Fallback
+	
+	# Calculate SP: base + (growth per level above 1) + INT bonus
+	# Growth only applies at level 2+, not at initial level 1
+	var sp = novice_job.base_sp + (novice_job.sp_growth * max(0, current_level - 1)) + (get_total_int() * novice_job.int_sp_factor)
+	
+	# If current job is not Novice, ADD job advancement bonuses on top
+	if current_job_data and current_job_data.job_name != "Novice":
+		sp += (current_job_data.base_sp - novice_job.base_sp)
+		sp += (current_job_data.sp_growth - novice_job.sp_growth) * max(0, current_level - 1)
+		sp += get_total_int() * (current_job_data.int_sp_factor - novice_job.int_sp_factor)
+	
+	var debug_str = "SP Calc: base=%d + growth=(%d*%d) + int=(%d*%.2f) = %d" % [
+		novice_job.base_sp,
+		novice_job.sp_growth,
+		max(0, current_level - 1),
+		get_total_int(),
+		novice_job.int_sp_factor,
+		sp
+	]
+	print(debug_str)
+	
+	return sp
 
 func get_max_hp_bonus() -> int:
 	return get_total_vit() * 15
+
+# Natural HP regeneration per second
+func get_hp_regen() -> int:
+	# Base: VIT / 5, multiplied by hp_regen_percent_mod
+	var base_regen = int(get_total_vit() / 5.0)
+	var regen = int(base_regen * hp_regen_percent_mod) + hp_regen_flat_bonus
+	return max(0, regen)
+
+# Natural SP regeneration per second
+func get_sp_regen() -> int:
+	# Base: INT / 6, multiplied by sp_regen_percent_mod
+	var base_regen = int(get_total_int() / 6.0)
+	var regen = int(base_regen * sp_regen_percent_mod) + sp_regen_flat_bonus
+	return max(0, regen)
 
 func get_attack_speed() -> float:
 	return max(0.2, 1.0 - (get_total_agi() * 0.01) - (get_total_dex() * 0.005) - status_bonuses.aspd_fixed - passive_skill_bonuses.aspd_fixed)
@@ -142,6 +244,12 @@ func get_aspd() -> int:
 func get_healing_item_bonus() -> float:
 	return healing_item_bonus
 
+func get_hp_regen_percent() -> float:
+	return hp_regen_percent_mod
+
+func get_sp_regen_percent() -> float:
+	return sp_regen_percent_mod
+
 # --- Lógica de Aplicación ---
 
 func set_equipment_bonuses(new_bonuses: Dictionary):
@@ -149,6 +257,7 @@ func set_equipment_bonuses(new_bonuses: Dictionary):
 	for key in new_bonuses:
 		if equipment_bonuses.has(key):
 			equipment_bonuses[key] = new_bonuses[key]
+	_update_health_and_sp_components()
 	stats_changed.emit() # Actualiza UI
 
 func apply_status_bonus(stat_name: String, amount): # amount sin tipo fijo (int/float)
@@ -188,6 +297,9 @@ func level_up():
 	# Fórmula sugerida: (Nivel / 5) + 3
 	var points_to_add = int(current_level / 5.0) + 3
 	stat_points_available += points_to_add
+	
+	# Update HP/SP when leveling up
+	_update_health_and_sp_components()
 	
 	on_level_up.emit(current_level)
 	stats_changed.emit()
@@ -264,6 +376,10 @@ func request_stat_increase(stat_name: String) -> bool:
 			"int": int_stat += 1
 			"dex": dex += 1
 			"luk": luk += 1
+		
+		# Update HP/SP when VIT or INT changes
+		if stat_name == "vit" or stat_name == "int":
+			_update_health_and_sp_components()
 		
 		stats_changed.emit()
 		return true # Éxito

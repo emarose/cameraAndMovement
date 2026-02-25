@@ -272,9 +272,11 @@ func _modify_stat(stat_name: String):
 		# Restar los puntos según el costo calculado
 		GameManager.player_stats["stat_points_available"] -= cost
 		
-		# 3. Lógica especial para VIT
+		# 3. Update HP bar if VIT changed, SP bar if INT changed
 		if stat_name == "vit":
-			_update_player_max_hp()
+			_update_max_hp()
+		elif stat_name == "int_stat":
+			_update_max_sp()
 			
 		# 4. Refrescar la UI y Log
 		refresh_ui()
@@ -282,6 +284,49 @@ func _modify_stat(stat_name: String):
 	else:
 		# Opcional: Avisar que no tiene suficientes puntos
 		add_log_message("Puntos insuficientes. Necesitas %d para subir %s" % [cost, stat_name.to_upper()], Color.ORANGE_RED)
+
+# --- Update only max HP ---
+func _update_max_hp():
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.has_node("StatsComponent"):
+		return
+	
+	var stats_comp = player.get_node("StatsComponent")
+	var health_comp = player.get_node("HealthComponent")
+	
+	# Get new max HP using the proper job-based formula
+	var new_max_hp = stats_comp.get_max_hp()
+	
+	# Update component and HUD bar
+	health_comp.max_health = new_max_hp
+	hp_bar.max_value = new_max_hp
+	
+	# Emit signal to update UI
+	health_comp.on_health_changed.emit(health_comp.current_health)
+
+# --- Update only max SP ---
+func _update_max_sp():
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.has_node("StatsComponent"):
+		return
+	
+	var stats_comp = player.get_node("StatsComponent")
+	var sp_comp = player.get_node("SPComponent")
+	
+	# Get new max SP using the proper job-based formula
+	var new_max_sp = stats_comp.get_max_sp()
+	
+	# Update component and HUD bar
+	sp_comp.max_sp = new_max_sp
+	sp_bar.max_value = new_max_sp
+	
+	# Emit signal to update UI
+	sp_comp.on_sp_changed.emit(sp_comp.current_sp, sp_comp.max_sp)
+
+# --- Legacy function (can be removed) ---
+func _recalculate_and_update_hp_sp():
+	_update_max_hp()
+	_update_max_sp()
 
 # --- Función auxiliar de costo (Punto 2 de tu lista) ---
 func _get_upgrade_cost(current_value: int) -> int:

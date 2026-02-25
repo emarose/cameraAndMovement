@@ -95,20 +95,45 @@ func _ready():
 		if item != null:
 			inventory.add_item(item, 1)
 
-	# 1. Calcular y setear vida inicial
-	var max_hp_calculado = 100 + stats.get_max_hp_bonus()
-	health_component.max_health = max_hp_calculado
-	health_component.current_health = max_hp_calculado
-	skill_component.setup(self, stats, sp_component)
+	# CRITICAL: Only initialize HP/SP here if we DON'T have saved data
+	# If we have saved data, load_player_data() will handle it and overwrite these values
+	# This prevents the race condition where _ready() calculates with wrong level before load_player_data() sets it
 	
-	if sp_component:
-		sp_component.setup(stats)
-		if not sp_component.on_sp_changed.is_connected(_on_sp_changed):
-			sp_component.on_sp_changed.connect(_on_sp_changed)
-		_on_sp_changed(sp_component.current_sp, sp_component.max_sp)
-	
-	# Recalcular bonos pasivos al iniciar (importante después de cargar partida)
-	GameManager.recalculate_all_passive_bonuses()
+	if not GameManager.has_saved_data:
+		print("\n=== PLAYER READY (No saved data) ===")
+		# 1. Initialize job data before calculating HP/SP
+		var job_data = GameManager.get_current_job_data()
+		print("Initial job data: %s" % (job_data.job_name if job_data else "NULL"))
+		if job_data:
+			stats.set_current_job(job_data)
+		
+		# 2. Calculate and set initial HP/SP using job-based formulas
+		var max_hp_calculado = stats.get_max_hp()
+		print("Initial max HP calculation: %d" % max_hp_calculado)
+		health_component.max_health = max_hp_calculado
+		health_component.current_health = max_hp_calculado
+		health_component.on_health_changed.emit(health_component.current_health)
+		skill_component.setup(self, stats, sp_component)
+		
+		if sp_component:
+			sp_component.setup(stats)
+			if not sp_component.on_sp_changed.is_connected(_on_sp_changed):
+				sp_component.on_sp_changed.connect(_on_sp_changed)
+			_on_sp_changed(sp_component.current_sp, sp_component.max_sp)
+		
+		# Recalcular bonos pasivos al iniciar (importante después de cargar partida)
+		print("Calling recalculate_all_passive_bonuses from player._ready()")
+		GameManager.recalculate_all_passive_bonuses()
+		print("After passive bonus recalc - Max HP: %d, Current HP: %d" % [health_component.max_health, health_component.current_health])
+	else:
+		print("\n=== PLAYER READY (Has saved data - skipping HP init) ===")
+		# Just setup components without initializing HP - load_player_data will do that
+		skill_component.setup(self, stats, sp_component)
+		
+		if sp_component:
+			sp_component.setup(stats)
+			if not sp_component.on_sp_changed.is_connected(_on_sp_changed):
+				sp_component.on_sp_changed.connect(_on_sp_changed)
 	
 	inventory.inventory_changed.connect(_on_inventory_changed)
 	
