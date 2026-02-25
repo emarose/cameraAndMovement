@@ -20,6 +20,7 @@
 [ext_resource type="Resource" uid="uid://da3odkrocig16" path="res://resources/items/Knife.tres" id="11_p07f3"]
 [ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="12_o4126"]
 [ext_resource type="PackedScene" uid="uid://bktyhgvk5hews" path="res://assets/characters/mannequin_medium.tscn" id="12_p07f3"]
+[ext_resource type="PackedScene" uid="uid://c66rfqyvyqp0a" path="res://scenes/castingCircle.tscn" id="13_casting"]
 [ext_resource type="Script" uid="uid://bb5m4qisg7fb8" path="res://scripts/RegenerationComponent.gd" id="15_0rnld"]
 [ext_resource type="Script" uid="uid://b1hf11y1cgjtr" path="res://scripts/InventoryComponent.gd" id="19_ebwui"]
 [ext_resource type="Script" uid="uid://gvc84ejulk4" path="res://scripts/EquipmentComponent.gd" id="19_sfy4j"]
@@ -30,6 +31,7 @@
 [ext_resource type="Script" uid="uid://bbs2j7s34hksd" path="res://scripts/AttackState.gd" id="24_attackstate"]
 [ext_resource type="Script" uid="uid://vymhci21drmc" path="res://scripts/CastState.gd" id="25_caststate"]
 [ext_resource type="Script" uid="uid://bft8xssn57qw2" path="res://scripts/FlinchState.gd" id="26_flinchstate"]
+[ext_resource type="Script" uid="uid://h3l7qeugfwn" path="res://scripts/CastingCircleComponent.gd" id="27_castingcomp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqk2v"]
 albedo_color = Color(0.43321982, 0.62398577, 0.602917, 1)
@@ -40,10 +42,10 @@ material = SubResource("StandardMaterial3D_aqk2v")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 height = 2.3964844
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_axnmu"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_hxdpb"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_fvsjc"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_agngo"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
@@ -103,11 +105,11 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12061417, 0)
-texture = SubResource("ViewportTexture_axnmu")
+texture = SubResource("ViewportTexture_hxdpb")
 
 [node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("7_spbar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.20458083, 0)
-texture = SubResource("ViewportTexture_fvsjc")
+texture = SubResource("ViewportTexture_agngo")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")
@@ -160,3 +162,8 @@ script = ExtResource("26_flinchstate")
 [node name="AOEIndicator" type="MeshInstance3D" parent="." unique_id=288806777]
 visible = false
 mesh = SubResource("CylinderMesh_0rnld")
+
+[node name="CastingCircleComponent" type="Node3D" parent="." unique_id=454639192]
+script = ExtResource("27_castingcomp")
+
+[node name="CastingCircle" parent="CastingCircleComponent" unique_id=454639191 instance=ExtResource("13_casting")]

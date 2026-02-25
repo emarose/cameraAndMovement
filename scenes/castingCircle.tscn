@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c66rfqyvyqp0a"]
+
+[ext_resource type="ArrayMesh" uid="uid://d2ou7bnprcby0" path="res://assets/models/circleMesh.obj" id="1_m71bi"]
+[ext_resource type="Shader" uid="uid://1e4mhcbdin1q" path="res://assets/shaders/castingCircle.tres" id="2_m71bi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lib2p"]
+render_priority = 0
+shader = ExtResource("2_m71bi")
+shader_parameter/ColorParameter = Color(0.13333334, 0, 0.3882353, 1)
+shader_parameter/Speed = Vector2(-1.2, 0)
+shader_parameter/Extra_opacity = 0.3
+
+[node name="CastingCircle" type="Node3D" unique_id=1618126951]
+transform = Transform3D(1, 0, 0, 0, 0.099534154, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="CircleMesh" type="MeshInstance3D" parent="." unique_id=454639190]
+transform = Transform3D(0.99455833, 0, 0, 0, 9.992131, 0, 0, 0, 0.99455833, 0, 0, 0)
+mesh = ExtResource("1_m71bi")
+surface_material_override/0 = SubResource("ShaderMaterial_lib2p")

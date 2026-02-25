@@ -857,7 +857,6 @@ func _on_skill_state_changed():
 			# Enviamos el nombre al HUD para mostrar el Label
 			hud.update_armed_skill_info(skill_component.armed_skill.skill_name)
 		else:
-
 			hud.update_armed_skill_info("")
 
 # --- Callbacks de Regeneración ---
