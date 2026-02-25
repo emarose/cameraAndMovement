@@ -69,7 +69,7 @@ func save_player_data(player):
 	player_stats["luk"] = player.stats.luk
 	player_stats["stat_points_available"] = player.stats.stat_points_available
 	
-	print("Saved level: %d, base stats - VIT: %d (equipment bonus: %d)" % [player_stats["level"], player.stats.vit, player.stats.equipment_bonuses.vit])
+	print("Saved level: %d, base stats - VIT: %d (equipment bonus: %d), Stat Points: %d" % [player_stats["level"], player.stats.vit, player.stats.equipment_bonuses.vit, player.stats.stat_points_available])
 	print("=== END SAVE PLAYER DATA ===\n")
 	
 	# Base level is tracked in GameManager; avoid overwriting with stale StatsComponent data.
@@ -124,7 +124,7 @@ func load_player_data(player):
 	player.stats.dex = player_stats.get("dex", 1)
 	player.stats.luk = player_stats.get("luk", 1)
 	player.stats.stat_points_available = player_stats.get("stat_points_available", 0)
-	print("Loaded base stats - VIT: %d" % player.stats.vit)
+	print("Loaded base stats - VIT: %d, Stat Points: %d" % [player.stats.vit, player.stats.stat_points_available])
 	
 	# 1. LEVEL, ZENY AND PROGRESSION FIRST
 	player.stats.current_level = player_stats["level"]
@@ -380,10 +380,12 @@ func gain_experience(amount: int, is_job: bool = false):
 			player_stats["stat_points_available"] += 1 # Ganamos un punto por nivel
 			base_level_up.emit(player_stats["level"])
 			req_exp = get_required_exp(player_stats["level"], false)
-			# Keep the player's StatsComponent in sync with GameManager's base level.
+			# Keep the player's StatsComponent in sync with GameManager's base level and stat points
 			var player = get_tree().get_first_node_in_group("player")
 			if player and player.has_node("StatsComponent"):
-				player.get_node("StatsComponent").current_level = player_stats["level"]
+				var stats_comp = player.get_node("StatsComponent")
+				stats_comp.current_level = player_stats["level"]
+				stats_comp.stat_points_available = player_stats["stat_points_available"]
 		
 		base_exp_gained.emit(player_stats["base_exp"], req_exp)
 func can_learn_skill(skill: SkillData) -> bool:
@@ -575,6 +577,27 @@ func change_job(new_job_resource: JobData):
 	
 	# Recalcular bonos pasivos (por si cambiamos de job, mantenemos las skills pasivas)
 	recalculate_all_passive_bonuses()
+	
+	# CRITICAL: Update HUD bars with new max HP/SP after job change
+	if player.has_node("HealthComponent") and player.has_node("SPComponent"):
+		var health_comp = player.get_node("HealthComponent")
+		var sp_comp = player.get_node("SPComponent")
+		
+		# Update HUD if it exists
+		if player.hud:
+			var hp_bar = player.hud.get_node_or_null("HealthBar")
+			if hp_bar:
+				hp_bar.max_value = health_comp.max_health
+				print("Job Change: Updated HUD HP bar to %d" % hp_bar.max_value)
+			
+			var sp_bar = player.hud.get_node_or_null("ManaBar")
+			if sp_bar:
+				sp_bar.max_value = sp_comp.max_sp
+				print("Job Change: Updated HUD SP bar to %d" % sp_bar.max_value)
+			
+			# Force UI refresh to show updated values
+			health_comp.on_health_changed.emit(health_comp.current_health)
+			sp_comp.on_sp_changed.emit(sp_comp.current_sp, sp_comp.max_sp)
 	
 	# Emitir señal para actualizar UI
 	job_level_up.emit(player_stats["job_level"])

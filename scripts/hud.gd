@@ -269,8 +269,9 @@ func _modify_stat(stat_name: String):
 		# Aumentar el stat
 		player_stats.set(stat_name, current_val + 1)
 		
-		# Restar los puntos según el costo calculado
+		# Restar los puntos según el costo calculado (en AMBOS lugares para mantener sincronización)
 		GameManager.player_stats["stat_points_available"] -= cost
+		player_stats.stat_points_available -= cost
 		
 		# 3. Update HP bar if VIT changed, SP bar if INT changed
 		if stat_name == "vit":

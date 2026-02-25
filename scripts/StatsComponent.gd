@@ -96,9 +96,11 @@ var is_stunned: bool = false
 
 # Helper function to set current job data (called when player changes job)
 func set_current_job(job_data: JobData) -> void:
+	print("Setting current job to: %s" % job_data.job_name)
 	current_job_data = job_data
 	# Trigger HP/SP recalculation in components
 	_update_health_and_sp_components()
+	print("After job set - Max HP: %d, Max SP: %d" % [get_max_hp(), get_max_sp()])
 	stats_changed.emit()
 
 # Internal helper to update HealthComponent and SPComponent with new max values
