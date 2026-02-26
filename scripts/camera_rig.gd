@@ -1,8 +1,8 @@
 extends Node3D
 
 @export var mouse_sensitivity := 0.005
-@export var min_pitch := deg_to_rad(-70)
-@export var max_pitch := deg_to_rad(-30)
+@export var min_pitch := deg_to_rad(-45)
+@export var max_pitch := deg_to_rad(-20)
 
 @export var min_distance := 4.0
 @export var max_distance := 15.0

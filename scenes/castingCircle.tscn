@@ -8,7 +8,7 @@ render_priority = 0
 shader = ExtResource("2_m71bi")
 shader_parameter/ColorParameter = Color(0.13333334, 0, 0.3882353, 1)
 shader_parameter/Speed = Vector2(-1.2, 0)
-shader_parameter/Extra_opacity = 0.5
+shader_parameter/Extra_opacity = 0.9
 
 [node name="CastingCircle" type="Node3D" unique_id=1618126951]
 transform = Transform3D(1, 0, 0, 0, 0.099534154, 0, 0, 0, 1, 0, 0, 0)

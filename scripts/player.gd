@@ -14,8 +14,8 @@ extends CharacterBody3D
 @export var attack_animation_duration: float = 0.5  # Total duration of attack animation
 
 @export_group("Hotbar Inicial")
-# Usamos un Array exportado para configurar las skills iniciales desde el editor
-# Arrastra tus recursos de Skills (o Items) aquí en el inspector.
+# Hotbar will be initialized empty. Items will be loaded from saved data in GameManager.
+# If no saved data exists, hotbar starts empty.
 @export var initial_hotbar: Array[Resource] = []
 
 # Nuevo: Inventario inicial para pruebas/debug
@@ -83,12 +83,10 @@ func _ready():
 	_initialize_bone_attachments()
 	
 	hotbar_content.resize(HOTBAR_SIZE)
-	# Cargar configuración inicial de hotbar
+	# Initialize hotbar as empty - items will be loaded from saved data if available
+	# GameManager.load_player_data() will populate the hotbar if there's saved data
 	for i in range(HOTBAR_SIZE):
-		if i < initial_hotbar.size() and initial_hotbar[i] != null:
-			hotbar_content[i] = initial_hotbar[i]
-		else:
-			hotbar_content[i] = null
+		hotbar_content[i] = null
 
 	# Cargar inventario inicial
 	for item in initial_inventory:

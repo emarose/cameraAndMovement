@@ -7,9 +7,9 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dyed0"]
 render_priority = 0
 shader = ExtResource("3_d4jfq")
-shader_parameter/ColorParameter = Color(0.31745803, 0.59752524, 0.52260655, 1)
+shader_parameter/ColorParameter = Color(0.78431374, 0.4862745, 0.17254902, 1)
 shader_parameter/Speed = Vector2(0.25, 0)
-shader_parameter/Extra_opacity = 0.8
+shader_parameter/Extra_opacity = 1.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_v0xau"]
 height = 0.5
