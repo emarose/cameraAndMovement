@@ -88,22 +88,22 @@ transform = Transform3D(0.9779913, 0, -0.20864572, 0, 1, 0, 0.20864572, 0, 0.977
 [node name="Portals" type="Node" parent="." unique_id=1005359231]
 
 [node name="PortalToSouthField" parent="Portals" unique_id=2093780239 instance=ExtResource("4_db6y7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1082163, 0.016118431, 27.837933)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8048601, 0.016118431, 24.569347)
 target_map_path = "uid://fe2tshx87c7v"
 target_spawn_id = "FromCity"
 
 [node name="PortalToNorthField" parent="Portals" unique_id=877044739 instance=ExtResource("4_db6y7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.71904945, 0.52148616, -26.686821)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42716527, 0.52148616, -22.958424)
 target_map_path = "uid://bbeawwmqb6oao"
 target_spawn_id = "FromCity"
 
 [node name="PortalToEastField" parent="Portals" unique_id=1311227856 instance=ExtResource("4_db6y7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.189812, 0.016118431, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.649715, 0.016118431, 0.7321062)
 target_map_path = "uid://8delfhl6qr4o"
 target_spawn_id = "FromCity"
 
 [node name="PortalToWestField" parent="Portals" unique_id=813049737 instance=ExtResource("4_db6y7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.896717, 0.14161578, 0.70883656)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.485106, 0.14161578, 0.8870888)
 target_map_path = "uid://dc5c12pqb8oaq"
 target_spawn_id = "FromCity"
 
@@ -125,7 +125,7 @@ transform = Transform3D(5.2461696, 0, -4.6344047, 0, 7, 0, 4.6344047, 0, 5.24616
 transform = Transform3D(6.668073, 0, 2.1299763, 0, 7.000001, 0, -2.1299763, 0, 6.668073, -5.9443808, 0, -12.794354)
 
 [node name="building_home_B_red2" parent="Props" unique_id=632493878 instance=ExtResource("17_w7xn8")]
-transform = Transform3D(-2.7192526, 0, 6.4502454, 0, 7, 0, -6.4502454, 0, -2.7192526, -13.5835, -0.20210797, 8.310323)
+transform = Transform3D(-2.7192526, 0, 6.4502454, 0, 7, 0, -6.4502454, 0, -2.7192526, -15.5835, -0.20210797, 9.310323)
 
 [node name="building_blacksmith_red2" parent="Props" unique_id=1449539842 instance=ExtResource("18_cqgnn")]
 transform = Transform3D(-3.0208545, 0, -6.314621, 0, 7, 0, 6.314621, 0, -3.0208545, 17.084476, -0.039100423, 8.467279)
@@ -206,7 +206,7 @@ transform = Transform3D(1.4996259, 0, -0.03350717, 0, 1.5000007, 0, 0.03350717, 
 transform = Transform3D(-1.1724279, 0, -0.93563557, 0, 1.5000002, 0, 0.93563557, 0, -1.1724279, -15.868563, 0, -19.210098)
 
 [node name="wall24" parent="Props" unique_id=1939886637 instance=ExtResource("21_mbwv1")]
-transform = Transform3D(0.033507437, 0, 1.4996258, 0, 1.5000002, 0, -1.4996258, 0, 0.033507437, -22.819912, 0, -4.7192607)
+transform = Transform3D(0.038963214, 0.00051182177, 1.4994938, -0.004917242, 1.4999921, -0.0003842006, -1.4994859, -0.004905601, 0.03896468, -22.819912, 0, -4.7192607)
 
 [node name="building_home_A_red4" parent="Props" unique_id=861048742 instance=ExtResource("16_q2hic")]
 transform = Transform3D(-6.655431, 0, -2.1691585, 0, 7, 0, 2.1691585, 0, -6.655431, 8.124688, 0, 15.889122)

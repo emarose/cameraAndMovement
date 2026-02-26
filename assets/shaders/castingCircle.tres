@@ -1,8 +1,8 @@
 [gd_resource type="VisualShader" format=3 uid="uid://1e4mhcbdin1q"]
 
 [sub_resource type="Gradient" id="Gradient_02m2d"]
-offsets = PackedFloat32Array(0, 0.37280703, 0.5614035, 0.9868421)
-colors = PackedColorArray(0, 0, 0, 1, 0.73608184, 0.73608184, 0.73608184, 1, 0.91474247, 0.91474247, 0.91474247, 1, 0, 0, 0, 1)
+offsets = PackedFloat32Array(0, 0.19311875, 0.27302995, 0.85127634)
+colors = PackedColorArray(0, 0, 0, 1, 0.73608184, 0.73608184, 0.73608184, 1, 0.65962267, 0.65962267, 0.65962267, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_0cykv"]
 gradient = SubResource("Gradient_02m2d")
