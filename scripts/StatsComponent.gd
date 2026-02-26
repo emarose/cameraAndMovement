@@ -184,9 +184,7 @@ func get_max_hp() -> int:
 		get_total_vit(),
 		job.vit_hp_factor,
 		hp
-	]
-	print(debug_str)
-	
+	]	
 	return hp
 
 # Calculate max SP based on JobData
@@ -215,9 +213,7 @@ func get_max_sp() -> int:
 		get_total_int(),
 		novice_job.int_sp_factor,
 		sp
-	]
-	print(debug_str)
-	
+	]	
 	return sp
 
 func get_max_hp_bonus() -> int:

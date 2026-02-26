@@ -56,7 +56,6 @@ func can_use_skill(skill: SkillData) -> bool:
 		var current_time = Time.get_ticks_msec()
 		if current_time < cooldown_end:
 			var remaining = (cooldown_end - current_time) / 1000.0
-			print("  can_use_skill %s: Still on cooldown (%.1fs remaining)" % [skill.skill_name, remaining])
 			# Only show message for player
 			if actor.is_in_group("player"):
 				get_tree().call_group("hud", "add_log_message", "Habilidad en cooldown", Color.ORANGE)
@@ -77,7 +76,6 @@ func can_use_skill(skill: SkillData) -> bool:
 			get_tree().call_group("hud", "add_log_message", "SP insuficiente", Color.RED)
 		return false
 	
-	print("  can_use_skill %s: OK (level %d, SP cost %d)" % [skill.skill_name, skill_level, sp_cost])
 	return true
 
 func cast_immediate(skill: SkillData):
@@ -272,7 +270,7 @@ func _apply_damage(target: Node3D, skill: SkillData, skill_level: int = 1):
 			target_health.heal(heal_amount)
 			
 			if actor.has_method("spawn_floating_text"):
-				actor.spawn_floating_text(target.global_position, heal_amount, true)
+				actor.spawn_floating_text(target.global_position, heal_amount, false)
 			
 			if actor.is_in_group("player"):
 				get_tree().call_group("hud", "add_log_message", 
@@ -330,7 +328,7 @@ func _apply_aoe_damage(center_pos: Vector3, skill: SkillData, skill_level: int =
 			caster_health.heal(heal_amount)
 			
 			if actor.has_method("spawn_floating_text"):
-				actor.spawn_floating_text(actor.global_position, heal_amount, true)
+				actor.spawn_floating_text(actor.global_position, heal_amount, false)
 			
 			if actor.is_in_group("player"):
 				get_tree().call_group("hud", "add_log_message", 

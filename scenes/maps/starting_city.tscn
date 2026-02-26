@@ -184,6 +184,15 @@ transform = Transform3D(-6.5567086e-08, 0, 1.5000001, 0, 1.5000006, 0, -1.500000
 [node name="wall18" parent="Props" unique_id=1252160164 instance=ExtResource("21_mbwv1")]
 transform = Transform3D(-1.3438349, 0, 0.66641337, 0, 1.4999994, 0, -0.66641337, 0, -1.3438349, -19.308022, -0.33, 35.644825)
 
+[node name="wall41" parent="Props" unique_id=526489626 instance=ExtResource("21_mbwv1")]
+transform = Transform3D(-0.90966946, 0, 1.1926868, 0, 1.4999994, 0, -1.1926868, 0, -0.90966946, -12.404274, -0.33, 5.9707394)
+
+[node name="wall43" parent="Props" unique_id=1005615658 instance=ExtResource("21_mbwv1")]
+transform = Transform3D(-1.3438349, 0, 0.66641337, 0, 1.4999994, 0, -0.66641337, 0, -1.3438349, -3.1745987, -0.33, 13.383381)
+
+[node name="wall44" parent="Props" unique_id=998393648 instance=ExtResource("21_mbwv1")]
+transform = Transform3D(-1.1694493, 0, 0.9393546, 0, 1.4999994, 0, -0.9393546, 0, -1.1694493, -8.276591, -0.33, 10.118624)
+
 [node name="wall7" parent="Props" unique_id=1559180292 instance=ExtResource("21_mbwv1")]
 transform = Transform3D(1.4865026, 0, -0.2007716, 0, 1.4999999, 0, 0.2007716, 0, 1.4865026, 11.555234, -0.33, -21.566963)
 
@@ -254,10 +263,10 @@ transform = Transform3D(-9, 0, -7.86805e-07, 0, 9, 0, 7.86805e-07, 0, -9, -8.273
 transform = Transform3D(7.849392, 0, -4.403072, 0, 9, 0, 4.403072, 0, 7.849392, -7.656847, -0.33, 17.896095)
 
 [node name="building_home_A_red6" parent="Props" unique_id=1055386587 instance=ExtResource("16_q2hic")]
-transform = Transform3D(-3.9430814, 0, 8.090248, 0, 9, 0, -8.090248, 0, -3.9430814, -26.023434, -0.33, 14.60854)
+transform = Transform3D(-5.0272655, 0, 7.465026, 0, 9, 0, -7.465026, 0, -5.0272655, -24.380177, -0.33, 17.62501)
 
 [node name="building_home_A_red7" parent="Props" unique_id=1163748548 instance=ExtResource("16_q2hic")]
-transform = Transform3D(0.697675, 0, -8.972918, 0, 9.000001, 0, 8.972918, 0, 0.697675, -16.664856, -0.33, 7.2523746)
+transform = Transform3D(3.9780614, 0, -8.073105, 0, 9, 0, 8.073105, 0, 3.9780614, -17.662975, -0.33, 8.535522)
 
 [node name="barrel2" parent="Props" unique_id=590405725 instance=ExtResource("22_cqgnn")]
 transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 15.128853, -0.33, -6.502096)

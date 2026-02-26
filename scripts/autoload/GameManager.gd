@@ -45,10 +45,6 @@ var has_saved_data: bool = false
 const SAVE_PATH = "user://savegame.data"
 
 func save_player_data(player):
-	print("\n=== SAVING PLAYER DATA ===")
-	print("Current HP: %d, Current SP: %d" % [player.health_component.current_health, player.sp_component.current_sp])
-	print("Max HP: %d, Max SP: %d" % [player.health_component.max_health, player.sp_component.max_sp])
-	
 	player_stats["current_hp"] = player.health_component.current_health
 	player_stats["max_hp"] = player.health_component.max_health
 	player_stats["current_sp"] = player.sp_component.current_sp
@@ -68,10 +64,7 @@ func save_player_data(player):
 	player_stats["dex"] = player.stats.dex
 	player_stats["luk"] = player.stats.luk
 	player_stats["stat_points_available"] = player.stats.stat_points_available
-	
-	print("Saved level: %d, base stats - VIT: %d (equipment bonus: %d), Stat Points: %d" % [player_stats["level"], player.stats.vit, player.stats.equipment_bonuses.vit, player.stats.stat_points_available])
-	print("=== END SAVE PLAYER DATA ===\n")
-	
+
 	# Base level is tracked in GameManager; avoid overwriting with stale StatsComponent data.
 	
 	# Limpiar y guardar inventario
@@ -113,9 +106,7 @@ func save_player_data(player):
 
 func load_player_data(player):
 	# Load player data from GameManager (always, not just when manually saved)
-	print("\n=== LOADING PLAYER DATA ===")
-	print("Saved stats - HP: %d, SP: %d" % [player_stats.get("current_hp", 0), player_stats.get("current_sp", 0)])
-	
+
 	# 0. INDIVIDUAL STATS - LOAD FIRST before any calculations
 	player.stats.str_stat = player_stats.get("str", 1)
 	player.stats.agi = player_stats.get("agi", 1)
@@ -124,8 +115,7 @@ func load_player_data(player):
 	player.stats.dex = player_stats.get("dex", 1)
 	player.stats.luk = player_stats.get("luk", 1)
 	player.stats.stat_points_available = player_stats.get("stat_points_available", 0)
-	print("Loaded base stats - VIT: %d, Stat Points: %d" % [player.stats.vit, player.stats.stat_points_available])
-	
+
 	# 1. LEVEL, ZENY AND PROGRESSION FIRST
 	player.stats.current_level = player_stats["level"]
 	player.stats.current_job_level = player_stats.get("job_level", 1)
@@ -139,9 +129,6 @@ func load_player_data(player):
 	else:
 		current_job_data = load("res://resources/jobs/Novice.tres")
 	
-	print("Loaded job: %s" % current_job_data.job_name)
-	print("Job base HP: %d, Growth: %d, VIT factor: %.2f" % [current_job_data.base_hp, current_job_data.hp_growth, current_job_data.vit_hp_factor])
-	
 	# Ensure current job and novice are in unlocked_jobs
 	var novice_path = "res://resources/jobs/Novice.tres"
 	if not player_stats["unlocked_jobs"].has(novice_path):
@@ -154,8 +141,6 @@ func load_player_data(player):
 	if player.has_node("StatsComponent"):
 		var stats_comp = player.get_node("StatsComponent")
 		stats_comp.set_current_job(current_job_data)
-		print("Max HP after job load: %d" % stats_comp.get_max_hp())
-		print("Equipment bonuses before equipment load - VIT: %d" % stats_comp.equipment_bonuses.vit)
 
 	# 3. EQUIPAMIENTO - Now load equipment AFTER job is set
 	# Equipment bonuses will be calculated with the correct job data
@@ -179,14 +164,7 @@ func load_player_data(player):
 		# DEBUG: Check stats after equipment loading
 		if player.has_node("StatsComponent"):
 			var stats_comp = player.get_node("StatsComponent")
-			print("After equipment load:")
-			print("  Equipment VIT bonus: +%d" % stats_comp.equipment_bonuses.vit)
-			print("  Total VIT: %d" % stats_comp.get_total_vit())
-			print("  Max HP: %d" % stats_comp.get_max_hp())
-			print("  Max SP: %d" % stats_comp.get_max_sp())
-			print("  Health component max_health: %d" % player.health_component.max_health)
-			print("  SP component max_sp: %d" % player.sp_component.max_sp)
-		
+
 		equipment_comp.equipment_changed.emit()
 
 	# 4. INVENTARIO COMPLETO
