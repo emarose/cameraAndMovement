@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://b3guvx11ec2r3"]
+
+[ext_resource type="Animation" uid="uid://bfn0hgp0jnakb" path="res://assets/characters/animations/Melee_Unarmed_Attack_Punch_A.res" id="1_punch"]
+[ext_resource type="PackedScene" uid="uid://b8qchvxn2qfqw" path="res://assets/weapon_models/Unarmed.tscn" id="2_model"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="3_script"]
+
+[resource]
+script = ExtResource("3_script")
+attack_start_animation_resource = ExtResource("1_punch")
+item_name = "Unarmed"
+model = ExtResource("2_model")
+description = "Bare fists"
+item_type = 1
+stackable = false
+max_stack_size = 1
+sell_price = 0

@@ -6,6 +6,9 @@ class_name EquipmentComponent
 
 signal equipment_changed # Para avisar a la UI
 
+# Arma invisible que se equipa automáticamente cuando no hay arma
+const UNARMED_WEAPON = preload("res://resources/items/UnarmedWeapon.tres")
+
 # Diccionario que mapea cada slot a un item equipado (o null)
 var equipped_items: Dictionary = {
 	EquipmentItem.EquipmentSlot.WEAPON: null,
@@ -29,6 +32,8 @@ func _ready():
 		stats_component = parent_entity.get_node_or_null("StatsComponent")
 		inventory_component = parent_entity.get_node_or_null("InventoryComponent")
 		_initialize_bone_attachments()
+		# Equipar arma invisible si no hay arma equipada
+		_ensure_weapon_equipped()
 
 ## Equipar un ítem desde el inventario
 func equip_item(item: EquipmentItem) -> bool:
@@ -47,8 +52,8 @@ func equip_item(item: EquipmentItem) -> bool:
 	# Equipamos el nuevo item
 	equipped_items[slot_type] = item
 	
-	# Si había un item viejo, lo devolvemos al inventario
-	if old_item and inventory_component:
+	# Si había un item viejo, lo devolvemos al inventario (excepto el arma invisible)
+	if old_item and old_item != UNARMED_WEAPON and inventory_component:
 		inventory_component.add_item(old_item, 1)
 	
 	# Recalculamos stats (incluyendo limpiar bonos previos y aplicar nuevos)
@@ -67,6 +72,10 @@ func unequip_slot(slot_type: EquipmentItem.EquipmentSlot) -> bool:
 	if not item:
 		return false
 	
+	# No permitir desequipar el arma invisible
+	if slot_type == EquipmentItem.EquipmentSlot.WEAPON and item == UNARMED_WEAPON:
+		return false
+	
 	# Verificar si hay espacio en el inventario
 	if inventory_component and not inventory_component.add_item(item, 1):
 		return false
@@ -77,6 +86,10 @@ func unequip_slot(slot_type: EquipmentItem.EquipmentSlot) -> bool:
 	# Limpiar el modelo visual del equipo
 	_clear_equipment_visuals(slot_type, item)
 	
+	# Si es un arma, equipar el arma invisible
+	if slot_type == EquipmentItem.EquipmentSlot.WEAPON:
+		_equip_unarmed_weapon()
+	
 	# Recalcular stats (esto limpiará todos los bonos y los recalculará)
 	_recalculate_equipment_bonuses()
 	equipment_changed.emit()
@@ -85,6 +98,12 @@ func unequip_slot(slot_type: EquipmentItem.EquipmentSlot) -> bool:
 
 ## Obtener el item equipado en un slot específico
 func get_equipped_item(slot_type: EquipmentItem.EquipmentSlot) -> EquipmentItem:
+	# Si es el slot de arma y no hay nada equipado, devolver el arma invisible
+	if slot_type == EquipmentItem.EquipmentSlot.WEAPON:
+		var weapon = equipped_items[slot_type]
+		if not weapon:
+			return UNARMED_WEAPON
+		return weapon
 	return equipped_items[slot_type]
 
 ## Recalcula y aplica todos los bonos del equipamiento a StatsComponent
@@ -252,3 +271,22 @@ func _get_attachment_for_slot(slot_type: EquipmentItem.EquipmentSlot, item: Equi
 			return "LeftHand" # Or a custom attachment
 		_:
 			return ""
+## Asegura que siempre haya un arma equipada (equipa el arma invisible si no hay ninguna)
+func _ensure_weapon_equipped() -> void:
+	if not equipped_items[EquipmentItem.EquipmentSlot.WEAPON]:
+		_equip_unarmed_weapon()
+
+## Equipa el arma invisible (unarmed) sin afectar el inventario
+func _equip_unarmed_weapon() -> void:
+	# Limpiar visuales anteriores
+	var old_weapon = equipped_items[EquipmentItem.EquipmentSlot.WEAPON]
+	if old_weapon:
+		_clear_equipment_visuals(EquipmentItem.EquipmentSlot.WEAPON, old_weapon)
+	
+	# Equipar el arma invisible
+	equipped_items[EquipmentItem.EquipmentSlot.WEAPON] = UNARMED_WEAPON
+	
+	# Actualizar visuales y stats
+	_update_equipment_visuals(UNARMED_WEAPON, EquipmentItem.EquipmentSlot.WEAPON)
+	_recalculate_equipment_bonuses()
+	equipment_changed.emit()
