@@ -3,7 +3,9 @@ extends CharacterBody3D
 @export var data: EnemyData 
 @export var flinch_duration: float = 0.1
 @export var attack_anim_duration: float = 0.4  # Total duration of attack animation
-@export var attack_hit_delay: float = 0.2  # Time until damage is dealt in attack animation
+## Fraction (0.0–1.0) through the attack animation at which damage is applied.
+## Replaces the old absolute attack_hit_delay to stay in sync across any animation length.
+@export_range(0.0, 1.0, 0.01) var attack_hit_frame_ratio: float = 0.5
 
 @onready var nav_agent = $NavigationAgent3D
 @onready var health_comp = $HealthComponent
@@ -278,8 +280,9 @@ func attack_player():
 		can_attack = false
 		_trigger_attack_state()
 		
-		# WAIT for animation to reach hit frame before dealing damage
-		await get_tree().create_timer(attack_hit_delay).timeout
+		# Hit delay is a ratio of attack_anim_duration — stays in sync regardless of animation length.
+		var actual_hit_delay: float = attack_anim_duration * attack_hit_frame_ratio
+		await get_tree().create_timer(actual_hit_delay).timeout
 		
 		# Verify player is still valid after delay
 		if not is_instance_valid(player) or player.is_dead:

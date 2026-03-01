@@ -10,8 +10,11 @@ extends CharacterBody3D
 @export var cursor_talk: Texture2D
 @export var cursor_door: Texture2D
 @export var flinch_duration: float = 0.2
-@export var attack_hit_delay: float = 0.3  # Time until damage is dealt in attack animation
-@export var attack_animation_duration: float = 0.5  # Total duration of attack animation
+## Fraction (0.0–1.0) through the START animation at which damage is applied.
+## 0.5 = damage lands at the midpoint of the animation, perfectly synced to the hit frame.
+@export_range(0.0, 1.0, 0.01) var attack_hit_frame_ratio: float = 0.5
+## Fallback total attack duration used only when no AnimationPlayer animation is found.
+@export var attack_animation_duration: float = 0.5
 
 @export_group("Hotbar Inicial")
 # Hotbar will be initialized empty. Items will be loaded from saved data in GameManager.
@@ -546,7 +549,7 @@ func _shoot_projectile(target: Node3D, projectile_scene: PackedScene) -> void:
 
 func execute_attack(enemy) -> void:
 	# Retorna cuando el ataque y su cooldown (ASPD) finalizan
-	if not can_attack_player or is_dead: 
+	if not can_attack_player or is_dead:
 		return
 
 	# Si el enemigo dejó de ser válido, salir
@@ -555,7 +558,7 @@ func execute_attack(enemy) -> void:
 
 	# IMMEDIATELY lock attacks to prevent re-entry
 	can_attack_player = false
-	
+
 	# Marcar el estado de ataque para bloquear input/movimiento durante la animación
 	is_attacking = true
 	_face_target(enemy)
@@ -566,7 +569,7 @@ func execute_attack(enemy) -> void:
 
 	var enemy_health = enemy.get_node_or_null("HealthComponent")
 	var enemy_data = enemy.data
-	
+
 	# Check if we're using a ranged weapon
 	var weapon = null
 	var is_ranged_attack = false
@@ -575,35 +578,60 @@ func execute_attack(enemy) -> void:
 		if weapon and weapon.is_ranged:
 			is_ranged_attack = true
 
-	# Temporarily disable AnimationTree so AnimationPlayer can play weapon animations
+	# --- RESOLVE WHICH ANIMATIONS TO PLAY ---
+	# Determine start and release animations, preferring weapon-specific ones.
+	var start_anim: StringName = &""
+	var release_anim: StringName = &""
+	if animation_player:
+		if current_weapon_attack_start_anim != &"" and animation_player.has_animation(current_weapon_attack_start_anim):
+			start_anim = current_weapon_attack_start_anim
+		elif animation_player.has_animation(&"attack_1"):
+			start_anim = &"attack_1"
+
+		if current_weapon_attack_release_anim != &"" and animation_player.has_animation(current_weapon_attack_release_anim):
+			release_anim = current_weapon_attack_release_anim
+		elif animation_player.has_animation(&"attack_1"):
+			release_anim = &"attack_1"
+
+	# --- READ ACTUAL ANIMATION LENGTH for perfectly synced hit timing ---
+	# This replaces the hardcoded attack_hit_delay / attack_animation_duration exports.
+	var anim_length: float = attack_animation_duration  # fallback when no AnimationPlayer anim exists
+	if animation_player and start_anim != &"":
+		var anim_res = animation_player.get_animation(start_anim)
+		if anim_res:
+			anim_length = anim_res.length
+
+	# --- DISABLE ANIMATIONTREE ---
+	# Wait one physics frame after disabling so the tree fully stops driving the skeleton
+	# before AnimationPlayer takes over — prevents a one-frame visual pop/snap.
 	var anim_tree_was_active = false
 	if animation_tree:
 		anim_tree_was_active = animation_tree.active
 		if anim_tree_was_active:
 			animation_tree.active = false
-	
-	# Play weapon-specific attack start animation using AnimationPlayer or fallback to AnimationTree
-	var played_attack_anim = false
-	if animation_player and current_weapon_attack_start_anim != "" and animation_player.has_animation(current_weapon_attack_start_anim):
-		animation_player.play(current_weapon_attack_start_anim)
-		played_attack_anim = true
-	elif animation_player and animation_player.has_animation("attack_1"):
-		animation_player.play("attack_1")
-		played_attack_anim = true
+			await get_tree().process_frame
 
-	# If no AnimationPlayer anim played, use AnimationTree state machine for melee/no-weapon
-	if not played_attack_anim and animation_tree:
-		var state_machine_playback = animation_tree.get("parameters/playback")
-		if state_machine_playback:
-			state_machine_playback.travel("Attack")
-			played_attack_anim = true
+	# --- PLAY START ANIMATION ---
+	var played_anim := false
+	if animation_player and start_anim != &"":
+		animation_player.play(start_anim)
+		played_anim = true
+	elif animation_tree:
+		# Fallback: re-enable tree and travel to Attack state
+		animation_tree.active = true
+		anim_tree_was_active = true
+		var sm_playback = animation_tree.get("parameters/StateMachine/playback")
+		if sm_playback:
+			sm_playback.travel("Attack")
+		played_anim = true
 
-	if not played_attack_anim:
-		push_warning("Player: No attack start animation found")
+	if not played_anim:
+		push_warning("Player: No attack animation found")
 
 	if enemy_health and enemy_data and stats:
-		# WAIT for animation to reach hit frame before dealing damage
-		await get_tree().create_timer(attack_hit_delay).timeout
+		# Hit delay = ratio of actual animation length → always in sync with the real hit frame.
+		var actual_hit_delay: float = anim_length * attack_hit_frame_ratio
+		await get_tree().create_timer(actual_hit_delay).timeout
 
 		# Verificar que el enemigo sigue válido después del delay
 		if not is_instance_valid(enemy) or not is_instance_valid(enemy_health):
@@ -613,29 +641,16 @@ func execute_attack(enemy) -> void:
 			is_attacking = false
 			return
 
-		# For ranged attacks, shoot projectile instead of direct damage
-		if is_ranged_attack and weapon.projectile_scene:
-			# Play release animation for ranged weapons
-			if animation_player:
-				if current_weapon_attack_release_anim != "" and animation_player.has_animation(current_weapon_attack_release_anim):
-					animation_player.play(current_weapon_attack_release_anim)
-				elif animation_player.has_animation("attack_1"):
-					animation_player.play("attack_1")
-			
+		# --- DAMAGE / PROJECTILE RESOLUTION (synced to hit frame) ---
+		if is_ranged_attack and weapon and weapon.projectile_scene:
+			# Ranged: if bow_draw → bow_release are distinct, switch to the release animation now.
+			if animation_player and release_anim != &"" and release_anim != start_anim:
+				animation_player.play(release_anim)
 			_shoot_projectile(enemy, weapon.projectile_scene)
-			# Projectile will handle damage, so skip direct damage calculation
-			# But still show "attack" message
 			get_tree().call_group("hud", "add_log_message", "Disparaste a " + enemy_data.monster_name, Color.WHITE)
 		else:
-			# Melee attack - calculate and apply damage directly
-			# Play release animation for melee weapons
-			if animation_player:
-				if current_weapon_attack_release_anim != "" and animation_player.has_animation(current_weapon_attack_release_anim):
-					animation_player.play(current_weapon_attack_release_anim)
-				elif animation_player.has_animation("attack_1"):
-					animation_player.play("attack_1")
-			
-			# Cálculo de hit
+			# Melee: the start animation IS the full swing — do NOT restart it at the hit frame.
+			# Damage lands at the hit frame while the animation continues to follow-through.
 			var hit_chance_percent = (stats.get_hit() - enemy_data.flee) + 80
 			hit_chance_percent = clamp(hit_chance_percent, 5, 95)
 			var is_hit = (randi() % 100) < hit_chance_percent
@@ -644,45 +659,44 @@ func execute_attack(enemy) -> void:
 				get_tree().call_group("hud", "add_log_message", "Fallaste contra " + enemy_data.monster_name, Color.SKY_BLUE)
 				spawn_floating_text(enemy.global_position, 0, true)
 			else:
-				# Obtener stats del enemigo
 				var enemy_stats = enemy.get_node_or_null("StatsComponent")
 				var base_atk = stats.get_atk()
-				
+
 				# Usar CombatMath para aplicar elemento del arma y bonos vs raza/elemento
 				var final_damage = CombatMath.calculate_final_damage(
-					base_atk, 
-					stats, 
+					base_atk,
+					stats,
 					enemy_stats,
 					-1  # -1 significa usar weapon_element, no un elemento de skill específico
 				)
-				
+
 				# Aplicar defensa del enemigo
 				final_damage = max(1, final_damage - enemy_data.def)
-				
+
 				get_tree().call_group("hud", "add_log_message", "Golpeaste a %s por %d" % [enemy_data.monster_name, final_damage], Color.WHITE)
 				enemy_health.take_damage(final_damage)
 				spawn_floating_text(enemy.global_position, final_damage, false)
 
-		# Wait for animation to finish (separate from attack cooldown)
-		var remaining_anim_time = attack_animation_duration - attack_hit_delay
-		if remaining_anim_time > 0:
-			await get_tree().create_timer(remaining_anim_time).timeout
+		# --- WAIT FOR ANIMATION TO TRULY FINISH before restoring the AnimationTree ---
+		# Using animation_finished signal guarantees the skeleton won't snap mid-swing,
+		# regardless of actual animation length.
+		if animation_player and animation_player.is_playing():
+			await animation_player.animation_finished
 
-		# Restore AnimationTree after attack animation completes
+		# Restore AnimationTree only after the attack animation has fully completed.
 		if animation_tree and anim_tree_was_active:
 			animation_tree.active = true
-		
-		# Animation finished - release attacking state
+
 		is_attacking = false
 
-		# Now wait for the rest of the attack cooldown (ASPD)
-		var cooldown_time = stats.get_attack_speed() - attack_animation_duration
-		if cooldown_time > 0:
+		# ASPD cooldown: any remaining time beyond the animation length before next attack.
+		var cooldown_time: float = stats.get_attack_speed() - anim_length
+		if cooldown_time > 0.0:
 			await get_tree().create_timer(cooldown_time).timeout
-		
+
 		can_attack_player = true
 	else:
-		# If no valid target, just end the attack state
+		# No valid target — clean up immediately.
 		if animation_tree and anim_tree_was_active:
 			animation_tree.active = true
 		is_attacking = false
