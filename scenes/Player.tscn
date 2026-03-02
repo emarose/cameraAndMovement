@@ -14,23 +14,41 @@
 [ext_resource type="Texture2D" uid="uid://b1syjwa46sik" path="res://assets/icons/cursor_door.png" id="6_b8lor"]
 [ext_resource type="PackedScene" uid="uid://2h7d5skhop8m" path="res://scenes/SPBar3D.tscn" id="7_spbar"]
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="8_khinc"]
-[ext_resource type="Resource" uid="uid://bclpmtq2ng6om" path="res://resources/items/HunterBow.tres" id="8_pfeki"]
+[ext_resource type="Resource" uid="uid://cweap2afist1a" path="res://resources/items/weapons/BronzeKnuckle.tres" id="8_lt3gi"]
+[ext_resource type="Resource" uid="uid://bhvpgsn4038nq" path="res://resources/items/weapons/Claymore.tres" id="9_akpgi"]
+[ext_resource type="Resource" uid="uid://bhvpgw45fc6mp" path="res://resources/items/weapons/BattleAxe.tres" id="9_qrixf"]
 [ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="10_d3wef"]
+[ext_resource type="Resource" uid="uid://bhvpgtn4038or" path="res://resources/items/weapons/CrystalSword.tres" id="10_kumhx"]
+[ext_resource type="Resource" uid="uid://cweap17wand1a" path="res://resources/items/weapons/MagicWand.tres" id="10_qmt83"]
+[ext_resource type="Resource" uid="uid://cweap14hamm3c" path="res://resources/items/weapons/Flail.tres" id="11_100hb"]
 [ext_resource type="Animation" uid="uid://bfn0hgp0jnakb" path="res://assets/characters/animations/Melee_Unarmed_Attack_Punch_A.res" id="11_axnmu"]
-[ext_resource type="Resource" uid="uid://da3odkrocig16" path="res://resources/items/Knife.tres" id="11_p07f3"]
+[ext_resource type="Resource" uid="uid://bhvpgx45fc7nq" path="res://resources/items/weapons/GreatAxe.tres" id="12_7odld"]
 [ext_resource type="Script" uid="uid://el6ifwj8k7u6" path="res://scripts/SPComponent.gd" id="12_o4126"]
 [ext_resource type="PackedScene" uid="uid://bktyhgvk5hews" path="res://assets/characters/mannequin_medium.tscn" id="12_p07f3"]
+[ext_resource type="Resource" uid="uid://bhvphpchlnvlo" path="res://resources/items/weapons/Halberd.tres" id="13_axtmv"]
 [ext_resource type="PackedScene" uid="uid://c66rfqyvyqp0a" path="res://scenes/castingCircle.tscn" id="13_casting"]
+[ext_resource type="Resource" uid="uid://bhvpgv45fc5lo" path="res://resources/items/weapons/Hatchet.tres" id="14_6x32p"]
 [ext_resource type="Script" uid="uid://bb5m4qisg7fb8" path="res://scripts/RegenerationComponent.gd" id="15_0rnld"]
+[ext_resource type="Resource" uid="uid://bhvpgu7hhdclo" path="res://resources/items/weapons/IronDagger.tres" id="15_pusvq"]
+[ext_resource type="Resource" uid="uid://cweap20fist2b" path="res://resources/items/weapons/IronKnuckle.tres" id="16_qduiv"]
+[ext_resource type="Resource" uid="uid://bhvpgqn4038lo" path="res://resources/items/weapons/IronSword.tres" id="17_7yj0e"]
+[ext_resource type="Resource" uid="uid://bhvphw5vxc6lp" path="res://resources/items/weapons/LongBow.tres" id="18_c0jld"]
 [ext_resource type="Script" uid="uid://b1hf11y1cgjtr" path="res://scripts/InventoryComponent.gd" id="19_ebwui"]
+[ext_resource type="Resource" uid="uid://cweap12hamm1a" path="res://resources/items/weapons/Mace.tres" id="19_mdclj"]
 [ext_resource type="Script" uid="uid://gvc84ejulk4" path="res://scripts/EquipmentComponent.gd" id="19_sfy4j"]
 [ext_resource type="Script" uid="uid://dc22adx2f2fi3" path="res://scripts/StatusEffectManager.gd" id="20_gv3ic"]
+[ext_resource type="Resource" uid="uid://cweap16staf2b" path="res://resources/items/weapons/MysticStaff.tres" id="21_ml80s"]
 [ext_resource type="Script" uid="uid://cirh2a74sb343" path="res://scripts/StateMachine.gd" id="21_statemachine"]
 [ext_resource type="Script" uid="uid://v87mpt8747bk" path="res://scripts/IdleState.gd" id="22_idlestate"]
+[ext_resource type="Resource" uid="uid://bhvpgun4038ps" path="res://resources/items/weapons/ShadowBlade.tres" id="22_vdgyb"]
+[ext_resource type="Resource" uid="uid://bhvphqnwemnlo" path="res://resources/items/weapons/Spear.tres" id="23_jvyme"]
 [ext_resource type="Script" uid="uid://bggcrnm0ql2j0" path="res://scripts/MoveState.gd" id="23_movestate"]
 [ext_resource type="Script" uid="uid://bbs2j7s34hksd" path="res://scripts/AttackState.gd" id="24_attackstate"]
+[ext_resource type="Resource" uid="uid://bhvpgrn4038mp" path="res://resources/items/weapons/SteelSword.tres" id="24_swrsk"]
 [ext_resource type="Script" uid="uid://vymhci21drmc" path="res://scripts/CastState.gd" id="25_caststate"]
+[ext_resource type="Resource" uid="uid://cweap13hamm2b" path="res://resources/items/weapons/WarHammer.tres" id="25_pkfac"]
 [ext_resource type="Script" uid="uid://bft8xssn57qw2" path="res://scripts/FlinchState.gd" id="26_flinchstate"]
+[ext_resource type="Resource" uid="uid://cweap15staf1a" path="res://resources/items/weapons/WoodStaff.tres" id="26_unhkg"]
 [ext_resource type="Script" uid="uid://h3l7qeugfwn" path="res://scripts/CastingCircleComponent.gd" id="27_castingcomp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqk2v"]
@@ -42,10 +60,10 @@ material = SubResource("StandardMaterial3D_aqk2v")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 height = 2.3964844
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_hxdpb"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_m4as6"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_agngo"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_b1r6t"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
@@ -68,9 +86,8 @@ cursor_skill = ExtResource("4_p07f3")
 cursor_talk = ExtResource("5_viqgg")
 cursor_door = ExtResource("6_b8lor")
 flinch_duration = 0.1
-attack_hit_frame_ratio = 0.5
 attack_animation_duration = 0.8
-initial_inventory = Array[Resource]([ExtResource("11_p07f3"), ExtResource("8_pfeki")])
+initial_inventory = Array[Resource]([ExtResource("9_qrixf"), ExtResource("8_lt3gi"), ExtResource("9_akpgi"), ExtResource("10_kumhx"), ExtResource("11_100hb"), ExtResource("12_7odld"), ExtResource("13_axtmv"), ExtResource("14_6x32p"), ExtResource("15_pusvq"), ExtResource("16_qduiv"), ExtResource("17_7yj0e"), ExtResource("18_c0jld"), ExtResource("19_mdclj"), ExtResource("10_qmt83"), ExtResource("21_ml80s"), ExtResource("22_vdgyb"), ExtResource("23_jvyme"), ExtResource("24_swrsk"), ExtResource("25_pkfac"), ExtResource("26_unhkg")])
 floating_text_scene = ExtResource("4_bruh7")
 level_up_effect_scene = ExtResource("5_6eyey")
 unarmed_attack_animation_resource = ExtResource("11_axnmu")
@@ -105,11 +122,11 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12061417, 0)
-texture = SubResource("ViewportTexture_hxdpb")
+texture = SubResource("ViewportTexture_m4as6")
 
 [node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("7_spbar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.20458083, 0)
-texture = SubResource("ViewportTexture_agngo")
+texture = SubResource("ViewportTexture_b1r6t")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")

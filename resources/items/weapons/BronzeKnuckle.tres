@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3]
+
+[ext_resource type="Animation" path="res://assets/characters/animations/Melee_1H_Attack_Slice_Diagonal.res" id="1"]
+[ext_resource type="Texture2D" path="res://resources/items/fc671.png" id="2"]
+[ext_resource type="PackedScene" path="res://assets/weapon_models/fistweapon_A.gltf" id="3"]
+[ext_resource type="Script" path="res://scripts/EquipmentItem.gd" id="4"]
+
+[resource]
+script = ExtResource("4")
+slot = 0
+atk_bonus = 10
+def_bonus = 0
+str_bonus = 0
+vit_bonus = 0
+is_ranged = false
+attack_range = 1.5
+weapon_attachment = 0
+attack_start_animation_resource = ExtResource("1")
+item_name = "Bronze Knuckle"
+icon = ExtResource("2")
+model = ExtResource("3")
+icon_rotation = Vector3(-105, -7, 29)
+description = "Brawler's bronze knuckle. +10 ATK"
+item_type = 1
+stackable = false
+max_stack_size = 1
+sell_price = 35
+buy_price = 20
+weapon_element = 0
+race_bonus = 0
+race_bonus_value = 0.0
+element_bonus = 0
+element_bonus_value = 0.0

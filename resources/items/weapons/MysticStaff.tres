@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://cweap16staf2b"]
+
+[ext_resource type="Animation" uid="uid://bxxg351ld780v" path="res://assets/characters/animations/Melee_1H_Attack_Slice_Diagonal.res" id="1"]
+[ext_resource type="Texture2D" uid="uid://lvtv1uqe5h5a" path="res://resources/items/fc671.png" id="2"]
+[ext_resource type="PackedScene" uid="uid://fcjqf6g6drr5" path="res://assets/weapon_models/staff_B.gltf" id="3"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="4"]
+
+[resource]
+script = ExtResource("4")
+atk_bonus = 22
+attack_start_animation_resource = ExtResource("1")
+item_name = "Mystic Staff"
+icon = ExtResource("2")
+model = ExtResource("3")
+icon_rotation = Vector3(0, 10, 31)
+description = "A staff imbued with arcane energy. +22 ATK"
+item_type = 1
+stackable = false
+max_stack_size = 1
+sell_price = 180
