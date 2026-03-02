@@ -2,20 +2,38 @@
 
 [ext_resource type="Script" uid="uid://d0ug7mgpswyw2" path="res://scripts/NPC_Merchant.gd" id="1"]
 [ext_resource type="Script" uid="uid://br1bl783toxt8" path="res://scripts/ItemData.gd" id="2_885ar"]
-[ext_resource type="Resource" uid="uid://v01uhi7vf7p2" path="res://resources/items/BerserkPill.tres" id="3_guji4"]
 [ext_resource type="Resource" uid="uid://c8gw20ha2d6o0" path="res://resources/items/BlessingScroll.tres" id="4_kquv3"]
-[ext_resource type="Resource" uid="uid://cr7luqw1pv8n" path="res://resources/items/AntiFormlessAxe.tres" id="5_l5dco"]
-[ext_resource type="Resource" uid="uid://dyg64ibd5bqdy" path="res://resources/items/IronHelmet.tres" id="6_c10d3"]
-[ext_resource type="Resource" uid="uid://cekll1bd772jt" path="res://resources/items/LeatherArmor.tres" id="7_mrcmr"]
+[ext_resource type="Resource" uid="uid://bhvpgw45fc6mp" path="res://resources/items/weapons/BattleAxe.tres" id="5_xbxgu"]
+[ext_resource type="Resource" uid="uid://bt4ele3x14dus" path="res://resources/items/weapons/BronzeKnuckle.tres" id="6_yvita"]
+[ext_resource type="Resource" uid="uid://bhvpgsn4038nq" path="res://resources/items/weapons/Claymore.tres" id="7_geib2"]
 [ext_resource type="Resource" uid="uid://bq6j45wyyofjk" path="res://resources/items/smallRedPotion.tres" id="8_kjcis"]
+[ext_resource type="Resource" uid="uid://bhvpgtn4038or" path="res://resources/items/weapons/CrystalSword.tres" id="8_vshm4"]
 [ext_resource type="PackedScene" uid="uid://bddndogbwgjk4" path="res://assets/characters/barbarian.tscn" id="9_guji4"]
+[ext_resource type="Resource" uid="uid://cweap14hamm3c" path="res://resources/items/weapons/Flail.tres" id="9_k52a7"]
+[ext_resource type="Resource" uid="uid://bhvpgx45fc7nq" path="res://resources/items/weapons/GreatAxe.tres" id="10_7kbq8"]
+[ext_resource type="Resource" uid="uid://bhvphpchlnvlo" path="res://resources/items/weapons/Halberd.tres" id="11_oy1ny"]
+[ext_resource type="Resource" uid="uid://bhvpgv45fc5lo" path="res://resources/items/weapons/Hatchet.tres" id="12_tsmfr"]
+[ext_resource type="Resource" uid="uid://bclpmtq2ng6om" path="res://resources/items/weapons/HunterBow.tres" id="13_veo7v"]
+[ext_resource type="Resource" uid="uid://bhvpgu7hhdclo" path="res://resources/items/weapons/IronDagger.tres" id="14_hafca"]
+[ext_resource type="Resource" uid="uid://8iri6ta0waqa" path="res://resources/items/weapons/IronKnuckle.tres" id="15_kkq0h"]
+[ext_resource type="Resource" uid="uid://bhvpgqn4038lo" path="res://resources/items/weapons/IronSword.tres" id="16_sqfsh"]
+[ext_resource type="Resource" uid="uid://da3odkrocig16" path="res://resources/items/weapons/Knife.tres" id="17_rixau"]
+[ext_resource type="Resource" uid="uid://bhvphw5vxc6lp" path="res://resources/items/weapons/LongBow.tres" id="18_30mv4"]
+[ext_resource type="Resource" uid="uid://cweap12hamm1a" path="res://resources/items/weapons/Mace.tres" id="19_xwmqh"]
+[ext_resource type="Resource" uid="uid://cweap17wand1a" path="res://resources/items/weapons/MagicWand.tres" id="20_tinsi"]
+[ext_resource type="Resource" uid="uid://cweap16staf2b" path="res://resources/items/weapons/MysticStaff.tres" id="21_a7dnj"]
+[ext_resource type="Resource" uid="uid://bhvpgun4038ps" path="res://resources/items/weapons/ShadowBlade.tres" id="22_fsnkk"]
+[ext_resource type="Resource" uid="uid://bhvphqnwemnlo" path="res://resources/items/weapons/Spear.tres" id="23_tyasb"]
+[ext_resource type="Resource" uid="uid://bhvpgrn4038mp" path="res://resources/items/weapons/SteelSword.tres" id="24_qsqyh"]
+[ext_resource type="Resource" uid="uid://cweap13hamm2b" path="res://resources/items/weapons/WarHammer.tres" id="25_8h8c7"]
+[ext_resource type="Resource" uid="uid://cweap15staf1a" path="res://resources/items/weapons/WoodStaff.tres" id="26_vk1ed"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_guji4"]
 
 [node name="NPC_Merchant" type="StaticBody3D" unique_id=753893127 groups=["npc"]]
 script = ExtResource("1")
 interact_distance = 10.0
-items_for_sale = Array[ExtResource("2_885ar")]([ExtResource("3_guji4"), ExtResource("4_kquv3"), ExtResource("5_l5dco"), ExtResource("6_c10d3"), ExtResource("7_mrcmr"), ExtResource("8_kjcis")])
+items_for_sale = Array[ExtResource("2_885ar")]([ExtResource("4_kquv3"), ExtResource("8_kjcis"), ExtResource("5_xbxgu"), ExtResource("6_yvita"), ExtResource("7_geib2"), ExtResource("8_vshm4"), ExtResource("9_k52a7"), ExtResource("10_7kbq8"), ExtResource("11_oy1ny"), ExtResource("12_tsmfr"), ExtResource("13_veo7v"), ExtResource("14_hafca"), ExtResource("15_kkq0h"), ExtResource("16_sqfsh"), ExtResource("17_rixau"), ExtResource("18_30mv4"), ExtResource("19_xwmqh"), ExtResource("20_tinsi"), ExtResource("21_a7dnj"), ExtResource("22_fsnkk"), ExtResource("23_tyasb"), ExtResource("24_qsqyh"), ExtResource("25_8h8c7"), ExtResource("26_vk1ed")])
 
 [node name="Barbarian" parent="." unique_id=1528736684 instance=ExtResource("9_guji4")]
 
