@@ -281,7 +281,7 @@ transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 16.920923, -0.33, -7.87423
 transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0.8736682, -0.33, -33.760998)
 
 [node name="building_tower_B_red5" parent="Props" unique_id=374779028 instance=ExtResource("22_q2hic")]
-transform = Transform3D(-8, 0, -6.993822e-07, 0, 8, 0, 6.993822e-07, 0, -8, 0.96128273, -0.33, 63.06667)
+transform = Transform3D(-8, 0, -6.993822e-07, 0, 8, 0, 6.993822e-07, 0, -8, 28.924854, -0.33, 42.91154)
 
 [node name="building_tower_B_red6" parent="Props" unique_id=112666331 instance=ExtResource("22_q2hic")]
 transform = Transform3D(-3.496911e-07, 0, -8, 0, 8, 0, 8, 0, -3.496911e-07, 25, -0.33, -6)
@@ -320,7 +320,7 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0.6055546, -0.32516012,
 transform = Transform3D(-3.934025e-07, 0, 9, 0, 9, 0, -9, 0, -3.934025e-07, -50.220512, -0.15537368, 0.80086136)
 
 [node name="building_barracks_red2" parent="Props" unique_id=312860781 instance=ExtResource("28_7xbjj")]
-transform = Transform3D(5.656854, 0, 5.656854, 0, 8, 0, -5.656854, 0, 5.656854, -43.275955, 0.00470829, -42.251293)
+transform = Transform3D(7.071068, 0, 7.071068, 0, 10, 0, -7.071068, 0, 7.071068, -43.275955, 0.00470829, -42.251293)
 
 [node name="hills_A_trees2" parent="Props" unique_id=555170622 instance=ExtResource("29_6p68x")]
 transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, 44.248028, 0.5489322, -24.555262)
