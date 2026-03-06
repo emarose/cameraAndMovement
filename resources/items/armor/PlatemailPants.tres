@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://qnal7ohn5u3w"]
+
+[ext_resource type="Texture2D" uid="uid://lcixf65fdwrt" path="res://resources/items/armor/platemail_pants.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 2
+def_bonus = 30
+item_name = "Platemail Pants"
+icon = ExtResource("1")
+description = "Thick steel plate leggings for formidable defense."
+stackable = false
+sell_price = 900
+buy_price = 1800

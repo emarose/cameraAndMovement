@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://ckrvnrc8lgc50"]
+
+[ext_resource type="Texture2D" uid="uid://clooo7iket6qs" path="res://resources/items/armor/close_helmet.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 1
+def_bonus = 28
+vit_bonus = 1
+item_name = "Close Helmet"
+icon = ExtResource("1")
+description = "A fully enclosed steel helmet offering maximum head protection."
+stackable = false
+sell_price = 800
+buy_price = 1600

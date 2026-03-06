@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://cjy247jn6bosm"]
+
+[ext_resource type="Texture2D" uid="uid://ba2cd6ov1c8kb" path="res://resources/items/armor/platemail.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 2
+def_bonus = 40
+vit_bonus = 2
+item_name = "Platemail"
+icon = ExtResource("1")
+description = "Heavy full-body plate armor for maximum protection."
+stackable = false
+sell_price = 1200
+buy_price = 2400

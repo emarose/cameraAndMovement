@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://brobm8pio6v4x"]
+
+[ext_resource type="Texture2D" uid="uid://daelltam0u56w" path="res://resources/items/armor/studded_helmet.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 1
+def_bonus = 20
+item_name = "Studded Helmet"
+icon = ExtResource("1")
+description = "A leather helmet reinforced with iron studs."
+stackable = false
+sell_price = 500
+buy_price = 1000

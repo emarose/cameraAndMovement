@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://dt75wua4vebse"]
+
+[ext_resource type="Texture2D" uid="uid://dqvvcinw5iok2" path="res://resources/items/armor/copper_ring.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 3
+def_bonus = 1
+vit_bonus = 1
+item_name = "Copper Ring"
+icon = ExtResource("1")
+description = "A simple copper ring that bolsters the wearer's vitality."
+stackable = false
+sell_price = 30
+buy_price = 60

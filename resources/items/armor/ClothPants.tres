@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://rf2tq613bjhb"]
+
+[ext_resource type="Texture2D" uid="uid://bjtn0hblb7oq0" path="res://resources/items/armor/cloth_pants.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 2
+def_bonus = 3
+item_name = "Cloth Pants"
+icon = ExtResource("1")
+description = "Simple cloth pants providing light protection."
+stackable = false
+sell_price = 30
+buy_price = 60

@@ -7,7 +7,7 @@ class_name EquipmentComponent
 signal equipment_changed # Para avisar a la UI
 
 # Arma invisible que se equipa automáticamente cuando no hay arma
-const UNARMED_WEAPON = preload("res://resources/items/UnarmedWeapon.tres")
+const UNARMED_WEAPON = preload("res://resources/items/weapons/UnarmedWeapon.tres")
 
 # Diccionario que mapea cada slot a un item equipado (o null)
 var equipped_items: Dictionary = {

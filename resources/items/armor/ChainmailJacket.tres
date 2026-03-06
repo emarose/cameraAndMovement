@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://iptlpa6jea3x"]
+
+[ext_resource type="Texture2D" uid="uid://ciqkrwa16rlpw" path="res://resources/items/armor/chainmail_jacket.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 2
+def_bonus = 22
+item_name = "Chainmail Jacket"
+icon = ExtResource("1")
+description = "A full chainmail jacket providing strong protection."
+stackable = false
+sell_price = 400
+buy_price = 800

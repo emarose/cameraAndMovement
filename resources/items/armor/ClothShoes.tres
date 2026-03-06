@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://cs64vs835dard"]
+
+[ext_resource type="Texture2D" uid="uid://c7f6ms0luaxn0" path="res://resources/items/armor/cloth_shoes.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 3
+def_bonus = 2
+item_name = "Cloth Shoes"
+icon = ExtResource("1")
+description = "Soft cloth shoes offering minimal protection."
+stackable = false
+sell_price = 15
+buy_price = 30

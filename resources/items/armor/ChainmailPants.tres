@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://bjqumqb7kfb4y"]
+
+[ext_resource type="Texture2D" uid="uid://2lx1vpnm2e4i" path="res://resources/items/armor/chainmail_pants.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 2
+def_bonus = 18
+item_name = "Chainmail Pants"
+icon = ExtResource("1")
+description = "Chainmail leggings providing sturdy leg protection."
+stackable = false
+sell_price = 300
+buy_price = 600

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://dclum6dtx6rhb"]
+
+[ext_resource type="Texture2D" uid="uid://cs72ap82j4nsp" path="res://resources/items/armor/leather_cap.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 1
+def_bonus = 8
+item_name = "Leather Cap"
+icon = ExtResource("1")
+description = "A sturdy leather cap offering decent head protection."
+stackable = false
+sell_price = 80
+buy_price = 160

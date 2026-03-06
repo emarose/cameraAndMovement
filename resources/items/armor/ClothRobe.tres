@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://bsg3ur724caic"]
+
+[ext_resource type="Texture2D" uid="uid://b0lohc2wdwwub" path="res://resources/items/armor/cloth_robe.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 2
+def_bonus = 5
+item_name = "Cloth Robe"
+icon = ExtResource("1")
+description = "A lightweight cloth robe. Good for mages."
+stackable = false
+sell_price = 50
+buy_price = 100

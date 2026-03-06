@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://dc3n5p6e2j4to"]
+
+[ext_resource type="Texture2D" uid="uid://ca8ye8seywoqk" path="res://resources/items/armor/chainmail_gloves.png" id="1"]
+[ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
+[resource]
+script = ExtResource("2")
+slot = 3
+def_bonus = 8
+str_bonus = 2
+item_name = "Chainmail Gloves"
+icon = ExtResource("1")
+description = "Chainmail gauntlets that reinforce grip and strength."
+stackable = false
+sell_price = 180
+buy_price = 360
