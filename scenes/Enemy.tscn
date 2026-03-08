@@ -1,88 +1,68 @@
-[gd_scene format=3 uid="uid://bteikfcwt50w6"]
+[gd_scene load_steps=12 format=3 uid="uid://bteikfcwt50w6"]
 
 [ext_resource type="Script" uid="uid://by7cbpuh1k7ld" path="res://scripts/enemy.gd" id="1_55jtl"]
 [ext_resource type="PackedScene" uid="uid://ce1embig558rd" path="res://scenes/HealthBar3D.tscn" id="2_ft8do"]
 [ext_resource type="Script" uid="uid://d32apxuk1vawh" path="res://scripts/healthComponent.gd" id="2_mpr68"]
 [ext_resource type="Script" uid="uid://c0quf3cggmm2i" path="res://scripts/StatsComponent.gd" id="4_ft8do"]
-[ext_resource type="Script" uid="uid://4gjfq05hu1wt" path="res://scripts/SkillComponent.gd" id="5_1vja8"]
-[ext_resource type="Script" uid="uid://dc22adx2f2fi3" path="res://scripts/StatusEffectManager.gd" id="5_5wwv6"]
-[ext_resource type="Script" uid="uid://cirh2a74sb343" path="res://scripts/StateMachine.gd" id="6_statemachine"]
-[ext_resource type="Script" uid="uid://v87mpt8747bk" path="res://scripts/IdleState.gd" id="7_idlestate"]
-[ext_resource type="Script" uid="uid://bggcrnm0ql2j0" path="res://scripts/MoveState.gd" id="8_movestate"]
-[ext_resource type="Script" uid="uid://bbs2j7s34hksd" path="res://scripts/AttackState.gd" id="9_attackstate"]
-[ext_resource type="Script" uid="uid://vymhci21drmc" path="res://scripts/CastState.gd" id="10_caststate"]
-[ext_resource type="Script" uid="uid://bft8xssn57qw2" path="res://scripts/FlinchState.gd" id="11_flinchstate"]
+[ext_resource type="Script" path="res://scripts/SkillComponent.gd" id="5_skill"]
+[ext_resource type="Script" path="res://scripts/StateMachine.gd" id="6_state"]
+[ext_resource type="Script" path="res://scripts/SPComponent.gd" id="7_sp"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_isvm2"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_mpr68"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_isvm2"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_2qkhh"]
+size = Vector3(1, 1.2158203, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3gvst"]
 albedo_color = Color(0.43137255, 0.07058824, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_55jtl"]
 material = SubResource("StandardMaterial3D_3gvst")
-size = Vector3(0.3, 0.3, 0.3)
+size = Vector3(0.9, 0.9, 0.9)
 
-[node name="Enemy" type="CharacterBody3D" unique_id=137946859 groups=["enemy"]]
+[node name="Enemy" type="CharacterBody3D" groups=["enemy"]]
+collision_layer = 4
+collision_mask = 3
 script = ExtResource("1_55jtl")
-attack_anim_duration = 0.5
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=577986372]
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 1.5
-target_desired_distance = 1.4
-path_max_distance = 3.01
+target_desired_distance = 1.5
 avoidance_enabled = true
-neighbor_distance = 10.0
-time_horizon_agents = 0.5
-max_speed = 15.0
 
-[node name="Label3D" type="Label3D" parent="." unique_id=499131153]
+[node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7542914, 0)
 billboard = 1
 text = "mob_name"
 font_size = 64
 outline_size = 24
 
-[node name="HealthBar3D" parent="." unique_id=776687452 instance=ExtResource("2_ft8do")]
+[node name="HealthBar3D" parent="." instance=ExtResource("2_ft8do")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7302118, 0)
-texture = SubResource("ViewportTexture_isvm2")
+no_depth_test = true
+texture = SubResource("ViewportTexture_mpr68")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=529849094]
-shape = SubResource("BoxShape3D_isvm2")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.107910156, 0)
+shape = SubResource("BoxShape3D_2qkhh")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1960796069]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("BoxMesh_55jtl")
 
-[node name="HealthComponent" type="Node" parent="." unique_id=1624565924]
+[node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("2_mpr68")
 max_health = 1
 
-[node name="StatsComponent" type="Node" parent="." unique_id=932019368]
+[node name="StatsComponent" type="Node" parent="."]
 script = ExtResource("4_ft8do")
 
-[node name="SkillComponent" type="Node" parent="." unique_id=1601425566]
-script = ExtResource("5_1vja8")
+[node name="SkillComponent" type="Node" parent="."]
+script = ExtResource("5_skill")
 
-[node name="StatusEffectManagerComponent" type="Node" parent="." unique_id=1012831347]
-script = ExtResource("5_5wwv6")
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("6_state")
 
-[node name="StateMachine" type="Node" parent="." unique_id=1025464724]
-script = ExtResource("6_statemachine")
-
-[node name="Idle" type="Node" parent="StateMachine" unique_id=1115198517]
-script = ExtResource("7_idlestate")
-
-[node name="Move" type="Node" parent="StateMachine" unique_id=787287252]
-script = ExtResource("8_movestate")
-
-[node name="Attack" type="Node" parent="StateMachine" unique_id=1395445904]
-script = ExtResource("9_attackstate")
-
-[node name="Cast" type="Node" parent="StateMachine" unique_id=167663778]
-script = ExtResource("10_caststate")
-
-[node name="Flinch" type="Node" parent="StateMachine" unique_id=173541873]
-script = ExtResource("11_flinchstate")
+[node name="SPComponent" type="Node" parent="."]
+script = ExtResource("7_sp")

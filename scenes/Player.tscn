@@ -57,6 +57,8 @@ bottom_radius = 1.0
 height = 0.01
 
 [node name="Player" type="CharacterBody3D" unique_id=1179624594 groups=["player"]]
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_g2els")
 speed = 8.0
 attack_range = 3.0
@@ -92,6 +94,7 @@ script = ExtResource("2_qhqgy")
 zoom_speed = 2.0
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot" unique_id=795005348]
+collision_mask = 1
 spring_length = 8.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=1839852354]
