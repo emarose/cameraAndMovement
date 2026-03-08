@@ -35,7 +35,6 @@ var is_stunned: bool = false
 var is_aggroed: bool = false
 var is_flinching: bool = false
 var flinch_timer: float = 0.0
-var attack_timer: float = 0.0
 
 # Timer for skill usage attempts
 var skill_attempt_timer: float = 0.0
@@ -113,10 +112,6 @@ func _ready():
 		state_machine.setup(self, animation_tree)
 
 func _physics_process(delta):
-	if is_attacking:
-		attack_timer -= delta
-		if attack_timer <= 0.0:
-			is_attacking = false
 	if is_flinching:
 		flinch_timer -= delta
 		if flinch_timer <= 0.0:
@@ -295,19 +290,39 @@ func attack_player():
 	
 	if can_attack:
 		can_attack = false
-		_trigger_attack_state()
+		is_attacking = true
 		
-		# Hit delay is a ratio of attack_anim_duration — stays in sync regardless of animation length.
-		var actual_hit_delay: float = attack_anim_duration * attack_hit_frame_ratio
+		# --- RESOLVE WHICH ANIMATION TO PLAY ---
+		var attack_anim: StringName = &""
+		if data and animation_player:
+			attack_anim = _resolve_anim(data.anim_attack)
+		
+		# --- READ ACTUAL ANIMATION LENGTH for perfectly synced hit timing ---
+		var anim_length: float = attack_anim_duration  # fallback
+		if animation_player and attack_anim != &"":
+			var anim_res = animation_player.get_animation(attack_anim)
+			if anim_res:
+				anim_length = anim_res.length
+		
+		# --- PLAY ATTACK ANIMATION ---
+		if animation_player and attack_anim != &"":
+			animation_player.play(attack_anim)
+			print("[%s] Playing attack animation '%s' (duration: %.2f)" % [data.monster_name, attack_anim, anim_length])
+		else:
+			print("[%s] No attack animation found, using fallback duration" % (data.monster_name if data else "?"))
+		
+		# --- WAIT FOR HIT FRAME ---
+		# Hit delay is a ratio of actual animation length — stays in sync regardless of animation length.
+		var actual_hit_delay: float = anim_length * attack_hit_frame_ratio
 		await get_tree().create_timer(actual_hit_delay).timeout
 		
 		# Verify player is still valid after delay
 		if not is_instance_valid(player) or player.is_dead:
 			can_attack = true
 			is_attacking = false
-			attack_timer = 0.0
 			return
 		
+		# --- APPLY DAMAGE AT HIT FRAME ---
 		# Obtener componentes del jugador para cálculos
 		var p_stats = player.get_node_or_null("StatsComponent")
 		var health_node = player.get_node_or_null("HealthComponent")
@@ -321,11 +336,10 @@ func attack_player():
 				chance = clamp(chance, 0.05, 0.95) # Siempre hay 5% de chance de fallar o acertar
 			
 			if randf() <= chance:
-				
 				# ACERTÓ EL GOLPE
 				get_tree().call_group("hud", "add_log_message", 
-		"Has recibido %d de daño de %s" % [stats_comp.get_atk(), data.monster_name], 
-		Color.CRIMSON)
+					"Has recibido %d de daño de %s" % [stats_comp.get_atk(), data.monster_name], 
+					Color.CRIMSON)
 				health_node.take_damage(stats_comp.get_atk())
 				if player.has_method("_on_player_hit"):
 					player._on_player_hit(health_node.current_health)
@@ -336,34 +350,36 @@ func attack_player():
 			else:
 				# FALLÓ EL GOLPE (MISS)
 				get_tree().call_group("hud", "add_log_message", 
-		"¡Esquivaste el ataque de %s!" % data.monster_name, 
-		Color.SKY_BLUE)
-				if player.has_method("_on_player_miss"): # Por si quieres mostrar un texto de "MISS"
+					"¡Esquivaste el ataque de %s!" % data.monster_name, 
+					Color.SKY_BLUE)
+				if player.has_method("_on_player_miss"):
 					player._on_player_miss()
 		
-		# Wait for animation to finish (is_attacking is handled by timer in _physics_process)
-		# Then wait for the rest of the attack cooldown (ASPD)
-		var cooldown_time = stats_comp.get_attack_speed() - attack_anim_duration
-		if cooldown_time > 0:
+		# --- WAIT FOR ANIMATION TO TRULY FINISH ---
+		# Using animation_finished signal guarantees the skeleton won't snap mid-swing.
+		if animation_player and animation_player.is_playing():
+			await animation_player.animation_finished
+		
+		is_attacking = false
+		
+		# --- ASPD COOLDOWN ---
+		# Any remaining time beyond the animation length before next attack.
+		var cooldown_time: float = stats_comp.get_attack_speed() - anim_length
+		if cooldown_time > 0.0:
 			await get_tree().create_timer(cooldown_time).timeout
 		
 		can_attack = true
 
-func _trigger_attack_state():
+# Deprecated: Attack logic moved inline to attack_player() for better animation sync.
+# Kept for reference but no longer called.
+func _trigger_attack_state_DEPRECATED():
 	is_attacking = true
 	print("[%s] Triggering ATTACK state" % (data.monster_name if data else "?"))
-	# Play attack animation; auto-update duration from the clip length
 	if data:
-		print("  Looking for attack anim: '%s'" % data.anim_attack)
 		var resolved := _resolve_anim(data.anim_attack)
 		if resolved != &"":
-			attack_timer = animation_player.get_animation(resolved).length
-			attack_anim_duration = attack_timer
 			animation_player.play(resolved)
-			print("  Playing attack animation '%s' (duration: %.2f)" % [resolved, attack_anim_duration])
-			return
-	print("  Using fallback attack timer: %.2f" % attack_anim_duration)
-	attack_timer = attack_anim_duration
+			print("  Playing attack animation '%s'" % resolved)
 
 func _on_take_damage(new_health):
 
