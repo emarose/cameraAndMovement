@@ -6,6 +6,8 @@ extends CharacterBody3D
 ## Fraction (0.0–1.0) through the attack animation at which damage is applied.
 ## Replaces the old absolute attack_hit_delay to stay in sync across any animation length.
 @export_range(0.0, 1.0, 0.01) var attack_hit_frame_ratio: float = 0.5
+## Max yaw turn speed in degrees per second. Set to 0 for instant snapping.
+@export_range(0.0, 1440.0, 1.0) var turn_speed_deg: float = 540.0
 
 @onready var nav_agent = $NavigationAgent3D
 @onready var health_comp = $HealthComponent
@@ -14,6 +16,7 @@ extends CharacterBody3D
 @onready var stats_comp: StatsComponent = $StatsComponent
 @onready var skill_comp: SkillComponent = $SkillComponent
 @onready var state_machine: StateMachine = $StateMachine
+@onready var collision_shape_node: CollisionShape3D = get_node_or_null("CollisionShape3D")
 
 enum State { IDLE, WANDERING, CHASING, ATTACKING }
 
@@ -21,6 +24,7 @@ var current_state = State.IDLE
 var player = null
 var mesh = null
 var animation_tree: AnimationTree = null
+var animation_player: AnimationPlayer = null
 var is_dead: bool = false
 var is_attacking: bool = false
 var wander_target: Vector3
@@ -59,9 +63,13 @@ func _ready():
 		var model_instance = data.model_scene.instantiate()
 		add_child(model_instance)
 		mesh = model_instance
+		if model_instance is Node3D:
+			_fit_collision_shape_from_model(model_instance)
 		
 		# Find AnimationTree in the model for state machine
 		animation_tree = model_instance.get_node_or_null("AnimationTree")
+		# Find AnimationPlayer inside the model (supports nested GLB hierarchies)
+		_setup_animation_player(model_instance)
 
 	if stats_comp:
 		stats_comp.initialize_from_resource(data)
@@ -118,6 +126,9 @@ func _physics_process(delta):
 		return
 	if not navigation_ready:
 		return
+
+	# Keep locomotion animation in sync with actual velocity
+	_update_locomotion_anim()
 
 	if player and !player.is_dead:
 		var dist_to_player = global_position.distance_to(player.global_position)
@@ -191,15 +202,16 @@ func _move_logic(target_pos: Vector3, movement_speed: float):
 	# Rotación (siempre mirar a donde intenta ir, excepto si está quieto)
 	if final_velocity.length() > 0.1:
 		var look_target = Vector3(next_pos.x, global_position.y, next_pos.z)
-		look_at(look_target, Vector3.UP)
+		_rotate_towards(look_target)
 	
 	nav_agent.set_velocity(final_velocity)
 
 func _visual_jump_effect():
-	if mesh:
-		var tween = create_tween()
-		tween.tween_property(mesh, "position:y", 0.5, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		tween.tween_property(mesh, "position:y", 0.0, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	if data:
+		var resolved := _resolve_anim(data.anim_jump)
+		if resolved != &"":
+			animation_player.play(resolved)
+			print("[%s] Playing jump animation '%s'" % [data.monster_name, resolved])
 	
 func _on_velocity_computed(safe_velocity: Vector3):
 	# Esta función se dispara automáticamente gracias a la conexión en _ready
@@ -209,6 +221,11 @@ func _on_velocity_computed(safe_velocity: Vector3):
 func _stop_movement():
 	# Pedimos una velocidad de cero al sistema de evitación
 	nav_agent.set_velocity(Vector3.ZERO)
+
+## Rebuilds the enemy collision from the current model (useful after changing model at runtime).
+func refresh_collision_shape() -> void:
+	if mesh and mesh is Node3D:
+		_fit_collision_shape_from_model(mesh)
 	
 func patrol_logic(delta):
 	if home_position == Vector3.ZERO:
@@ -264,7 +281,7 @@ func chase_target(target_pos: Vector3, movement_speed: float):
 	# Rotación hacia el siguiente punto del camino
 	var look_target = Vector3(next_pos.x, current_pos.y, next_pos.z)
 	if current_pos.distance_to(look_target) > 0.1:
-		look_at(look_target, Vector3.UP)
+		_rotate_towards(look_target)
 	
 	var speed_mult := (stats_comp.get_move_speed_modifier() if stats_comp else 1.0)
 	velocity = (next_pos - current_pos).normalized() * movement_speed * speed_mult
@@ -274,7 +291,7 @@ func attack_player():
 	# Mirar al jugador mientras ataca
 	var look_target = Vector3(player.global_position.x, global_position.y, player.global_position.z)
 	if global_position.distance_to(look_target) > 0.1:
-		look_at(look_target, Vector3.UP)
+		_rotate_towards(look_target)
 	
 	if can_attack:
 		can_attack = false
@@ -312,7 +329,6 @@ func attack_player():
 				health_node.take_damage(stats_comp.get_atk())
 				if player.has_method("_on_player_hit"):
 					player._on_player_hit(health_node.current_health)
-				_play_attack_anim()
 				
 				# Chance de aplicar status effect
 				if data.attack_status_effects.size() > 0 and randf() < data.status_effect_chance:
@@ -335,14 +351,19 @@ func attack_player():
 
 func _trigger_attack_state():
 	is_attacking = true
+	print("[%s] Triggering ATTACK state" % (data.monster_name if data else "?"))
+	# Play attack animation; auto-update duration from the clip length
+	if data:
+		print("  Looking for attack anim: '%s'" % data.anim_attack)
+		var resolved := _resolve_anim(data.anim_attack)
+		if resolved != &"":
+			attack_timer = animation_player.get_animation(resolved).length
+			attack_anim_duration = attack_timer
+			animation_player.play(resolved)
+			print("  Playing attack animation '%s' (duration: %.2f)" % [resolved, attack_anim_duration])
+			return
+	print("  Using fallback attack timer: %.2f" % attack_anim_duration)
 	attack_timer = attack_anim_duration
-
-func _play_attack_anim():
-	if not mesh: return
-	var tween = create_tween()
-	# Un pequeño paso hacia adelante y atrás
-	tween.tween_property(mesh, "position:z", -0.2, 0.1).as_relative()
-	tween.tween_property(mesh, "position:z", 0.2, 0.1).as_relative()
 
 func _on_take_damage(new_health):
 
@@ -354,11 +375,13 @@ func _on_take_damage(new_health):
 	# Activar aggro al recibir daño (ataque del jugador desde distancia)
 	is_aggroed = true
 	
-	# Visual flinch effect (no longer controls is_stunned - let status effects handle that)
-	if mesh: # Solo crear el tween SI tenemos el mesh listo
-		var tween = create_tween()
-		tween.tween_property(mesh, "scale", Vector3(1.3, 0.7, 1.3), 0.1)
-		tween.tween_property(mesh, "scale", Vector3(1, 1, 1), 0.1)
+	# Visual flinch effect
+	if data:
+		print("[%s] Taking damage - looking for flinch anim: '%s'" % [data.monster_name, data.anim_flinch])
+		var resolved := _resolve_anim(data.anim_flinch)
+		if resolved != &"":
+			animation_player.play(resolved)
+			print("  Playing flinch animation '%s'" % resolved)
 
 	# Trigger flinch animation state
 	is_flinching = true
@@ -394,33 +417,30 @@ func _on_death():
 	GameManager.gain_experience(data.job_exp, true)   # Exp Job from resource
 	
 	# 4. Feedback Visual (Animación)
-	if mesh:
-		var tween = create_tween()
-		# Usamos set_trans y set_ease para que se vea más profesional (RO style)
-		tween.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-		tween.tween_property(mesh, "rotation:x", deg_to_rad(-90), 0.4)
-		tween.parallel().tween_property(mesh, "scale", Vector3.ZERO, 0.5)
-		
-		# Ocultar UI
-		if health_bar: health_bar.hide()
-		if mob_name: mob_name.hide()
-		
-		await tween.finished
-	
+	if health_bar: health_bar.hide()
+	if mob_name: mob_name.hide()
+
+	if data:
+		print("[%s] Death - looking for death anim: '%s'" % [data.monster_name, data.anim_death])
+		var resolved := _resolve_anim(data.anim_death)
+		if resolved != &"":
+			animation_player.play(resolved)
+			print("  Playing death animation '%s'" % resolved)
+			await animation_player.animation_finished
+
 	queue_free()
 
 ## Genera los drops loot según la tabla de drops del enemigo
 func _spawn_loot(death_position: Vector3):
 	if not data or data.drop_table.is_empty():
 		return
-		
+
 	for drop_entry in data.drop_table:
-		# Validar que sea un resource con los métodos necesarios
 		if drop_entry and drop_entry.has_method("should_drop") and drop_entry.has_method("get_drop_quantity"):
 			if drop_entry.should_drop():
 				var quantity = drop_entry.get_drop_quantity()
 				_create_item_drop(drop_entry.item_data, quantity, death_position)
-		
+
 func _create_item_drop(item_data: ItemData, quantity: int, spawn_position: Vector3):
 	if not item_data:
 		return
@@ -493,6 +513,214 @@ func _try_use_skill() -> void:
 		SkillData.SkillType.POINT:
 			execute_skill(skill, player.global_position)
 
+# ---------------------------------------------------------------------------
+# Animation helpers
+# ---------------------------------------------------------------------------
+
+## Finds the first AnimationPlayer in the model subtree (handles nested GLB hierarchies).
+func _find_animation_player(node: Node) -> AnimationPlayer:
+	if node is AnimationPlayer:
+		return node
+	for child in node.get_children():
+		var result = _find_animation_player(child)
+		if result:
+			return result
+	return null
+
+## Initialises animation_player and optionally loads the EnemyData animation library.
+func _setup_animation_player(model_instance: Node) -> void:
+	animation_player = _find_animation_player(model_instance)
+	print("[%s] AnimationPlayer found: %s" % [data.monster_name if data else "?", animation_player])
+	
+	if not animation_player:
+		print("  [WARNING] No AnimationPlayer in model!")
+		return
+	
+	# List all existing animations BEFORE loading library
+	print("  Existing animations in AnimationPlayer:")
+	for lib_name in animation_player.get_animation_library_list():
+		var lib = animation_player.get_animation_library(lib_name)
+		var anim_list = lib.get_animation_list()
+		print("    Library '%s': %s" % [lib_name, anim_list])
+	
+	if not data or not data.animation_library:
+		print("  No animation_library in EnemyData, using embedded animations only")
+		return
+	
+	# Avoid adding the library twice (e.g. when model is reloaded)
+	if not animation_player.has_animation_library(&"enemy"):
+		animation_player.add_animation_library(&"enemy", data.animation_library)
+		print("  Added 'enemy' library with animations: %s" % data.animation_library.get_animation_list())
+	else:
+		print("  'enemy' library already exists, skipping add")
+
+## Resolves a short animation name to the full name used by the AnimationPlayer.
+## Checks "enemy/<name>" (loaded library) first, then the bare name (GLB embedded).
+func _resolve_anim(short_name: StringName) -> StringName:
+	if not animation_player or short_name == &"":
+		print("  [ANIM] Cannot resolve '%s' - no AnimationPlayer or empty name" % short_name)
+		return &""
+	
+	var prefixed := StringName("enemy/" + short_name)
+	if animation_player.has_animation(prefixed):
+		print("  [ANIM] Resolved '%s' -> '%s' (from library)" % [short_name, prefixed])
+		return prefixed
+	
+	if animation_player.has_animation(short_name):
+		print("  [ANIM] Resolved '%s' -> '%s' (embedded)" % [short_name, short_name])
+		return short_name
+	
+	print("  [ANIM] FAILED to resolve '%s' - not found in AnimationPlayer" % short_name)
+	print("    Available animations: %s" % str(_get_all_anim_names()))
+	return &""
+
+## Helper to list all available animations for debugging
+func _get_all_anim_names() -> Array:
+	if not animation_player:
+		return []
+	var all_anims = []
+	for lib_name in animation_player.get_animation_library_list():
+		var lib = animation_player.get_animation_library(lib_name)
+		for anim_name in lib.get_animation_list():
+			var full_name = (lib_name + "/" + anim_name) if lib_name != "" else anim_name
+			all_anims.append(full_name)
+	return all_anims
+
+## Plays a resolved animation safely; does nothing if not found.
+func _play_anim(short_name: StringName) -> void:
+	var resolved := _resolve_anim(short_name)
+	if resolved != &"":
+		animation_player.play(resolved)
+
+## Rotates enemy on yaw to face a world-space point, with optional model forward offset.
+## This keeps rotation logic consistent across movement, chase and attack.
+func _rotate_towards(target_pos: Vector3) -> void:
+	var to_target := target_pos - global_position
+	to_target.y = 0.0
+	if to_target.length_squared() <= 0.0001:
+		return
+
+	# Godot forward is -Z, so yaw comes from atan2(x, z) with a PI shift.
+	var target_yaw := atan2(to_target.x, to_target.z) + PI
+	if data:
+		target_yaw += deg_to_rad(data.facing_yaw_offset_deg)
+
+	if turn_speed_deg <= 0.0:
+		rotation.y = target_yaw
+		return
+
+	var delta_time := get_physics_process_delta_time()
+	var max_step := deg_to_rad(turn_speed_deg) * delta_time
+	var yaw_diff := wrapf(target_yaw - rotation.y, -PI, PI)
+	rotation.y += clamp(yaw_diff, -max_step, max_step)
+
+func _fit_collision_shape_from_model(model_root: Node3D) -> void:
+	if not data or not data.auto_fit_collision_shape or not model_root:
+		return
+
+	var aabb := _calculate_model_local_aabb(model_root)
+	if aabb.size.length_squared() <= 0.0001:
+		return
+
+	var fit_size = (aabb.size + (data.collision_padding * 2.0)) * data.collision_size_multiplier
+	fit_size.x = max(fit_size.x, data.collision_min_size.x)
+	fit_size.y = max(fit_size.y, data.collision_min_size.y)
+	fit_size.z = max(fit_size.z, data.collision_min_size.z)
+
+	if not collision_shape_node:
+		collision_shape_node = CollisionShape3D.new()
+		collision_shape_node.name = "CollisionShape3D"
+		add_child(collision_shape_node)
+
+	# Keep fitted shapes predictable even if the scene had edited transform values.
+	collision_shape_node.rotation = Vector3.ZERO
+	collision_shape_node.scale = Vector3.ONE
+
+	var shape_mode := data.collision_shape_mode
+	if shape_mode == 0:
+		if collision_shape_node.shape is CapsuleShape3D:
+			shape_mode = 1
+		elif collision_shape_node.shape is BoxShape3D:
+			shape_mode = 2
+		elif collision_shape_node.shape is SphereShape3D:
+			shape_mode = 3
+		else:
+			shape_mode = 1
+
+	match shape_mode:
+		1:
+			var capsule := collision_shape_node.shape as CapsuleShape3D
+			if not capsule:
+				capsule = CapsuleShape3D.new()
+				collision_shape_node.shape = capsule
+			var radius = max(0.05, max(fit_size.x, fit_size.z) * 0.5)
+			capsule.radius = radius
+			capsule.height = max(fit_size.y, (radius * 2.0) + 0.05)
+		2:
+			var box := collision_shape_node.shape as BoxShape3D
+			if not box:
+				box = BoxShape3D.new()
+				collision_shape_node.shape = box
+			box.size = fit_size
+		3:
+			var sphere := collision_shape_node.shape as SphereShape3D
+			if not sphere:
+				sphere = SphereShape3D.new()
+				collision_shape_node.shape = sphere
+			sphere.radius = max(0.05, max(fit_size.x, fit_size.y, fit_size.z) * 0.5)
+
+	var center := aabb.get_center() + data.collision_center_offset
+	collision_shape_node.position = center
+
+func _calculate_model_local_aabb(model_root: Node3D) -> AABB:
+	var result := AABB()
+	var has_any := false
+	var meshes: Array[MeshInstance3D] = []
+	_collect_mesh_instances(model_root, meshes)
+
+	if meshes.is_empty():
+		return AABB(Vector3(-0.2, 0.0, -0.2), Vector3(0.4, 1.0, 0.4))
+
+	for mesh_instance in meshes:
+		if not mesh_instance.mesh:
+			continue
+		var local_aabb := mesh_instance.get_aabb()
+		if local_aabb.size.length_squared() <= 0.0001:
+			continue
+		var to_enemy_local := global_transform.affine_inverse() * mesh_instance.global_transform
+		var transformed := to_enemy_local * local_aabb
+		if has_any:
+			result = result.merge(transformed)
+		else:
+			result = transformed
+			has_any = true
+
+	if not has_any:
+		return AABB(Vector3(-0.2, 0.0, -0.2), Vector3(0.4, 1.0, 0.4))
+	return result
+
+func _collect_mesh_instances(node: Node, out: Array[MeshInstance3D]) -> void:
+	if node is MeshInstance3D:
+		out.append(node)
+	for child in node.get_children():
+		_collect_mesh_instances(child, out)
+
+## Switches between idle and walk animations based on horizontal velocity.
+func _update_locomotion_anim() -> void:
+	if not animation_player or not data or is_attacking or is_flinching or is_casting or is_dead:
+		return
+	var h_speed := Vector2(velocity.x, velocity.z).length()
+	var target: StringName = data.anim_walk if h_speed > 0.1 else data.anim_idle
+	var resolved := _resolve_anim(target)
+	if resolved == &"":
+		return
+	if animation_player.current_animation == resolved:
+		return
+	print("[%s] Locomotion: switching to '%s' (speed: %.2f)" % [data.monster_name, resolved, h_speed])
+	animation_player.play(resolved)
+
+# ---------------------------------------------------------------------------
+
 func _apply_random_status_effect(target: Node) -> void:
 	if data.attack_status_effects.is_empty():
 		return
@@ -505,12 +733,6 @@ func _apply_random_status_effect(target: Node) -> void:
 		get_tree().call_group("hud", "add_log_message", 
 			"¡%s te infligió %s!" % [data.monster_name, effect.effect_name], 
 			Color.ORANGE)
-
-func _play_aggro_effect():
-	if mesh:
-		var tween = create_tween()
-		tween.tween_property(mesh, "position:y", 0.5, 0.1).as_relative()
-		tween.chain().tween_property(mesh, "position:y", -0.5, 0.1).as_relative()
 
 ## Execute a skill with casting if needed, or immediate if no cast time
 func execute_skill(skill: SkillData, target) -> void:

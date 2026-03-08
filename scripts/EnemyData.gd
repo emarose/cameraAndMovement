@@ -32,6 +32,22 @@ class_name EnemyData
 
 @export_group("Visuals")
 @export var model_scene: PackedScene
+## Yaw correction (degrees) for model forward axis. Use 180 if model faces backwards.
+@export_range(-180.0, 180.0, 1.0) var facing_yaw_offset_deg: float = 0.0
+
+@export_group("Collision")
+## Auto-creates/resizes CollisionShape3D from the model AABB at runtime.
+@export var auto_fit_collision_shape: bool = true
+## Auto keeps current shape type if present, otherwise uses Capsule.
+@export_enum("Auto", "Capsule", "Box", "Sphere") var collision_shape_mode: int = 0
+## Multiplies fitted collision size after AABB + padding.
+@export var collision_size_multiplier: Vector3 = Vector3.ONE
+## Padding added on each axis (total size uses padding * 2).
+@export var collision_padding: Vector3 = Vector3(0.05, 0.0, 0.05)
+## Extra offset applied to collision center after fitting.
+@export var collision_center_offset: Vector3 = Vector3.ZERO
+## Lower bounds to avoid tiny/invalid shapes.
+@export var collision_min_size: Vector3 = Vector3(0.2, 0.4, 0.2)
 
 @export_group("Locomotion")
 @export var movement_type: StatsComponent.MovementType = StatsComponent.MovementType.SLIDE
@@ -51,3 +67,20 @@ class_name EnemyData
 @export var status_effect_chance: float = 0.15  # 15% chance por defecto
 @export var skills: Array[SkillData] = []  # Skills que el enemigo puede usar
 @export var skill_use_chance: float = 0.3  # 30% chance de usar skill cuando puede
+
+@export_group("Animations")
+## Optional AnimationLibrary loaded from res://assets/characters/animations/enemies/.
+## Assign one here and its animations become available to the enemy's AnimationPlayer.
+@export var animation_library: AnimationLibrary = null
+## Animation name for idle standing. Must exist in the AnimationPlayer (or loaded library).
+@export var anim_idle: StringName = &"Idle"
+## Animation name for walking/running.
+@export var anim_walk: StringName = &"Walk"
+## Animation name played when attacking.
+@export var anim_attack: StringName = &"Punch"
+## Animation name played on death.
+@export var anim_death: StringName = &"Death"
+## Animation name played when flinching (hit received).
+@export var anim_flinch: StringName = &"HitRecieve"
+## Animation name for the jump impulse (JUMP movement type). Falls back to a tween if empty.
+@export var anim_jump: StringName = &"Jump"

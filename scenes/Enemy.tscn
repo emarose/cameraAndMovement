@@ -16,8 +16,7 @@
 [sub_resource type="ViewportTexture" id="ViewportTexture_isvm2"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_2qkhh"]
-size = Vector3(1, 1.2158203, 1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_isvm2"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3gvst"]
 albedo_color = Color(0.43137255, 0.07058824, 1, 1)
@@ -28,6 +27,7 @@ size = Vector3(0.3, 0.3, 0.3)
 
 [node name="Enemy" type="CharacterBody3D" unique_id=137946859 groups=["enemy"]]
 script = ExtResource("1_55jtl")
+attack_anim_duration = 0.5
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=577986372]
 path_desired_distance = 1.5
@@ -50,8 +50,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7302118, 0)
 texture = SubResource("ViewportTexture_isvm2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=529849094]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.107910156, 0)
-shape = SubResource("BoxShape3D_2qkhh")
+shape = SubResource("BoxShape3D_isvm2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1960796069]
 visible = false
