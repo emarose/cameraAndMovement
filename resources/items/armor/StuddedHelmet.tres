@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://brobm8pio6v4x"]
 
-[ext_resource type="Texture2D" uid="uid://daelltam0u56w" path="res://resources/items/armor/studded_helmet.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://daelltam0u56w" path="res://assets/models/items/armor/studded_helmet.png" id="1"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
 
 [resource]

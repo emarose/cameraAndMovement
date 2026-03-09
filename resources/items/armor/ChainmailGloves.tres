@@ -1,7 +1,8 @@
 [gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://dc3n5p6e2j4to"]
 
-[ext_resource type="Texture2D" uid="uid://ca8ye8seywoqk" path="res://resources/items/armor/chainmail_gloves.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://ca8ye8seywoqk" path="res://assets/models/items/armor/chainmail_gloves.png" id="1"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
+
 
 [resource]
 script = ExtResource("2")

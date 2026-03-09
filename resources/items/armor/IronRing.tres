@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://c2wee4gyfai4p"]
 
-[ext_resource type="Texture2D" uid="uid://diushp0fyeodb" path="res://resources/items/armor/iron_ring.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://diushp0fyeodb" path="res://assets/models/items/armor/iron_ring.png" id="1"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
 
 [resource]

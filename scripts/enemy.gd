@@ -558,7 +558,6 @@ func _setup_animation_player(model_instance: Node) -> void:
 	for lib_name in animation_player.get_animation_library_list():
 		var lib = animation_player.get_animation_library(lib_name)
 		var anim_list = lib.get_animation_list()
-		print("    Library '%s': %s" % [lib_name, anim_list])
 	
 	if not data or not data.animation_library:
 		print("  No animation_library in EnemyData, using embedded animations only")
@@ -568,23 +567,18 @@ func _setup_animation_player(model_instance: Node) -> void:
 	if not animation_player.has_animation_library(&"enemy"):
 		animation_player.add_animation_library(&"enemy", data.animation_library)
 		print("  Added 'enemy' library with animations: %s" % data.animation_library.get_animation_list())
-	else:
-		print("  'enemy' library already exists, skipping add")
 
 ## Resolves a short animation name to the full name used by the AnimationPlayer.
 ## Checks "enemy/<name>" (loaded library) first, then the bare name (GLB embedded).
 func _resolve_anim(short_name: StringName) -> StringName:
 	if not animation_player or short_name == &"":
-		print("  [ANIM] Cannot resolve '%s' - no AnimationPlayer or empty name" % short_name)
 		return &""
 	
 	var prefixed := StringName("enemy/" + short_name)
 	if animation_player.has_animation(prefixed):
-		print("  [ANIM] Resolved '%s' -> '%s' (from library)" % [short_name, prefixed])
 		return prefixed
 	
 	if animation_player.has_animation(short_name):
-		print("  [ANIM] Resolved '%s' -> '%s' (embedded)" % [short_name, short_name])
 		return short_name
 	
 	
@@ -732,7 +726,6 @@ func _update_locomotion_anim() -> void:
 		return
 	if animation_player.current_animation == resolved:
 		return
-	print("[%s] Locomotion: switching to '%s' (speed: %.2f)" % [data.monster_name, resolved, h_speed])
 	animation_player.play(resolved)
 
 # ---------------------------------------------------------------------------

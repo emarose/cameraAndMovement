@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://d3xff5h0gbj4y"]
 
-[ext_resource type="Texture2D" uid="uid://bee3ygub5yv72" path="res://resources/items/armor/kite_shield.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bee3ygub5yv72" path="res://assets/models/items/armor/kite_shield.png" id="1"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
 
 [resource]

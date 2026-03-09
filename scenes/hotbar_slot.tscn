@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cqd3ossx4ruqj"]
 
 [ext_resource type="Script" uid="uid://xq6bpglviphk" path="res://scripts/hotbar_slot.gd" id="1_ea3t7"]
-[ext_resource type="Texture2D" uid="uid://50aplan2p5pu" path="res://textures/white-square1.png" id="2_sheke"]
+[ext_resource type="Texture2D" uid="uid://50aplan2p5pu" path="res://assets/textures/white-square1.png" id="2_sheke"]
 
 [node name="HotbarSlot" type="Panel" unique_id=59960567]
 custom_minimum_size = Vector2(42, 42)

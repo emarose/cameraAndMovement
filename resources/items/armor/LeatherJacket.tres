@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://bix136inganrl"]
 
-[ext_resource type="Texture2D" uid="uid://cfcxgnup6vsyg" path="res://resources/items/armor/leather_jacket.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://cfcxgnup6vsyg" path="res://assets/models/items/armor/leather_jacket.png" id="1"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
 
 [resource]

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://cjy247jn6bosm"]
 
-[ext_resource type="Texture2D" uid="uid://ba2cd6ov1c8kb" path="res://resources/items/armor/platemail.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://ba2cd6ov1c8kb" path="res://assets/models/items/armor/platemail.png" id="1"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
 
 [resource]

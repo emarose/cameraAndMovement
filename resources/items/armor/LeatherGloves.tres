@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EquipmentItem" format=3 uid="uid://h7025hmf0mqk"]
 
-[ext_resource type="Texture2D" uid="uid://db3y3a1ayfkx" path="res://resources/items/armor/leather_gloves.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://db3y3a1ayfkx" path="res://assets/models/items/armor/leather_gloves.png" id="1"]
 [ext_resource type="Script" uid="uid://7bv08dur57x" path="res://scripts/EquipmentItem.gd" id="2"]
 
 [resource]

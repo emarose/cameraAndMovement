@@ -29,6 +29,24 @@ window/stretch/mode="canvas_items"
 mouse_cursor/custom_image="uid://biubb72lqc4a3"
 display_server/layer_4=""
 
+[file_customization]
+
+folder_colors={
+"res://assets/buildings/": "gray",
+"res://assets/characters/": "yellow",
+"res://assets/decoration/": "gray",
+"res://assets/models/enemies/": "red",
+"res://assets/models/items/": "teal",
+"res://assets/terrain assets/": "gray",
+"res://assets/terrain/": "gray",
+"res://resources/items/": "teal",
+"res://resources/jobs/": "yellow",
+"res://resources/mobs/": "red",
+"res://resources/skills/": "purple",
+"res://resources/statusEffects/": "blue",
+"res://scenes/maps/": "gray"
+}
+
 [gui]
 
 theme/custom_font="uid://dd37sxd3av5ne"
