@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="10_hpdg8"]
 [ext_resource type="PackedScene" uid="uid://cahkpaehl1yti" path="res://assets/decoration/nature/tree_single_A.gltf" id="11_hpdg8"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="12_d13bl"]
-[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="13_rdgog"]
+[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/Flying/VenomousSpider.tres" id="13_rdgog"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)

@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://ds6x3jn1pw3uw"]
+
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
+[ext_resource type="PackedScene" uid="uid://8dhkrvrbwdja" path="res://assets/models/enemies/Blob/Ninja.gltf" id="4"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+
+[resource]
+script = ExtResource("1")
+monster_name = "Ninja"
+level = 5
+race = 1
+element = 9
+base_exp = 120
+job_exp = 90
+str_stat = 6
+agi = 10
+vit = 4
+int_stat = 4
+dex = 8
+luk = 6
+max_hp = 140
+flee = 12
+def = 3
+move_spd = 3.5
+aggro_range = 8.0
+attack_range = 1.8
+lose_aggro_range = 16.0
+model_scene = ExtResource("4")
+facing_yaw_offset_deg = 180.0
+collision_size_multiplier = Vector3(0.7, 0.7, 0.7)
+wander_radius = 15.0
+idle_time_min = 1.0
+idle_time_max = 3.0
+movement_speed_factor = 0.7
+skill_use_chance = 0.0
+anim_idle = &"Idle"
+anim_walk = &"Walk"
+anim_attack = &"Attack"
+anim_flinch = &"Hurt"
+metadata/_custom_type_script = "uid://e53aoxyegbf"

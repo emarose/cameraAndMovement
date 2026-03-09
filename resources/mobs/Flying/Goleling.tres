@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://cm5qy7n8kx4wp"]
+
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
+[ext_resource type="PackedScene" uid="uid://csw80f2g7huf1" path="res://assets/models/enemies/Goleling.gltf" id="4"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+
+[resource]
+script = ExtResource("1")
+monster_name = "Goleling"
+level = 10
+race = 0
+element = 4
+base_exp = 300
+job_exp = 220
+str_stat = 14
+agi = 3
+vit = 18
+int_stat = 2
+dex = 4
+luk = 3
+max_hp = 600
+flee = 3
+def = 22
+move_spd = 1.8
+aggro_range = 8.0
+attack_range = 1.8
+lose_aggro_range = 16.0
+model_scene = ExtResource("4")
+facing_yaw_offset_deg = 180.0
+collision_size_multiplier = Vector3(0.9, 0.9, 0.9)
+wander_radius = 10.0
+idle_time_min = 3.0
+idle_time_max = 8.0
+movement_speed_factor = 0.4
+skill_use_chance = 0.0
+anim_idle = &"Idle"
+anim_walk = &"Walk"
+anim_attack = &"Punch"
+anim_flinch = &"HitRecieve"
+metadata/_custom_type_script = "uid://e53aoxyegbf"

@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://dqm8x3jwp2y5k"]
+
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
+[ext_resource type="PackedScene" uid="uid://dj3fmn8sj4bxp" path="res://assets/models/enemies/Glub.gltf" id="4"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+
+[resource]
+script = ExtResource("1")
+monster_name = "Glub"
+level = 2
+race = 5
+element = 2
+base_exp = 80
+job_exp = 60
+str_stat = 2
+agi = 4
+vit = 3
+int_stat = 1
+dex = 3
+luk = 2
+max_hp = 120
+flee = 6
+def = 3
+move_spd = 2.0
+aggro_range = 6.0
+attack_range = 1.5
+lose_aggro_range = 12.0
+model_scene = ExtResource("4")
+facing_yaw_offset_deg = 180.0
+collision_size_multiplier = Vector3(0.8, 0.8, 0.8)
+movement_type = 1
+jump_frequency = 0.4
+wander_radius = 12.0
+idle_time_min = 2.0
+idle_time_max = 5.0
+movement_speed_factor = 0.5
+skill_use_chance = 0.0
+anim_idle = &"Idle"
+anim_walk = &"Walk"
+anim_attack = &"Punch"
+anim_flinch = &"HitRecieve"
+metadata/_custom_type_script = "uid://e53aoxyegbf"

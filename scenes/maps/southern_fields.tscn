@@ -7,9 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://tfhj7fa44sip" path="res://assets/terrain/southern_fields_chunk.glb" id="4_u650k"]
 [ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="6_hh4ub"]
 [ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="6_tb7bt"]
-[ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="7_bddx0"]
+[ext_resource type="Resource" path="res://resources/mobs/Poring.tres" id="7_bddx0"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="7_gamxu"]
-[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="10_c5puj"]
+[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/Flying/VenomousSpider.tres" id="10_c5puj"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ici1b"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)

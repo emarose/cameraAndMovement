@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://b2xk8jn5qw3mp"]
+
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
+[ext_resource type="PackedScene" uid="uid://di12nj8jie85n" path="res://assets/models/enemies/Blob/Alien.gltf" id="4"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+
+[resource]
+script = ExtResource("1")
+monster_name = "Alien"
+level = 3
+element = 7
+base_exp = 70
+job_exp = 50
+str_stat = 3
+agi = 5
+vit = 3
+int_stat = 4
+dex = 4
+luk = 3
+max_hp = 100
+def = 2
+move_spd = 2.2
+aggro_range = 7.0
+attack_range = 1.5
+lose_aggro_range = 14.0
+model_scene = ExtResource("4")
+collision_size_multiplier = Vector3(0.7, 0.7, 0.7)
+wander_radius = 12.0
+idle_time_max = 5.0
+skill_use_chance = 0.0
+anim_attack = &"Attack"
+anim_flinch = &"Hurt"
+metadata/_custom_type_script = "uid://e53aoxyegbf"

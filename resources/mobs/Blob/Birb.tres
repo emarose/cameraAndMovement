@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://daxm7jn4pw2lk"]
+
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
+[ext_resource type="PackedScene" uid="uid://bq2rke141w0p6" path="res://assets/models/enemies/Blob/Birb.gltf" id="4"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+
+[resource]
+script = ExtResource("1")
+monster_name = "Birb"
+level = 2
+race = 2
+element = 8
+base_exp = 55
+job_exp = 40
+str_stat = 2
+agi = 7
+vit = 2
+int_stat = 2
+dex = 5
+luk = 4
+max_hp = 85
+flee = 10
+def = 1
+move_spd = 3.2
+aggro_range = 6.0
+attack_range = 1.5
+lose_aggro_range = 12.0
+model_scene = ExtResource("4")
+collision_size_multiplier = Vector3(0.6, 0.6, 0.6)
+movement_type = 1
+jump_frequency = 0.5
+wander_radius = 14.0
+idle_time_min = 1.0
+idle_time_max = 3.0
+movement_speed_factor = 0.6
+skill_use_chance = 0.0
+anim_attack = &"Attack"
+anim_flinch = &"Hurt"
+metadata/_custom_type_script = "uid://e53aoxyegbf"

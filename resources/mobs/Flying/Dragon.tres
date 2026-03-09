@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://bw8qx5n7m4hp6"]
+
+[ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
+[ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
+[ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
+[ext_resource type="PackedScene" uid="uid://dqwxqgdvopq4c" path="res://assets/models/enemies/Dragon.gltf" id="4"]
+[ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+[ext_resource type="Resource" uid="uid://cloo1cx1g1rok" path="res://resources/skills/Fireball.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+monster_name = "Dragon"
+level = 25
+type = 1
+race = 6
+element = 3
+base_exp = 1200
+job_exp = 900
+str_stat = 30
+agi = 15
+vit = 28
+int_stat = 25
+dex = 18
+luk = 12
+max_hp = 2000
+flee = 15
+def = 25
+move_spd = 4.0
+aggro_range = 15.0
+attack_range = 4.0
+lose_aggro_range = 30.0
+model_scene = ExtResource("4")
+facing_yaw_offset_deg = 180.0
+collision_size_multiplier = Vector3(1.5, 1.5, 1.5)
+movement_type = 2
+wander_radius = 30.0
+idle_time_min = 3.0
+idle_time_max = 7.0
+movement_speed_factor = 0.5
+skills = Array[ExtResource("5")]([ExtResource("6")])
+skill_use_chance = 0.6
+anim_idle = &"Flying_Idle"
+anim_walk = &"Fast_Flying"
+anim_attack = &"Punch"
+anim_flinch = &"HitReact"
+metadata/_custom_type_script = "uid://e53aoxyegbf"

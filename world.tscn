@@ -7,9 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="5_036b0"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="6_gbfbk"]
 [ext_resource type="PackedScene" uid="uid://b3mj4b8fx2imj" path="res://scenes/HUD.tscn" id="7_pkg7o"]
-[ext_resource type="Resource" uid="uid://ttnxvkfcc5ku" path="res://resources/mobs/Poring.tres" id="8_ioo17"]
-[ext_resource type="Resource" uid="uid://b5sbonaifogvd" path="res://resources/mobs/Fabre.tres" id="9_ioo17"]
-[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/VenomousSpider.tres" id="11_ic0uy"]
+[ext_resource type="Resource" path="res://resources/mobs/Poring.tres" id="8_ioo17"]
+[ext_resource type="Resource" path="res://resources/mobs/Fabre.tres" id="9_ioo17"]
+[ext_resource type="Resource" uid="uid://drfusfqmignrn" path="res://resources/mobs/Flying/VenomousSpider.tres" id="11_ic0uy"]
 [ext_resource type="PackedScene" uid="uid://cxmfbmm1ex652" path="res://scenes/NPC_Merchant.tscn" id="12_k3n1d"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tlwt5"]
