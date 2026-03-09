@@ -491,8 +491,14 @@ func _try_use_skill() -> void:
 	
 	var dist_to_player = global_position.distance_to(player.global_position)
 	print("_try_use_skill: Checking %d skills, distance to player: %.1f" % [data.skills.size(), dist_to_player])
+
+	# Single source of truth: enemy-level AI chance controls whether this attempt casts any skill.
+	var ai_chance = data.get_skill_use_chance_normalized()
+	if randf() >= ai_chance:
+		print("_try_use_skill: Failed enemy skill_use_chance roll (%.0f%%)" % (ai_chance * 100.0))
+		return
 	
-	# Find usable skills within range that pass their individual use chance
+	# Find usable skills within range
 	var usable_skills = []
 	
 	for skill in data.skills:
@@ -505,13 +511,8 @@ func _try_use_skill() -> void:
 		if not skill_comp.can_use_skill(skill):
 			print("  Skill %s: Cannot use (cooldown or other issue)" % skill.skill_name)
 			continue
-		
-		# Check individual skill chance
-		if randf() < skill.ai_use_chance:
-			print("  Skill %s: PASSED chance check (%.0f%%)" % [skill.skill_name, skill.ai_use_chance * 100])
-			usable_skills.append(skill)
-		else:
-			print("  Skill %s: Failed chance check (%.0f%%)" % [skill.skill_name, skill.ai_use_chance * 100])
+
+		usable_skills.append(skill)
 	
 	if usable_skills.is_empty():
 		print("_try_use_skill: No usable skills found")
@@ -586,8 +587,7 @@ func _resolve_anim(short_name: StringName) -> StringName:
 		print("  [ANIM] Resolved '%s' -> '%s' (embedded)" % [short_name, short_name])
 		return short_name
 	
-	print("  [ANIM] FAILED to resolve '%s' - not found in AnimationPlayer" % short_name)
-	print("    Available animations: %s" % str(_get_all_anim_names()))
+	
 	return &""
 
 ## Helper to list all available animations for debugging

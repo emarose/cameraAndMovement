@@ -48,6 +48,10 @@ func setup(actor_node: Node3D, stats_node: StatsComponent, sp_node: SPComponent)
 	stats = stats_node
 	sp_comp = sp_node
 
+func _uses_sp_costs() -> bool:
+	# Enemies cast by AI chance/cooldown and should never be blocked by SP.
+	return actor != null and actor.is_in_group("player")
+
 func can_use_skill(skill: SkillData) -> bool:
 	if not skill: return false
 	
@@ -64,12 +68,11 @@ func can_use_skill(skill: SkillData) -> bool:
 			# Remove expired cooldown
 			cooldown_timers.erase(skill.skill_name)
 	
-	# Only check SP if this is a player (has sp_comp with actual SP system)
-	# Enemies use skills freely without SP cost
+	# Only players are limited by SP; enemies cast for free.
 	var skill_level = _get_skill_level(skill)
 	var sp_cost = _get_skill_sp_cost(skill, skill_level)
 	
-	if sp_comp and sp_comp.current_sp < sp_cost:
+	if _uses_sp_costs() and sp_comp and sp_comp.current_sp < sp_cost:
 		print("  can_use_skill %s: Insufficient SP (need %d, have %d)" % [skill.skill_name, sp_cost, sp_comp.current_sp])
 		# Only show message for player
 		if actor.is_in_group("player"):
@@ -85,7 +88,7 @@ func cast_immediate(skill: SkillData):
 	var sp_cost = _get_skill_sp_cost(skill, skill_level)
 	
 	# Only consume SP for players (enemies use skills for free)
-	if sp_comp:
+	if _uses_sp_costs() and sp_comp:
 		sp_comp.use_sp(sp_cost)
 	
 	_start_cooldown(skill)
@@ -215,14 +218,14 @@ func _finalize_skill_execution(skill: SkillData, target_data):
 	
 	# Validar SP y Cooldown justo antes de disparar (por si el SP bajó durante el cast)
 	# Only for players - enemies don't need SP
-	if sp_comp and sp_comp.current_sp < sp_cost:
+	if _uses_sp_costs() and sp_comp and sp_comp.current_sp < sp_cost:
 		# Only show message for player
 		if actor.is_in_group("player"):
 			get_tree().call_group("hud", "add_log_message", "SP insuficiente al terminar cast", Color.RED)
 		return
 
 	# Only consume SP for players (enemies use skills for free)
-	if sp_comp:
+	if _uses_sp_costs() and sp_comp:
 		sp_comp.use_sp(sp_cost)
 	
 	_start_cooldown(skill)

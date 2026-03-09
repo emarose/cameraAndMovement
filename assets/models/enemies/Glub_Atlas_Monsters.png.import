@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bl8txw4uctnkw"
-path.s3tc="res://.godot/imported/maxdamage_scab-low-poly_t_scab_emission.png-f06f1b66debe37fb082708fb5846330b.s3tc.ctex"
+uid="uid://bi0frpq32n1x7"
+path.s3tc="res://.godot/imported/Glub_Atlas_Monsters.png-9662b08c6c9b92a3b0295c2da84ba3e0.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "d4f8eeeab0eb7eb0d0d0d36f8c8fbebe"
+"md5": "19edfe03ec2ac473b0a20d5684c8b79c"
 }
 
 [deps]
 
-source_file="res://assets/models/maxdamage_scab-low-poly_t_scab_emission.png"
-dest_files=["res://.godot/imported/maxdamage_scab-low-poly_t_scab_emission.png-f06f1b66debe37fb082708fb5846330b.s3tc.ctex"]
+source_file="res://assets/models/enemies/Glub_Atlas_Monsters.png"
+dest_files=["res://.godot/imported/Glub_Atlas_Monsters.png-9662b08c6c9b92a3b0295c2da84ba3e0.s3tc.ctex"]
 
 [params]
 

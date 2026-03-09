@@ -74,8 +74,10 @@ Enemies can now use skills with randomized behavior:
 
 ```gdscript
 @export var skills: Array[SkillData] = []
-@export var skill_use_chance: float = 0.3  # 30% when in combat
+@export var skill_use_chance: float = 0.3  # Enemy AI cast chance per attempt (0.0-1.0)
 ```
+
+`SkillData` no longer has an additional AI chance field. Enemy skill behavior now uses only `EnemyData.skill_use_chance` to avoid duplicated probability checks.
 
 ### Skill Types Support
 - **IMMEDIATE** - Instant cast (e.g., self-buffs, AoE)

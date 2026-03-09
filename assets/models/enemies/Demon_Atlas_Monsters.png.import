@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2qto7txeqcye"
-path.s3tc="res://.godot/imported/maxdamage_scab-low-poly_bug1.png-a5210ed81348b86dc28dd613ba0047fd.s3tc.ctex"
+uid="uid://ds1yolaube756"
+path.s3tc="res://.godot/imported/Demon_Atlas_Monsters.png-5e4fb91ba342e15065470535e44cfb63.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "e759e3b6b3fb6d1ef3bff401e912a3b5"
+"md5": "19edfe03ec2ac473b0a20d5684c8b79c"
 }
 
 [deps]
 
-source_file="res://assets/models/maxdamage_scab-low-poly_bug1.png"
-dest_files=["res://.godot/imported/maxdamage_scab-low-poly_bug1.png-a5210ed81348b86dc28dd613ba0047fd.s3tc.ctex"]
+source_file="res://assets/models/enemies/Demon_Atlas_Monsters.png"
+dest_files=["res://.godot/imported/Demon_Atlas_Monsters.png-5e4fb91ba342e15065470535e44cfb63.s3tc.ctex"]
 
 [params]
 

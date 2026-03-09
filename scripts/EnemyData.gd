@@ -33,7 +33,7 @@ class_name EnemyData
 @export_group("Visuals")
 @export var model_scene: PackedScene
 ## Yaw correction (degrees) for model forward axis. Use 180 if model faces backwards.
-@export_range(-180.0, 180.0, 1.0) var facing_yaw_offset_deg: float = 0.0
+@export_range(-180.0, 180.0, 1.0) var facing_yaw_offset_deg: float = 180.0
 
 @export_group("Collision")
 ## Auto-creates/resizes CollisionShape3D from the model AABB at runtime.
@@ -66,7 +66,7 @@ class_name EnemyData
 @export var attack_status_effects: Array[StatusEffectData] = []  # Status effects que puede infligir al atacar
 @export var status_effect_chance: float = 0.15  # 15% chance por defecto
 @export var skills: Array[SkillData] = []  # Skills que el enemigo puede usar
-@export var skill_use_chance: float = 0.3  # 30% chance de usar skill cuando puede
+@export var skill_use_chance: float = 0.3  # Enemy AI chance to attempt a skill (0.0-1.0, legacy 0-100 also accepted)
 
 @export_group("Animations")
 ## Optional AnimationLibrary loaded from res://assets/characters/animations/enemies/.
@@ -84,3 +84,10 @@ class_name EnemyData
 @export var anim_flinch: StringName = &"HitRecieve"
 ## Animation name for the jump impulse (JUMP movement type). Falls back to a tween if empty.
 @export var anim_jump: StringName = &"Jump"
+
+## Returns skill_use_chance normalized to [0.0, 1.0].
+## Backward compatible with old data using percentage values (e.g. 30, 50, 100).
+func get_skill_use_chance_normalized() -> float:
+	if skill_use_chance > 1.0:
+		return clamp(skill_use_chance / 100.0, 0.0, 1.0)
+	return clamp(skill_use_chance, 0.0, 1.0)

@@ -25,11 +25,11 @@
 [ext_resource type="PackedScene" uid="uid://cvtbpoyueqawj" path="res://assets/decoration/nature/hills_A_trees.gltf" id="29_6p68x"]
 [ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="29_bsjvw"]
 [ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="29_xy04r"]
-[ext_resource type="Resource" uid="uid://vx6j7vtqcn4c" path="res://resources/mobs/Ghost.tres" id="30_bsjvw"]
 [ext_resource type="PackedScene" uid="uid://bwn8pyun0i1gp" path="res://assets/decoration/nature/trees_A_large.gltf" id="30_pd3o2"]
 [ext_resource type="PackedScene" uid="uid://beq8m3o5m3jtd" path="res://assets/decoration/nature/trees_A_medium.gltf" id="31_hwb1x"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="31_o1i7i"]
 [ext_resource type="PackedScene" uid="uid://dik35sslhu1bi" path="res://assets/decoration/nature/mountain_A_grass.gltf" id="32_xn3of"]
+[ext_resource type="Resource" uid="uid://d4jhqpmjc1f1x" path="res://resources/mobs/Alpaking.tres" id="32_xy04r"]
 [ext_resource type="PackedScene" uid="uid://cahkpaehl1yti" path="res://assets/decoration/nature/tree_single_A.gltf" id="33_v08of"]
 [ext_resource type="PackedScene" uid="uid://dcmr8qt1njsto" path="res://assets/decoration/nature/trees_A_small.gltf" id="34_4gw0c"]
 
@@ -363,6 +363,6 @@ transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, 30.59848, -1.2916005, 16.8844
 [node name="MobSpawner" parent="." unique_id=1312273434 instance=ExtResource("29_xy04r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6135993, -0.075182915, -8.798916)
 enemy_scene = ExtResource("29_bsjvw")
-mob_pool = Array[ExtResource("31_o1i7i")]([ExtResource("30_bsjvw")])
+mob_pool = Array[ExtResource("31_o1i7i")]([ExtResource("32_xy04r")])
 spawn_radius = 10.0
-max_mobs = 2
+max_mobs = 5

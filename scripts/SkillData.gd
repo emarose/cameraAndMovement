@@ -27,9 +27,6 @@ enum SkillType { TARGET, POINT, SELF }
 @export var is_interruptible: bool = true # Si es true, moverse o recibir daño cancela
 @export var cast_animation_name: String = "cast" # Nombre de la animación a reproducir
 
-@export_group("IA Enemiga")
-@export var ai_use_chance: float = 1.0 # Probabilidad que un enemigo use esta skill (0.0 - 1.0)
-
 @export_group("Level Scaling")
 @export var sp_cost_base: int = 0 # Base SP cost at level 1 (if > 0, replaces sp_cost)
 @export var sp_cost_per_level: int = 0 # Additional SP cost per skill level
