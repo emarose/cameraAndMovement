@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://d376231e8sady" path="res://resources/skills/Fireball.png" id="1_hffen"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="1_len4x"]
+[ext_resource type="PackedScene" uid="uid://dobsi6m31rt0n" path="res://assets/vfx/magic/tornado/tornado_fire.tscn" id="1_r0p1h"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="3_1vslj"]
 
 [resource]
@@ -15,6 +16,7 @@ cooldown = 5.0
 icon = ExtResource("1_hffen")
 element = 3
 aoe_radius = 2.0
+effect_scene = ExtResource("1_r0p1h")
 cast_time = 2.0
 is_interruptible = null
 metadata/_custom_type_script = "uid://bdyuj5busdh3c"
