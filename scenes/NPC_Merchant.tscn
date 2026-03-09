@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d0ug7mgpswyw2" path="res://scripts/NPC_Merchant.gd" id="1"]
 [ext_resource type="Script" uid="uid://br1bl783toxt8" path="res://scripts/ItemData.gd" id="2_885ar"]
-[ext_resource type="Resource" uid="uid://c8gw20ha2d6o0" path="res://resources/items/BlessingScroll.tres" id="4_kquv3"]
+[ext_resource type="Resource" uid="uid://c8gw20ha2d6o0" path="res://resources/items/consumable/BlessingScroll.tres" id="4_kquv3"]
 [ext_resource type="Resource" uid="uid://bhvpgw45fc6mp" path="res://resources/items/weapons/BattleAxe.tres" id="5_xbxgu"]
 [ext_resource type="Resource" uid="uid://bt4ele3x14dus" path="res://resources/items/weapons/BronzeKnuckle.tres" id="6_yvita"]
 [ext_resource type="Resource" uid="uid://bhvpgsn4038nq" path="res://resources/items/weapons/Claymore.tres" id="7_geib2"]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c66rfqyvyqp0a"]
 
-[ext_resource type="ArrayMesh" uid="uid://d2ou7bnprcby0" path="res://assets/models/circleMesh.obj" id="1_m71bi"]
+[ext_resource type="ArrayMesh" uid="uid://d2ou7bnprcby0" path="res://assets/models/environment/circleMesh.obj" id="1_m71bi"]
 [ext_resource type="Shader" uid="uid://1e4mhcbdin1q" path="res://assets/shaders/castingCircle.tres" id="2_m71bi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lib2p"]

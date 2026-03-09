@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_ip2de"]
 [ext_resource type="Resource" uid="uid://dxvgj38ylbxal" path="res://resources/statusEffects/poison.tres" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="4_b40yg"]
-[ext_resource type="PackedScene" uid="uid://nwy7442r2y6l" path="res://assets/models/enemies/maxdamage_scab-low-poly.gltf" id="4_ip2de"]
+[ext_resource type="PackedScene" uid="uid://nwy7442r2y6l" path="res://assets/models/enemies/Crawlers/maxdamage_scab-low-poly.gltf" id="4_ip2de"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="6_0xt7n"]
 
 [resource]

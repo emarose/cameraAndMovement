@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cjti4ahfu47rf"]
 
 [ext_resource type="Script" uid="uid://cmq6xnt12nikr" path="res://scripts/portal.gd" id="1_v0xau"]
-[ext_resource type="ArrayMesh" uid="uid://d2ou7bnprcby0" path="res://assets/models/circleMesh.obj" id="2_jr6l0"]
+[ext_resource type="ArrayMesh" uid="uid://d2ou7bnprcby0" path="res://assets/models/environment/circleMesh.obj" id="2_jr6l0"]
 [ext_resource type="Shader" uid="uid://1e4mhcbdin1q" path="res://assets/shaders/castingCircle.tres" id="3_d4jfq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dyed0"]

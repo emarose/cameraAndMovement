@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://nwy7442r2y6l"
-path="res://.godot/imported/maxdamage_scab-low-poly.gltf-2e46970b296e5a736187a73a5012685c.scn"
+path="res://.godot/imported/maxdamage_scab-low-poly.gltf-971aeb209b4fa6b19207bffe3620d697.scn"
 
 [deps]
 
-source_file="res://assets/models/enemies/maxdamage_scab-low-poly.gltf"
-dest_files=["res://.godot/imported/maxdamage_scab-low-poly.gltf-2e46970b296e5a736187a73a5012685c.scn"]
+source_file="res://assets/models/enemies/Crawlers/maxdamage_scab-low-poly.gltf"
+dest_files=["res://.godot/imported/maxdamage_scab-low-poly.gltf-971aeb209b4fa6b19207bffe3620d697.scn"]
 
 [params]
 
