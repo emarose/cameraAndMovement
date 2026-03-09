@@ -1,8 +1,8 @@
 extends Button
 # Asigna los nodos hijos aquí arrastrándolos con Ctrl
-@onready var icon_rect = $HBoxContainer/TextureRect
-@onready var name_label = $HBoxContainer/LabelName
-@onready var price_label = $HBoxContainer/LabelPrice
+@onready var icon_rect = $MarginContainer/HBoxContainer/TextureRect
+@onready var name_label = $MarginContainer/HBoxContainer/LabelName
+@onready var price_label = $MarginContainer/HBoxContainer/LabelPrice
 
 var current_item: ItemData = null
 
@@ -20,7 +20,6 @@ func set_data(item: ItemData, is_buying: bool):
 	current_item = item
 	icon_rect.texture = IconGenerator.get_icon(item)
 	name_label.text = item.item_name
-	
 	if is_buying:
 		price_label.text = str(item.buy_price) + " Z" # Asumiendo que tienes buy_price
 		price_label.modulate = Color.WHITE
