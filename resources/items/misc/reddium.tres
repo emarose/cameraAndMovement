@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://fhl9747bh1oyuxh"]
+
+[ext_resource type="Script" uid="uid://opygvpqmk7xaz37" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ndgdvzv1pt10od3" path="res://assets/models/items/misc/reddium.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Reddium"
+icon = ExtResource("2")
+description = "A valuable Reddium often traded by merchants and jewel crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 65
+buy_price = 130

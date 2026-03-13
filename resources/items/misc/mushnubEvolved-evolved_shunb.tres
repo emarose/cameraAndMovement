@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://47dij77ubgxbwxf"]
+
+[ext_resource type="Script" uid="uid://atcdylpyya7fxsb" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://hcsr8xhijdud84k" path="res://assets/models/items/misc/mushnubEvolved-evolved_shunb.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Evolved Shunb"
+icon = ExtResource("2")
+description = "A Evolved Shunb dropped by Mushnub Evolved. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 35
+buy_price = 70

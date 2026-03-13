@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://znji80di9x6mjmx"]
+
+[ext_resource type="Script" uid="uid://utacjy2h86m3dlw" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cybk1kbai3htq9s" path="res://assets/models/items/misc/ninja-ninja_toy_katana.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Ninja Toy Katana"
+icon = ExtResource("2")
+description = "A Ninja Toy Katana dropped by Ninja. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 10
+buy_price = 20

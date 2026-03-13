@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://o40a6a0jn5429a5"]
+
+[ext_resource type="Script" uid="uid://4fgbkpxjbfn0hjo" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://xbgdhj15gf975jx" path="res://assets/models/items/misc/lapiz_lazuli.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Lapiz Lazuli"
+icon = ExtResource("2")
+description = "A valuable Lapiz Lazuli often traded by merchants and jewel crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 80
+buy_price = 160

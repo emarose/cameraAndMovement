@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://yd3mr08wciaggeu"]
+
+[ext_resource type="Script" uid="uid://paipgpn5e3erf4p" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://gg5t4kaoalvhbxq" path="res://assets/models/items/misc/diamond.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Diamond"
+icon = ExtResource("2")
+description = "A valuable Diamond often traded by merchants and jewel crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 80
+buy_price = 160

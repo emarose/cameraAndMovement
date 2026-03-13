@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://ajzcv1608w5vjaf"]
+
+[ext_resource type="Script" uid="uid://uhehsljdr3z1xw6" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://9ymxqxpn8tpiqyb" path="res://assets/models/items/misc/mushnubEvolved-small_green_mushrooms.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Small Green Mushrooms"
+icon = ExtResource("2")
+description = "A Small Green Mushrooms dropped by Mushnub Evolved. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

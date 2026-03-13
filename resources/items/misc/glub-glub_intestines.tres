@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://3vlzo9bptji7m7n"]
+
+[ext_resource type="Script" uid="uid://xr5153lhdmmvpey" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://3gc8queijukdxg4" path="res://assets/models/items/misc/glub-glub_intestines.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Glub Intestines"
+icon = ExtResource("2")
+description = "A fresh Glub Intestines dropped by Glub. Alchemists buy it for experiments."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

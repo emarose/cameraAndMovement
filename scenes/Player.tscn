@@ -40,10 +40,10 @@ material = SubResource("StandardMaterial3D_aqk2v")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qlg0r"]
 height = 2.3964844
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_m4as6"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_axnmu"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_b1r6t"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_fvsjc"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7iby"]
@@ -94,7 +94,6 @@ script = ExtResource("2_qhqgy")
 zoom_speed = 2.0
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot" unique_id=795005348]
-collision_mask = 1
 spring_length = 8.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=1839852354]
@@ -104,11 +103,11 @@ fov = 84.6
 
 [node name="HealthBar3D" parent="." unique_id=1218748725 groups=["player"] instance=ExtResource("3_mdl7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12061417, 0)
-texture = SubResource("ViewportTexture_m4as6")
+texture = SubResource("ViewportTexture_axnmu")
 
 [node name="SPBar3D" parent="." unique_id=1609834012 groups=["player"] instance=ExtResource("7_spbar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.20458083, 0)
-texture = SubResource("ViewportTexture_b1r6t")
+texture = SubResource("ViewportTexture_fvsjc")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=347607018]
 script = ExtResource("4_qu4a1")
@@ -119,8 +118,6 @@ script = ExtResource("12_o4126")
 
 [node name="StatsComponent" type="Node" parent="." unique_id=1372930636]
 script = ExtResource("8_khinc")
-str_stat = 9
-dex = 9
 race = 7
 
 [node name="SkillComponent" type="Node" parent="." unique_id=1172722662]

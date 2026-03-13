@@ -3,15 +3,35 @@
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://bd2jbrm17ejv8" path="res://assets/models/enemies/Blob/Wizard.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://b4bavfc03x4ca" path="res://resources/items/misc/wizard-wizard_amulet.tres" id="3_opssk"]
+[ext_resource type="Resource" uid="uid://ron4lpccw8sa" path="res://resources/items/misc/wizard-wizard_skull.tres" id="4_51gmk"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+[ext_resource type="Resource" uid="uid://c2cf28h8ijuqh" path="res://resources/items/misc/emerald.tres" id="5_wo7is"]
+[ext_resource type="PackedScene" uid="uid://bjrotg6l1xfnd" path="res://assets/models/enemies/Crawlers/Wizard.gltf" id="6_0wavy"]
+
+[sub_resource type="Resource" id="Resource_ujtij"]
+script = ExtResource("3")
+item_data = ExtResource("3_opssk")
+drop_chance = 0.3
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_q7ijq"]
+script = ExtResource("3")
+item_data = ExtResource("4_51gmk")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_53t4q"]
+script = ExtResource("3")
+item_data = ExtResource("5_wo7is")
+drop_chance = 0.4
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
 monster_name = "Wizard"
 level = 5
 race = 1
-element = 0
 base_exp = 115
 job_exp = 85
 str_stat = 3
@@ -27,16 +47,12 @@ move_spd = 2.4
 aggro_range = 9.0
 attack_range = 2.5
 lose_aggro_range = 18.0
-model_scene = ExtResource("4")
-facing_yaw_offset_deg = 180.0
+model_scene = ExtResource("6_0wavy")
 collision_size_multiplier = Vector3(0.7, 0.7, 0.7)
 wander_radius = 14.0
-idle_time_min = 2.0
 idle_time_max = 6.0
-movement_speed_factor = 0.5
+drop_table = Array[ExtResource("3")]([SubResource("Resource_ujtij"), SubResource("Resource_q7ijq"), SubResource("Resource_53t4q")])
 skill_use_chance = 0.0
-anim_idle = &"Idle"
-anim_walk = &"Walk"
 anim_attack = &"Attack"
 anim_flinch = &"Hurt"
 metadata/_custom_type_script = "uid://e53aoxyegbf"

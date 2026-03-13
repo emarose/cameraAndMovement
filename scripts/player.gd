@@ -172,7 +172,7 @@ func change_character_model(new_model_scene: PackedScene):
 		print("Warning: No model scene provided to change_character_model")
 		return
 	
-	# Find the current model node (assuming it's named with "Mannequin" or is the first child that's a model)
+	# Find the current  model node (assuming it's named with "Mannequin" or is the first child that's a model)
 	var current_model = get_node_or_null("Mannequin_Medium")
 	if not current_model:
 		# Try to find any child that looks like a character model

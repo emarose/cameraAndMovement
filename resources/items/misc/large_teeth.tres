@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://wr8x5wkar5m67u3"]
+
+[ext_resource type="Script" uid="uid://tjp1favfx8eln3e" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://0b3qumjt0e7h4h6" path="res://assets/models/items/misc/large_teeth.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Large Teeth"
+icon = ExtResource("2")
+description = "A monster-derived Large Teeth used in basic crafting recipes."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 28
+buy_price = 56

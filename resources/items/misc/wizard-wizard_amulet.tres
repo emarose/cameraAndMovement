@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://87058o1sbu11ov5"]
+
+[ext_resource type="Script" uid="uid://rzr4h1uyn7r5sns" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://gw3r82caa03h1bx" path="res://assets/models/items/misc/wizard-wizard_amulet.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Wizard Amulet"
+icon = ExtResource("2")
+description = "A rare Wizard Amulet taken from Wizard. Collectors pay well for it."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 115
+buy_price = 230

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://hc7eernvv9qd0q4"]
+
+[ext_resource type="Script" uid="uid://98b06hm0awbserc" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://63dh2s0kr4m8miy" path="res://assets/models/items/misc/greenBlob-green_blob_eye.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Green Blob Eye"
+icon = ExtResource("2")
+description = "A trophy from Green Blob: Green Blob Eye. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 28
+buy_price = 56

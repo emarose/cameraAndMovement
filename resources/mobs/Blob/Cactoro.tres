@@ -3,8 +3,29 @@
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://ut2y6au4gv3b" path="res://assets/models/enemies/Blob/Cactoro.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://dfrmos2k77671" path="res://resources/items/misc/cactoro-cactus_chunk.tres" id="3_tyqek"]
+[ext_resource type="PackedScene" uid="uid://ut2y6au4gv3b" path="res://assets/models/enemies/Crawlers/Cactoro.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://biujlgq45t8fx" path="res://resources/items/misc/cactoro-cactus_needle.tres" id="4_61kvb"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+[ext_resource type="Resource" uid="uid://c164wed50m7qq" path="res://resources/items/misc/cactoro-tattered_sombrero.tres" id="5_uoqk2"]
+
+[sub_resource type="Resource" id="Resource_5v0mh"]
+script = ExtResource("3")
+item_data = ExtResource("3_tyqek")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_i5hhp"]
+script = ExtResource("3")
+item_data = ExtResource("4_61kvb")
+drop_chance = 0.4
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_bbjxp"]
+script = ExtResource("3")
+item_data = ExtResource("5_uoqk2")
+drop_chance = 0.2
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
@@ -22,16 +43,14 @@ dex = 3
 luk = 2
 max_hp = 150
 flee = 3
-move_spd = 1.5
+move_spd = 2.5
 aggro_range = 6.0
-attack_range = 1.5
+attack_range = 3.0
 lose_aggro_range = 12.0
 model_scene = ExtResource("4")
-collision_size_multiplier = Vector3(0.7, 0.7, 0.7)
 wander_radius = 10.0
 idle_time_min = 3.0
-movement_speed_factor = 0.4
+drop_table = Array[ExtResource("3")]([SubResource("Resource_5v0mh"), SubResource("Resource_i5hhp"), SubResource("Resource_bbjxp")])
 skill_use_chance = 0.0
-anim_attack = &"Attack"
-anim_flinch = &"Hurt"
+anim_attack = &"Bite_Front"
 metadata/_custom_type_script = "uid://e53aoxyegbf"

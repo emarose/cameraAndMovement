@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://yxbvq9474mwhb0k"]
+
+[ext_resource type="Script" uid="uid://pct8sh7eb2ve2jg" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://juuabsy9r5guuio" path="res://assets/models/items/misc/wizard-wizard_skull.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Wizard Skull"
+icon = ExtResource("2")
+description = "A trophy from Wizard: Wizard Skull. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 43
+buy_price = 86

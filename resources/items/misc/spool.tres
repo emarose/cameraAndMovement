@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://364fu05w2dxeo2x"]
+
+[ext_resource type="Script" uid="uid://2h8hs70ea3yl6nn" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://sacli9g08ufktv0" path="res://assets/models/items/misc/spool.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Spool"
+icon = ExtResource("2")
+description = "A miscellaneous trade item: Spool. Mainly sold for zeny."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

@@ -4,8 +4,29 @@
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="2_dumyf"]
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="3_3f8jd"]
 [ext_resource type="PackedScene" uid="uid://kgoj688k751a" path="res://assets/models/enemies/Flying/Alpaking.gltf" id="3_dumyf"]
+[ext_resource type="Resource" uid="uid://dqtjw2rwredeh" path="res://resources/items/misc/alpaking-alpaking_armor_piece.tres" id="3_q6clg"]
+[ext_resource type="Resource" uid="uid://dpr7ia57fyv1o" path="res://resources/items/misc/aquamarine.tres" id="4_urpvt"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="4_uxscp"]
+[ext_resource type="Resource" uid="uid://cpglv318x3mss" path="res://resources/items/misc/bone.tres" id="5_1s6bi"]
 [ext_resource type="Resource" uid="uid://cloo1cx1g1rok" path="res://resources/skills/Fireball.tres" id="9_d71yj"]
+
+[sub_resource type="Resource" id="Resource_8v7oq"]
+script = ExtResource("2_dumyf")
+item_data = ExtResource("3_q6clg")
+drop_chance = 0.2
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_cc8cd"]
+script = ExtResource("2_dumyf")
+item_data = ExtResource("4_urpvt")
+drop_chance = 0.3
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_nmvkj"]
+script = ExtResource("2_dumyf")
+item_data = ExtResource("5_1s6bi")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("3_3f8jd")
@@ -18,6 +39,7 @@ move_spd = 4.5
 attack_range = 3.0
 model_scene = ExtResource("3_dumyf")
 movement_type = 2
+drop_table = Array[ExtResource("2_dumyf")]([SubResource("Resource_8v7oq"), SubResource("Resource_cc8cd"), SubResource("Resource_nmvkj")])
 skills = Array[ExtResource("4_uxscp")]([ExtResource("9_d71yj")])
 skill_use_chance = 0.5
 anim_idle = &"Flying_Idle"

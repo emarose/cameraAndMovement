@@ -3,8 +3,21 @@
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://cg6l0lpprhwxk" path="res://assets/models/enemies/Blob/Mushnub.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://dgw2jrtmw1cxc" path="res://resources/items/misc/mushnub-yellow_shub.tres" id="3_3uvrc"]
+[ext_resource type="PackedScene" uid="uid://brwnwol4vkxjq" path="res://assets/models/enemies/Blob/Mushnub.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://bjqe7apgbci37" path="res://resources/items/misc/mushnub-yellow_spores.tres" id="4_ka7q4"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+
+[sub_resource type="Resource" id="Resource_1vw83"]
+script = ExtResource("3")
+item_data = ExtResource("3_3uvrc")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_8m66t"]
+script = ExtResource("3")
+item_data = ExtResource("4_ka7q4")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
@@ -18,25 +31,20 @@ str_stat = 3
 agi = 2
 vit = 4
 int_stat = 2
-dex = 2
-luk = 2
-max_hp = 95
+max_hp = 20
 flee = 3
-def = 3
+def = 1
 move_spd = 1.8
 aggro_range = 6.0
-attack_range = 1.5
+attack_range = 3.0
 lose_aggro_range = 12.0
 model_scene = ExtResource("4")
-facing_yaw_offset_deg = 180.0
 collision_size_multiplier = Vector3(0.6, 0.6, 0.6)
 wander_radius = 10.0
 idle_time_min = 2.5
 idle_time_max = 6.0
 movement_speed_factor = 0.4
+drop_table = Array[ExtResource("3")]([SubResource("Resource_1vw83"), SubResource("Resource_8m66t")])
 skill_use_chance = 0.0
-anim_idle = &"Idle"
-anim_walk = &"Walk"
-anim_attack = &"Attack"
-anim_flinch = &"Hurt"
+anim_attack = &"Bite_Front"
 metadata/_custom_type_script = "uid://e53aoxyegbf"

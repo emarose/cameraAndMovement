@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://gxc06adhddfhkx4"]
+
+[ext_resource type="Script" uid="uid://9yauhrimmza9fjo" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://xsg6iigya972vvf" path="res://assets/models/items/misc/dragon-dragon_skull.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Dragon Skull"
+icon = ExtResource("2")
+description = "A trophy from Dragon: Dragon Skull. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 43
+buy_price = 86

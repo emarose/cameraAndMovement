@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://1fdtfm25ie10"]
+
+[ext_resource type="Script" uid="uid://br1bl783toxt8" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dyxeq550pg137" path="res://assets/models/items/misc/agathe.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Agathe"
+icon = ExtResource("2")
+description = "A valuable Agathe often traded by merchants and jewel crafters."
+sell_price = 80
+buy_price = 160

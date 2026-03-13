@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://iiuvskruob9pslp"]
+
+[ext_resource type="Script" uid="uid://6af5gxl8zlqjl3b" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://vb1vvy5r4bqv88t" path="res://assets/models/items/misc/ancient_bones.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Ancient Bones"
+icon = ExtResource("2")
+description = "A monster-derived Ancient Bones used in basic crafting recipes."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 43
+buy_price = 86

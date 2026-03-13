@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://pmtm8ulcs0febcs"]
+
+[ext_resource type="Script" uid="uid://mzwsuj1vnjrqlis" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://vqew0p35bbjg7nl" path="res://assets/models/items/misc/platinum_shard.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Platinum Shard"
+icon = ExtResource("2")
+description = "A valuable Platinum Shard often traded by merchants and jewel crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 73
+buy_price = 146

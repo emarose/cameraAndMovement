@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://d6vdmtceupk5nrp"]
+
+[ext_resource type="Script" uid="uid://ozyvroeapupu9s7" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://9z333glkimznjzg" path="res://assets/models/items/misc/greenSpikyBlob-blob_spikes.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Blob Spikes"
+icon = ExtResource("2")
+description = "A Blob Spikes dropped by Green Spiky Blob. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 10
+buy_price = 20

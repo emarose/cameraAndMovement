@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://kus2z32nuw0msi6"]
+
+[ext_resource type="Script" uid="uid://fmln3n6vf0j14x0" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://9rnzk0jy8xsamnq" path="res://assets/models/items/misc/yeti-ice_fragment.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Ice Fragment"
+icon = ExtResource("2")
+description = "A Ice Fragment dropped by Yeti. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 33
+buy_price = 66

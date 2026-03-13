@@ -3,8 +3,29 @@
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://bm2uii8q5i1bd" path="res://assets/models/enemies/Blob/Yeti.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://ddffin544fglb" path="res://resources/items/misc/yeti-ice_fragment.tres" id="3_umlaq"]
+[ext_resource type="PackedScene" uid="uid://dje0d5b8bcwwc" path="res://assets/models/enemies/Blob/Yeti.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://dgvhqw7w02sa3" path="res://resources/items/misc/yeti-yeti_skin.tres" id="4_dxswg"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+[ext_resource type="Resource" uid="uid://0fmu5q12tw7d" path="res://resources/items/misc/organic_parts.tres" id="5_omm2o"]
+
+[sub_resource type="Resource" id="Resource_jyl7u"]
+script = ExtResource("3")
+item_data = ExtResource("3_umlaq")
+drop_chance = 0.7
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_4e3hp"]
+script = ExtResource("3")
+item_data = ExtResource("4_dxswg")
+drop_chance = 0.4
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_gsd2h"]
+script = ExtResource("3")
+item_data = ExtResource("5_omm2o")
+drop_chance = 0.7
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
@@ -21,22 +42,17 @@ int_stat = 3
 dex = 4
 luk = 3
 max_hp = 190
-flee = 5
 def = 6
 move_spd = 2.2
 aggro_range = 8.0
-attack_range = 2.0
+attack_range = 4.0
 lose_aggro_range = 16.0
 model_scene = ExtResource("4")
-facing_yaw_offset_deg = 180.0
 collision_size_multiplier = Vector3(0.9, 0.9, 0.9)
 wander_radius = 14.0
 idle_time_min = 2.5
 idle_time_max = 6.0
-movement_speed_factor = 0.5
+drop_table = Array[ExtResource("3")]([SubResource("Resource_jyl7u"), SubResource("Resource_4e3hp"), SubResource("Resource_gsd2h")])
 skill_use_chance = 0.0
-anim_idle = &"Idle"
-anim_walk = &"Walk"
-anim_attack = &"Attack"
-anim_flinch = &"Hurt"
+anim_attack = &"Bite_Front"
 metadata/_custom_type_script = "uid://e53aoxyegbf"

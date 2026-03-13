@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://goak0maql2flno2"]
+
+[ext_resource type="Script" uid="uid://h91no8cb9h1bwbl" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://xhtfjev39dlgz3o" path="res://assets/models/items/misc/birb-birb_skull.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Birb Skull"
+icon = ExtResource("2")
+description = "A trophy from Birb: Birb Skull. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 28
+buy_price = 56

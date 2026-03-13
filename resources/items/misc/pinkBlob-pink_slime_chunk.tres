@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://mbfpf6pq2sjp0yf"]
+
+[ext_resource type="Script" uid="uid://lbslbi466nz9azz" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ccbh5h6ygvwh4t4" path="res://assets/models/items/misc/pinkBlob-pink_slime_chunk.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Pink Slime Chunk"
+icon = ExtResource("2")
+description = "A Pink Slime Chunk dropped by Pink Blob. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

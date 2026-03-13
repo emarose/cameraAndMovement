@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://kifa37fs1rq1jo8"]
+
+[ext_resource type="Script" uid="uid://2a7bajvyrtzc2by" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://3fq1tvp2ni7ro0w" path="res://assets/models/items/misc/mushnubEvolved-evolved_spike.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Evolved Spike"
+icon = ExtResource("2")
+description = "A Evolved Spike dropped by Mushnub Evolved. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 35
+buy_price = 70

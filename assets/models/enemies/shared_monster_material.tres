@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bunt8hdr0ih65"]
+
+[ext_resource type="Texture2D" uid="uid://coawveiq0skfg" path="res://assets/models/enemies/Atlas_Monsters.png" id="1_ujtog"]
+
+[resource]
+albedo_texture = ExtResource("1_ujtog")

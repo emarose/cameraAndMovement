@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://bcypi8hqvlj6t"]
+
+[ext_resource type="PackedScene" uid="uid://di12nj8jie85n" path="res://assets/models/enemies/Blob/Alien.gltf" id="1_2iadj"]
+[ext_resource type="PackedScene" uid="uid://bq2rke141w0p6" path="res://assets/models/enemies/Blob/Birb.gltf" id="2_81spj"]
+[ext_resource type="PackedScene" uid="uid://bm381ep841nvh" path="res://assets/models/enemies/Blob/Cat.gltf" id="3_m6f6k"]
+[ext_resource type="PackedScene" uid="uid://c2ql5jdb3agjq" path="res://assets/models/enemies/Blob/Chicken.gltf" id="4_rycmk"]
+[ext_resource type="PackedScene" uid="uid://dke7hnwyhk05m" path="res://assets/models/enemies/Blob/Dog.gltf" id="5_25x6e"]
+[ext_resource type="PackedScene" uid="uid://cx8x88g3o8nxp" path="res://assets/models/enemies/Blob/GreenBlob.gltf" id="6_fghm2"]
+[ext_resource type="PackedScene" uid="uid://c2qlbme30x2ey" path="res://assets/models/enemies/Blob/GreenSpikyBlob.gltf" id="7_qunav"]
+[ext_resource type="PackedScene" uid="uid://brwnwol4vkxjq" path="res://assets/models/enemies/Blob/Mushnub.gltf" id="8_prw2w"]
+[ext_resource type="PackedScene" uid="uid://vdc8c8fbdv8s" path="res://assets/models/enemies/Blob/Mushnub_Evolved.gltf" id="9_l6rqs"]
+[ext_resource type="PackedScene" uid="uid://d4ae5247sv6sg" path="res://assets/models/enemies/Blob/PinkBlob.gltf" id="10_l8cuh"]
+[ext_resource type="PackedScene" uid="uid://dje0d5b8bcwwc" path="res://assets/models/enemies/Blob/Yeti.gltf" id="11_e0fx3"]
+[ext_resource type="PackedScene" uid="uid://ut2y6au4gv3b" path="res://assets/models/enemies/Crawlers/Cactoro.gltf" id="12_6fq4l"]
+[ext_resource type="PackedScene" uid="uid://ym86fuvoyrvv" path="res://assets/models/enemies/Blob/Fish.gltf" id="13_mbghb"]
+[ext_resource type="PackedScene" uid="uid://skymspn8f1y4" path="res://assets/models/enemies/Crawlers/Ninja.gltf" id="14_aayoi"]
+[ext_resource type="PackedScene" uid="uid://bd64jirvhasqx" path="res://assets/models/enemies/Crawlers/Orc.gltf" id="15_tjddo"]
+[ext_resource type="PackedScene" uid="uid://bjk7e02xslfp0" path="res://assets/models/enemies/Crawlers/Pigeon.gltf" id="16_weepk"]
+[ext_resource type="PackedScene" uid="uid://bjrotg6l1xfnd" path="res://assets/models/enemies/Crawlers/Wizard.gltf" id="17_0p824"]
+[ext_resource type="PackedScene" uid="uid://kgoj688k751a" path="res://assets/models/enemies/Flying/Alpaking.gltf" id="18_2sfx1"]
+[ext_resource type="PackedScene" uid="uid://cf8uwkfm1ahar" path="res://assets/models/enemies/Flying/Demon.gltf" id="19_vp7ps"]
+[ext_resource type="PackedScene" uid="uid://df2kcwcy37dl5" path="res://assets/models/enemies/Flying/Dragon.gltf" id="20_esoy1"]
+[ext_resource type="PackedScene" uid="uid://cgeam6wmvy6q8" path="res://assets/models/enemies/Flying/Ghost.gltf" id="21_06rad"]
+[ext_resource type="PackedScene" uid="uid://drwiks2l4cxtm" path="res://assets/models/enemies/Flying/Glub.gltf" id="22_i5gyv"]
+[ext_resource type="PackedScene" uid="uid://cr7jgyp30360y" path="res://assets/models/enemies/Flying/Glub_Evolved.gltf" id="23_rccpq"]
+[ext_resource type="PackedScene" uid="uid://q16v7imwvn60" path="res://assets/models/enemies/Flying/Goleling.gltf" id="24_eacwh"]
+[ext_resource type="PackedScene" uid="uid://12quddx3r6v6" path="res://assets/models/enemies/Flying/Pigeon.gltf" id="25_m410m"]
+[ext_resource type="PackedScene" uid="uid://3t8xfoq41tgk" path="res://assets/models/enemies/Flying/Squidle.gltf" id="26_lmhcd"]
+[ext_resource type="PackedScene" uid="uid://b20gkn4gyeqt8" path="res://assets/models/enemies/Flying/Tribal.gltf" id="27_thn34"]
+
+[node name="Node3D" type="Node3D" unique_id=625463127]
+
+[node name="Alien" parent="." unique_id=1417949491 instance=ExtResource("1_2iadj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6242614, 4.694841, 0)
+
+[node name="Birb" parent="." unique_id=1233818693 instance=ExtResource("2_81spj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5135076, 4.694841, 0)
+
+[node name="Cat" parent="." unique_id=1690403342 instance=ExtResource("3_m6f6k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0872755, 0, 0)
+
+[node name="Chicken" parent="." unique_id=1493435272 instance=ExtResource("4_rycmk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.74405, 0, 0)
+
+[node name="Dog" parent="." unique_id=580348772 instance=ExtResource("5_25x6e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.8982525, 0, 0)
+
+[node name="GreenBlob" parent="." unique_id=955401702 instance=ExtResource("6_fghm2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.516113, 3.6744952, 0)
+
+[node name="GreenSpikyBlob" parent="." unique_id=193993329 instance=ExtResource("7_qunav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.360893, 3.6744952, 0)
+
+[node name="Mushnub" parent="." unique_id=1183086234 instance=ExtResource("8_prw2w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.742, 0, 0)
+
+[node name="Mushnub_Evolved2" parent="." unique_id=1330938377 instance=ExtResource("9_l6rqs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.977, 0, 0)
+
+[node name="PinkBlob" parent="." unique_id=283787608 instance=ExtResource("10_l8cuh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.03285, 0, 0)
+
+[node name="Yeti" parent="." unique_id=1326065870 instance=ExtResource("11_e0fx3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.917843, 0, 0)
+
+[node name="Cactoro" parent="." unique_id=1752451757 instance=ExtResource("12_6fq4l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.974942, 0, 16)
+
+[node name="Fish" parent="." unique_id=1972115774 instance=ExtResource("13_mbghb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4678407, 0, 16)
+
+[node name="Ninja" parent="." unique_id=1448960822 instance=ExtResource("14_aayoi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.9166775, 0, 16)
+
+[node name="Orc" parent="." unique_id=1952912074 instance=ExtResource("15_tjddo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.572634, 0, 16)
+
+[node name="Pigeon" parent="." unique_id=1730184481 instance=ExtResource("16_weepk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.04123, 0, 16)
+
+[node name="Wizard" parent="." unique_id=1370072017 instance=ExtResource("17_0p824")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.204245, 0, 16)
+
+[node name="Alpaking2" parent="." unique_id=52584894 instance=ExtResource("18_2sfx1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1541915, 0, 32)
+
+[node name="Demon" parent="." unique_id=1537704195 instance=ExtResource("19_vp7ps")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3142467, 0, 32)
+
+[node name="Dragon" parent="." unique_id=592832528 instance=ExtResource("20_esoy1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.391134, 0, 32)
+
+[node name="Ghost2" parent="." unique_id=1731742727 instance=ExtResource("21_06rad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.765068, 0, 32)
+
+[node name="Glub2" parent="." unique_id=962439208 instance=ExtResource("22_i5gyv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.035158, 0, 32)
+
+[node name="Glub_Evolved2" parent="." unique_id=851549057 instance=ExtResource("23_rccpq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.137047, 0, 32)
+
+[node name="Goleling2" parent="." unique_id=1785291232 instance=ExtResource("24_eacwh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.916515, -2.3841858e-07, 32)
+
+[node name="Pigeon2" parent="." unique_id=1369817785 instance=ExtResource("25_m410m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.001835, 0, 32)
+
+[node name="Squidle" parent="." unique_id=1069231393 instance=ExtResource("26_lmhcd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.815872, 0, 32)
+
+[node name="Tribal" parent="." unique_id=1809606165 instance=ExtResource("27_thn34")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.34125, 0, 32)

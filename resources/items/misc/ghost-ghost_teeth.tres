@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://m3h1qn0uz76p79t"]
+
+[ext_resource type="Script" uid="uid://wumb3qf04orxyf8" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://n0arn12sneq5tq7" path="res://assets/models/items/misc/ghost-ghost_teeth.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Ghost Teeth"
+icon = ExtResource("2")
+description = "A trophy from Ghost: Ghost Teeth. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 28
+buy_price = 56

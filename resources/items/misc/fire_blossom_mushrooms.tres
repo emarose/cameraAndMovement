@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://qkwfuah2nfvgdhi"]
+
+[ext_resource type="Script" uid="uid://tebc1mz7sl2kyf4" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://du9kzp9shs2ty64" path="res://assets/models/items/misc/fire_blossom_mushrooms.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Fire Blossom Mushrooms"
+icon = ExtResource("2")
+description = "A natural material called Fire Blossom Mushrooms, common in field crafting."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

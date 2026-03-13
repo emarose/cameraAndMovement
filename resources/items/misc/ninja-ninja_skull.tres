@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://ylp06aesidd37bk"]
+
+[ext_resource type="Script" uid="uid://0n3f068ed92yyt1" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://zbteepzcs82gwz4" path="res://assets/models/items/misc/ninja-ninja_skull.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Ninja Skull"
+icon = ExtResource("2")
+description = "A trophy from Ninja: Ninja Skull. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 28
+buy_price = 56

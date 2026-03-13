@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://sphpbcv3jui811o"]
+
+[ext_resource type="Script" uid="uid://ftlat3uvvv83an8" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://59l52jkeb6hu5bw" path="res://assets/models/items/misc/alien-mucus.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Mucus"
+icon = ExtResource("2")
+description = "A fresh Mucus dropped by Alien. Alchemists buy it for experiments."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

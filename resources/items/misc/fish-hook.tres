@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://lbe6gw60jaj0pqp"]
+
+[ext_resource type="Script" uid="uid://frkxvc2hmmei0vd" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://daqboco8io1sm2w" path="res://assets/models/items/misc/fish-hook.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Hook"
+icon = ExtResource("2")
+description = "A Hook dropped by Fish. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

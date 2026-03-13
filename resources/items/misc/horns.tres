@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://okdyztfg3hytmyl"]
+
+[ext_resource type="Script" uid="uid://xazie6p72az8g3u" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://9xn66ujvswwau5c" path="res://assets/models/items/misc/horns.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Horns"
+icon = ExtResource("2")
+description = "A monster-derived Horns used in basic crafting recipes."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 28
+buy_price = 56

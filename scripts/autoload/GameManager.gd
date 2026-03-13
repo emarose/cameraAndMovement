@@ -6,7 +6,7 @@ var player_stats = {
 	"current_sp": 0,
 	"max_hp": 0,
 	"max_sp": 0,
-	"zeny": 0,
+	"zeny": 5000,
 	"level": 1,
 	"inventory_slots": [], # Array de {"item_path": String, "quantity": int}
 	"equipped_items": {}, # {slot_type: item_path}
@@ -20,8 +20,8 @@ var player_stats = {
 	"base_exp": 0,
 	"skill_points": 0,
 	"stat_points_available": 0,
-	# NOVO: Individual stat points - CRITICAL for persistence
-	"str": 1,
+	# Individual stat points - CRITICAL for persistence
+	"str": 20,
 	"agi": 1,
 	"vit": 1,
 	"int": 1,

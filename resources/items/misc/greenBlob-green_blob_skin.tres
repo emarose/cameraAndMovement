@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://jol14e3ienmg0bd"]
+
+[ext_resource type="Script" uid="uid://wlappheri1icc4h" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://6hqg0h87sd65i00" path="res://assets/models/items/misc/greenBlob-green_blob_skin.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Green Blob Skin"
+icon = ExtResource("2")
+description = "A fresh Green Blob Skin dropped by Green Blob. Alchemists buy it for experiments."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 28
+buy_price = 56

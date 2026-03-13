@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://d5s6nqoaxfif1f5"]
+
+[ext_resource type="Script" uid="uid://eph0elc2x9hng4q" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://hdnxh5hf6l0rdds" path="res://assets/models/items/misc/alien-horn_fragments.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Horn Fragments"
+icon = ExtResource("2")
+description = "A trophy from Alien: Horn Fragments. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 36
+buy_price = 72

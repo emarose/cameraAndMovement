@@ -3,32 +3,47 @@
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://crsatmxe0s3b8" path="res://assets/models/enemies/Pigeon.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://3qaqlcu68ttg" path="res://resources/items/misc/pigeon-pigeon_feather.tres" id="3_cfo2e"]
+[ext_resource type="PackedScene" uid="uid://12quddx3r6v6" path="res://assets/models/enemies/Flying/Pigeon.gltf" id="3_gcr5n"]
+[ext_resource type="Resource" uid="uid://cv6u5d0k5g2oc" path="res://resources/items/misc/feather.tres" id="4_rlthw"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+[ext_resource type="Resource" uid="uid://dhyagjj5qxt04" path="res://resources/items/misc/birb-birb_skull.tres" id="5_teatq"]
+
+[sub_resource type="Resource" id="Resource_kn8w2"]
+script = ExtResource("3")
+item_data = ExtResource("3_cfo2e")
+drop_chance = 0.3
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_q2bao"]
+script = ExtResource("3")
+item_data = ExtResource("4_rlthw")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_5npe8"]
+script = ExtResource("3")
+item_data = ExtResource("5_teatq")
+drop_chance = 0.6
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
 monster_name = "Pigeon"
-level = 1
 race = 2
 element = 8
 base_exp = 50
 job_exp = 40
-str_stat = 1
 agi = 8
-vit = 1
-int_stat = 1
 dex = 5
 luk = 4
 max_hp = 80
 flee = 12
 def = 1
 move_spd = 3.5
-aggro_range = 5.0
 attack_range = 1.5
 lose_aggro_range = 10.0
-model_scene = ExtResource("4")
-facing_yaw_offset_deg = 180.0
+model_scene = ExtResource("3_gcr5n")
 collision_size_multiplier = Vector3(0.6, 0.6, 0.6)
 collision_padding = Vector3(0.05, 0.05, 0.05)
 movement_type = 2
@@ -36,9 +51,9 @@ wander_radius = 15.0
 idle_time_min = 1.0
 idle_time_max = 3.0
 movement_speed_factor = 0.7
+drop_table = Array[ExtResource("3")]([SubResource("Resource_kn8w2"), SubResource("Resource_q2bao"), SubResource("Resource_5npe8")])
 skill_use_chance = 0.0
 anim_idle = &"Flying_Idle"
 anim_walk = &"Fast_Flying"
-anim_attack = &"Punch"
 anim_flinch = &"HitReact"
 metadata/_custom_type_script = "uid://e53aoxyegbf"

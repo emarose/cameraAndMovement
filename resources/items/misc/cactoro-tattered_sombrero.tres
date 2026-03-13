@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://4inojkp4ek2et3m"]
+
+[ext_resource type="Script" uid="uid://c0u2czomgdu8052" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://h06zq01cktmk563" path="res://assets/models/items/misc/cactoro-tattered_sombrero.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Tattered Sombrero"
+icon = ExtResource("2")
+description = "A Tattered Sombrero dropped by Cactoro. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 10
+buy_price = 20

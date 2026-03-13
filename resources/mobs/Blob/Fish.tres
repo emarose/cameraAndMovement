@@ -3,8 +3,28 @@
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://ym86fuvoyrvv" path="res://assets/models/enemies/Blob/Fish.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://biup14dukmvks" path="res://resources/items/misc/fish-empty_can.tres" id="3_3d3lm"]
+[ext_resource type="PackedScene" uid="uid://ym86fuvoyrvv" path="res://assets/models/enemies/Blob/Fish.gltf" id="3_m4fvl"]
+[ext_resource type="Resource" uid="uid://u7yjp8yspg16" path="res://resources/items/misc/fish-hook.tres" id="4_gr77y"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+[ext_resource type="Resource" uid="uid://cj1edhbj1dugo" path="res://resources/items/misc/fish-worm.tres" id="5_j2tx2"]
+
+[sub_resource type="Resource" id="Resource_j33sw"]
+script = ExtResource("3")
+item_data = ExtResource("3_3d3lm")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_son8s"]
+script = ExtResource("3")
+item_data = ExtResource("4_gr77y")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_xlu6b"]
+script = ExtResource("3")
+item_data = ExtResource("5_j2tx2")
+drop_chance = 0.33
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
@@ -26,12 +46,13 @@ move_spd = 2.6
 aggro_range = 6.0
 attack_range = 1.5
 lose_aggro_range = 12.0
-model_scene = ExtResource("4")
+model_scene = ExtResource("3_m4fvl")
 collision_size_multiplier = Vector3(0.6, 0.6, 0.6)
 wander_radius = 12.0
 idle_time_min = 1.5
 idle_time_max = 4.0
+drop_table = Array[ExtResource("3")]([SubResource("Resource_j33sw"), SubResource("Resource_son8s"), SubResource("Resource_xlu6b")])
 skill_use_chance = 0.0
-anim_attack = &"Attack"
-anim_flinch = &"Hurt"
+anim_attack = &"Bite_Front"
+anim_flinch = &"HitReceive"
 metadata/_custom_type_script = "uid://e53aoxyegbf"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://v7mr4i7c7enj7sm"]
+
+[ext_resource type="Script" uid="uid://p49ynqa3a3pkhyj" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://jzk8eoktzdsdaa8" path="res://assets/models/items/misc/mushnub-yellow_shub.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Yellow Shub"
+icon = ExtResource("2")
+description = "A Yellow Shub dropped by Mushnub. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 10
+buy_price = 20

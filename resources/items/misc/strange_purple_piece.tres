@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://vebvtjcuqnfhk5y"]
+
+[ext_resource type="Script" uid="uid://p2lgwppc6eenq4r" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://so8e0tgigvw8c8l" path="res://assets/models/items/misc/strange_purple_piece.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Strange Purple Piece"
+icon = ExtResource("2")
+description = "A miscellaneous trade item: Strange Purple Piece. Mainly sold for zeny."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 35
+buy_price = 70

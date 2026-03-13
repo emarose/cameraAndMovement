@@ -3,40 +3,44 @@
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://cvx4enbxg8bw3" path="res://assets/models/enemies/Blob/PinkBlob.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://br70olx6wx2o8" path="res://resources/items/misc/pinkBlob-pink_slime_chunk.tres" id="3_hk4r2"]
+[ext_resource type="PackedScene" uid="uid://d4ae5247sv6sg" path="res://assets/models/enemies/Blob/PinkBlob.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://q80f3u5r1rsq" path="res://resources/items/misc/ruby.tres" id="4_i0aoh"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+
+[sub_resource type="Resource" id="Resource_00vyu"]
+script = ExtResource("3")
+item_data = ExtResource("3_hk4r2")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_8hoc5"]
+script = ExtResource("3")
+item_data = ExtResource("4_i0aoh")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
 monster_name = "Pink Blob"
-level = 1
-race = 0
-element = 0
 base_exp = 45
 job_exp = 35
 str_stat = 2
 agi = 4
 vit = 3
-int_stat = 1
 dex = 3
 luk = 3
 max_hp = 75
-flee = 5
 def = 2
 move_spd = 2.0
-aggro_range = 5.0
-attack_range = 1.5
+attack_range = 3.0
 lose_aggro_range = 10.0
 model_scene = ExtResource("4")
-facing_yaw_offset_deg = 180.0
 collision_size_multiplier = Vector3(0.6, 0.6, 0.6)
 wander_radius = 10.0
-idle_time_min = 2.0
 idle_time_max = 5.0
 movement_speed_factor = 0.4
+drop_table = Array[ExtResource("3")]([SubResource("Resource_00vyu"), SubResource("Resource_8hoc5")])
 skill_use_chance = 0.0
-anim_idle = &"Idle"
-anim_walk = &"Walk"
-anim_attack = &"Attack"
-anim_flinch = &"Hurt"
+anim_attack = &"Bite_Front"
+anim_flinch = &"HitReceive"
 metadata/_custom_type_script = "uid://e53aoxyegbf"

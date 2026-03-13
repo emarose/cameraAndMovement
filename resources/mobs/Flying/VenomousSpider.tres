@@ -4,8 +4,15 @@
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="1_ip2de"]
 [ext_resource type="Resource" uid="uid://dxvgj38ylbxal" path="res://resources/statusEffects/poison.tres" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="4_b40yg"]
-[ext_resource type="PackedScene" uid="uid://nwy7442r2y6l" path="res://assets/models/enemies/Crawlers/maxdamage_scab-low-poly.gltf" id="4_ip2de"]
+[ext_resource type="PackedScene" uid="uid://nwy7442r2y6l" path="res://assets/models/enemies/Crawlers/Venomous_Spoder.gltf" id="4_ip2de"]
+[ext_resource type="Resource" uid="uid://0fmu5q12tw7d" path="res://resources/items/misc/organic_parts.tres" id="4_p54y5"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="6_0xt7n"]
+
+[sub_resource type="Resource" id="Resource_erxkm"]
+script = ExtResource("4_b40yg")
+item_data = ExtResource("4_p54y5")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
@@ -31,6 +38,9 @@ wander_radius = 15.0
 idle_time_min = 1.5
 idle_time_max = 4.0
 movement_speed_factor = 0.6
+drop_table = Array[ExtResource("4_b40yg")]([SubResource("Resource_erxkm"), null, null])
 attack_status_effects = Array[ExtResource("1_ip2de")]([ExtResource("2")])
 status_effect_chance = 0.25
 skill_use_chance = 0.5
+anim_attack = &"Eat"
+anim_death = &"Die"

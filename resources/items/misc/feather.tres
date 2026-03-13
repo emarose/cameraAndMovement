@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://6nqotv9e1yc8haw"]
+
+[ext_resource type="Script" uid="uid://nyxrfo8p1ukn0c5" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://jr202xr7zwkyo1d" path="res://assets/models/items/misc/feather.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Feather"
+icon = ExtResource("2")
+description = "A miscellaneous trade item: Feather. Mainly sold for zeny."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

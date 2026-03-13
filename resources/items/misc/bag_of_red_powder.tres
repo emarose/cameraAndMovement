@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://vavjtyya5fv0n52"]
+
+[ext_resource type="Script" uid="uid://pqwanxkt8e8v0xe" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://q82xn7540tt4t07" path="res://assets/models/items/misc/bag_of_red_powder.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Bag Of Red Powder"
+icon = ExtResource("2")
+description = "A miscellaneous trade item: Bag Of Red Powder. Mainly sold for zeny."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 10
+buy_price = 20

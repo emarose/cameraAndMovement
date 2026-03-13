@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://qa15peb4hc51qpy"]
+
+[ext_resource type="Script" uid="uid://zi4a3mczk0zn0of" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://u928get3izu9i2j" path="res://assets/models/items/misc/tulipan.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Tulipan"
+icon = ExtResource("2")
+description = "A miscellaneous trade item: Tulipan. Mainly sold for zeny."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 10
+buy_price = 20

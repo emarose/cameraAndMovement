@@ -2096,6 +2096,13 @@ _subresources={
 "slices/amount": 0
 }
 },
+"materials": {
+"Atlas": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/models/enemies/shared_monster_material.tres",
+"use_external/path": "uid://bunt8hdr0ih65"
+}
+},
 "nodes": {
 "PATH:CharacterArmature/Skeleton3D/Ghost": {
 "physics/shape_type": 4

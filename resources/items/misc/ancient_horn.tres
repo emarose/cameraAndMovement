@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://a9b3rhy2tvgrbfc"]
+
+[ext_resource type="Script" uid="uid://7bh76s1ca1tmy6w" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://qekvq66tfaorvdu" path="res://assets/models/items/misc/ancient_horn.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Ancient Horn"
+icon = ExtResource("2")
+description = "A monster-derived Ancient Horn used in basic crafting recipes."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 53
+buy_price = 106

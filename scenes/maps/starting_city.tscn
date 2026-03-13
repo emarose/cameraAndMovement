@@ -23,11 +23,10 @@
 [ext_resource type="PackedScene" uid="uid://domrc27ajcua6" path="res://assets/buildings/red/building_barracks_red.gltf" id="28_7xbjj"]
 [ext_resource type="PackedScene" uid="uid://dov75yck4auqj" path="res://assets/buildings/red/building_castle_red.gltf" id="28_d0s5y"]
 [ext_resource type="PackedScene" uid="uid://cvtbpoyueqawj" path="res://assets/decoration/nature/hills_A_trees.gltf" id="29_6p68x"]
-[ext_resource type="PackedScene" uid="uid://bteikfcwt50w6" path="res://scenes/Enemy.tscn" id="29_bsjvw"]
-[ext_resource type="PackedScene" uid="uid://bcqc6sx1ah56r" path="res://scenes/MobSpawner.tscn" id="29_xy04r"]
 [ext_resource type="PackedScene" uid="uid://bwn8pyun0i1gp" path="res://assets/decoration/nature/trees_A_large.gltf" id="30_pd3o2"]
 [ext_resource type="PackedScene" uid="uid://beq8m3o5m3jtd" path="res://assets/decoration/nature/trees_A_medium.gltf" id="31_hwb1x"]
 [ext_resource type="PackedScene" uid="uid://dik35sslhu1bi" path="res://assets/decoration/nature/mountain_A_grass.gltf" id="32_xn3of"]
+[ext_resource type="PackedScene" uid="uid://bm381ep841nvh" path="res://assets/models/enemies/Blob/Cat.gltf" id="33_o1i7i"]
 [ext_resource type="PackedScene" uid="uid://cahkpaehl1yti" path="res://assets/decoration/nature/tree_single_A.gltf" id="33_v08of"]
 [ext_resource type="PackedScene" uid="uid://dcmr8qt1njsto" path="res://assets/decoration/nature/trees_A_small.gltf" id="34_4gw0c"]
 
@@ -358,8 +357,5 @@ transform = Transform3D(11, 0, 0, 0, 11, 0, 0, 0, 11, 24.382277, -1.2916005, 27.
 [node name="trees_A_small4" parent="Props" unique_id=1738827760 instance=ExtResource("34_4gw0c")]
 transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, 30.59848, -1.2916005, 16.884485)
 
-[node name="MobSpawner" parent="." unique_id=1312273434 instance=ExtResource("29_xy04r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3363042, -0.075182915, -10.448727)
-enemy_scene = ExtResource("29_bsjvw")
-spawn_radius = 10.0
-max_mobs = 3
+[node name="Cat" parent="Props" unique_id=1152394990 instance=ExtResource("33_o1i7i")]
+transform = Transform3D(0.39821762, 0.0028774363, -0.30234823, -0.0036128, 0.49998695, 0, 0.30234033, 0.0021846474, 0.39822802, 10.104502, -0.11205101, -8.407869)

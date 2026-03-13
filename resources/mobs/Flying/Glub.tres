@@ -3,8 +3,28 @@
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://dj3fmn8sj4bxp" path="res://assets/models/enemies/Glub.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://0jqagxf83jrq" path="res://resources/items/misc/mystic_branch.tres" id="3_g8nk4"]
+[ext_resource type="PackedScene" uid="uid://drwiks2l4cxtm" path="res://assets/models/enemies/Flying/Glub.gltf" id="3_vyff4"]
+[ext_resource type="Resource" uid="uid://cettmfupxuw18" path="res://resources/items/misc/glub-glub_intestines.tres" id="4_yciat"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+[ext_resource type="Resource" uid="uid://du7mvqjbv45hv" path="res://resources/items/misc/glass_shard.tres" id="5_kc34c"]
+
+[sub_resource type="Resource" id="Resource_53saw"]
+script = ExtResource("3")
+item_data = ExtResource("3_g8nk4")
+drop_chance = 0.2
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_d8bj2"]
+script = ExtResource("3")
+item_data = ExtResource("4_yciat")
+drop_chance = 0.8
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_kul3l"]
+script = ExtResource("3")
+item_data = ExtResource("5_kc34c")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
@@ -17,28 +37,23 @@ job_exp = 60
 str_stat = 2
 agi = 4
 vit = 3
-int_stat = 1
 dex = 3
 luk = 2
 max_hp = 120
 flee = 6
 def = 3
-move_spd = 2.0
+move_spd = 4.0
 aggro_range = 6.0
 attack_range = 1.5
 lose_aggro_range = 12.0
-model_scene = ExtResource("4")
-facing_yaw_offset_deg = 180.0
+model_scene = ExtResource("3_vyff4")
 collision_size_multiplier = Vector3(0.8, 0.8, 0.8)
-movement_type = 1
 jump_frequency = 0.4
 wander_radius = 12.0
-idle_time_min = 2.0
 idle_time_max = 5.0
-movement_speed_factor = 0.5
+drop_table = Array[ExtResource("3")]([SubResource("Resource_53saw"), SubResource("Resource_d8bj2"), SubResource("Resource_kul3l")])
 skill_use_chance = 0.0
-anim_idle = &"Idle"
-anim_walk = &"Walk"
-anim_attack = &"Punch"
-anim_flinch = &"HitRecieve"
+anim_idle = &"Flying_Idle"
+anim_walk = &"Fast_Flying"
+anim_attack = &"Headbutt"
 metadata/_custom_type_script = "uid://e53aoxyegbf"

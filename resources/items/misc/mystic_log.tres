@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://25z8wsqd5ccrbn9"]
+
+[ext_resource type="Script" uid="uid://g4ygv3j85m56exg" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://0uhrk78iu1cosp6" path="res://assets/models/items/misc/mystic_log.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Mystic Log"
+icon = ExtResource("2")
+description = "A natural material called Mystic Log, common in field crafting."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 43
+buy_price = 86

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://u4qbr8vlgzyql99"]
+
+[ext_resource type="Script" uid="uid://zon9t499fuj3hs6" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://brazd4cwd21a4jn" path="res://assets/models/items/misc/demon-demon_skull.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Demon Skull"
+icon = ExtResource("2")
+description = "A trophy from Demon: Demon Skull. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 43
+buy_price = 86

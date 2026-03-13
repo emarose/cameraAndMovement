@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://897u7zy3dj28qer"]
+
+[ext_resource type="Script" uid="uid://pfndpqtt1b18gny" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://3x8l8khfikg69h2" path="res://assets/models/items/misc/strange_green_piece.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Strange Green Piece"
+icon = ExtResource("2")
+description = "A miscellaneous trade item: Strange Green Piece. Mainly sold for zeny."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 35
+buy_price = 70

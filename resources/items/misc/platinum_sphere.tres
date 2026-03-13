@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://hc75fqaq4mzo5di"]
+
+[ext_resource type="Script" uid="uid://qhnwyf6bdpxazdb" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://v420nnxixegl3bz" path="res://assets/models/items/misc/platinum_sphere.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Platinum Sphere"
+icon = ExtResource("2")
+description = "A valuable Platinum Sphere often traded by merchants and jewel crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 155
+buy_price = 310

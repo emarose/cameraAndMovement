@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://ybtrrb7c2jux502"]
+
+[ext_resource type="Script" uid="uid://78vm9z4m1qycraa" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://crql5zdcuei5uru" path="res://assets/models/items/misc/glubEvolved-glub_evolved_relic.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Glub Evolved Relic"
+icon = ExtResource("2")
+description = "A rare Glub Evolved Relic taken from Glub Evolved. Collectors pay well for it."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 125
+buy_price = 250

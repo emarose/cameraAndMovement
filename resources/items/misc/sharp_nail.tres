@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://vh16763f8sx2jus"]
+
+[ext_resource type="Script" uid="uid://25t1klra203ultg" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://1zvcqhbgx3onzx6" path="res://assets/models/items/misc/sharp_nail.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Sharp Nail"
+icon = ExtResource("2")
+description = "A monster-derived Sharp Nail used in basic crafting recipes."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

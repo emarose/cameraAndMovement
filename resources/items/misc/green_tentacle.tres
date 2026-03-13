@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://sykm1u3e1ebm9gn"]
+
+[ext_resource type="Script" uid="uid://blpsud2avdo2jk1" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://z7tf88tx7iqwu6f" path="res://assets/models/items/misc/green_tentacle.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Green Tentacle"
+icon = ExtResource("2")
+description = "A miscellaneous trade item: Green Tentacle. Mainly sold for zeny."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 10
+buy_price = 20

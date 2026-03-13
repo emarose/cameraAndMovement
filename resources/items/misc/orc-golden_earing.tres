@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b29sslt67q7lglp"]
+
+[ext_resource type="Script" uid="uid://k2deaeiflt6132r" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://lu003orajvexz50" path="res://assets/models/items/misc/orc-golden_earing.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Golden Earing"
+icon = ExtResource("2")
+description = "A Golden Earing dropped by Orc. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 45
+buy_price = 90

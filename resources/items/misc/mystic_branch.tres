@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cptqeetxjldptqs"]
+
+[ext_resource type="Script" uid="uid://truwcg5kudipzog" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://b6y0qajdqhxyh9n" path="res://assets/models/items/misc/mystic_branch.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Mystic Branch"
+icon = ExtResource("2")
+description = "A natural material called Mystic Branch, common in field crafting."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 43
+buy_price = 86

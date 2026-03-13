@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://baxczmjt7pmdtzt"]
+
+[ext_resource type="Script" uid="uid://a4kzg78qpg3qnvu" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://0f0bg5csfbrdgi8" path="res://assets/models/items/misc/scales.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Scales"
+icon = ExtResource("2")
+description = "A monster-derived Scales used in basic crafting recipes."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 28
+buy_price = 56

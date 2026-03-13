@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://5qn6zuavs2bvyt1"]
+
+[ext_resource type="Script" uid="uid://zjbz0odbemehwym" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://kam0p0olty4eaus" path="res://assets/models/items/misc/mushnub-yellow_spores.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Yellow Spores"
+icon = ExtResource("2")
+description = "A Yellow Spores dropped by Mushnub. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 28
+buy_price = 56

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://5e71sj4rbvzpzll"]
+
+[ext_resource type="Script" uid="uid://gemr0re7xitatb7" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://3qlb1q6mu0crcxd" path="res://assets/models/items/misc/tribal-skull.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Skull"
+icon = ExtResource("2")
+description = "A trophy from Tribal: Skull. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 43
+buy_price = 86

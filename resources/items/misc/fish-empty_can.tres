@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://pwuq31pko1izcsg"]
+
+[ext_resource type="Script" uid="uid://4xg9nm56kdc0js8" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://55o6svm8kid11bk" path="res://assets/models/items/misc/fish-empty_can.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Empty Can"
+icon = ExtResource("2")
+description = "A Empty Can dropped by Fish. Useful as a trade material."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 18
+buy_price = 36

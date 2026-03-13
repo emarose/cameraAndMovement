@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b2nute3bhue94ln"]
+
+[ext_resource type="Script" uid="uid://lwucbfqa0mf96b4" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://1iv5k00u83emrnu" path="res://assets/models/items/misc/demon-demon_horns.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Demon Horns"
+icon = ExtResource("2")
+description = "A trophy from Demon: Demon Horns. Valued by hunters and crafters."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 43
+buy_price = 86

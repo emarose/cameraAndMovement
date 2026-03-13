@@ -3,8 +3,21 @@
 [ext_resource type="Script" uid="uid://e53aoxyegbf" path="res://scripts/EnemyData.gd" id="1"]
 [ext_resource type="Script" uid="uid://y6wkl8vhgid" path="res://scripts/StatusEffectData.gd" id="2"]
 [ext_resource type="Script" uid="uid://bj2c0xe6whkco" path="res://scripts/DropEntry.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://8dhkrvrbwdja" path="res://assets/models/enemies/Blob/Ninja.gltf" id="4"]
+[ext_resource type="Resource" uid="uid://4pfjwtqe7fea" path="res://resources/items/misc/ninja-ninja_skull.tres" id="3_xmgc0"]
+[ext_resource type="Resource" uid="uid://6a0ou20b010r" path="res://resources/items/misc/ninja-ninja_toy_katana.tres" id="4_0a5m2"]
 [ext_resource type="Script" uid="uid://bdyuj5busdh3c" path="res://scripts/SkillData.gd" id="5"]
+[ext_resource type="PackedScene" uid="uid://skymspn8f1y4" path="res://assets/models/enemies/Crawlers/Ninja.gltf" id="5_povuu"]
+
+[sub_resource type="Resource" id="Resource_w7fyf"]
+script = ExtResource("3")
+item_data = ExtResource("3_xmgc0")
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
+
+[sub_resource type="Resource" id="Resource_0urhm"]
+script = ExtResource("3")
+item_data = ExtResource("4_0a5m2")
+drop_chance = 0.3
+metadata/_custom_type_script = "uid://bj2c0xe6whkco"
 
 [resource]
 script = ExtResource("1")
@@ -27,16 +40,14 @@ move_spd = 3.5
 aggro_range = 8.0
 attack_range = 1.8
 lose_aggro_range = 16.0
-model_scene = ExtResource("4")
-facing_yaw_offset_deg = 180.0
+model_scene = ExtResource("5_povuu")
 collision_size_multiplier = Vector3(0.7, 0.7, 0.7)
 wander_radius = 15.0
 idle_time_min = 1.0
 idle_time_max = 3.0
 movement_speed_factor = 0.7
+drop_table = Array[ExtResource("3")]([SubResource("Resource_w7fyf"), SubResource("Resource_0urhm")])
 skill_use_chance = 0.0
-anim_idle = &"Idle"
-anim_walk = &"Walk"
 anim_attack = &"Attack"
 anim_flinch = &"Hurt"
 metadata/_custom_type_script = "uid://e53aoxyegbf"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://uzxp2j2ll8xs1fl"]
+
+[ext_resource type="Script" uid="uid://zsa3co4fpa0zrq1" path="res://scripts/ItemData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://5y69h7tgv0kowor" path="res://assets/models/items/misc/dragon-dragon_blood.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_name = "Dragon Blood"
+icon = ExtResource("2")
+description = "A fresh Dragon Blood dropped by Dragon. Alchemists buy it for experiments."
+item_type = 2
+stackable = true
+max_stack_size = 99
+sell_price = 43
+buy_price = 86
